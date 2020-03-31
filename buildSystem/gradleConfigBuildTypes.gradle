@@ -1,0 +1,30 @@
+ext {
+    android {
+        buildTypes {
+            debug {
+                //Settings
+                debuggable = true
+                shrinkResources = false
+                testCoverageEnabled = false
+
+                matchingFallbacks = ['qa', 'debug']
+            }
+
+            release {
+                //Settings
+                minifyEnabled true
+                shrinkResources false
+
+                matchingFallbacks = ['release']
+            }
+
+            qa.initWith(buildTypes.debug)
+            qa {
+                //Settings
+                debuggable = true
+                testCoverageEnabled = true
+                matchingFallbacks = ['qa']
+            }
+        }
+    }
+}
