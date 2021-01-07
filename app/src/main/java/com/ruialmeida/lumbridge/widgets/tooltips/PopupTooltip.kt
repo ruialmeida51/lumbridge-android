@@ -22,7 +22,7 @@ import androidx.annotation.IntegerRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
 import com.ruialmeida.lumbridge.R
-import com.ruialmeida.lumbridge.extensions.bindings.afterMeasured
+import com.ruialmeida.lumbridge.extensions.views.afterMeasured
 import org.jetbrains.anko.windowManager
 
 class PopupTooltip(
