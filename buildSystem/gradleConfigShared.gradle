@@ -1,17 +1,17 @@
 apply from: "$rootProject.projectDir/buildSystem/gradleConfigBuildTypes.gradle"
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
 
     defaultConfig {
         minSdkVersion 26
-        targetSdkVersion 29
+        targetSdkVersion 30
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
 
     sourceSets {
