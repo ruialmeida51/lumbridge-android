@@ -1,2 +1,3 @@
-include ':lumbridge'
-rootProject.name='lumbridge-android'
+include ':lumbridgelibrary'
+include ':app'
+rootProject.name = "lumbridge"
