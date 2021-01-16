@@ -1,0 +1,12 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply from: "$rootProject.projectDir/lumbridge/buildSystem/gradleConfigShared.gradle"
+apply from: "$rootProject.projectDir/lumbridge/buildSystem/gradleConfigDependencies.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation appDependencies.values()
+    kapt appAnnotationProcessors.values()
+}

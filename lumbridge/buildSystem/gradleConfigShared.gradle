@@ -1,0 +1,27 @@
+apply from: "$rootProject.projectDir/lumbridge/buildSystem/gradleConfigBuildTypes.gradle"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.0"
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 30
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    sourceSets {
+        debug.java.srcDirs += 'src/debug/java'
+        release.java.srcDirs += 'src/debug/java'
+        qa.java.srcDirs += 'src/qa/java'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
