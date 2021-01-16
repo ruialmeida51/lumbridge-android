@@ -1,3 +1,1 @@
-include ':lumbridgelibrary'
-include ':lumbridge'
-rootProject.name = "lumbridge"
+include ':base'
