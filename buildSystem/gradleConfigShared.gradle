@@ -15,8 +15,8 @@ android {
     }
 
     sourceSets {
-        debug.java.srcDirs += 'src/debug/java'
-        release.java.srcDirs += 'src/debug/java'
+        debug.java.srcDirs += 'src/main/java'
+        release.java.srcDirs += 'src/main/java'
         qa.java.srcDirs += 'src/qa/java'
     }
 
