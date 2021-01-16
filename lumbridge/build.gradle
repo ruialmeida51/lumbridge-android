@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-apply from: "$rootProject.projectDir/buildSystem/gradleConfigShared.gradle"
-apply from: "$rootProject.projectDir/buildSystem/gradleConfigDependencies.gradle"
+apply from: "../buildSystem/gradleConfigShared.gradle"
+apply from: "../buildSystem/gradleConfigDependencies.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
