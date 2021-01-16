@@ -22,17 +22,22 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "com.jakewharton.threetenabp:threetenabp:$threeTenABPDateVersion"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.anko:anko:$ankoVersion"
+
     implementation "androidx.core:core-ktx:$kotlinExtensionsVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     implementation "androidx.cardview:cardview:$cardViewVersion"
+
     implementation "me.everything:overscroll-decor-android:$overScrollVersion"
+
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutinesVersion"
+
     implementation "io.github.reactivecircus.flowbinding:flowbinding-android:$flowBindingVersion"
     implementation "io.github.reactivecircus.flowbinding:flowbinding-activity:$flowBindingVersion"
     implementation "io.github.reactivecircus.flowbinding:flowbinding-appcompat:$flowBindingVersion"
