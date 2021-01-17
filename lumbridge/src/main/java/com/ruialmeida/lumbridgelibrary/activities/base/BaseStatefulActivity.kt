@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import com.ruialmeida.lumbridgelibrary.viewmodel.base.BaseStatefulViewModel
 
-abstract class BaseStatefulActivity<Binding: ViewDataBinding, ViewModel : BaseStatefulViewModel<State>, State, ErrorState>: AppCompatActivity() {
+abstract class BaseStatefulActivity<Binding: ViewDataBinding, ViewModel : BaseStatefulViewModel<State, ErrorState>, State, ErrorState>: AppCompatActivity() {
     protected lateinit var binding: Binding
     protected lateinit var viewModel: ViewModel
 
