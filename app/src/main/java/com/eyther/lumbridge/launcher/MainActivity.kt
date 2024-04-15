@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import com.eyther.lumbridge.ui.theme.LumbridgeTheme
 import com.eyther.lumbridge.launcher.screens.MainScreen
-import com.eyther.osrsoutpost.features.main.viewmodel.MainActivityViewModel
+import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

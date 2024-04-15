@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 
-val LightOSRSColors = lightColorScheme(
+val LightColors = lightColorScheme(
 	background = LightBackground,
 	surface = LightSurface,
 	primary = LightPrimary,
@@ -24,7 +24,7 @@ val LightOSRSColors = lightColorScheme(
 	error = Color.Red
 )
 
-val DarkOSRSColors = darkColorScheme(
+val DarkColors = darkColorScheme(
 	background = DarkBackground,
 	surface = DarkSurface,
 	primary = DarkPrimary,
@@ -49,7 +49,7 @@ private fun SetStatusBarColor(colorScheme: ColorScheme,) {
 
 @Composable
 fun LumbridgeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-	val colorScheme = if (darkTheme) DarkOSRSColors else LightOSRSColors
+	val colorScheme = if (darkTheme) DarkColors else LightColors
 	
 	SetStatusBarColor(
 		colorScheme = colorScheme
@@ -57,7 +57,7 @@ fun LumbridgeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
 	
 	MaterialTheme(
 		colorScheme = colorScheme,
-		typography = OSRSTypography,
+		typography = runescapeTypography,
 		content = content
 	)
 }

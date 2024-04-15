@@ -15,4 +15,5 @@ object AppVersions {
     const val NAVIGATION_VERSION = "2.7.7"
 
     const val HILT_VERSION = "2.44"
+    const val HILT_NAVIGATION_VERSION = "1.2.0"
 }

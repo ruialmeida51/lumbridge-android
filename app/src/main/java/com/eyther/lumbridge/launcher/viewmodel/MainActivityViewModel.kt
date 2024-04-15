@@ -1,4 +1,4 @@
-package com.eyther.osrsoutpost.features.main.viewmodel
+package com.eyther.lumbridge.launcher.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.eyther.lumbridge.launcher.model.UiMode

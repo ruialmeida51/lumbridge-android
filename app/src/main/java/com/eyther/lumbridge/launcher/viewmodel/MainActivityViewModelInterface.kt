@@ -1,4 +1,4 @@
-package com.eyther.osrsoutpost.features.main.viewmodel
+package com.eyther.lumbridge.launcher.viewmodel
 
 import com.eyther.lumbridge.launcher.model.UiMode
 import kotlinx.coroutines.flow.StateFlow

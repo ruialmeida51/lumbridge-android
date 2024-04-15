@@ -12,7 +12,7 @@ import com.eyther.lumbridge.R
 val runescapeFontFamily = FontFamily(Font(R.font.goudy_bookletter_1911))
 
 // Define your typography
-val OSRSTypography = Typography(
+val runescapeTypography = Typography(
 	titleLarge = TextStyle(
 		fontFamily = runescapeFontFamily,
 		fontSize = 28.sp,
