@@ -26,7 +26,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(16.dp)
         ) {
             LumbridgeNavigationHost(navController)
         }

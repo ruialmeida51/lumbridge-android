@@ -25,13 +25,6 @@ android {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-
-    buildTypes {
         debug {
             isDebuggable = true
             isShrinkResources = false
@@ -91,7 +84,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     AppDependencies.getImplementation().map { implementation(it) }
-    AppDependencies.getAnnotationProcessor().map { annotationProcessor(it) }
+    AppDependencies.debugImplementation().map { debugImplementation(it) }
     AppDependencies.getKapt().map { kapt(it) }
 }
