@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
@@ -32,8 +33,8 @@ import com.eyther.lumbridge.ui.theme.LumbridgeTheme
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
-fun ToolsScreen(
-    navController: NavController,
+fun ToolsOverviewScreen(
+    navController: NavHostController,
     label: String,
     toolsScreenViewModel: ToolsScreenViewModel = hiltViewModel()
 ) {
@@ -102,6 +103,7 @@ fun ToolGrid(
         onClick = { onItemClick(toolItem, navController) }
     ) {
         Column(
+            modifier = Modifier.padding(HalfPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -118,5 +120,5 @@ fun ToolGrid(
 @Preview
 private fun Preview() {
     val navController = rememberNavController()
-    LumbridgeTheme(darkTheme = false) { ToolsScreen(navController, "Tools") }
+    LumbridgeTheme(darkTheme = false) { ToolsOverviewScreen(navController, "Tools") }
 }

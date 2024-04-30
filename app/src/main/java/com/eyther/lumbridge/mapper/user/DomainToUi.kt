@@ -4,6 +4,7 @@ import com.eyther.lumbridge.domain.model.user.UserDomain
 import com.eyther.lumbridge.model.user.UserUi
 
 fun UserDomain.toUi() = UserUi(
-    grossSalary = grossSalary,
+    annualGrossSalary = annualGrossSalary,
+    foodCardPerDiem = foodCardPerDiem,
     locale = locale
 )

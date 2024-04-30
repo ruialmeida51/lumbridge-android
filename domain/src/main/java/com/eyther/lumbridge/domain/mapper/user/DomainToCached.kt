@@ -1,9 +1,10 @@
 package com.eyther.lumbridge.domain.mapper.user
 
-import com.eyther.lumbridge.data.model.UserEntity
+import com.eyther.lumbridge.data.model.user.UserCached
 import com.eyther.lumbridge.domain.model.user.UserDomain
 
-fun UserDomain.toCached() = UserEntity(
+fun UserDomain.toCached() = UserCached(
     countryCode = locale.countryCode,
-    grossSalary = grossSalary
+    annualGrossSalary = annualGrossSalary,
+    foodCardPerDiem = foodCardPerDiem
 )

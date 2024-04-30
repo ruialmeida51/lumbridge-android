@@ -23,6 +23,8 @@ class ToolsScreenViewModel @Inject constructor() : ViewModel(), ToolsScreenViewM
             when (toolItem) {
                 NetSalary -> ToolsNavigationItem.NetSalary.route
                 CTC -> ToolsNavigationItem.CostToCompany.route
+                Savings -> ToolsNavigationItem.Savings.route
+                Mortgage -> ToolsNavigationItem.Mortgage.route
             }
         )
     }

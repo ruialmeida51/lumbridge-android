@@ -1,14 +1,17 @@
 package com.eyther.lumbridge.features.tools.netsalary.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.domain.model.finance.NetSalaryProvider
-import com.eyther.lumbridge.domain.model.locale.InternalLocale
+import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.usecase.user.GetUserData
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
 import com.eyther.lumbridge.model.user.UserUi
+import com.eyther.lumbridge.usecase.finance.GetNetSalary
+import com.eyther.lumbridge.usecase.user.GetLocaleOrDefault
 import com.eyther.lumbridge.usecase.user.SaveUserData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,10 +21,13 @@ import kotlinx.coroutines.launch
 class NetSalaryScreenViewModel @Inject constructor(
     private val getUserData: GetUserData,
     private val saveUserData: SaveUserData,
-    private val netSalaryProvider: NetSalaryProvider
+    private val getNetSalary: GetNetSalary,
+    private val getLocaleOrDefault: GetLocaleOrDefault
 ) : ViewModel(), NetSalaryScreenViewModelInterface {
 
-    override val viewState = MutableStateFlow<NetSalaryScreenViewState>(getInitialState())
+    override val viewState = MutableStateFlow<NetSalaryScreenViewState>(
+        NetSalaryScreenViewState.Loading
+    )
 
     init {
         fetchUserData()
@@ -32,7 +38,14 @@ class NetSalaryScreenViewModel @Inject constructor(
             val userData = getUserData()
 
             if (userData == null) {
-                viewState.update { NetSalaryScreenViewState.Input() }
+                viewState.update {
+                    NetSalaryScreenViewState.Content.Input(
+                        annualGrossSalary = null,
+                        foodCardPerDiem = null,
+                        locale = getLocaleOrDefault()
+                    )
+                }
+
                 return@launch
             }
 
@@ -41,17 +54,30 @@ class NetSalaryScreenViewModel @Inject constructor(
     }
 
     private fun calculateNetSalary(userData: UserUi) {
-        val netSalary = netSalaryProvider.calculate(userData.grossSalary, userData.locale)
-        viewState.update { NetSalaryScreenViewState.HasData(netSalary) }
+        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(this::class.java.name, "Error calculating net salary 💥", throwable)
+        }
+
+        viewModelScope.launch(exceptionHandler) {
+
+            val netSalary = getNetSalary(userData.annualGrossSalary, userData.foodCardPerDiem)
+
+            viewState.update {
+                NetSalaryScreenViewState.Content.Overview(
+                    annualGrossSalary = userData.annualGrossSalary,
+                    netSalary = netSalary,
+                    locale = userData.locale
+                )
+            }
+        }
     }
 
-    private fun getInitialState() = NetSalaryScreenViewState.Initial
-
-    fun onCalculateNetSalary(annualSalary: Float) {
+    fun onCalculateNetSalary(annualSalary: Float, foodCardPerDiem: Float) {
         viewModelScope.launch {
             val userData = UserUi(
-                grossSalary = annualSalary,
-                locale = InternalLocale.PORTUGAL
+                annualGrossSalary = annualSalary,
+                foodCardPerDiem = foodCardPerDiem,
+                locale = SupportedLocales.PORTUGAL
             )
 
             saveUserData(userData).also { calculateNetSalary(userData) }
@@ -63,8 +89,10 @@ class NetSalaryScreenViewModel @Inject constructor(
             val userData = getUserData()
 
             viewState.update {
-                NetSalaryScreenViewState.Input(
-                    annualGrossSalary = userData?.grossSalary
+                NetSalaryScreenViewState.Content.Input(
+                    annualGrossSalary = userData?.annualGrossSalary,
+                    foodCardPerDiem = userData?.foodCardPerDiem,
+                    locale = userData?.locale ?: getLocaleOrDefault()
                 )
             }
         }

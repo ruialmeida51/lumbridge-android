@@ -31,7 +31,24 @@ object DataModule {
         )
     }
 
+    @Provides
+    @Singleton
+    @AppSettingsDataStore
+    fun provideAppSettingsDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = {
+                context.preferencesDataStoreFile("app_settings_data_store.db")
+            }
+        )
+    }
+
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class UserDataStore
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class AppSettingsDataStore
 }

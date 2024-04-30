@@ -14,37 +14,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.eyther.lumbridge.ui.navigation.bottomNavigation.LumbridgeNavigationItem
 
 @Composable
-fun LumbridgeBottomNavigationBar(navController: NavController) {
-	var selectedItemIndex by remember { mutableIntStateOf(0) }
-	NavigationBar(tonalElevation = 0.dp) {
-		LumbridgeNavigationItem.items().forEachIndexed { index, navigationItem ->
-			val selected = index == selectedItemIndex
-			NavigationBarItem(
-				selected = selected,
-				label = {
-					Text(navigationItem.label)
-				},
-				icon = {
-					Icon(
-						painter = painterResource(navigationItem.icon),
-						contentDescription = navigationItem.label,
-						modifier = Modifier.size(24.dp)
-					)
-				},
-				onClick = {
-					if (selectedItemIndex != index) {
-						selectedItemIndex = index
-						
-						navController.navigate(navigationItem.route) {
-							popUpTo(navController.graph.startDestinationId)
-							launchSingleTop = true
-						}
-					}
-				}
-			)
-		}
-	}
+fun LumbridgeBottomNavigationBar(navController: NavHostController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    val currentDestinationHierarchy = currentDestination?.hierarchy.orEmpty()
+
+    NavigationBar(tonalElevation = 0.dp) {
+        LumbridgeNavigationItem.items().forEach { navigationItem ->
+            NavigationBarItem(
+                selected = currentDestinationHierarchy.any { it.route == navigationItem.route },
+                label = {
+                    Text(navigationItem.label)
+                },
+                icon = {
+                    Icon(
+                        painter = painterResource(navigationItem.icon),
+                        contentDescription = navigationItem.label,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                onClick = {
+                    navController.navigate(navigationItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
+        }
+    }
 }

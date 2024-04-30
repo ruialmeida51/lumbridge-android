@@ -1,8 +1,9 @@
 package com.eyther.lumbridge.model.user
 
-import com.eyther.lumbridge.domain.model.locale.InternalLocale
+import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 
 data class UserUi(
-    val grossSalary: Float,
-    val locale: InternalLocale
+    val annualGrossSalary: Float,
+    val foodCardPerDiem: Float,
+    val locale: SupportedLocales
 )
