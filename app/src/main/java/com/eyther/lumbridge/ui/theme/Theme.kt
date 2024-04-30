@@ -8,9 +8,11 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import com.eyther.lumbridge.launcher.model.UiMode
 
 val LightColors = lightColorScheme(
 	background = LightBackground,
@@ -50,7 +52,10 @@ private fun SetStatusBarColor(colorScheme: ColorScheme,) {
 }
 
 @Composable
-fun LumbridgeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun LumbridgeTheme(
+	darkTheme: Boolean = isSystemInDarkTheme(),
+	content: @Composable () -> Unit
+) {
 	val colorScheme = if (darkTheme) DarkColors else LightColors
 	
 	SetStatusBarColor(

@@ -4,16 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.usecase.user.GetUserData
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
 import com.eyther.lumbridge.model.user.UserUi
 import com.eyther.lumbridge.usecase.finance.GetNetSalary
 import com.eyther.lumbridge.usecase.user.GetLocaleOrDefault
+import com.eyther.lumbridge.usecase.user.GetUserData
 import com.eyther.lumbridge.usecase.user.SaveUserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -35,7 +36,7 @@ class NetSalaryScreenViewModel @Inject constructor(
 
     private fun fetchUserData() {
         viewModelScope.launch {
-            val userData = getUserData()
+            val userData = getUserData().firstOrNull()
 
             if (userData == null) {
                 viewState.update {
@@ -86,7 +87,7 @@ class NetSalaryScreenViewModel @Inject constructor(
 
     fun onEditSalary() {
         viewModelScope.launch {
-            val userData = getUserData()
+            val userData = getUserData().firstOrNull()
 
             viewState.update {
                 NetSalaryScreenViewState.Content.Input(

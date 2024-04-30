@@ -3,6 +3,7 @@ package dependencies
 import versions.AppVersions.COMPOSE_BOM_VERSION
 import versions.AppVersions.COMPOSE_MATERIAL_3_CORE_VERSION
 import versions.AppVersions.COMPOSE_TOOLING_VERSION
+import versions.AppVersions.FIREBASE_BOM_VERSION
 import versions.AppVersions.HILT_NAVIGATION_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
 import versions.AppVersions.KTX_VERSION
@@ -36,6 +37,9 @@ object AppDependencies {
         // Hilt
         "androidx.hilt:hilt-navigation-compose:$HILT_NAVIGATION_VERSION",
         "com.google.dagger:hilt-android:$HILT_VERSION",
+
+        // Firebase
+        "com.google.firebase:firebase-bom:$FIREBASE_BOM_VERSION",
     )
 
     fun debugImplementation() = listOf(

@@ -1,6 +1,5 @@
 package dependencies
 
-import versions.SharedVersions
 import versions.SharedVersions.HILT_VERSION
 
 object DomainDependencies {

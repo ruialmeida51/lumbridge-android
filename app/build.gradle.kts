@@ -5,6 +5,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.appdistribution")
     kotlin("kapt")
 }
 
@@ -30,11 +32,17 @@ android {
             isShrinkResources = false
             enableUnitTestCoverage = false
 
+            firebaseAppDistribution {
+                artifactType = "APK"
+                groups = "internal-testers"
+                serviceCredentialsFile = "$rootDir/app/lumbridge-firebase-service-account.json"
+            }
+
             matchingFallbacks.addAll(arrayOf("qa", "debug"))
         }
 
         release {
-            isMinifyEnabled =  true
+            isMinifyEnabled = true
             isShrinkResources = false
 
             matchingFallbacks.add("release")

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.eyther.lumbridge" />
+                  <option name="mobileSdkAppId" value="1:921752946295:android:1b3ef6a334d64406cee872" />
+                  <option name="projectId" value="lumbridge-app" />
+                  <option name="projectNumber" value="921752946295" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

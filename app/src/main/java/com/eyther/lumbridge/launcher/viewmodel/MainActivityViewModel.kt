@@ -2,13 +2,13 @@ package com.eyther.lumbridge.launcher.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.domain.repository.preferences.PreferencesRepository
 import com.eyther.lumbridge.launcher.model.UiMode
-import com.eyther.lumbridge.usecase.preferences.GetIsDarkMode
+import com.eyther.lumbridge.usecase.preferences.GetPreferences
 import com.eyther.lumbridge.usecase.preferences.SetIsDarkMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -17,31 +17,33 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val getIsDarkMode: GetIsDarkMode,
+    private val getPreferences: GetPreferences,
     private val setIsDarkMode: SetIsDarkMode
 ) : ViewModel(), MainActivityViewModelInterface {
     override val uiMode = MutableStateFlow<UiMode>(UiMode.Light)
 
-    suspend fun checkUserUiMode(): UiMode? {
-        val isDarkMode = getIsDarkMode() ?: return null
-
-        return when {
-            isDarkMode -> UiMode.Dark
-            else -> UiMode.Light
-        }
+    init {
+        observePreferences()
     }
 
-    fun setLightMode() {
-        viewModelScope.launch {
-            uiMode.update { UiMode.Light }
-            setIsDarkMode(isDarkMode = false)
-        }
+    private fun observePreferences() {
+        getPreferences()
+            .filterNotNull()
+            .onEach { preferences ->
+                uiMode.update {
+                    if (preferences.isDarkMode) UiMode.Dark else UiMode.Light
+                }
+            }.launchIn(viewModelScope)
     }
 
-    fun setDarkMode() {
+    override suspend fun hasStoredPreferences(): Boolean {
+        return getPreferences().firstOrNull() != null
+    }
+
+    override fun toggleDarkMode(isDarkMode: Boolean) {
         viewModelScope.launch {
-            uiMode.update { UiMode.Dark }
-            setIsDarkMode(isDarkMode = true)
+            uiMode.update { if (isDarkMode) UiMode.Dark else UiMode.Light }
+            setIsDarkMode(isDarkMode)
         }
     }
 }
