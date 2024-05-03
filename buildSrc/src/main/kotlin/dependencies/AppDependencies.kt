@@ -8,7 +8,7 @@ import versions.AppVersions.HILT_NAVIGATION_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
 import versions.AppVersions.KTX_VERSION
 import versions.AppVersions.NAVIGATION_VERSION
-import versions.AppVersions.RETROFIT_VERSION
+import versions.AppVersions.COIL_VERSION
 import versions.SharedVersions.HILT_VERSION
 import versions.SharedVersions.KOTLIN_VERSION
 
@@ -27,8 +27,9 @@ object AppDependencies {
         "androidx.compose.material3:material3:$COMPOSE_MATERIAL_3_CORE_VERSION",
         "androidx.compose.ui:ui-tooling-preview:$COMPOSE_TOOLING_VERSION",
 
-        // Retrofit
-        "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION",
+        // Coil
+        "io.coil-kt:coil:$COIL_VERSION",
+        "io.coil-kt:coil-compose:$COIL_VERSION",
 
         // Navigation
         "androidx.navigation:navigation-runtime-ktx:$NAVIGATION_VERSION",

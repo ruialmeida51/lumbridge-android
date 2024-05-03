@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.launcher.viewmodel
 
-import com.eyther.lumbridge.launcher.model.UiMode
+import com.eyther.lumbridge.launcher.model.MainScreenViewState
 import kotlinx.coroutines.flow.StateFlow
 
 interface MainActivityViewModelInterface {
@@ -21,5 +21,5 @@ interface MainActivityViewModelInterface {
      */
     fun toggleDarkMode(isDarkMode: Boolean)
 
-    val uiMode: StateFlow<UiMode>
+    val viewState: StateFlow<MainScreenViewState>
 }

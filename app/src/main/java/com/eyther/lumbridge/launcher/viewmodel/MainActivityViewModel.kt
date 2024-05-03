@@ -2,6 +2,7 @@ package com.eyther.lumbridge.launcher.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eyther.lumbridge.launcher.model.MainScreenViewState
 import com.eyther.lumbridge.launcher.model.UiMode
 import com.eyther.lumbridge.usecase.preferences.GetPreferences
 import com.eyther.lumbridge.usecase.preferences.SetIsDarkMode
@@ -20,7 +21,8 @@ class MainActivityViewModel @Inject constructor(
     private val getPreferences: GetPreferences,
     private val setIsDarkMode: SetIsDarkMode
 ) : ViewModel(), MainActivityViewModelInterface {
-    override val uiMode = MutableStateFlow<UiMode>(UiMode.Light)
+
+    override val viewState = MutableStateFlow(MainScreenViewState())
 
     init {
         observePreferences()
@@ -30,8 +32,10 @@ class MainActivityViewModel @Inject constructor(
         getPreferences()
             .filterNotNull()
             .onEach { preferences ->
-                uiMode.update {
-                    if (preferences.isDarkMode) UiMode.Dark else UiMode.Light
+                viewState.update {
+                    it.copy(
+                        uiMode = if (preferences.isDarkMode) UiMode.Dark else UiMode.Light
+                    )
                 }
             }.launchIn(viewModelScope)
     }
@@ -42,7 +46,9 @@ class MainActivityViewModel @Inject constructor(
 
     override fun toggleDarkMode(isDarkMode: Boolean) {
         viewModelScope.launch {
-            uiMode.update { if (isDarkMode) UiMode.Dark else UiMode.Light }
+            viewState.update {
+                it.copy(uiMode = if (isDarkMode) UiMode.Dark else UiMode.Light)
+            }
             setIsDarkMode(isDarkMode)
         }
     }

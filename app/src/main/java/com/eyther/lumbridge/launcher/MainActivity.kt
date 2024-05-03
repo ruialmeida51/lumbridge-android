@@ -10,22 +10,23 @@ import androidx.lifecycle.lifecycleScope
 import com.eyther.lumbridge.ui.theme.LumbridgeTheme
 import com.eyther.lumbridge.launcher.screens.MainScreen
 import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModel
+import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModelInterface
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModelInterface by viewModels<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkThemeSettings()
 
         setContent {
-            val uiModeState = viewModel.uiMode.collectAsState()
+            val viewState = viewModel.viewState.collectAsState()
 
-            LumbridgeTheme(darkTheme = uiModeState.value.isDarkTheme()) {
+            LumbridgeTheme(darkTheme = viewState.value.uiMode.isDarkTheme()) {
                 MainScreen()
             }
         }

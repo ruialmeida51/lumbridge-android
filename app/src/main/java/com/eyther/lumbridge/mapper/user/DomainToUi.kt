@@ -1,10 +1,17 @@
 package com.eyther.lumbridge.mapper.user
 
-import com.eyther.lumbridge.domain.model.user.UserDomain
-import com.eyther.lumbridge.model.user.UserUi
+import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
+import com.eyther.lumbridge.domain.model.user.UserProfileDomain
+import com.eyther.lumbridge.model.user.UserFinancialsUi
+import com.eyther.lumbridge.model.user.UserProfileUi
 
-fun UserDomain.toUi() = UserUi(
+fun UserProfileDomain.toUi() = UserProfileUi(
+    locale = locale,
+    name = name,
+    email = email
+)
+
+fun UserFinancialsDomain.toUi() = UserFinancialsUi(
     annualGrossSalary = annualGrossSalary,
-    foodCardPerDiem = foodCardPerDiem,
-    locale = locale
+    foodCardPerDiem = foodCardPerDiem
 )

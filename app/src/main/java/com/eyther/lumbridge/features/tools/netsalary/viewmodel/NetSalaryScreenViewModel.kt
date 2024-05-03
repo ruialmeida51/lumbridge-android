@@ -5,25 +5,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
-import com.eyther.lumbridge.model.user.UserUi
+import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.finance.GetNetSalary
-import com.eyther.lumbridge.usecase.user.GetLocaleOrDefault
-import com.eyther.lumbridge.usecase.user.GetUserData
-import com.eyther.lumbridge.usecase.user.SaveUserData
+import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
+import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class NetSalaryScreenViewModel @Inject constructor(
-    private val getUserData: GetUserData,
-    private val saveUserData: SaveUserData,
-    private val getNetSalary: GetNetSalary,
-    private val getLocaleOrDefault: GetLocaleOrDefault
+    private val getUserFinancials: GetUserFinancials,
+    private val getLocaleOrDefault: GetLocaleOrDefault,
+    private val saveUserFinancials: SaveUserFinancials,
+    private val getNetSalary: GetNetSalary
 ) : ViewModel(), NetSalaryScreenViewModelInterface {
 
     override val viewState = MutableStateFlow<NetSalaryScreenViewState>(
@@ -36,64 +35,67 @@ class NetSalaryScreenViewModel @Inject constructor(
 
     private fun fetchUserData() {
         viewModelScope.launch {
-            val userData = getUserData().firstOrNull()
+            val userData = getUserFinancials()
+            val locale = getLocaleOrDefault()
 
             if (userData == null) {
                 viewState.update {
                     NetSalaryScreenViewState.Content.Input(
                         annualGrossSalary = null,
                         foodCardPerDiem = null,
-                        locale = getLocaleOrDefault()
+                        locale = locale
                     )
                 }
 
                 return@launch
             }
 
-            calculateNetSalary(userData)
+            calculateNetSalary(userData, locale)
         }
     }
 
-    private fun calculateNetSalary(userData: UserUi) {
+    private fun calculateNetSalary(userData: UserFinancialsUi, locale: SupportedLocales) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             Log.e(this::class.java.name, "Error calculating net salary 💥", throwable)
         }
 
         viewModelScope.launch(exceptionHandler) {
 
-            val netSalary = getNetSalary(userData.annualGrossSalary, userData.foodCardPerDiem)
+            val netSalary = getNetSalary(
+                annualGrossSalary = userData.annualGrossSalary,
+                foodCardPerDiem = userData.foodCardPerDiem
+            )
 
             viewState.update {
                 NetSalaryScreenViewState.Content.Overview(
                     annualGrossSalary = userData.annualGrossSalary,
                     netSalary = netSalary,
-                    locale = userData.locale
+                    locale = locale
                 )
             }
         }
     }
 
-    fun onCalculateNetSalary(annualSalary: Float, foodCardPerDiem: Float) {
+    override fun onCalculateNetSalary(annualSalary: Float, foodCardPerDiem: Float) {
         viewModelScope.launch {
-            val userData = UserUi(
+            val userData = UserFinancialsUi(
                 annualGrossSalary = annualSalary,
-                foodCardPerDiem = foodCardPerDiem,
-                locale = SupportedLocales.PORTUGAL
+                foodCardPerDiem = foodCardPerDiem
             )
 
-            saveUserData(userData).also { calculateNetSalary(userData) }
+            saveUserFinancials(userData).also { calculateNetSalary(userData, getLocaleOrDefault()) }
         }
     }
 
-    fun onEditSalary() {
+    override fun onEditSalary() {
         viewModelScope.launch {
-            val userData = getUserData().firstOrNull()
+            val userData = getUserFinancials()
 
             viewState.update {
                 NetSalaryScreenViewState.Content.Input(
                     annualGrossSalary = userData?.annualGrossSalary,
                     foodCardPerDiem = userData?.foodCardPerDiem,
-                    locale = userData?.locale ?: getLocaleOrDefault()
+                    locale = getLocaleOrDefault()
                 )
             }
         }

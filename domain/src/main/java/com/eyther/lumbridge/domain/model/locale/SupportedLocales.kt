@@ -4,7 +4,10 @@ import java.util.Currency
 
 // ISO 3166 ALPHA 2 for locale,
 // ISO 4217 for currency
-enum class SupportedLocales(val countryCode: String, val currency: Currency) {
+enum class SupportedLocales(
+    val countryCode: String,
+    private val currency: Currency
+) {
     PORTUGAL("pt", Currency.getInstance("EUR"));
 
     fun getCurrencySymbol(): String = this.currency.symbol

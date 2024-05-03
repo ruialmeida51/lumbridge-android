@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.tools
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,11 +15,13 @@ import com.eyther.lumbridge.features.tools.mortgage.screens.MortgageScreen
 import com.eyther.lumbridge.features.tools.savings.screens.SavingsScreen
 
 @Composable
-fun ToolsNavHost(navController: NavHostController) {
+fun ToolsNavHost(
+    navController: NavHostController
+) {
     NavHost(
         modifier = Modifier.fillMaxSize(),
         navController = navController,
-        startDestination = ToolsNavigationItem.Overview.route,
+        startDestination = ToolsNavigationItem.Overview.route
     ) {
         composable(route = ToolsNavigationItem.Overview.route) {
             ToolsOverviewScreen(
@@ -27,7 +30,11 @@ fun ToolsNavHost(navController: NavHostController) {
             )
         }
 
-        composable(route = ToolsNavigationItem.NetSalary.route) {
+        composable(
+            enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up) },
+            exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down) },
+            route = ToolsNavigationItem.NetSalary.route
+        ) {
             NetSalaryScreen(
                 navController = navController,
                 label = ToolsNavigationItem.NetSalary.label

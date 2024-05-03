@@ -5,15 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.eyther.lumbridge.ui.common.composables.components.bottomNavigation.LumbridgeBottomNavigationBar
 import com.eyther.lumbridge.ui.navigation.bottomNavigation.LumbridgeNavigationHost
-import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.theme.LumbridgeTheme
 
 @Composable
@@ -23,7 +19,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = { LumbridgeBottomNavigationBar(navController) },
-        topBar = { LumbridgeTopAppBar(navController) }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -37,5 +32,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 @Composable
 @Preview
 private fun MainScreenPreview() {
-    LumbridgeTheme(darkTheme = true) { MainScreen() }
+    LumbridgeTheme {
+        MainScreen()
+    }
 }

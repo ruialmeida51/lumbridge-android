@@ -18,7 +18,7 @@ class ToolsScreenViewModel @Inject constructor() : ViewModel(), ToolsScreenViewM
 
     private fun getInitialState() = ToolScreenViewState.Content(ToolItem.entries)
 
-    fun onItemClick(toolItem: ToolItem, navController: NavController) {
+    override fun navigate(toolItem: ToolItem, navController: NavController) {
         navController.navigate(
             when (toolItem) {
                 NetSalary -> ToolsNavigationItem.NetSalary.route

@@ -3,8 +3,8 @@ package com.eyther.lumbridge.features.tools.savings.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.savings.model.SavingsScreenViewState
-import com.eyther.lumbridge.usecase.user.GetUserData
-import com.eyther.lumbridge.usecase.user.SaveUserData
+import com.eyther.lumbridge.usecase.user.profile.GetUserProfile
+import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SavingsScreenViewModel @Inject constructor(
-    private val getUserData: GetUserData,
-    private val saveUserData: SaveUserData
+    private val getUserProfile: GetUserProfile,
+    private val saveUserData: SaveUserProfile
 ) : ViewModel(), SavingsScreenViewModelInterface {
     override val viewState = MutableStateFlow<SavingsScreenViewState>(
         SavingsScreenViewState.Loading
@@ -26,7 +26,7 @@ class SavingsScreenViewModel @Inject constructor(
     // TODO
     private fun fetchUserData() {
         viewModelScope.launch {
-            val userData = getUserData()
+            val userData = getUserProfile()
 
             if (userData == null) {
                 // Refer to Net Salary Calculator for the implementation of this block.
