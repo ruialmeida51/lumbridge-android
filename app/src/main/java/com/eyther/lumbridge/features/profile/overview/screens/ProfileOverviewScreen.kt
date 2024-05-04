@@ -4,14 +4,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material3.Icon
@@ -31,8 +35,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
-import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
+import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.features.profile.overview.viewmodel.ProfileOverviewScreenViewModel
 import com.eyther.lumbridge.features.profile.overview.viewmodel.ProfileOverviewScreenViewModelInterface
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
@@ -57,6 +61,8 @@ fun ProfileOverviewScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
+                .height(IntrinsicSize.Max)
         ) {
             when (state) {
                 is ProfileOverviewScreenViewState.Content -> Content(

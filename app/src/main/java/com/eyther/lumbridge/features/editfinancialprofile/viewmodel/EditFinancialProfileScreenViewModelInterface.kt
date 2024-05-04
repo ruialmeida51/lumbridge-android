@@ -1,21 +1,17 @@
 package com.eyther.lumbridge.features.editfinancialprofile.viewmodel
 
 import androidx.navigation.NavHostController
+import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewEffect
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-interface EditFinancialProfileScreenViewModelInterface {
+interface EditFinancialProfileScreenViewModelInterface : EditFinancialProfileInputHandler {
     val viewState: StateFlow<EditFinancialProfileScreenViewState>
+    val viewEffect: SharedFlow<EditFinancialProfileScreenViewEffect>
 
     /**
      * Saves the user data inputted by the user.
-     * @param annualGrossSalary the annual gross salary of the user.
-     * @param foodCardPerDiem the food card per diem of the user.
-     * @param navController the navigation controller.
      */
-    fun saveUserData(
-        annualGrossSalary: Float,
-        foodCardPerDiem: Float,
-        navController: NavHostController
-    )
+    fun saveUserData(navController: NavHostController)
 }

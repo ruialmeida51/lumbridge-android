@@ -12,6 +12,13 @@ fun UserProfileUi.toDomain() = UserProfileDomain(
 )
 
 fun UserFinancialsUi.toDomain() = UserFinancialsDomain(
-    annualGrossSalary = annualGrossSalary,
-    foodCardPerDiem = foodCardPerDiem
+    annualGrossSalary = checkNotNull(annualGrossSalary),
+    foodCardPerDiem = checkNotNull(foodCardPerDiem),
+    savingsPercentage = savingsPercentage,
+    necessitiesPercentage = necessitiesPercentage,
+    luxuriesPercentage = luxuriesPercentage,
+    numberOfDependants = numberOfDependants,
+    irsWithPartner = irsWithPartner,
+    married = married,
+    handicapped = handicapped
 )

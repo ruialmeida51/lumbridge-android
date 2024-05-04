@@ -2,5 +2,12 @@ package com.eyther.lumbridge.data.model.user
 
 data class UserFinancialsCached(
     val annualGrossSalary: Float,
-    val foodCardPerDiem: Float
+    val foodCardPerDiem: Float,
+    val savingsPercentage: Int?,
+    val necessitiesPercentage: Int?,
+    val luxuriesPercentage: Int?,
+    val numberOfDependants: Int?,
+    val irsWithPartner: Boolean,
+    val married: Boolean,
+    val handicapped: Boolean,
 )

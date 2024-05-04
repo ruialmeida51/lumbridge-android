@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,14 +37,11 @@ class FinancialOverviewScreenViewModel @Inject constructor(
                     if (userFinancials == null) {
                         FinancialOverviewScreenViewState.Content.Input(getLocaleOrDefault())
                     } else {
-                        val netSalary = getNetSalary(
-                            annualGrossSalary = userFinancials.annualGrossSalary,
-                            foodCardPerDiem = userFinancials.foodCardPerDiem
-                        )
+                        val netSalary = getNetSalary(userFinancials)
 
                         FinancialOverviewScreenViewState.Content.Overview(
                             locale = getLocaleOrDefault(),
-                            annualGrossSalary = userFinancials.annualGrossSalary,
+                            annualGrossSalary = checkNotNull(userFinancials.annualGrossSalary),
                             netSalary = netSalary
                         )
                     }

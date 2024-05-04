@@ -14,5 +14,12 @@ fun UserProfileCached.toDomain() = UserProfileDomain(
 
 fun UserFinancialsCached.toDomain() = UserFinancialsDomain(
     annualGrossSalary = annualGrossSalary,
-    foodCardPerDiem = foodCardPerDiem
+    foodCardPerDiem = foodCardPerDiem,
+    savingsPercentage = savingsPercentage,
+    necessitiesPercentage = necessitiesPercentage,
+    luxuriesPercentage = luxuriesPercentage,
+    numberOfDependants = numberOfDependants,
+    irsWithPartner = irsWithPartner,
+    married = married,
+    handicapped = handicapped,
 )

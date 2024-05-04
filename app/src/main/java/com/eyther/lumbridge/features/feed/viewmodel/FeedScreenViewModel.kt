@@ -5,9 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
 import com.eyther.lumbridge.usecase.news.GetNewsFeed
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +27,12 @@ class FeedScreenViewModel @Inject constructor(
     }
 
     private fun fetchNewsFeed() {
-        viewModelScope.launch {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            throwable.printStackTrace()
+            viewState.update { FeedScreenViewState.Empty }
+        }
+
+        viewModelScope.launch(coroutineExceptionHandler) {
             val newsFeed = getNewsFeed()
 
             if (newsFeed.isEmpty()) {

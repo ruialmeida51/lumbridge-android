@@ -1,12 +1,9 @@
 package com.eyther.lumbridge.features.feed.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,30 +12,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
 import com.eyther.lumbridge.features.feed.viewmodel.FeedScreenViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.FeedScreenViewModelInterface
 import com.eyther.lumbridge.model.news.FeedItemUi
+import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
+import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -63,12 +62,20 @@ fun FeedScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(DefaultPadding)
+                .padding(horizontal = DefaultPadding)
         ) {
             when (state) {
-                is FeedScreenViewState.Content -> Content(state)
-                is FeedScreenViewState.Empty -> Empty(viewModel::refresh)
-                is FeedScreenViewState.Loading -> Unit
+                is FeedScreenViewState.Content -> {
+                    Content(state)
+                }
+
+                is FeedScreenViewState.Empty -> {
+                    EmptyScreen(onRefresh = viewModel::refresh)
+                }
+
+                is FeedScreenViewState.Loading -> {
+                    LoadingIndicator()
+                }
             }
         }
     }
@@ -79,12 +86,16 @@ private fun Content(
     state: FeedScreenViewState.Content
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = DefaultPadding)
+        modifier = Modifier.fillMaxSize()
     ) {
         items(state.feedItems.count()) { index ->
+            if (index == 0) {
+                Spacer(modifier = Modifier.height(DefaultPadding))
+            }
+
             FeedItem(feedItemUi = state.feedItems[index])
-            Spacer(modifier = Modifier.padding(DefaultPadding))
+
+            Spacer(modifier = Modifier.height(DefaultPadding))
         }
     }
 }
@@ -104,81 +115,65 @@ private fun FeedItem(
             )
             .padding(DefaultPadding)
     ) {
+        val scalingType = remember { mutableStateOf(ContentScale.Crop) }
+        val colorFilter = remember { mutableStateOf<ColorFilter?>(null) }
+        val onSurfaceColor = MaterialTheme.colorScheme.onSurface
+
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(128.dp),
-            contentScale = ContentScale.Crop,
+                .height(192.dp)
+                .clip(shape = RoundedCornerShape(8.dp))
+                .padding(bottom = QuarterPadding),
+            contentScale = scalingType.value,
+            error = painterResource(id = R.drawable.ic_image_not_supported),
+            onSuccess = {
+                scalingType.value = ContentScale.Crop
+                colorFilter.value = null
+            },
+            onError = {
+                scalingType.value = ContentScale.FillHeight
+                colorFilter.value = ColorFilter.tint(onSurfaceColor)
+            },
             model = feedItemUi.image,
-            filterQuality = FilterQuality.None,
-            contentDescription = feedItemUi.title
-        )
-
-        Spacer(
-            modifier = Modifier.padding(QuarterPadding)
+            filterQuality = FilterQuality.Low,
+            contentDescription = feedItemUi.title,
+            colorFilter = colorFilter.value
         )
 
         Text(
+            modifier = Modifier.padding(bottom = QuarterPadding),
             text = feedItemUi.title,
             style = runescapeTypography.titleSmall
         )
 
-        Spacer(
-            modifier = Modifier.padding(QuarterPadding)
-        )
-
         Text(
+            modifier = Modifier.padding(bottom = QuarterPadding),
             text = feedItemUi.description,
             style = runescapeTypography.bodyMedium
         )
 
-        Spacer(
-            modifier = Modifier.padding(QuarterPadding)
-        )
-
         Text(
             text = feedItemUi.pubDate,
-            style = runescapeTypography.labelSmall
+            style = runescapeTypography.labelSmall,
+            modifier = Modifier.align(Alignment.End)
         )
     }
 }
 
 @Composable
-private fun ColumnScope.Empty(
-    onRefresh: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .align(Alignment.CenterHorizontally),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "It seems we're having some trouble fetching the news feed. " +
-                    "Please try again later.",
-            style = runescapeTypography.titleSmall,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.padding(DefaultPadding))
-
-        Icon(
-            modifier = Modifier
-                .size(32.dp)
-                .align(Alignment.CenterHorizontally),
-            painter = painterResource(id = R.drawable.ic_news),
-            contentDescription = "News Feed"
-        )
-
-        Spacer(modifier = Modifier.padding(DefaultPadding))
-
-        Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-            onClick = { onRefresh() }
-        ) {
-            Text(text = "Refresh")
-        }
-    }
+private fun ColumnScope.EmptyScreen(onRefresh: () -> Unit) {
+    EmptyScreenWithButton(
+        text = "It seems we're having some trouble fetching the news feed. " +
+                "Please try again later.",
+        buttonText = "Refresh",
+        icon = {
+            Icon(
+                modifier = Modifier.size(32.dp),
+                painter = painterResource(id = R.drawable.ic_news),
+                contentDescription = "News Feed"
+            )
+        },
+        onButtonClick = onRefresh
+    )
 }

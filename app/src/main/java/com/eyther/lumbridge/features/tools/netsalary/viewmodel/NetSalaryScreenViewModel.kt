@@ -7,9 +7,9 @@ import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
 import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.finance.GetNetSalary
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
+import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,35 +55,18 @@ class NetSalaryScreenViewModel @Inject constructor(
     }
 
     private fun calculateNetSalary(userData: UserFinancialsUi, locale: SupportedLocales) {
-        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             Log.e(this::class.java.name, "Error calculating net salary 💥", throwable)
         }
 
-        viewModelScope.launch(exceptionHandler) {
+        viewModelScope.launch(coroutineExceptionHandler) {
 
-            val netSalary = getNetSalary(
-                annualGrossSalary = userData.annualGrossSalary,
-                foodCardPerDiem = userData.foodCardPerDiem
-            )
-
-            viewState.update {
-                NetSalaryScreenViewState.Content.Overview(
-                    annualGrossSalary = userData.annualGrossSalary,
-                    netSalary = netSalary,
-                    locale = locale
-                )
-            }
         }
     }
 
     override fun onCalculateNetSalary(annualSalary: Float, foodCardPerDiem: Float) {
         viewModelScope.launch {
-            val userData = UserFinancialsUi(
-                annualGrossSalary = annualSalary,
-                foodCardPerDiem = foodCardPerDiem
-            )
 
-            saveUserFinancials(userData).also { calculateNetSalary(userData, getLocaleOrDefault()) }
         }
     }
 

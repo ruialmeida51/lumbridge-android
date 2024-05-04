@@ -13,5 +13,12 @@ fun UserProfileDomain.toCached() = UserProfileCached(
 
 fun UserFinancialsDomain.toCached() = UserFinancialsCached(
     annualGrossSalary = annualGrossSalary,
-    foodCardPerDiem = foodCardPerDiem
+    foodCardPerDiem = foodCardPerDiem,
+    savingsPercentage = savingsPercentage,
+    necessitiesPercentage = necessitiesPercentage,
+    luxuriesPercentage = luxuriesPercentage,
+    numberOfDependants = numberOfDependants,
+    irsWithPartner = irsWithPartner,
+    married = married,
+    handicapped = handicapped
 )

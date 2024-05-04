@@ -6,30 +6,11 @@ import com.eyther.lumbridge.model.user.UserFinancialsUi
 sealed interface EditFinancialProfileScreenViewState {
     data object Loading : EditFinancialProfileScreenViewState
 
-    sealed class Content(
-        open val locale: SupportedLocales
-    ): EditFinancialProfileScreenViewState {
-        /**
-         * There's no data to display, we need to ask the user to create a profile.
-         */
-        data class NoData(
-            override val locale: SupportedLocales
-        ): Content(locale)
+    data class Content(
+        val locale: SupportedLocales,
+        val currentData: UserFinancialsUi? = null,
+        val shouldEnableSaveButton: Boolean = false
+    ): EditFinancialProfileScreenViewState
 
-        /**
-         * We have saved user data that we can display.
-         */
-        data class Data(
-            override val locale: SupportedLocales,
-            val currentData: UserFinancialsUi
-        ): Content(locale)
-
-        /**
-         * @return the user data if it exists, otherwise null.
-         */
-        fun getUserData() = when(this) {
-            is NoData -> null
-            is Data -> currentData
-        }
-    }
+    fun asContent() = this as? Content
 }
