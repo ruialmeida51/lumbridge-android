@@ -93,8 +93,7 @@ sealed interface PortugalIrsBracketType {
                 return (
                         !userFinancialsDomain.married &&
                                 (userFinancialsDomain.numberOfDependants ?: 0) == 0 &&
-                                !userFinancialsDomain.handicapped &&
-                                userFinancialsDomain.singleIncome
+                                !userFinancialsDomain.handicapped
                         ) || (
                         userFinancialsDomain.married &&
                                 !userFinancialsDomain.handicapped &&
@@ -167,8 +166,7 @@ sealed interface PortugalIrsBracketType {
             override fun isIrsBracket(userFinancialsDomain: UserFinancialsDomain): Boolean {
                 return !userFinancialsDomain.married &&
                         (userFinancialsDomain.numberOfDependants ?: 0) > 0 &&
-                        !userFinancialsDomain.handicapped &&
-                        userFinancialsDomain.singleIncome
+                        !userFinancialsDomain.handicapped
             }
         }
 
@@ -346,8 +344,7 @@ sealed interface PortugalIrsBracketType {
             override fun isIrsBracket(userFinancialsDomain: UserFinancialsDomain): Boolean {
                 return !userFinancialsDomain.married &&
                         (userFinancialsDomain.numberOfDependants ?: 0) > 0 &&
-                        userFinancialsDomain.handicapped &&
-                        userFinancialsDomain.singleIncome
+                        userFinancialsDomain.handicapped
             }
         }
 
