@@ -7,7 +7,7 @@ interface EditFinancialProfileInputHandler {
     fun onNecessitiesPercentageChanged(necessitiesPercentage: Int?)
     fun onLuxuriesPercentageChanged(luxuriesPercentage: Int?)
     fun onNumberOfDependantsChanged(numberOfDependants: Int?)
-    fun onIrsWithPartnerChanged(irsWithPartner: Boolean)
+    fun onSingleIncomeChanged(singleIncome: Boolean)
     fun onMarriedChanged(married: Boolean)
     fun onHandicappedChanged(handicapped: Boolean)
 }

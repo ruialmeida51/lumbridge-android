@@ -133,11 +133,11 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
         }
     }
 
-    override fun onIrsWithPartnerChanged(irsWithPartner: Boolean) {
+    override fun onSingleIncomeChanged(singleIncome: Boolean) {
         updateInput { state ->
             state.copy(
-                currentData = state.currentData?.copy(irsWithPartner = irsWithPartner)
-                    ?: UserFinancialsUi(irsWithPartner = irsWithPartner)
+                currentData = state.currentData?.copy(singleIncome = singleIncome)
+                    ?: UserFinancialsUi(singleIncome = singleIncome)
             )
         }
     }

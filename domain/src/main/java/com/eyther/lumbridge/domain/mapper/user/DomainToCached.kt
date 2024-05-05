@@ -18,7 +18,7 @@ fun UserFinancialsDomain.toCached() = UserFinancialsCached(
     necessitiesPercentage = necessitiesPercentage,
     luxuriesPercentage = luxuriesPercentage,
     numberOfDependants = numberOfDependants,
-    irsWithPartner = irsWithPartner,
+    singleIncome = singleIncome,
     married = married,
     handicapped = handicapped
 )

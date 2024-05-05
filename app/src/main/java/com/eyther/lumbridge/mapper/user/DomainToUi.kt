@@ -18,7 +18,7 @@ fun UserFinancialsDomain.toUi() = UserFinancialsUi(
     necessitiesPercentage = necessitiesPercentage,
     luxuriesPercentage = luxuriesPercentage,
     numberOfDependants = numberOfDependants,
-    irsWithPartner = irsWithPartner,
+    singleIncome = singleIncome,
     married = married,
     handicapped = handicapped
 )

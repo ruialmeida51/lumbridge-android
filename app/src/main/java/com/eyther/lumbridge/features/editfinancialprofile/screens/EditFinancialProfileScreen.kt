@@ -129,14 +129,14 @@ fun ColumnScope.DemographicInformation(
         modifier = Modifier
             .padding(bottom = DefaultPadding)
             .align(Alignment.Start),
-        text = "Demographic Information",
+        text = "What does your household look like?",
         style = runescapeTypography.titleSmall,
         color = MaterialTheme.colorScheme.onPrimary
     )
 
 
     SwitchSetting(
-        label = "Handicapped ?",
+        label = "Handicapped",
         isChecked = state.currentData?.handicapped ?: false,
         onCheckedChange = { viewModel.onHandicappedChanged(it) },
     )
@@ -144,7 +144,7 @@ fun ColumnScope.DemographicInformation(
     Spacer(modifier = Modifier.height(DefaultPadding))
 
     SwitchSetting(
-        label = "Married ?",
+        label = "Married",
         isChecked = state.currentData?.married ?: false,
         onCheckedChange = { viewModel.onMarriedChanged(it) }
     )
@@ -152,9 +152,9 @@ fun ColumnScope.DemographicInformation(
     Spacer(modifier = Modifier.height(DefaultPadding))
 
     SwitchSetting(
-        label = "IRS with partner ?",
-        isChecked = state.currentData?.irsWithPartner ?: false,
-        onCheckedChange = { viewModel.onIrsWithPartnerChanged(it) }
+        label = "Single income",
+        isChecked = state.currentData?.singleIncome ?: false,
+        onCheckedChange = { viewModel.onSingleIncomeChanged(it) }
     )
 
     Spacer(modifier = Modifier.height(DefaultPadding))
@@ -224,7 +224,11 @@ fun ColumnScope.SavingsBreakdown(
         mutableStateOf(TextFieldValue(state.currentData?.savingsPercentage?.toString().orEmpty()))
     }
     val necessitiesPercentage = remember {
-        mutableStateOf(TextFieldValue(state.currentData?.necessitiesPercentage?.toString().orEmpty()))
+        mutableStateOf(
+            TextFieldValue(
+                state.currentData?.necessitiesPercentage?.toString().orEmpty()
+            )
+        )
     }
     val luxuriesPercentage = remember {
         mutableStateOf(TextFieldValue(state.currentData?.luxuriesPercentage?.toString().orEmpty()))

@@ -7,7 +7,7 @@ data class UserFinancialsDomain(
     val necessitiesPercentage: Int?,
     val luxuriesPercentage: Int?,
     val numberOfDependants: Int?,
-    val irsWithPartner: Boolean,
+    val singleIncome: Boolean,
     val married: Boolean,
     val handicapped: Boolean
 )

@@ -9,7 +9,7 @@ data class UserFinancialsUi(
     val luxuriesPercentage: Int? = null,
 
     val numberOfDependants: Int? = null,
-    val irsWithPartner: Boolean = false,
+    val singleIncome: Boolean = false,
     val married: Boolean = false,
     val handicapped: Boolean = false
 )
