@@ -153,6 +153,7 @@ fun ColumnScope.DemographicInformation(
 
     SwitchSetting(
         label = "Single income",
+        enabled = state.currentData?.married == true,
         isChecked = state.currentData?.singleIncome ?: false,
         onCheckedChange = { viewModel.onSingleIncomeChanged(it) }
     )

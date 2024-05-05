@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 fun SwitchSetting(
     modifier: Modifier = Modifier,
     icon: Int? = null,
+    enabled: Boolean = true,
     label: String,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit
@@ -20,6 +21,7 @@ fun SwitchSetting(
         label = label
     ) {
         Switch(
+            enabled = enabled,
             modifier = Modifier.height(16.dp),
             checked = isChecked,
             onCheckedChange = onCheckedChange
