@@ -13,6 +13,11 @@ import kotlin.math.ceil
 import kotlin.math.floor
 
 class PortugalNetSalaryCalculator @Inject constructor() : NetSalaryCalculator {
+    companion object {
+        private const val WORKING_DAYS_IN_MONTH = 22f
+        private const val RECEIVING_MONTHS_WITH_DUODECIMOS = 12
+        private const val RECEIVING_MONTHS_WITHOUT_DUODECIMOS = 14
+    }
     /**
      * Calculates the net salary for Portugal and saves the deductions made.
      * In Portugal, typically, you get paid 14 months.
@@ -27,14 +32,17 @@ class PortugalNetSalaryCalculator @Inject constructor() : NetSalaryCalculator {
     override fun calculate(
         userFinancialsDomain: UserFinancialsDomain
     ): NetSalary {
-        val foodCardMonthly = userFinancialsDomain.foodCardPerDiem * 22f
+        val foodCardMonthly = userFinancialsDomain.foodCardPerDiem * WORKING_DAYS_IN_MONTH
         val portugalIrsBracket =
             PortugalIrsBracketType.of(userFinancialsDomain).getIrsBracket(userFinancialsDomain)
 
         return NetSalary(
-            // We round up to the nearest integer in Portugal.
-            salary = portugalIrsBracket.netSalary,
-            foodCard = ceil(foodCardMonthly),
+            monthlyGrossSalary = userFinancialsDomain.annualGrossSalary / RECEIVING_MONTHS_WITHOUT_DUODECIMOS,
+            monthlyNetSalary = portugalIrsBracket.netSalary,
+            annualGrossSalary = userFinancialsDomain.annualGrossSalary,
+            annualNetSalary = portugalIrsBracket.netSalary * RECEIVING_MONTHS_WITHOUT_DUODECIMOS,
+            monthlyFoodCard = ceil(foodCardMonthly),
+            dailyFoodCard = userFinancialsDomain.foodCardPerDiem,
             deductions = getDeductions(
                 irsDeduction = portugalIrsBracket.irsDeductionValue,
                 ssDeduction = portugalIrsBracket.ssDeductionValue,

@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.features.tools.overview.screens
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,14 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +36,7 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBar
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.LumbridgeTheme
+import com.eyther.lumbridge.ui.theme.QuarterPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
@@ -48,7 +52,9 @@ fun ToolsOverviewScreen(
     ) { paddingValues ->
         val state = toolsScreenViewModel.viewState.collectAsState()
 
-        Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)) {
             when (val currentState = state.value) {
                 is ToolScreenViewState.Content -> Content(
                     state = currentState,
@@ -94,25 +100,22 @@ fun ToolGrid(
     navController: NavController,
     onItemClick: (toolItem: ToolItem, navController: NavController) -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
             .aspectRatio(1f)
-            .padding(HalfPadding),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onPrimary),
-        color = MaterialTheme.colorScheme.surface,
-        onClick = { onItemClick(toolItem, navController) }
+            .padding(HalfPadding)
+            .clip(RoundedCornerShape(8.dp))
+            .shadow(elevation = QuarterPadding)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .clickable { onItemClick(toolItem, navController) },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Column(
-            modifier = Modifier.padding(HalfPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = toolItem.text,
-                style = runescapeTypography.titleSmall,
-                textAlign = TextAlign.Center
-            )
-        }
+        Text(
+            text = toolItem.text,
+            style = runescapeTypography.titleSmall,
+            textAlign = TextAlign.Center
+        )
     }
 }
 

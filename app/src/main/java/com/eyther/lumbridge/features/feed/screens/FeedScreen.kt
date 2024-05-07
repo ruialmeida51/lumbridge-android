@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
@@ -38,6 +39,7 @@ import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
 import com.eyther.lumbridge.features.feed.viewmodel.FeedScreenViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.IFeedScreenViewModel
 import com.eyther.lumbridge.model.news.FeedItemUi
+import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
@@ -88,56 +90,77 @@ private fun Content(
     state: FeedScreenViewState.Content,
     viewModel: IFeedScreenViewModel
 ) {
-    Spacer(modifier = Modifier.height(DefaultPadding))
-
-    LazyRow {
-        items(state.availableFeeds.count()) { index ->
-            val feed = state.availableFeeds[index]
-
-            if (index == 0) {
-                Spacer(modifier = Modifier.width(DefaultPadding))
-            }
-
-            Text(
-                text = feed.label,
-                style = runescapeTypography.titleSmall,
-                modifier = Modifier
-                    .padding(end = if (index == state.availableFeeds.lastIndex) {
-                        DefaultPadding
-                    } else {
-                        HalfPadding
-                    })
-                    .background(
-                        shape = RoundedCornerShape(8.dp),
-                        color = if (state.selectedFeed == feed) {
-                            MaterialTheme.colorScheme.primaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.secondaryContainer
-                        }
-                    )
-                    .padding(HalfPadding)
-                    .clickable { viewModel.selectFeed(feed) }
-            )
-        }
-    }
-
-    Spacer(modifier = Modifier.height(DefaultPadding))
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = DefaultPadding)
     ) {
         items(state.feedItems.count()) { index ->
             if (index == 0) {
                 Spacer(modifier = Modifier.height(DefaultPadding))
+
+                LazyRow {
+                    items(state.availableFeeds.count()) { index ->
+                        val feed = state.availableFeeds[index]
+
+                        if (index == 0) {
+                            Spacer(modifier = Modifier.width(DefaultPadding))
+                        }
+
+                        FeedOption(
+                            feed = feed,
+                            isSelected = state.selectedFeed == feed,
+                            onFeedSelected = viewModel::selectFeed
+                        )
+
+                        if (index == state.availableFeeds.lastIndex) {
+                            Spacer(modifier = Modifier.width(DefaultPadding))
+                        }
+                    }
+                }
             }
+
+            Spacer(modifier = Modifier.height(HalfPadding))
 
             FeedItem(feedItemUi = state.feedItems[index])
 
-            Spacer(modifier = Modifier.height(DefaultPadding))
+            if (index == state.feedItems.lastIndex) {
+                Spacer(modifier = Modifier.height(DefaultPadding))
+            }
         }
     }
+}
+
+@Composable
+private fun FeedOption(
+    feed: RssFeedUi,
+    isSelected: Boolean,
+    onFeedSelected: (RssFeedUi) -> Unit
+) {
+    val backgroundColor = if (isSelected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.secondary
+    }
+
+    val textColor = if (isSelected) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSecondary
+    }
+
+    Text(
+        text = feed.label,
+        style = runescapeTypography.bodyLarge,
+        modifier = Modifier
+            .padding(end = QuarterPadding)
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable { onFeedSelected(feed) }
+            .padding(HalfPadding),
+        color = textColor
+    )
 }
 
 @Composable
@@ -149,37 +172,39 @@ private fun FeedItem(
     Column(
         modifier = Modifier
             .clickable { uriHandler.openUri(feedItemUi.link) }
-            .background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(8)
-            )
+            .padding(horizontal = DefaultPadding)
+            .clip(RoundedCornerShape(8.dp))
+            .shadow(elevation = QuarterPadding)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding)
     ) {
         val scalingType = remember { mutableStateOf(ContentScale.Crop) }
         val colorFilter = remember { mutableStateOf<ColorFilter?>(null) }
-        val onSurfaceColor = MaterialTheme.colorScheme.onSurface
+        val imageTintColor = MaterialTheme.colorScheme.onPrimary
 
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(192.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
-                .padding(bottom = QuarterPadding),
-            contentScale = scalingType.value,
-            error = painterResource(id = R.drawable.ic_image_not_supported),
-            onSuccess = {
-                scalingType.value = ContentScale.Crop
-                colorFilter.value = null
-            },
-            onError = {
-                scalingType.value = ContentScale.FillHeight
-                colorFilter.value = ColorFilter.tint(onSurfaceColor)
-            },
-            model = feedItemUi.image,
-            filterQuality = FilterQuality.Low,
-            contentDescription = feedItemUi.title,
-            colorFilter = colorFilter.value
-        )
+        if (feedItemUi.image.isNotEmpty()) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(192.dp)
+                    .padding(bottom = HalfPadding)
+                    .clip(shape = RoundedCornerShape(8.dp)),
+                contentScale = scalingType.value,
+                error = painterResource(id = R.drawable.ic_image_not_supported),
+                onSuccess = {
+                    scalingType.value = ContentScale.Crop
+                    colorFilter.value = null
+                },
+                onError = {
+                    scalingType.value = ContentScale.FillHeight
+                    colorFilter.value = ColorFilter.tint(imageTintColor)
+                },
+                model = feedItemUi.image,
+                filterQuality = FilterQuality.Low,
+                contentDescription = feedItemUi.title,
+                colorFilter = colorFilter.value
+            )
+        }
 
         Text(
             modifier = Modifier.padding(bottom = QuarterPadding),
@@ -204,6 +229,7 @@ private fun FeedItem(
 @Composable
 private fun ColumnScope.EmptyScreen(onRefresh: () -> Unit) {
     EmptyScreenWithButton(
+        modifier = Modifier.padding(DefaultPadding),
         text = "It seems we're having some trouble fetching the news feed. " +
                 "Please try again later.",
         buttonText = "Refresh",

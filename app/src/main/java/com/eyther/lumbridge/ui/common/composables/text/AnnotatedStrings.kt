@@ -11,10 +11,22 @@ import androidx.compose.ui.text.withStyle
  * styled with a different colour from the remaining text, to make it stand out.
  */
 @Composable
-fun buildAnnotatedStringTextWithLabel(label: String, remainingText: String) = buildAnnotatedString {
-    withStyle(SpanStyle(color = MaterialTheme.colorScheme.inversePrimary)) {
-        append(label)
-    }
+fun buildAnnotatedStringTextWithLabel(
+    label: String,
+    remainingText: String,
+    reversed: Boolean = false
+) = buildAnnotatedString {
+    if (reversed) {
+        append(remainingText)
 
-    append(remainingText)
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
+            append(label)
+        }
+    } else {
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
+            append(label)
+        }
+
+        append(remainingText)
+    }
 }

@@ -18,7 +18,6 @@ sealed interface FinancialOverviewScreenViewState {
         // This state should only be reached if we actually have data to display.
         data class Overview(
             override val locale: SupportedLocales,
-            val annualGrossSalary: Float,
             val netSalary: NetSalaryUi
         ) : Content(locale)
     }

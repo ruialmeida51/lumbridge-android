@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.profile.overview.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,14 +19,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.Lumbridge
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
+import com.eyther.lumbridge.ui.theme.QuarterPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
@@ -63,6 +65,7 @@ fun ProfileOverviewScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
                 .height(IntrinsicSize.Max)
+                .padding(DefaultPadding)
         ) {
             when (state) {
                 is ProfileOverviewScreenViewState.Content -> Content(
@@ -89,16 +92,15 @@ private fun Content(
         Text(
             text = "Financial Settings",
             style = runescapeTypography.bodyLarge,
-            modifier = Modifier.padding(vertical = HalfPadding, horizontal = DefaultPadding)
+            modifier = Modifier.padding(vertical = HalfPadding)
         )
-
 
         ProfileFinancialSettings(navController, viewModel::navigate)
 
         Text(
             text = "App Settings",
             style = runescapeTypography.bodyLarge,
-            modifier = Modifier.padding(vertical = HalfPadding, horizontal = DefaultPadding)
+            modifier = Modifier.padding(vertical = HalfPadding)
         )
 
         ProfileAppSettings(navController, viewModel::navigate)
@@ -111,62 +113,59 @@ private fun ProfileHeader(
     state: ProfileOverviewScreenViewState.Content,
     onNavigate: (ProfileNavigationItem, NavController) -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(DefaultPadding),
-        shape = RoundedCornerShape(8),
+            .clip(RoundedCornerShape(8.dp))
+            .shadow(elevation = QuarterPadding)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(DefaultPadding)
     ) {
-        Column(
-            modifier = Modifier.padding(DefaultPadding)
-        ) {
-            Row {
-                Icon(
-                    imageVector = Icons.Rounded.AccountCircle,
-                    contentDescription = "Profile Image",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(80.dp)
+        Row {
+            Icon(
+                imageVector = Icons.Rounded.AccountCircle,
+                contentDescription = "Profile Image",
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(80.dp),
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(start = DefaultPadding)
+                    .align(Alignment.CenterVertically),
+                verticalArrangement = Arrangement.spacedBy(DefaultPadding),
+            ) {
+                Text(
+                    text = "Hello, ${state.username ?: "Guest"}",
+                    style = runescapeTypography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
 
-                Column(
-                    modifier = Modifier
-                        .padding(start = DefaultPadding)
-                        .align(Alignment.CenterVertically),
-                    verticalArrangement = Arrangement.spacedBy(DefaultPadding),
-                ) {
+                state.email?.let {
                     Text(
-                        text = "Hello, ${state.username ?: "Guest"}",
-                        style = runescapeTypography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-                    )
-
-                    state.email?.let {
-                        Text(
-                            text = it,
-                            style = runescapeTypography.bodyLarge
-                        )
-                    }
-
-                    Text(
-                        text = "From ${state.locale?.name?.capitalise() ?: "Unknown"}",
+                        text = it,
                         style = runescapeTypography.bodyLarge
                     )
                 }
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                Icon(
-                    modifier = Modifier.clickable {
-                        onNavigate(
-                            ProfileNavigationItem.EditProfile,
-                            navController
-                        )
-                    },
-                    painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = "Edit profile"
+                Text(
+                    text = "From ${state.locale?.name?.capitalise() ?: "Unknown"}",
+                    style = runescapeTypography.bodyLarge
                 )
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Icon(
+                modifier = Modifier.clickable {
+                    onNavigate(
+                        ProfileNavigationItem.EditProfile,
+                        navController
+                    )
+                },
+                painter = painterResource(id = R.drawable.ic_edit),
+                contentDescription = "Edit profile"
+            )
         }
     }
 }
@@ -176,25 +175,19 @@ private fun ProfileFinancialSettings(
     navController: NavHostController,
     onNavigate: (ProfileNavigationItem, NavController) -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
+            .clip(RoundedCornerShape(8.dp))
+            .shadow(elevation = QuarterPadding)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding),
-        shape = RoundedCornerShape(8),
+        verticalArrangement = Arrangement.spacedBy(DefaultPadding)
     ) {
-
-        Column(
-            modifier = Modifier
-                .padding(DefaultPadding),
-            verticalArrangement = Arrangement.spacedBy(DefaultPadding)
-        ) {
-            MovementSetting(
-                icon = R.drawable.ic_savings,
-                label = "Edit Financial Profile",
-                onClick = { onNavigate(ProfileNavigationItem.EditFinancialProfile, navController) }
-            )
-        }
+        MovementSetting(
+            icon = R.drawable.ic_savings,
+            label = "Edit Financial Profile",
+            onClick = { onNavigate(ProfileNavigationItem.EditFinancialProfile, navController) }
+        )
     }
 }
 
@@ -203,24 +196,18 @@ private fun ProfileAppSettings(
     navController: NavHostController,
     onNavigate: (ProfileNavigationItem, NavController) -> Unit
 ) {
-    Surface(
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
+            .clip(RoundedCornerShape(8.dp))
+            .shadow(elevation = QuarterPadding)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding),
-        shape = RoundedCornerShape(8),
+        verticalArrangement = Arrangement.spacedBy(DefaultPadding)
     ) {
-
-        Column(
-            modifier = Modifier
-                .padding(DefaultPadding),
-            verticalArrangement = Arrangement.spacedBy(DefaultPadding)
-        ) {
-            MovementSetting(
-                icon = R.drawable.ic_settings,
-                label = "App Settings",
-                onClick = { onNavigate(ProfileNavigationItem.Settings, navController) }
-            )
-        }
+        MovementSetting(
+            icon = R.drawable.ic_settings,
+            label = "App Settings",
+            onClick = { onNavigate(ProfileNavigationItem.Settings, navController) }
+        )
     }
 }

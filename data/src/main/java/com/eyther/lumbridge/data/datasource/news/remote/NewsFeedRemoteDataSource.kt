@@ -3,14 +3,14 @@ package com.eyther.lumbridge.data.datasource.news.remote
 import com.eyther.lumbridge.data.datasource.news.service.EconomyOECDRssClient
 import com.eyther.lumbridge.data.datasource.news.service.EuronewsRssClient
 import com.eyther.lumbridge.data.datasource.news.service.FinanceOECDRssClient
-import com.eyther.lumbridge.data.datasource.news.service.PortugalOECDRssClient
+import com.eyther.lumbridge.data.datasource.news.service.PortugalNewsRssClient
 import javax.inject.Inject
 
 class NewsFeedRemoteDataSource @Inject constructor(
     private val economyOECDRssClient: EconomyOECDRssClient,
     private val financeOECDRssClient: FinanceOECDRssClient,
     private val euronewsRssClient: EuronewsRssClient,
-    private val portugalOECDRssClient: PortugalOECDRssClient
+    private val portugalNewsRssClient: PortugalNewsRssClient
 ) {
     suspend fun getEconomyOECDRssFeed(): String? {
         return if (economyOECDRssClient.getRssFeed().isSuccessful) {
@@ -36,9 +36,9 @@ class NewsFeedRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getPortugalOECDRssFeed(): String? {
-        return if (portugalOECDRssClient.getRssFeed().isSuccessful) {
-            portugalOECDRssClient.getRssFeed().body()
+    suspend fun getPortugalNewsRssFeed(): String? {
+        return if (portugalNewsRssClient.getRssFeed().isSuccessful) {
+            portugalNewsRssClient.getRssFeed().body()
         } else {
             null
         }

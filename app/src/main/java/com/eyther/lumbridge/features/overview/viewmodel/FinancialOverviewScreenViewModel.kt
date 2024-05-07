@@ -41,7 +41,6 @@ class FinancialOverviewScreenViewModel @Inject constructor(
 
                         FinancialOverviewScreenViewState.Content.Overview(
                             locale = getLocaleOrDefault(),
-                            annualGrossSalary = checkNotNull(userFinancials.annualGrossSalary),
                             netSalary = netSalary
                         )
                     }

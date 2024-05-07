@@ -42,9 +42,7 @@ fun LoadingIndicator() {
         horizontalAlignment = CenterHorizontally
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.width(48.dp),
-            color = MaterialTheme.colorScheme.secondary,
-            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            modifier = Modifier.width(48.dp)
         )
 
         Spacer(modifier = Modifier.height(DoublePadding))

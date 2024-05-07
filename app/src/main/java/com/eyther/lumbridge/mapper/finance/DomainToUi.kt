@@ -9,8 +9,12 @@ import com.eyther.lumbridge.model.finance.NetSalaryUi
 
 fun NetSalary.toUi(): NetSalaryUi {
     return NetSalaryUi(
-        salary = salary,
-        foodCard = foodCard,
+        annualGrossSalary = annualGrossSalary,
+        annualNetSalary = annualNetSalary,
+        monthlyGrossSalary = monthlyGrossSalary,
+        monthlyNetSalary = monthlyNetSalary,
+        monthlyFoodCard = monthlyFoodCard,
+        dailyFoodCard = dailyFoodCard,
         deductions = deductions.map { it.toUi() },
         moneyAllocations = moneyAllocation?.map { it.toUi() }
     )

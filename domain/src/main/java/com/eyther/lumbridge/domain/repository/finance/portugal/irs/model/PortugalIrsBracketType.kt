@@ -24,8 +24,22 @@ sealed interface PortugalIrsBracketType {
         }
     }
 
-    abstract fun getIrsBracket(userFinancialsDomain: UserFinancialsDomain): PortugalIrsBracket
-    abstract fun isIrsBracket(userFinancialsDomain: UserFinancialsDomain): Boolean
+    /**
+     * Returns the IRS bracket for the user financials provided with the deductions made and
+     * the net salary.
+     * @param userFinancialsDomain the user financials to calculate the IRS bracket from
+     * @return the IRS bracket
+     * @throws IllegalArgumentException if no IRS bracket is found for the user financials
+     */
+    fun getIrsBracket(userFinancialsDomain: UserFinancialsDomain): PortugalIrsBracket
+
+    /**
+     * Returns whether the user financials provided match the IRS bracket.
+     * @param userFinancialsDomain the user financials to check if they match the IRS bracket
+     * @return true if the user financials match the IRS bracket, false otherwise
+     * @throws IllegalArgumentException if no IRS bracket is found for the user financials
+     */
+    fun isIrsBracket(userFinancialsDomain: UserFinancialsDomain): Boolean
 
     sealed interface NoHandicap : PortugalIrsBracketType {
         // Not married with no dependants OR married with two holders and zero or more dependants

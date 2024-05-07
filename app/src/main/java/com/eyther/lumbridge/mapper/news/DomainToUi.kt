@@ -25,6 +25,6 @@ fun RssFeed.toUi(): RssFeedUi {
         RssFeed.EconomyOECD -> RssFeedUi("Economy OECD")
         RssFeed.FinanceOECD -> RssFeedUi("Finance OECD")
         RssFeed.Euronews -> RssFeedUi("Euronews")
-        RssFeed.PortugalOECD -> RssFeedUi("Portugal OECD")
+        RssFeed.PortugalNews -> RssFeedUi("The Portugal News")
     }
 }

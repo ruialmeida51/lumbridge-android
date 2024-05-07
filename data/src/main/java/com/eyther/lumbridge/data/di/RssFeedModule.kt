@@ -3,7 +3,7 @@ package com.eyther.lumbridge.data.di
 import com.eyther.lumbridge.data.datasource.news.service.EconomyOECDRssClient
 import com.eyther.lumbridge.data.datasource.news.service.EuronewsRssClient
 import com.eyther.lumbridge.data.datasource.news.service.FinanceOECDRssClient
-import com.eyther.lumbridge.data.datasource.news.service.PortugalOECDRssClient
+import com.eyther.lumbridge.data.datasource.news.service.PortugalNewsRssClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,11 +25,11 @@ object RssFeedModule {
 
     @Provides
     @Singleton
-    fun providePortugalOECDClient(): PortugalOECDRssClient = Retrofit.Builder()
-        .baseUrl("https://www.oecd.org/portugal/")
+    fun providePortugalNewsClient(): PortugalNewsRssClient = Retrofit.Builder()
+        .baseUrl("https://www.theportugalnews.com/")
         .addConverterFactory(ScalarsConverterFactory.create())
         .build()
-        .create(PortugalOECDRssClient::class.java)
+        .create(PortugalNewsRssClient::class.java)
 
     @Provides
     @Singleton

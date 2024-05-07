@@ -39,7 +39,7 @@ fun Settings(
 
         Text(
             text = label,
-            style = runescapeTypography.bodyLarge
+            style = runescapeTypography.bodyMedium
         )
 
         Spacer(Modifier.weight(1f))

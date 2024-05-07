@@ -14,7 +14,7 @@ class NewsFeedRepository @Inject constructor(
 ) {
     fun getAvailableFeeds() = listOf(
         RssFeed.Euronews,
-        RssFeed.PortugalOECD,
+        RssFeed.PortugalNews,
         RssFeed.EconomyOECD,
         RssFeed.FinanceOECD
     )
@@ -24,7 +24,7 @@ class NewsFeedRepository @Inject constructor(
             RssFeed.EconomyOECD -> newsFeedRemoteDataSource.getEconomyOECDRssFeed()
             RssFeed.FinanceOECD -> newsFeedRemoteDataSource.getFinanceOECDRssFeed()
             RssFeed.Euronews -> newsFeedRemoteDataSource.getEuronewsRssFeed()
-            RssFeed.PortugalOECD -> newsFeedRemoteDataSource.getPortugalOECDRssFeed()
+            RssFeed.PortugalNews -> newsFeedRemoteDataSource.getPortugalNewsRssFeed()
         }
 
         val parsedRss = RssParserBuilder(charset = Charsets.UTF_8)

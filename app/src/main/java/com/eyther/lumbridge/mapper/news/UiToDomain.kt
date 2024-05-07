@@ -8,7 +8,7 @@ fun RssFeedUi.toDomain(): RssFeed {
         "Economy OECD" -> RssFeed.EconomyOECD
         "Finance OECD" -> RssFeed.FinanceOECD
         "Euronews" -> RssFeed.Euronews
-        "Portugal OECD" -> RssFeed.PortugalOECD
+        "The Portugal News" -> RssFeed.PortugalNews
         else -> throw IllegalArgumentException("Unknown RssFeed name: $label")
     }
 }

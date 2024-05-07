@@ -8,10 +8,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,11 +39,11 @@ fun TextInput(
             state.suffix?.let {
                 Text(
                     text = state.suffix,
-                    style = runescapeTypography.bodyLarge
+                    style = runescapeTypography.bodyMedium
                 )
             }
         },
-        textStyle = runescapeTypography.bodyLarge,
+        textStyle = runescapeTypography.bodyMedium,
         onValueChange = {
             text.value = it
             onInputChanged(it.text)
@@ -54,7 +52,7 @@ fun TextInput(
             label?.let {
                 Text(
                     text = label,
-                    style = runescapeTypography.bodyLarge
+                    style = runescapeTypography.bodyMedium
                 )
             }
         },
@@ -62,7 +60,7 @@ fun TextInput(
             placeholder?.let {
                 Text(
                     text = placeholder,
-                    style = runescapeTypography.bodyLarge
+                    style = runescapeTypography.bodyMedium
                 )
             }
         },
@@ -83,10 +81,7 @@ fun TextInput(
                 )
             }
         },
-        keyboardOptions = keyboardOptions,
-        colors = TextFieldDefaults.colors(
-            focusedLabelColor = MaterialTheme.colorScheme.onSecondary
-        )
+        keyboardOptions = keyboardOptions
     )
 }
 
