@@ -20,7 +20,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val getPreferences: GetPreferences,
     private val setIsDarkMode: SetIsDarkMode
-) : ViewModel(), MainActivityViewModelInterface {
+) : ViewModel(), IMainActivityViewModel {
 
     override val viewState = MutableStateFlow(MainScreenViewState())
 

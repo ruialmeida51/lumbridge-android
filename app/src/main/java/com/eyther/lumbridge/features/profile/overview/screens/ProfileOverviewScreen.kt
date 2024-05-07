@@ -37,8 +37,8 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
+import com.eyther.lumbridge.features.profile.overview.viewmodel.IProfileOverviewScreenViewModel
 import com.eyther.lumbridge.features.profile.overview.viewmodel.ProfileOverviewScreenViewModel
-import com.eyther.lumbridge.features.profile.overview.viewmodel.ProfileOverviewScreenViewModelInterface
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
@@ -50,7 +50,7 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 fun ProfileOverviewScreen(
     navController: NavHostController,
     label: String,
-    viewModel: ProfileOverviewScreenViewModelInterface = hiltViewModel<ProfileOverviewScreenViewModel>()
+    viewModel: IProfileOverviewScreenViewModel = hiltViewModel<ProfileOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState().value
 
@@ -79,7 +79,7 @@ fun ProfileOverviewScreen(
 
 @Composable
 private fun Content(
-    viewModel: ProfileOverviewScreenViewModelInterface,
+    viewModel: IProfileOverviewScreenViewModel,
     navController: NavHostController,
     state: ProfileOverviewScreenViewState.Content
 ) {

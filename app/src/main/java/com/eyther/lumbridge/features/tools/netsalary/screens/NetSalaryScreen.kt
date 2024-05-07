@@ -14,8 +14,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
+import com.eyther.lumbridge.features.tools.netsalary.viewmodel.INetSalaryScreenViewModel
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.NetSalaryScreenViewModel
-import com.eyther.lumbridge.features.tools.netsalary.viewmodel.NetSalaryScreenViewModelInterface
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -24,7 +24,7 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 fun NetSalaryScreen(
     navController: NavHostController,
     label: String,
-    viewModel: NetSalaryScreenViewModelInterface = hiltViewModel<NetSalaryScreenViewModel>()
+    viewModel: INetSalaryScreenViewModel = hiltViewModel<NetSalaryScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState()
 

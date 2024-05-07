@@ -2,6 +2,7 @@ package dependencies
 
 import versions.AppVersions.COIL_VERSION
 import versions.AppVersions.COMPOSE_BOM_VERSION
+import versions.AppVersions.COMPOSE_LIFECYCLE_VERSION
 import versions.AppVersions.COMPOSE_MATERIAL_3_CORE_VERSION
 import versions.AppVersions.COMPOSE_TOOLING_VERSION
 import versions.AppVersions.FIREBASE_BOM_VERSION
@@ -26,6 +27,7 @@ object AppDependencies {
         "androidx.compose:compose-bom:$COMPOSE_BOM_VERSION",
         "androidx.compose.material3:material3:$COMPOSE_MATERIAL_3_CORE_VERSION",
         "androidx.compose.ui:ui-tooling-preview:$COMPOSE_TOOLING_VERSION",
+        "androidx.lifecycle:lifecycle-runtime-compose:$COMPOSE_LIFECYCLE_VERSION",
 
         // Coil
         "io.coil-kt:coil:$COIL_VERSION",

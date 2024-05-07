@@ -26,8 +26,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
+import com.eyther.lumbridge.features.tools.overview.viewmodel.IToolsScreenViewModel
 import com.eyther.lumbridge.features.tools.overview.viewmodel.ToolsScreenViewModel
-import com.eyther.lumbridge.features.tools.overview.viewmodel.ToolsScreenViewModelInterface
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -39,7 +39,7 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 fun ToolsOverviewScreen(
     navController: NavHostController,
     label: String,
-    toolsScreenViewModel: ToolsScreenViewModelInterface = hiltViewModel<ToolsScreenViewModel>()
+    toolsScreenViewModel: IToolsScreenViewModel = hiltViewModel<ToolsScreenViewModel>()
 ) {
     Scaffold(
         topBar = {

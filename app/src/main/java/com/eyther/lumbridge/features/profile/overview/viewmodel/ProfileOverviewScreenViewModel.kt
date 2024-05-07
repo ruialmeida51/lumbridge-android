@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
-import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.usecase.user.profile.GetUserProfileStream
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileOverviewScreenViewModel @Inject constructor(
     private val getUserProfileStream: GetUserProfileStream
-) : ViewModel(), ProfileOverviewScreenViewModelInterface {
+) : ViewModel(), IProfileOverviewScreenViewModel {
 
     override val viewState = MutableStateFlow<ProfileOverviewScreenViewState>(
         ProfileOverviewScreenViewState.Loading

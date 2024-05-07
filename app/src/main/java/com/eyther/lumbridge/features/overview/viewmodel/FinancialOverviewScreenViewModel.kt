@@ -21,7 +21,7 @@ class FinancialOverviewScreenViewModel @Inject constructor(
     private val getUserFinancialsStream: GetUserFinancialsStream,
     private val getNetSalary: GetNetSalary
 ) : ViewModel(),
-    FinancialOverviewScreenViewModelInterface {
+    IFinancialOverviewScreenViewModel {
 
     override val viewState: MutableStateFlow<FinancialOverviewScreenViewState> =
         MutableStateFlow(FinancialOverviewScreenViewState.Loading)

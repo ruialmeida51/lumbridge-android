@@ -3,7 +3,7 @@ package com.eyther.lumbridge.features.tools.netsalary.viewmodel
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
 import kotlinx.coroutines.flow.StateFlow
 
-interface NetSalaryScreenViewModelInterface {
+interface INetSalaryScreenViewModel {
     val viewState: StateFlow<NetSalaryScreenViewState>
 
     /**

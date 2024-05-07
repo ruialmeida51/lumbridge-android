@@ -10,18 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,25 +26,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewState
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.EditProfileScreenViewModel
-import com.eyther.lumbridge.features.profile.editprofile.viewmodel.EditProfileScreenViewModelInterface
+import com.eyther.lumbridge.features.profile.editprofile.viewmodel.IEditProfileScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.components.TextInput
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun EditProfileScreen(
     navController: NavHostController,
     label: String,
-    viewModel: EditProfileScreenViewModelInterface = hiltViewModel<EditProfileScreenViewModel>()
+    viewModel: IEditProfileScreenViewModel = hiltViewModel<EditProfileScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState().value
 
@@ -71,8 +65,9 @@ fun EditProfileScreen(
                 is EditProfileScreenViewState.Content -> Content(
                     navController = navController,
                     state = state,
-                    saveUserData = viewModel::saveUserData
+                    viewModel = viewModel
                 )
+
                 is EditProfileScreenViewState.Loading -> Unit
             }
         }
@@ -83,59 +78,27 @@ fun EditProfileScreen(
 private fun Content(
     navController: NavHostController,
     state: EditProfileScreenViewState.Content,
-    saveUserData: (String, String, SupportedLocales, NavHostController) -> Unit
+    viewModel: IEditProfileScreenViewModel
 ) {
     Column(
         modifier = Modifier.padding(DefaultPadding)
     ) {
-        var name by remember {
-            mutableStateOf(TextFieldValue(state.getUserData()?.name.orEmpty()))
-        }
-
-        var email by remember {
-            mutableStateOf(TextFieldValue(state.getUserData()?.email.orEmpty()))
-        }
-
-        var locale by remember {
-            mutableStateOf(state.getUserData()?.locale ?: SupportedLocales.PORTUGAL)
-        }
-
         var dropDownExpanded by remember {
             mutableStateOf(false)
         }
 
-        TextField(
-            modifier = Modifier.fillMaxWidth().padding(bottom = DefaultPadding),
-            value = name,
-            textStyle = runescapeTypography.bodyLarge,
-            onValueChange = { name = it },
-            label = {
-                Text(
-                    text = "Name",
-                    style = runescapeTypography.bodyLarge
-                )
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            colors = TextFieldDefaults.colors(
-                focusedLabelColor = MaterialTheme.colorScheme.onSecondary
-            )
+        TextInput(
+            modifier = Modifier.padding(bottom = DefaultPadding),
+            state = state.inputState.email,
+            label = "Name",
+            onInputChanged = viewModel::onNameChanged
         )
 
-        TextField(
-            modifier = Modifier.fillMaxWidth().padding(bottom = DefaultPadding),
-            value = email,
-            textStyle = runescapeTypography.bodyLarge,
-            onValueChange = { email = it },
-            label = {
-                Text(
-                    text = "Email",
-                    style = runescapeTypography.bodyLarge
-                )
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            colors = TextFieldDefaults.colors(
-                focusedLabelColor = MaterialTheme.colorScheme.onSecondary
-            )
+        TextInput(
+            modifier = Modifier.padding(bottom = DefaultPadding),
+            state = state.inputState.email,
+            label = "Email",
+            onInputChanged = viewModel::onEmailChanged
         )
 
         ExposedDropdownMenuBox(
@@ -144,13 +107,15 @@ private fun Content(
             onExpandedChange = { dropDownExpanded = !dropDownExpanded }
         ) {
             TextField(
-                value = locale.name.capitalise(),
+                value = state.inputState.locale.name.capitalise(),
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropDownExpanded)
                 },
-                modifier = Modifier.menuAnchor().fillMaxWidth()
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
             )
 
             ExposedDropdownMenu(
@@ -162,7 +127,7 @@ private fun Content(
                         text = { Text(it.name.capitalise()) },
                         onClick = {
                             dropDownExpanded = false
-                            locale = it
+                            viewModel.onLocaleChanged(it)
                         }
                     )
                 }
@@ -171,14 +136,10 @@ private fun Content(
 
         Button(
             modifier = Modifier.fillMaxWidth(),
-            enabled = shouldEnableButton(name.text, email.text, locale),
-            onClick = { saveUserData(name.text, email.text, locale, navController) }
+            enabled = state.shouldEnableSaveButton,
+            onClick = { viewModel.saveUserData(navController) }
         ) {
             Text(text = "Save Profile")
         }
     }
-}
-
-private fun shouldEnableButton(name: String?, email: String?, locale: SupportedLocales?): Boolean {
-    return name?.isNotEmpty() == true && email?.isNotEmpty() == true && locale != null
 }

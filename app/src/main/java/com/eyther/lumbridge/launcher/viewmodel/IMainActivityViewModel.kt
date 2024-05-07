@@ -3,7 +3,7 @@ package com.eyther.lumbridge.launcher.viewmodel
 import com.eyther.lumbridge.launcher.model.MainScreenViewState
 import kotlinx.coroutines.flow.StateFlow
 
-interface MainActivityViewModelInterface {
+interface IMainActivityViewModel {
     /**
      * Check if the user has stored preferences. If the user has stored preferences,
      * the app will use the stored preferences to set the theme settings. If the user

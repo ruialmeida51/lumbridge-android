@@ -33,7 +33,7 @@ import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewS
 import com.eyther.lumbridge.features.overview.navigation.FinancialOverviewNavigationItem
 import com.eyther.lumbridge.features.overview.screens.portugal.FinancialOverviewPortugal
 import com.eyther.lumbridge.features.overview.viewmodel.FinancialOverviewScreenViewModel
-import com.eyther.lumbridge.features.overview.viewmodel.FinancialOverviewScreenViewModelInterface
+import com.eyther.lumbridge.features.overview.viewmodel.IFinancialOverviewScreenViewModel
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
@@ -48,7 +48,7 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 fun FinancialOverviewScreen(
     navController: NavHostController,
     label: String,
-    viewModel: FinancialOverviewScreenViewModelInterface = hiltViewModel<FinancialOverviewScreenViewModel>()
+    viewModel: IFinancialOverviewScreenViewModel = hiltViewModel<FinancialOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState().value
 

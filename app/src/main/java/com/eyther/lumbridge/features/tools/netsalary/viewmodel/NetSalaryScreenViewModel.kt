@@ -23,7 +23,7 @@ class NetSalaryScreenViewModel @Inject constructor(
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val saveUserFinancials: SaveUserFinancials,
     private val getNetSalary: GetNetSalary
-) : ViewModel(), NetSalaryScreenViewModelInterface {
+) : ViewModel(), INetSalaryScreenViewModel {
 
     override val viewState = MutableStateFlow<NetSalaryScreenViewState>(
         NetSalaryScreenViewState.Loading

@@ -3,16 +3,18 @@ package com.eyther.lumbridge.features.tools.overview.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
-import com.eyther.lumbridge.features.tools.overview.model.ToolItem.*
+import com.eyther.lumbridge.features.tools.overview.model.ToolItem.CTC
+import com.eyther.lumbridge.features.tools.overview.model.ToolItem.Mortgage
+import com.eyther.lumbridge.features.tools.overview.model.ToolItem.NetSalary
+import com.eyther.lumbridge.features.tools.overview.model.ToolItem.Savings
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
 @HiltViewModel
-class ToolsScreenViewModel @Inject constructor() : ViewModel(), ToolsScreenViewModelInterface {
+class ToolsScreenViewModel @Inject constructor() : ViewModel(), IToolsScreenViewModel {
 
     override val viewState = MutableStateFlow<ToolScreenViewState>(getInitialState())
 

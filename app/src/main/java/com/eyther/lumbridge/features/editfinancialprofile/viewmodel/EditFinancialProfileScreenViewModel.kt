@@ -7,6 +7,8 @@ import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialPro
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Loading
+import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.EditFinancialProfileInputHandler
+import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.IEditFinancialProfileInputHandler
 import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsStream
 import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
@@ -15,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -25,168 +28,102 @@ import javax.inject.Inject
 class EditFinancialProfileScreenViewModel @Inject constructor(
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val getUserFinancials: GetUserFinancialsStream,
-    private val saveUserFinancials: SaveUserFinancials
-) : ViewModel(), EditFinancialProfileScreenViewModelInterface {
+    private val saveUserFinancials: SaveUserFinancials,
+    private val editFinancialProfileInputHandler: EditFinancialProfileInputHandler
+) : ViewModel(),
+    IEditFinancialProfileScreenViewModel,
+    IEditFinancialProfileInputHandler by editFinancialProfileInputHandler {
 
-    override val viewState: MutableStateFlow<EditFinancialProfileScreenViewState> =
-        MutableStateFlow(Loading)
+    companion object {
+        private const val PERCENTAGE_SUFFIX = "%"
+    }
 
+    override val viewState = MutableStateFlow<EditFinancialProfileScreenViewState>(Loading)
     override val viewEffect = MutableSharedFlow<EditFinancialProfileScreenViewEffect>()
 
     init {
-        fetchUserFinancials()
+        observeUserFinancials()
     }
 
-    private fun fetchUserFinancials() {
+    private fun observeUserFinancials() {
         viewModelScope.launch {
             val userFinancialsFlow = getUserFinancials()
             val locale = getLocaleOrDefault()
+            val currencySymbol = locale.getCurrencySymbol()
 
-            userFinancialsFlow
-                .onEach { userFinancials ->
+            val initialUserFinancials = userFinancialsFlow.firstOrNull()
+
+            updateInput { state ->
+                state.copy(
+                    annualGrossSalary = state.annualGrossSalary.copy(
+                        text = initialUserFinancials?.annualGrossSalary?.toString(),
+                        suffix = currencySymbol
+                    ),
+                    foodCardPerDiem = state.foodCardPerDiem.copy(
+                        text = initialUserFinancials?.foodCardPerDiem?.toString(),
+                        suffix = currencySymbol
+                    ),
+                    savingsPercentage = state.savingsPercentage.copy(
+                        text = initialUserFinancials?.savingsPercentage?.toString(),
+                        suffix = PERCENTAGE_SUFFIX
+                    ),
+                    necessitiesPercentage = state.necessitiesPercentage.copy(
+                        text = initialUserFinancials?.necessitiesPercentage?.toString(),
+                        suffix = PERCENTAGE_SUFFIX
+                    ),
+                    luxuriesPercentage = state.luxuriesPercentage.copy(
+                        text = initialUserFinancials?.luxuriesPercentage?.toString(),
+                        suffix = PERCENTAGE_SUFFIX
+                    ),
+                    numberOfDependants = state.numberOfDependants.copy(
+                        text = initialUserFinancials?.numberOfDependants?.toString()
+                    ),
+                    singleIncome = initialUserFinancials?.singleIncome ?: false,
+                    married = initialUserFinancials?.married ?: false,
+                    handicapped = initialUserFinancials?.handicapped ?: false
+                )
+            }
+
+            inputState
+                .onEach { inputState ->
                     viewState.update {
                         Content(
                             locale = locale,
-                            currentData = userFinancials,
-                            shouldEnableSaveButton = shouldEnableButton(userFinancials)
+                            shouldEnableSaveButton = shouldEnableSaveButton(inputState),
+                            inputState = inputState
                         )
                     }
-                }
-                .launchIn(this)
+                }.launchIn(this)
         }
     }
-
 
     override fun saveUserData(navController: NavHostController) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             viewModelScope.launch {
                 viewEffect.emit(
-                    EditFinancialProfileScreenViewEffect.ShowError(
-                        message = throwable.message ?: "An error occurred."
-                    )
+                    EditFinancialProfileScreenViewEffect.ShowError(throwable.message.orEmpty())
                 )
             }
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            val userFinancials = checkNotNull((viewState.value.asContent())?.currentData) {
-                "💥 User financial information cannot be null."
-            }
+            val inputState = inputState.value
+
+            val userFinancials = UserFinancialsUi(
+                annualGrossSalary = inputState.annualGrossSalary.text?.toFloatOrNull(),
+                foodCardPerDiem = inputState.foodCardPerDiem.text?.toFloatOrNull(),
+                savingsPercentage = inputState.savingsPercentage.text?.toIntOrNull(),
+                necessitiesPercentage = inputState.necessitiesPercentage.text?.toIntOrNull(),
+                luxuriesPercentage = inputState.luxuriesPercentage.text?.toIntOrNull(),
+                numberOfDependants = inputState.numberOfDependants.text?.toIntOrNull(),
+                singleIncome = inputState.singleIncome,
+                married = inputState.married,
+                handicapped = inputState.handicapped
+            )
 
             saveUserFinancials(userFinancials)
 
             navController.navigateUp()
-        }
-    }
-
-    override fun onAnnualGrossSalaryChanged(annualGrossSalary: Float?) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(annualGrossSalary = annualGrossSalary)
-                    ?: UserFinancialsUi(annualGrossSalary = annualGrossSalary)
-            )
-        }
-    }
-
-    override fun onFoodCardPerDiemChanged(foodCardPerDiem: Float?) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(foodCardPerDiem = foodCardPerDiem)
-                    ?: UserFinancialsUi(foodCardPerDiem = foodCardPerDiem)
-            )
-        }
-    }
-
-    override fun onSavingsPercentageChanged(savingsPercentage: Int?) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(savingsPercentage = savingsPercentage)
-                    ?: UserFinancialsUi(savingsPercentage = savingsPercentage)
-            )
-        }
-    }
-
-    override fun onNecessitiesPercentageChanged(necessitiesPercentage: Int?) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(necessitiesPercentage = necessitiesPercentage)
-                    ?: UserFinancialsUi(necessitiesPercentage = necessitiesPercentage)
-            )
-        }
-    }
-
-    override fun onLuxuriesPercentageChanged(luxuriesPercentage: Int?) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(luxuriesPercentage = luxuriesPercentage)
-                    ?: UserFinancialsUi(luxuriesPercentage = luxuriesPercentage)
-            )
-        }
-    }
-
-    override fun onNumberOfDependantsChanged(numberOfDependants: Int?) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(numberOfDependants = numberOfDependants)
-                    ?: UserFinancialsUi(numberOfDependants = numberOfDependants)
-            )
-        }
-    }
-
-    override fun onSingleIncomeChanged(singleIncome: Boolean) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(singleIncome = singleIncome)
-                    ?: UserFinancialsUi(singleIncome = singleIncome)
-            )
-        }
-    }
-
-    override fun onMarriedChanged(married: Boolean) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(married = married)
-                    ?: UserFinancialsUi(married = married)
-            )
-        }
-    }
-
-    override fun onHandicappedChanged(handicapped: Boolean) {
-        updateInput { state ->
-            state.copy(
-                currentData = state.currentData?.copy(handicapped = handicapped)
-                    ?: UserFinancialsUi(handicapped = handicapped)
-            )
-        }
-    }
-
-    private fun updateInput(
-        update: (Content) -> Content
-    ) {
-        viewState.update {
-            val currentState = checkNotNull(it.asContent())
-            val newState = update(currentState)
-
-            newState.copy(
-                shouldEnableSaveButton = shouldEnableButton(newState.currentData)
-            )
-        }
-    }
-
-
-    private fun shouldEnableButton(
-        userFinancialsUi: UserFinancialsUi?
-    ): Boolean {
-        with(userFinancialsUi) {
-            val percentagesValid = listOfNotNull(
-                this?.savingsPercentage,
-                this?.necessitiesPercentage,
-                this?.luxuriesPercentage
-            ).sum() <= 100
-
-            return this?.annualGrossSalary != null &&
-                    this.foodCardPerDiem != null &&
-                    percentagesValid
         }
     }
 }

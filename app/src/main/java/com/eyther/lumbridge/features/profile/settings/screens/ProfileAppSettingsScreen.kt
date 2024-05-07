@@ -21,8 +21,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsScreenViewState
+import com.eyther.lumbridge.features.profile.settings.viewmodel.IProfileAppSettingsScreenViewModel
 import com.eyther.lumbridge.features.profile.settings.viewmodel.ProfileAppAppSettingsScreenViewModel
-import com.eyther.lumbridge.features.profile.settings.viewmodel.ProfileAppSettingsScreenViewModelInterface
 import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModel
 import com.eyther.lumbridge.ui.common.composables.components.setting.SwitchSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
@@ -33,7 +33,7 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 fun ProfileSettingsScreen(
     label: String,
     navController: NavHostController,
-    viewModel: ProfileAppSettingsScreenViewModelInterface = hiltViewModel<ProfileAppAppSettingsScreenViewModel>(),
+    viewModel: IProfileAppSettingsScreenViewModel = hiltViewModel<ProfileAppAppSettingsScreenViewModel>(),
     parentViewModel: MainActivityViewModel = hiltViewModel()
 ) {
     val state = viewModel.viewState.collectAsState().value

@@ -5,7 +5,7 @@ import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewS
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import kotlinx.coroutines.flow.StateFlow
 
-interface FinancialOverviewScreenViewModelInterface {
+interface IFinancialOverviewScreenViewModel{
     val viewState : StateFlow<FinancialOverviewScreenViewState>
 
     /**

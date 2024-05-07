@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileAppAppSettingsScreenViewModel @Inject constructor(
     private val getPreferences: GetPreferences
-) : ViewModel(), ProfileAppSettingsScreenViewModelInterface {
+) : ViewModel(), IProfileAppSettingsScreenViewModel {
 
     override val viewState = MutableStateFlow<ProfileAppSettingsScreenViewState>(
         ProfileAppSettingsScreenViewState.Loading

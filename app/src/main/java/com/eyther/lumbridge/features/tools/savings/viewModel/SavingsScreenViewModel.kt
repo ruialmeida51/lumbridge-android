@@ -14,7 +14,7 @@ import javax.inject.Inject
 class SavingsScreenViewModel @Inject constructor(
     private val getUserProfile: GetUserProfile,
     private val saveUserData: SaveUserProfile
-) : ViewModel(), SavingsScreenViewModelInterface {
+) : ViewModel(), ISavingsScreenViewModel {
     override val viewState = MutableStateFlow<SavingsScreenViewState>(
         SavingsScreenViewState.Loading
     )

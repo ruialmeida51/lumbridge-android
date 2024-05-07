@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,20 +36,21 @@ import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
 import com.eyther.lumbridge.features.feed.viewmodel.FeedScreenViewModel
-import com.eyther.lumbridge.features.feed.viewmodel.FeedScreenViewModelInterface
+import com.eyther.lumbridge.features.feed.viewmodel.IFeedScreenViewModel
 import com.eyther.lumbridge.model.news.FeedItemUi
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun FeedScreen(
     label: String,
-    viewModel: FeedScreenViewModelInterface = hiltViewModel<FeedScreenViewModel>()
+    viewModel: IFeedScreenViewModel = hiltViewModel<FeedScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState().value
 
@@ -62,11 +65,10 @@ fun FeedScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = DefaultPadding)
         ) {
             when (state) {
                 is FeedScreenViewState.Content -> {
-                    Content(state)
+                    Content(state, viewModel)
                 }
 
                 is FeedScreenViewState.Empty -> {
@@ -83,10 +85,48 @@ fun FeedScreen(
 
 @Composable
 private fun Content(
-    state: FeedScreenViewState.Content
+    state: FeedScreenViewState.Content,
+    viewModel: IFeedScreenViewModel
 ) {
+    Spacer(modifier = Modifier.height(DefaultPadding))
+
+    LazyRow {
+        items(state.availableFeeds.count()) { index ->
+            val feed = state.availableFeeds[index]
+
+            if (index == 0) {
+                Spacer(modifier = Modifier.width(DefaultPadding))
+            }
+
+            Text(
+                text = feed.label,
+                style = runescapeTypography.titleSmall,
+                modifier = Modifier
+                    .padding(end = if (index == state.availableFeeds.lastIndex) {
+                        DefaultPadding
+                    } else {
+                        HalfPadding
+                    })
+                    .background(
+                        shape = RoundedCornerShape(8.dp),
+                        color = if (state.selectedFeed == feed) {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.secondaryContainer
+                        }
+                    )
+                    .padding(HalfPadding)
+                    .clickable { viewModel.selectFeed(feed) }
+            )
+        }
+    }
+
+    Spacer(modifier = Modifier.height(DefaultPadding))
+
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = DefaultPadding)
     ) {
         items(state.feedItems.count()) { index ->
             if (index == 0) {

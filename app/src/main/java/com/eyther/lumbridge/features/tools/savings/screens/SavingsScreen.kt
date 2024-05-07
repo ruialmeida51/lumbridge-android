@@ -11,8 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.eyther.lumbridge.features.tools.savings.viewModel.ISavingsScreenViewModel
 import com.eyther.lumbridge.features.tools.savings.viewModel.SavingsScreenViewModel
-import com.eyther.lumbridge.features.tools.savings.viewModel.SavingsScreenViewModelInterface
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
@@ -20,7 +20,7 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 fun SavingsScreen(
     navController: NavController,
     label: String,
-    viewModel: SavingsScreenViewModelInterface = hiltViewModel<SavingsScreenViewModel>()
+    viewModel: ISavingsScreenViewModel = hiltViewModel<SavingsScreenViewModel>()
 ) {
     Column(
         modifier = Modifier

@@ -3,17 +3,29 @@ package com.eyther.lumbridge.domain.repository.news
 import com.eyther.lumbridge.data.datasource.news.remote.NewsFeedRemoteDataSource
 import com.eyther.lumbridge.domain.model.news.Feed
 import com.eyther.lumbridge.domain.model.news.FeedItem
+import com.eyther.lumbridge.domain.model.news.RssFeed
 import com.prof18.rssparser.RssParserBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 class NewsFeedRepository @Inject constructor(
     private val newsFeedRemoteDataSource: NewsFeedRemoteDataSource
 ) {
-    suspend fun getNewsFeed(): Feed = withContext(Dispatchers.IO) {
-        val result = newsFeedRemoteDataSource.getRSSFeed()
+    fun getAvailableFeeds() = listOf(
+        RssFeed.Euronews,
+        RssFeed.PortugalOECD,
+        RssFeed.EconomyOECD,
+        RssFeed.FinanceOECD
+    )
+
+    suspend fun getNewsFeed(rssFeed: RssFeed): Feed = withContext(Dispatchers.IO) {
+        val result = when(rssFeed) {
+            RssFeed.EconomyOECD -> newsFeedRemoteDataSource.getEconomyOECDRssFeed()
+            RssFeed.FinanceOECD -> newsFeedRemoteDataSource.getFinanceOECDRssFeed()
+            RssFeed.Euronews -> newsFeedRemoteDataSource.getEuronewsRssFeed()
+            RssFeed.PortugalOECD -> newsFeedRemoteDataSource.getPortugalOECDRssFeed()
+        }
 
         val parsedRss = RssParserBuilder(charset = Charsets.UTF_8)
             .build()

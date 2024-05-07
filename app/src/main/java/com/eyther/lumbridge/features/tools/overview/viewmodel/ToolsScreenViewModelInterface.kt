@@ -5,7 +5,7 @@ import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
 import kotlinx.coroutines.flow.StateFlow
 
-interface ToolsScreenViewModelInterface {
+interface IToolsScreenViewModel {
     val viewState: StateFlow<ToolScreenViewState>
 
     /**

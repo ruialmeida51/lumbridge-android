@@ -2,11 +2,10 @@ package com.eyther.lumbridge.features.profile.overview.viewmodel
 
 import androidx.navigation.NavController
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
-import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import kotlinx.coroutines.flow.StateFlow
 
-interface ProfileOverviewScreenViewModelInterface {
+interface IProfileOverviewScreenViewModel {
     val viewState: StateFlow<ProfileOverviewScreenViewState>
 
     /**

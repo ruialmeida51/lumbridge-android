@@ -7,6 +7,7 @@ object AppVersions {
     const val COMPOSE_BOM_VERSION = "2024.04.00"
     const val COMPOSE_MATERIAL_3_CORE_VERSION = "1.2.1"
     const val COMPOSE_TOOLING_VERSION = "1.6.1"
+    const val COMPOSE_LIFECYCLE_VERSION = "2.7.0"
 
     const val NAVIGATION_VERSION = "2.7.7"
 

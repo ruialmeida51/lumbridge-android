@@ -14,20 +14,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.features.editfinancialprofile.components.FinancialInput
+import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewEffect
+import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewEffect.None
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.EditFinancialProfileScreenViewModel
-import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.EditFinancialProfileScreenViewModelInterface
+import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.IEditFinancialProfileScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.components.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.setting.SwitchSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
@@ -38,9 +38,10 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 fun EditFinancialProfileScreen(
     navController: NavHostController,
     label: String,
-    viewModel: EditFinancialProfileScreenViewModelInterface = hiltViewModel<EditFinancialProfileScreenViewModel>()
+    viewModel: IEditFinancialProfileScreenViewModel = hiltViewModel<EditFinancialProfileScreenViewModel>()
 ) {
-    val state = viewModel.viewState.collectAsState().value
+    val state = viewModel.viewState.collectAsStateWithLifecycle().value
+    val sideEffects = viewModel.viewEffect.collectAsStateWithLifecycle(None).value
 
     Scaffold(
         topBar = {
@@ -58,6 +59,13 @@ fun EditFinancialProfileScreen(
                 .verticalScroll(rememberScrollState())
                 .height(IntrinsicSize.Max)
         ) {
+            when(sideEffects) {
+                is None -> Unit
+                is EditFinancialProfileScreenViewEffect.ShowError -> Snackbar {
+                    Text(text = sideEffects.message)
+                }
+            }
+
             when (state) {
                 is EditFinancialProfileScreenViewState.Content -> Content(
                     navController = navController,
@@ -75,9 +83,8 @@ fun EditFinancialProfileScreen(
 private fun Content(
     navController: NavHostController,
     state: EditFinancialProfileScreenViewState.Content,
-    viewModel: EditFinancialProfileScreenViewModelInterface
+    viewModel: IEditFinancialProfileScreenViewModel
 ) {
-    val userData = state.currentData
     val currencySymbol = state.locale.getCurrencySymbol()
 
     Column(
@@ -119,12 +126,8 @@ private fun Content(
 @Composable
 fun ColumnScope.DemographicInformation(
     state: EditFinancialProfileScreenViewState.Content,
-    viewModel: EditFinancialProfileScreenViewModelInterface
+    viewModel: IEditFinancialProfileScreenViewModel
 ) {
-    val numberOfDependants = remember {
-        mutableStateOf(TextFieldValue(state.currentData?.numberOfDependants?.toString().orEmpty()))
-    }
-
     Text(
         modifier = Modifier
             .padding(bottom = DefaultPadding)
@@ -137,7 +140,7 @@ fun ColumnScope.DemographicInformation(
 
     SwitchSetting(
         label = "Handicapped",
-        isChecked = state.currentData?.handicapped ?: false,
+        isChecked = state.inputState.handicapped,
         onCheckedChange = { viewModel.onHandicappedChanged(it) },
     )
 
@@ -145,7 +148,7 @@ fun ColumnScope.DemographicInformation(
 
     SwitchSetting(
         label = "Married",
-        isChecked = state.currentData?.married ?: false,
+        isChecked = state.inputState.married,
         onCheckedChange = { viewModel.onMarriedChanged(it) }
     )
 
@@ -153,17 +156,17 @@ fun ColumnScope.DemographicInformation(
 
     SwitchSetting(
         label = "Single income",
-        enabled = state.currentData?.married == true,
-        isChecked = state.currentData?.singleIncome ?: false,
+        enabled = state.inputState.married,
+        isChecked = state.inputState.singleIncome,
         onCheckedChange = { viewModel.onSingleIncomeChanged(it) }
     )
 
     Spacer(modifier = Modifier.height(DefaultPadding))
 
-    FinancialInput(
+    NumberInput(
         label = "Number of dependants",
         placeholder = "0",
-        textFieldValue = numberOfDependants,
+        state = state.inputState.numberOfDependants,
         onInputChanged = { input ->
             viewModel.onNumberOfDependantsChanged(input.toIntOrNull())
         }
@@ -174,15 +177,8 @@ fun ColumnScope.DemographicInformation(
 fun ColumnScope.SalaryBreakdown(
     currencySymbol: String,
     state: EditFinancialProfileScreenViewState.Content,
-    viewModel: EditFinancialProfileScreenViewModelInterface
+    viewModel: IEditFinancialProfileScreenViewModel
 ) {
-    val annualGrossSalary = remember {
-        mutableStateOf(TextFieldValue(state.currentData?.annualGrossSalary?.toString().orEmpty()))
-    }
-    val foodCardPerDiem = remember {
-        mutableStateOf(TextFieldValue(state.currentData?.foodCardPerDiem?.toString().orEmpty()))
-    }
-
     Text(
         modifier = Modifier
             .padding(bottom = DefaultPadding)
@@ -192,11 +188,10 @@ fun ColumnScope.SalaryBreakdown(
         color = MaterialTheme.colorScheme.onPrimary
     )
 
-    FinancialInput(
-        suffix = currencySymbol,
+    NumberInput(
         label = "Annual Gross Salary",
-        placeholder = "50000$currencySymbol",
-        textFieldValue = annualGrossSalary,
+        placeholder = "35000$currencySymbol",
+        state = state.inputState.annualGrossSalary,
         onInputChanged = { input ->
             viewModel.onAnnualGrossSalaryChanged(input.toFloatOrNull())
         }
@@ -204,11 +199,10 @@ fun ColumnScope.SalaryBreakdown(
 
     Spacer(modifier = Modifier.height(DefaultPadding))
 
-    FinancialInput(
-        suffix = currencySymbol,
+    NumberInput(
         label = "Per Diem for Food Card",
         placeholder = "8.60",
-        textFieldValue = foodCardPerDiem,
+        state = state.inputState.foodCardPerDiem,
         onInputChanged = { input ->
             viewModel.onFoodCardPerDiemChanged(input.toFloatOrNull())
         }
@@ -219,22 +213,8 @@ fun ColumnScope.SalaryBreakdown(
 @Composable
 fun ColumnScope.SavingsBreakdown(
     state: EditFinancialProfileScreenViewState.Content,
-    viewModel: EditFinancialProfileScreenViewModelInterface
+    viewModel: IEditFinancialProfileScreenViewModel
 ) {
-    val savingsPercentage = remember {
-        mutableStateOf(TextFieldValue(state.currentData?.savingsPercentage?.toString().orEmpty()))
-    }
-    val necessitiesPercentage = remember {
-        mutableStateOf(
-            TextFieldValue(
-                state.currentData?.necessitiesPercentage?.toString().orEmpty()
-            )
-        )
-    }
-    val luxuriesPercentage = remember {
-        mutableStateOf(TextFieldValue(state.currentData?.luxuriesPercentage?.toString().orEmpty()))
-    }
-
     Text(
         modifier = Modifier
             .padding(bottom = DefaultPadding)
@@ -244,11 +224,10 @@ fun ColumnScope.SavingsBreakdown(
         color = MaterialTheme.colorScheme.onPrimary
     )
 
-    FinancialInput(
-        suffix = "%",
+    NumberInput(
         label = "Savings Percentage",
         placeholder = "Suggested: 30",
-        textFieldValue = savingsPercentage,
+        state = state.inputState.savingsPercentage,
         onInputChanged = { input ->
             viewModel.onSavingsPercentageChanged(input.toIntOrNull())
         }
@@ -256,11 +235,10 @@ fun ColumnScope.SavingsBreakdown(
 
     Spacer(modifier = Modifier.height(DefaultPadding))
 
-    FinancialInput(
-        suffix = "%",
+    NumberInput(
         label = "Necessities Percentage",
         placeholder = "Suggested: 50",
-        textFieldValue = necessitiesPercentage,
+        state = state.inputState.necessitiesPercentage,
         onInputChanged = { input ->
             viewModel.onNecessitiesPercentageChanged(input.toIntOrNull())
         }
@@ -268,11 +246,10 @@ fun ColumnScope.SavingsBreakdown(
 
     Spacer(modifier = Modifier.height(DefaultPadding))
 
-    FinancialInput(
-        suffix = "%",
+    NumberInput(
         label = "Luxuries Percentage",
         placeholder = "Suggested: 20",
-        textFieldValue = luxuriesPercentage,
+        state = state.inputState.luxuriesPercentage,
         onInputChanged = { input ->
             viewModel.onLuxuriesPercentageChanged(input.toIntOrNull())
         }
