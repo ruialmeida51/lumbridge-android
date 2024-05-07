@@ -1,15 +1,12 @@
 package com.eyther.lumbridge.features.tools.overview.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -20,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +27,7 @@ import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
 import com.eyther.lumbridge.features.tools.overview.viewmodel.IToolsScreenViewModel
 import com.eyther.lumbridge.features.tools.overview.viewmodel.ToolsScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -52,9 +49,11 @@ fun ToolsOverviewScreen(
     ) { paddingValues ->
         val state = toolsScreenViewModel.viewState.collectAsState()
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             when (val currentState = state.value) {
                 is ToolScreenViewState.Content -> Content(
                     state = currentState,
@@ -78,44 +77,40 @@ fun Content(
             .padding(DefaultPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-            items(state.options.size) {
-                val item = state.options[it]
-
-                ToolGrid(
-                    toolItem = item,
-                    navController = navController,
-                    onItemClick = onItemClick
+            items(state.options.keys.size) { index ->
+                val key = state.options.keys.elementAt(index)
+                Text(
+                    modifier = Modifier
+                        .padding(
+                            top = if (index > 0) DefaultPadding else 0.dp,
+                            bottom = HalfPadding
+                        )
+                        .align(Alignment.Start),
+                    text = key,
+                    style = runescapeTypography.bodyLarge
                 )
+                Column(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .shadow(elevation = QuarterPadding)
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .padding(DefaultPadding),
+                    verticalArrangement = Arrangement.spacedBy(DefaultPadding)
+                ) {
+                    state.options[key]?.forEach { item ->
+                        MovementSetting(
+                            icon = item.icon,
+                            label = item.text,
+                            onClick = { onItemClick(item, navController) }
+                        )
+                    }
+                }
             }
         }
-    }
-}
-
-@Composable
-fun ToolGrid(
-    toolItem: ToolItem,
-    navController: NavController,
-    onItemClick: (toolItem: ToolItem, navController: NavController) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .padding(HalfPadding)
-            .clip(RoundedCornerShape(8.dp))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable { onItemClick(toolItem, navController) },
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = toolItem.text,
-            style = runescapeTypography.titleSmall,
-            textAlign = TextAlign.Center
-        )
     }
 }
 

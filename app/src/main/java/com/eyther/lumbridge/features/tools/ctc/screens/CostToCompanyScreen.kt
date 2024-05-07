@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.features.tools.mortgage.screens
+package com.eyther.lumbridge.features.tools.ctc.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,10 +10,7 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.Lumbridge
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 
 @Composable
-fun MortgageScreen(
-    navController: NavController,
-    label: String
-) {
+fun CostToCompanyScreen(navController: NavController, label: String) {
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(

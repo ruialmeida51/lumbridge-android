@@ -15,7 +15,7 @@ sealed class ToolsNavigationItem(route: String, label: String) : NavigationItem(
 
     data object CostToCompany : ToolsNavigationItem(
         route = "cost_to_company",
-        label = "Cost to Company Calculator"
+        label = "CTC Calculator"
     )
 
     data object Savings : ToolsNavigationItem(

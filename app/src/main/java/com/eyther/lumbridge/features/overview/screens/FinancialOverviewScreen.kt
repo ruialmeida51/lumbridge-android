@@ -1,10 +1,13 @@
 package com.eyther.lumbridge.features.overview.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -43,12 +47,10 @@ import com.eyther.lumbridge.features.overview.viewmodel.IFinancialOverviewScreen
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.ui.common.composables.components.components.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
-import com.eyther.lumbridge.ui.common.composables.text.buildAnnotatedStringTextWithLabel
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
@@ -122,6 +124,8 @@ private fun ColumnScope.Overview(
 
     IncomeOverview(
         state = state,
+        navController = navController,
+        onNavigate = navigate,
         currencySymbol = currencySymbol
     )
 
@@ -129,22 +133,13 @@ private fun ColumnScope.Overview(
 
     MoneyAllocationBreakdown(
         currencySymbol = currencySymbol,
+        onNavigate = navigate,
+        navController = navController,
         moneyAllocation = state.netSalary.moneyAllocations
     )
 
     Spacer(
         modifier = Modifier.height(DefaultPadding)
-    )
-
-    LumbridgeButton(
-        modifier = Modifier.padding(horizontal = DefaultPadding),
-        onClick = {
-            navigate(
-                FinancialOverviewNavigationItem.EditFinancialProfile,
-                navController
-            )
-        },
-        label = "Edit Financial Profile"
     )
 
     Spacer(modifier = Modifier.padding(DefaultPadding))
@@ -153,6 +148,8 @@ private fun ColumnScope.Overview(
 @Composable
 private fun ColumnScope.IncomeOverview(
     state: FinancialOverviewScreenViewState.Content.Overview,
+    navController: NavHostController,
+    onNavigate: (NavigationItem, NavHostController) -> Unit,
     currencySymbol: String
 ) {
     Text(
@@ -168,55 +165,73 @@ private fun ColumnScope.IncomeOverview(
         style = runescapeTypography.bodyLarge
     )
 
-    Column(
-        Modifier
+    Row(
+        modifier = Modifier
             .padding(horizontal = DefaultPadding)
             .clip(RoundedCornerShape(8.dp))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .fillMaxWidth()
-            .padding(DefaultPadding)
+            .padding(DefaultPadding),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            modifier = Modifier.padding(bottom = QuarterPadding),
-            text = "Annual Income",
-            style = runescapeTypography.bodyLarge,
-            color = MaterialTheme.colorScheme.tertiary
-        )
+        Column {
+            Text(
+                modifier = Modifier.padding(bottom = QuarterPadding),
+                text = "Annual Income",
+                style = runescapeTypography.bodyLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
 
-        Salary(
-            leftLabel = "Net Annual: ",
-            leftText = "${state.netSalary.annualNetSalary}$currencySymbol",
-            rightLabel = "Gross Annual: ",
-            rightText = "${state.netSalary.annualGrossSalary}$currencySymbol"
-        )
+            Salary(
+                leftLabel = "Net Annual: ",
+                leftText = "${state.netSalary.annualNetSalary}$currencySymbol",
+                rightLabel = "Gross Annual: ",
+                rightText = "${state.netSalary.annualGrossSalary}$currencySymbol"
+            )
 
-        Text(
-            modifier = Modifier.padding(top = DefaultPadding, bottom = QuarterPadding),
-            text = "Monthly Income",
-            style = runescapeTypography.bodyLarge,
-            color = MaterialTheme.colorScheme.tertiary
-        )
+            Text(
+                modifier = Modifier.padding(top = DefaultPadding, bottom = QuarterPadding),
+                text = "Monthly Income",
+                style = runescapeTypography.bodyLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
 
-        Salary(
-            leftLabel = "Net Monthly: ",
-            leftText = "${state.netSalary.monthlyNetSalary}$currencySymbol",
-            rightLabel = "Gross Monthly: ",
-            rightText = "${state.netSalary.monthlyGrossSalary}$currencySymbol"
-        )
+            Salary(
+                leftLabel = "Net Monthly: ",
+                leftText = "${state.netSalary.monthlyNetSalary}$currencySymbol",
+                rightLabel = "Gross Monthly: ",
+                rightText = "${state.netSalary.monthlyGrossSalary}$currencySymbol"
+            )
 
-        Text(
-            modifier = Modifier.padding(top = DefaultPadding, bottom = QuarterPadding),
-            text = "Food Card",
-            style = runescapeTypography.bodyLarge,
-            color = MaterialTheme.colorScheme.tertiary
-        )
+            Text(
+                modifier = Modifier.padding(top = DefaultPadding, bottom = QuarterPadding),
+                text = "Food Card",
+                style = runescapeTypography.bodyLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
 
-        Salary(
-            leftLabel = "Card Monthly: ",
-            leftText = "${state.netSalary.monthlyFoodCard}$currencySymbol",
-            rightLabel = "Card Daily: ",
-            rightText = "${state.netSalary.dailyFoodCard}$currencySymbol"
+            Salary(
+                leftLabel = "Card Monthly: ",
+                leftText = "${state.netSalary.monthlyFoodCard}$currencySymbol",
+                rightLabel = "Card Daily: ",
+                rightText = "${state.netSalary.dailyFoodCard}$currencySymbol"
+            )
+        }
+
+        Icon(
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false)
+                ) {
+                    onNavigate(
+                        FinancialOverviewNavigationItem.EditFinancialProfile,
+                        navController
+                    )
+                },
+            painter = painterResource(id = R.drawable.ic_edit),
+            contentDescription = "Edit Financial Profile"
         )
     }
 }
@@ -248,6 +263,8 @@ private fun ColumnScope.PerCountryBreakdown(
 @Composable
 private fun ColumnScope.MoneyAllocationBreakdown(
     currencySymbol: String,
+    onNavigate: (NavigationItem, NavHostController) -> Unit,
+    navController: NavHostController,
     moneyAllocation: List<MoneyAllocationUi>?
 ) {
     Text(
@@ -264,8 +281,9 @@ private fun ColumnScope.MoneyAllocationBreakdown(
     )
 
 
-    Column(
-        Modifier
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
             .padding(horizontal = DefaultPadding)
             .clip(RoundedCornerShape(8.dp))
             .shadow(elevation = QuarterPadding)
@@ -273,34 +291,46 @@ private fun ColumnScope.MoneyAllocationBreakdown(
             .fillMaxWidth()
             .padding(DefaultPadding)
     ) {
-        if (moneyAllocation == null) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Start),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Text(
-                    text = "You haven't set a money allocation strategy. " +
-                            "Edit your financial profile to set one.",
-                    style = runescapeTypography.bodyMedium,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-            }
-        } else {
-            moneyAllocation.forEach { moneyAllocationUi ->
-                val text = buildAnnotatedStringTextWithLabel(
-                    label = "${moneyAllocationUi.label}: ",
-                    remainingText = "${moneyAllocationUi.amount}$currencySymbol"
-                )
-
-                Salary(
-                    leftLabel = "${moneyAllocationUi.label}: ",
-                    leftText = "${moneyAllocationUi.amount}$currencySymbol"
-                )
+        Column {
+            if (moneyAllocation == null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Start),
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    Text(
+                        text = "You haven't set a money allocation strategy. " +
+                                "Edit your financial profile to set one.",
+                        style = runescapeTypography.bodyMedium,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
+                }
+            } else {
+                moneyAllocation.forEach { moneyAllocationUi ->
+                    Salary(
+                        leftLabel = "${moneyAllocationUi.label}: ",
+                        leftText = "${moneyAllocationUi.amount}$currencySymbol"
+                    )
+                }
             }
         }
+
+        Icon(
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false)
+                ) {
+                    onNavigate(
+                        FinancialOverviewNavigationItem.EditFinancialProfile,
+                        navController
+                    )
+                },
+            painter = painterResource(id = R.drawable.ic_edit),
+            contentDescription = "Edit Financial Profile"
+        )
     }
 }
 
