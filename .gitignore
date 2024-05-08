@@ -83,3 +83,5 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+lumbridge-firebase-service-account.json
+upload-keystore.jks
