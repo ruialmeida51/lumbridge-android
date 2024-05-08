@@ -88,6 +88,7 @@ fun FinancialOverviewScreen(
                 )
 
                 is FinancialOverviewScreenViewState.Content.Input -> EmptyScreenWithButton(
+                    modifier = Modifier.padding(DefaultPadding),
                     text = "You don't seem have a financial profile yet.\n" +
                             "Press the button below to create one.",
                     buttonText = "Edit Financial Profile",
