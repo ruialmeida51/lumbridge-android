@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.usecase.finance
 
-import com.eyther.lumbridge.domain.repository.finance.NetSalaryRepository
+import com.eyther.lumbridge.domain.repository.netsalary.NetSalaryRepository
 import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.mapper.user.toDomain
 import com.eyther.lumbridge.model.finance.NetSalaryUi
@@ -13,7 +13,7 @@ class GetNetSalary @Inject constructor(
     private val getLocaleOrDefault: GetLocaleOrDefault
 ) {
     suspend operator fun invoke(
-        userFinancialsUi: UserFinancialsUi,
+        userFinancialsUi: UserFinancialsUi
     ): NetSalaryUi {
         val locale = getLocaleOrDefault()
 

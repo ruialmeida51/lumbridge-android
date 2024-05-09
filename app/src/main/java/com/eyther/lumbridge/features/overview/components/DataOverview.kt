@@ -8,28 +8,15 @@ import com.eyther.lumbridge.ui.common.composables.text.buildAnnotatedStringTextW
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
-fun Salary(
-    leftLabel: String,
-    leftText: String,
-    rightLabel: String? = null,
-    rightText: String? = null
+fun DataOverview(
+    label: String,
+    text: String
 ) {
     Column {
         Text(
             text = buildAnnotatedStringTextWithLabel(
-                label = leftLabel,
-                remainingText = leftText
-            ),
-            style = runescapeTypography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-
-        if (rightLabel == null || rightText == null) return
-
-        Text(
-            text = buildAnnotatedStringTextWithLabel(
-                label = rightLabel,
-                remainingText = rightText
+                label = label.plus(": "),
+                remainingText = text
             ),
             style = runescapeTypography.bodyMedium,
             textAlign = TextAlign.Center

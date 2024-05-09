@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate
 
+import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileInputState
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
@@ -18,19 +19,25 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
 
     override fun onAnnualGrossSalaryChanged(annualGrossSalary: Float?) {
         updateInput { state ->
+            val annualGrossSalaryText = annualGrossSalary?.toString()
             state.copy(
                 annualGrossSalary = state.annualGrossSalary.copy(
-                    text = annualGrossSalary?.toString()
+                    text = annualGrossSalaryText,
+                    error = annualGrossSalaryText.getErrorOrNull(R.string.edit_financial_profile_invalid_income)
                 )
             )
         }
+
     }
 
     override fun onFoodCardPerDiemChanged(foodCardPerDiem: Float?) {
         updateInput { state ->
+            val foodCardPerDiemText = foodCardPerDiem?.toString()
+
             state.copy(
                 foodCardPerDiem = state.foodCardPerDiem.copy(
-                    text = foodCardPerDiem?.toString()
+                    text = foodCardPerDiemText,
+                    error = foodCardPerDiemText.getErrorOrNull(R.string.edit_financial_profile_invalid_food_card)
                 )
             )
         }
@@ -101,25 +108,6 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
     }
 
     /**
-     * Validates the income input of the user.
-     *
-     * @param inputState the current input state of the screen.
-     * @return an error message if there's any error, null otherwise.
-     */
-    override fun validateIncome(
-        inputState: EditFinancialProfileInputState
-    ): TextResource? {
-        val validIncome = inputState.annualGrossSalary.text?.toFloatOrNull() != null
-        val validFoodCardPerDiem = inputState.foodCardPerDiem.text?.toFloatOrNull() != null
-
-        return if (!validIncome || !validFoodCardPerDiem) {
-            TextResource.Resource(R.string.edit_financial_profile_invalid_income)
-        } else {
-            null
-        }
-    }
-
-    /**
      * Validates the percentages input of the user.
      * The sum of the percentages must be less than or equal to 100.
      *
@@ -140,6 +128,34 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
         }
 
         return null
+    }
+
+    /**
+     * Checks if the save button should be enabled.
+     *
+     * The button should be enabled if the user has entered valid data.
+     *
+     * @param inputState the current state of the screen.
+     * @return true if the button should be enabled, false otherwise.
+     */
+    override fun shouldEnableSaveButton(inputState: EditFinancialProfileInputState): Boolean {
+        return validatePercentages(inputState) == null &&
+                inputState.annualGrossSalary.error == null &&
+                inputState.foodCardPerDiem.error == null
+    }
+
+    /**
+     * Helper function to update the inputState state of the screen.
+     *
+     * @param update the function to update the content state.
+     * @see Content
+     */
+    override fun updateInput(
+        update: (EditFinancialProfileInputState) -> EditFinancialProfileInputState
+    ) {
+        inputState.update { currentState ->
+            update(currentState)
+        }
     }
 
     /**
@@ -165,29 +181,14 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
     }
 
     /**
-     * Checks if the save button should be enabled.
-     *
-     * The button should be enabled if the user has entered valid data.
-     *
-     * @param inputState the current state of the screen.
-     * @return true if the button should be enabled, false otherwise.
+     * Helper function to get the error message of the text input.
+     * This is just a boilerplate code to avoid code duplication.
+     * @param errorRes the error message resource id.
+     * @return the updated state with the error message of the text input.
      */
-    override fun shouldEnableSaveButton(inputState: EditFinancialProfileInputState): Boolean {
-        return validatePercentages(inputState) == null &&
-                validateIncome(inputState) == null
-    }
-
-    /**
-     * Helper function to update the inputState state of the screen.
-     *
-     * @param update the function to update the content state.
-     * @see Content
-     */
-    override fun updateInput(
-        update: (EditFinancialProfileInputState) -> EditFinancialProfileInputState
-    ) {
-        inputState.update { currentState ->
-            update(currentState)
-        }
+    private fun String?.getErrorOrNull(@StringRes errorRes: Int) = if (isNullOrEmpty()) {
+        TextResource.Resource(resId = errorRes)
+    } else {
+        null
     }
 }

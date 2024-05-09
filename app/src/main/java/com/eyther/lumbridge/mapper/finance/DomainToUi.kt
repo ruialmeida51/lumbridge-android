@@ -5,10 +5,16 @@ import com.eyther.lumbridge.domain.model.finance.Deduction
 import com.eyther.lumbridge.domain.model.finance.DeductionType
 import com.eyther.lumbridge.domain.model.finance.MoneyAllocation
 import com.eyther.lumbridge.domain.model.finance.MoneyAllocationType
+import com.eyther.lumbridge.domain.model.finance.MortgageCalculation
+import com.eyther.lumbridge.domain.model.finance.MortgageType.FIXED
+import com.eyther.lumbridge.domain.model.finance.MortgageType.VARIABLE
 import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
+import com.eyther.lumbridge.model.finance.MortgageUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.model.mortgage.MortgageTypeUi.Fixed
+import com.eyther.lumbridge.model.mortgage.MortgageTypeUi.Variable
 
 fun NetSalary.toUi(): NetSalaryUi {
     return NetSalaryUi(
@@ -61,3 +67,18 @@ private fun getLabelForMoneyAllocationType(type: MoneyAllocationType): Int {
         MoneyAllocationType.Savings -> R.string.savings
     }
 }
+
+fun MortgageCalculation.toUi() = MortgageUi(
+    monthlyPayment = monthlyPayment,
+    loanAmount = loanAmount,
+    remainingAmount = remainingAmount,
+    monthsLeft = monthsLeft,
+    euribor = euribor,
+    spread = spread,
+    fixedInterestRate = fixedInterestRate,
+    mortgageTypeUi = when (mortgageType) {
+        FIXED -> Fixed
+        VARIABLE -> Variable
+    },
+    totalPaid = totalPaid
+)

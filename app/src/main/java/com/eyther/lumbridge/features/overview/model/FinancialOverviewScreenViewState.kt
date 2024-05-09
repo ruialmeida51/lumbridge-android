@@ -1,24 +1,19 @@
 package com.eyther.lumbridge.features.overview.model
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.model.finance.MortgageUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 
 sealed interface FinancialOverviewScreenViewState {
     data object Loading : FinancialOverviewScreenViewState
 
-    sealed class Content(
-        open val locale: SupportedLocales
-    ) : FinancialOverviewScreenViewState {
+    data class Content(
+        val locale: SupportedLocales,
+        val selectedTabItem: FinancialOverviewTabItem = FinancialOverviewTabItem.PersonalOverview,
+        val netSalary: NetSalaryUi? = null,
+        val mortgage: MortgageUi? = null
+    ) : FinancialOverviewScreenViewState
 
-        // Input mode - we need to ask the user to input his economic profile
-        data class Input(
-            override val locale: SupportedLocales
-        ) : Content(locale)
-
-        // This state should only be reached if we actually have data to display.
-        data class Overview(
-            override val locale: SupportedLocales,
-            val netSalary: NetSalaryUi
-        ) : Content(locale)
-    }
+    fun asContent(): Content = this as Content
+    fun isContent(): Boolean = this is Content
 }

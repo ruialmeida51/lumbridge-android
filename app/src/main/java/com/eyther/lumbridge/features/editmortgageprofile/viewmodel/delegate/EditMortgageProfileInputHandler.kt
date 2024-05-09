@@ -5,7 +5,6 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileInputState
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
-import com.eyther.lumbridge.ui.common.composables.model.TextInputState
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,9 +15,14 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
 
     override fun onMortgageAmountChanged(mortgageAmount: Float?) {
         updateInput { state ->
+            val loanAmount = mortgageAmount?.toString()
+
             state.copy(
                 loanAmount = state.loanAmount.copy(
-                    text = mortgageAmount?.toString()
+                    text = loanAmount,
+                    error = loanAmount.getErrorOrNull(
+                        R.string.edit_mortgage_profile_invalid_loan_amount
+                    )
                 )
             )
         }
@@ -26,9 +30,14 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
 
     override fun onEuriborRateChanged(euriborRate: Float?) {
         updateInput { state ->
+            val euriborRateText = euriborRate?.toString()
+
             state.copy(
                 euribor = state.euribor.copy(
-                    text = euriborRate?.toString()
+                    text = euriborRateText,
+                    error = euriborRateText.getErrorOrNull(
+                        R.string.edit_mortgage_profile_invalid_euribor
+                    )
                 )
             )
         }
@@ -36,9 +45,14 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
 
     override fun onSpreadChanged(spread: Float?) {
         updateInput { state ->
+            val spreadText = spread?.toString()
+
             state.copy(
                 spread = state.spread.copy(
-                    text = spread?.toString()
+                    text = spreadText,
+                    error = spreadText.getErrorOrNull(
+                        R.string.edit_mortgage_profile_invalid_spread
+                    )
                 )
             )
         }
@@ -46,9 +60,14 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
 
     override fun onFixedInterestRateChanged(fixedInterestRate: Float?) {
         updateInput { state ->
+            val fixedInterestRateText = fixedInterestRate?.toString()
+
             state.copy(
                 fixedInterestRate = state.fixedInterestRate.copy(
-                    text = fixedInterestRate?.toString()
+                    text = fixedInterestRateText,
+                    error = fixedInterestRateText.getErrorOrNull(
+                        R.string.edit_mortgage_profile_invalid_interest_rate
+                    )
                 )
             )
         }
@@ -62,68 +81,20 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
 
     override fun onMonthsLeftChanged(monthsLeft: Int?) {
         updateInput { state ->
+            val monthsLeftText = monthsLeft?.toString()
+
             state.copy(
                 monthsLeft = state.monthsLeft.copy(
-                    text = monthsLeft?.toString()
+                    text = monthsLeftText,
+                    error = monthsLeftText.getErrorOrNull(
+                        R.string.edit_mortgage_profile_invalid_months_left
+                    )
                 )
             )
         }
     }
 
     override fun validateInput(inputState: EditMortgageProfileInputState): Boolean {
-        updateInput {
-            it.copy(
-                loanAmount = updateErrorOrNull(
-                    inputState.loanAmount,
-                    R.string.edit_mortgage_profile_invalid_loan_amount
-                )
-            )
-        }
-
-        updateInput { state ->
-            state.copy(
-                monthsLeft = updateErrorOrNull(
-                    state.monthsLeft,
-                    R.string.edit_mortgage_profile_invalid_months_left
-                )
-            )
-        }
-
-        when (inputState.mortgageType) {
-            MortgageTypeUi.Fixed -> {
-                updateInput { state ->
-                    state.copy(
-                        fixedInterestRate = updateErrorOrNull(
-                            inputState.fixedInterestRate,
-                            R.string.edit_mortgage_profile_invalid_interest_rate
-                        )
-                    )
-                }
-            }
-
-            MortgageTypeUi.Variable -> {
-                updateInput {
-                    it.copy(
-                        euribor = updateErrorOrNull(
-                            inputState.euribor,
-                            R.string.edit_mortgage_profile_invalid_euribor
-                        )
-                    )
-                }
-
-                updateInput {
-                    it.copy(
-                        spread = updateErrorOrNull(
-                            inputState.spread,
-                            R.string.edit_mortgage_profile_invalid_spread
-                        )
-                    )
-                }
-            }
-
-            null -> Unit
-        }
-
         val isMortgageTypeValid = when (inputState.mortgageType) {
             MortgageTypeUi.Fixed -> {
                 inputState.fixedInterestRate.error == null
@@ -159,12 +130,16 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
         }
     }
 
-    private fun updateErrorOrNull(
-        textInputState: TextInputState,
-        @StringRes errorRes: Int
-    ) = if (textInputState.text.isNullOrEmpty()) {
-        textInputState.copy(error = TextResource.Resource(resId = errorRes))
+    /**
+     * Helper function to get the error message of the text input.
+     * This is just a boilerplate code to avoid code duplication.
+     * @param errorRes the error message resource id.
+     * @return the updated state with the error message of the text input.
+     * @see validateInput
+     */
+    private fun String?.getErrorOrNull(@StringRes errorRes: Int) = if (isNullOrEmpty()) {
+        TextResource.Resource(resId = errorRes)
     } else {
-        textInputState.copy(error = null)
+        null
     }
 }

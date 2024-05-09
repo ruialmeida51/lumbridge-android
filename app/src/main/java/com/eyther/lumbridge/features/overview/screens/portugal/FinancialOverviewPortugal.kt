@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.features.overview.components.Salary
+import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -24,8 +24,11 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun FinancialOverviewPortugal(
-    state: FinancialOverviewScreenViewState.Content.Overview
+    state: FinancialOverviewScreenViewState.Content
 ) {
+    // Net salary cannot be null in the content state.
+    checkNotNull(state.netSalary)
+
     val currencySymbol = remember { state.locale.getCurrencySymbol() }
 
     DeductionsBreakdown(
@@ -35,7 +38,7 @@ fun FinancialOverviewPortugal(
 }
 
 @Composable
-fun DeductionsBreakdown(currencySymbol: String, deductions: List<DeductionUi>) {
+private fun DeductionsBreakdown(currencySymbol: String, deductions: List<DeductionUi>) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -53,9 +56,9 @@ fun DeductionsBreakdown(currencySymbol: String, deductions: List<DeductionUi>) {
         )
 
         deductions.forEach { deductionUi ->
-            Salary(
-                leftLabel = stringResource(id = deductionUi.label).plus(": "),
-                leftText = if (deductionUi.hasPercentage()) {
+            DataOverview(
+                label = stringResource(id = deductionUi.label),
+                text = if (deductionUi.hasPercentage()) {
                     "${deductionUi.amount}$currencySymbol (${deductionUi.percentage}%)"
                 } else {
                     "${deductionUi.amount}$currencySymbol"

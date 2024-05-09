@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.repository.finance.portugal
+package com.eyther.lumbridge.domain.repository.netsalary.portugal
 
 import com.eyther.lumbridge.domain.model.finance.Deduction
 import com.eyther.lumbridge.domain.model.finance.DeductionType
@@ -6,8 +6,8 @@ import com.eyther.lumbridge.domain.model.finance.MoneyAllocation
 import com.eyther.lumbridge.domain.model.finance.MoneyAllocationType
 import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
-import com.eyther.lumbridge.domain.repository.finance.NetSalaryCalculator
-import com.eyther.lumbridge.domain.repository.finance.portugal.irs.model.PortugalIrsBracketType
+import com.eyther.lumbridge.domain.repository.netsalary.NetSalaryCalculator
+import com.eyther.lumbridge.domain.repository.netsalary.portugal.irs.model.PortugalIrsBracketType
 import javax.inject.Inject
 import kotlin.math.ceil
 import kotlin.math.floor

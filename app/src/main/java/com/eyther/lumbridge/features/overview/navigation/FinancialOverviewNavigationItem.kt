@@ -17,4 +17,9 @@ sealed class FinancialOverviewNavigationItem(
         route = "edit_financial_profile",
         label = R.string.edit_financial_profile
     )
+
+    data object EditMortgageProfile : FinancialOverviewNavigationItem(
+        route = "edit_mortgage_profile",
+        label = R.string.edit_mortgage_profile
+    )
 }

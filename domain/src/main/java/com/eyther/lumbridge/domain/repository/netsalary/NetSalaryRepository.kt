@@ -1,9 +1,9 @@
-package com.eyther.lumbridge.domain.repository.finance
+package com.eyther.lumbridge.domain.repository.netsalary
 
 import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
-import com.eyther.lumbridge.domain.repository.finance.portugal.PortugalNetSalaryCalculator
+import com.eyther.lumbridge.domain.repository.netsalary.portugal.PortugalNetSalaryCalculator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

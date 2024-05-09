@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -78,7 +77,6 @@ fun EditMortgageProfileScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .height(IntrinsicSize.Max)
         ) {
             when (sideEffects) {
                 is EditMortgageProfileScreenViewEffect.ShowError -> Snackbar {
@@ -157,14 +155,14 @@ private fun ColumnScope.RemainingAmount(
         NumberInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.loanAmount,
-            label = stringResource(id = R.string.edit_mortgage_profile_loan_amount),
+            label = stringResource(id = R.string.loan_amount),
             onInputChanged = { viewModel.onMortgageAmountChanged(it.toFloatOrNull()) }
         )
 
         NumberInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.monthsLeft,
-            label = stringResource(id = R.string.edit_mortgage_profile_loan_months_left),
+            label = stringResource(id = R.string.months_left),
             onInputChanged = { viewModel.onMonthsLeftChanged(it.toIntOrNull()) }
         )
     }

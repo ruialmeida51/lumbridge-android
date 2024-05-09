@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.repository.finance
+package com.eyther.lumbridge.domain.repository.netsalary
 
 import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain

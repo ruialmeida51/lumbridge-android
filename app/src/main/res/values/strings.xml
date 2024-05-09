@@ -25,14 +25,13 @@
     <string name="edit_financial_profile_save">Save Financial Profile</string>
     <string name="edit_financial_profile_suggested">Suggested: %1$s</string>
     <string name="edit_financial_profile_invalid_income">Please enter a valid income</string>
+    <string name="edit_financial_profile_invalid_food_card">Please enter a valid food card amount</string>
     <string name="edit_financial_profile_invalid_allocation">Total percentage must be less than or equal to %1$s</string>
 
     <string name="edit_mortgage_profile">Edit Mortgage Profile</string>
     <string name="edit_mortgage_profile_loan">What are the conditions of your loan?</string>
     <string name="edit_mortgage_profile_owe">How much do you still owe?</string>
     <string name="edit_mortgage_profile_save">Save Mortgage Profile</string>
-    <string name="edit_mortgage_profile_loan_amount">Loan Amount</string>
-    <string name="edit_mortgage_profile_loan_months_left">Months Left</string>
     <string name="edit_mortgage_profile_loan_type">Do you have a variable or fixed rate?</string>
     <string name="edit_mortgage_profile_invalid_interest_rate">Please enter a valid interest rate</string>
     <string name="edit_mortgage_profile_invalid_euribor">Please enter a valid Euribor rate</string>
@@ -41,6 +40,8 @@
     <string name="edit_mortgage_profile_invalid_months_left">Please enter a valid number of months</string>
 
     <string name="financial_overview">Financial Overview</string>
+    <string name="financial_overview_personal">Personal</string>
+    <string name="financial_overview_mortgage">Mortgage</string>
     <string name="financial_overview_salary">Your Salary Overview</string>
     <string name="financial_overview_annual_income">Annual Income</string>
     <string name="financial_overview_monthly_income">Monthly Income</string>
@@ -52,9 +53,15 @@
     <string name="financial_overview_deductions_portugal_social_security">Social Security</string>
     <string name="financial_overview_deductions_portugal_flat_tax">Flat Tax</string>
     <string name="financial_overview_allocation">Money Allocation</string>
+    <string name="financial_overview_mortgage_mortgage_amount">Current Debt</string>
+    <string name="financial_overview_mortgage_remaining_amount">Remaining Debt</string>
+    <string name="financial_overview_mortgage_next_payment">Next Payment</string>
+    <string name="financial_overview_mortgage_total_paid">Paid Debt</string>
     <string name="financial_overview_no_allocation_strategy">You haven\'t set a money allocation strategy.\nEdit your financial profile to set one.</string>
     <string name="financial_overview_no_profile">You don\'t seem have a financial profile yet.\nPress the button below to create one.</string>
+    <string name="financial_overview_no_mortgage_profile">You don\'t seem have a mortgage profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_create_profile">Create Financial Profile</string>
+    <string name="financial_overview_create_mortgage_profile">Create Mortgage Profile</string>
 
     <string name="profile">Profile</string>
     <string name="profile_greeting">Hello, %1$s</string>
@@ -69,6 +76,8 @@
     <string name="edit_profile_how_to_contact">How should we contact you?</string>
     <string name="edit_profile_select_country">Select your preferred country</string>
     <string name="edit_profile_save">Save Profile</string>
+    <string name="edit_profile_invalid_email">Please enter a valid email address</string>
+    <string name="edit_profile_invalid_name">Please enter a valid name</string>
 
     <string name="app_settings_change_preferences">Change your preferences</string>
 
@@ -114,4 +123,7 @@
     <string name="interest_rate">Interest Rate</string>
     <string name="loan_type_variable">Variable</string>
     <string name="loan_type_fixed">Fixed</string>
+    <string name="months_left">Months Left</string>
+    <string name="loan_amount">Loan Amount</string>
+    <string name="remaining">Remaining</string>
 </resources>

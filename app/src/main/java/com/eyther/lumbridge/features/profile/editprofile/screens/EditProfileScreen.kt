@@ -6,7 +6,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -78,7 +77,6 @@ fun EditProfileScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .height(IntrinsicSize.Max)
         ) {
             when (state) {
                 is EditProfileScreenViewState.Content -> Content(
@@ -126,7 +124,7 @@ private fun ColumnScope.Content(
 
         TextInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
-            state = state.inputState.email,
+            state = state.inputState.name,
             label = stringResource(id = R.string.name),
             onInputChanged = viewModel::onNameChanged,
             keyboardOptions = KeyboardOptions(
@@ -138,7 +136,8 @@ private fun ColumnScope.Content(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.email,
             label = stringResource(id = R.string.email),
-            onInputChanged = viewModel::onEmailChanged, keyboardOptions = KeyboardOptions(
+            onInputChanged = viewModel::onEmailChanged,
+            keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next
             )
         )

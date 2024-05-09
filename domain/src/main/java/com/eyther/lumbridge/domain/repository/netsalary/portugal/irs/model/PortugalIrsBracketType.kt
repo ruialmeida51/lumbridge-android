@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.repository.finance.portugal.irs.model
+package com.eyther.lumbridge.domain.repository.netsalary.portugal.irs.model
 
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 

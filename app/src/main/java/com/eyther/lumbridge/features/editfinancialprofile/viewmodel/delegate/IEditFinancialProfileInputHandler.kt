@@ -29,13 +29,6 @@ interface IEditFinancialProfileInputHandler {
     fun validatePercentages(inputState: EditFinancialProfileInputState): TextResource?
 
     /**
-     * Validates the income and returns an error message if the income is invalid.
-     * @return an error message if the income is invalid, null otherwise.
-     * @see EditFinancialProfileInputState
-     */
-    fun validateIncome(inputState: EditFinancialProfileInputState): TextResource?
-
-    /**
      * Checks if we have enough information available to enable the button.
      * @return true if we have enough information to enable the button, false otherwise.
      * @see EditFinancialProfileInputState
