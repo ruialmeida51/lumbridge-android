@@ -2,6 +2,7 @@
 
 package com.eyther.lumbridge.features.profile.editprofile.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,15 +34,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewState
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.EditProfileScreenViewModel
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.IEditProfileScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.components.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.components.TextInput
+import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -51,7 +57,7 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 @Composable
 fun EditProfileScreen(
     navController: NavHostController,
-    label: String,
+    @StringRes label: Int,
     viewModel: IEditProfileScreenViewModel = hiltViewModel<EditProfileScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState().value
@@ -59,7 +65,9 @@ fun EditProfileScreen(
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
-                topAppBarVariation = TopAppBarVariation.TitleAndIcon(title = label) {
+                topAppBarVariation = TopAppBarVariation.TitleAndIcon(
+                    title = stringResource(id = label)
+                ) {
                     navController.popBackStack()
                 }
             )
@@ -79,7 +87,7 @@ fun EditProfileScreen(
                     viewModel = viewModel
                 )
 
-                is EditProfileScreenViewState.Loading -> Unit
+                is EditProfileScreenViewState.Loading -> LoadingIndicator()
             }
         }
     }
@@ -100,7 +108,7 @@ private fun ColumnScope.Content(
                 bottom = HalfPadding
             )
             .align(Alignment.Start),
-        text = "How should we contact you?",
+        text = stringResource(id = R.string.edit_profile_how_to_contact),
         style = runescapeTypography.bodyLarge
     )
 
@@ -119,19 +127,24 @@ private fun ColumnScope.Content(
         TextInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.email,
-            label = "Name",
-            onInputChanged = viewModel::onNameChanged
+            label = stringResource(id = R.string.name),
+            onInputChanged = viewModel::onNameChanged,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            )
         )
 
         TextInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.email,
-            label = "Email",
-            onInputChanged = viewModel::onEmailChanged
+            label = stringResource(id = R.string.email),
+            onInputChanged = viewModel::onEmailChanged, keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            )
         )
 
         Text(
-            text = "Select your preferred country",
+            text = stringResource(id = R.string.edit_profile_select_country),
             style = runescapeTypography.bodyLarge,
             modifier = Modifier.padding(bottom = QuarterPadding),
             color = MaterialTheme.colorScheme.tertiary
@@ -183,6 +196,6 @@ private fun ColumnScope.Content(
         modifier = Modifier.padding(horizontal = DefaultPadding),
         enableButton = state.shouldEnableSaveButton,
         onClick = { viewModel.saveUserData(navController) },
-        label = "Save Profile"
+        label = stringResource(id = R.string.edit_profile_save)
     )
 }

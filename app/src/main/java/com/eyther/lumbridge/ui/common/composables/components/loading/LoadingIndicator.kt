@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,22 +24,13 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.DoublePadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
-private val loadingMessages = listOf(
-    "Hold on tight, we're catching data waves!",
-    "Just brewing up some digital magic...",
-    "Tapping into the data dimension, one moment...",
-    "Spinning the wheel of progress, almost there...",
-    "Revving up the engines, sit back and relax...",
-    "Gathering stardust for your digital experience...",
-    "Summoning the internet elves to do their thing...",
-    "Charging up our virtual hamsters for some heavy lifting..."
-)
-
 @Composable
 @Preview
 fun LoadingIndicator() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(DefaultPadding),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(DefaultPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = CenterHorizontally
     ) {
@@ -47,14 +40,13 @@ fun LoadingIndicator() {
 
         Spacer(modifier = Modifier.height(DoublePadding))
 
-
             Icon(
                 painter = painterResource(id = R.drawable.ic_scatter),
-                contentDescription = "Loading"
+                contentDescription = stringResource(id = R.string.loading)
             )
             
             Text(
-                text = loadingMessages.random(),
+                text = stringArrayResource(id = R.array.loading_messages).random(),
                 style = runescapeTypography.bodyMedium,
                 textAlign = TextAlign.Center
             )

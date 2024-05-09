@@ -45,6 +45,19 @@ object LocalDataModule {
 
     @Provides
     @Singleton
+    @UserMortgageDataStore
+    fun provideUserMortgageDataSource(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = {
+                context.preferencesDataStoreFile("user_mortgage_data_store.db")
+            }
+        )
+    }
+
+    @Provides
+    @Singleton
     @AppSettingsDataStore
     fun provideAppSettingsDataStore(
         @ApplicationContext context: Context
@@ -63,6 +76,10 @@ object LocalDataModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class UserFinancialsDataStore
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class UserMortgageDataStore
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)

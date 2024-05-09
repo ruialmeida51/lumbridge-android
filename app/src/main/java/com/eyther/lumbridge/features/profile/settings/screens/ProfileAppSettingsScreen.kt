@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.profile.settings.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -30,6 +32,7 @@ import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsSc
 import com.eyther.lumbridge.features.profile.settings.viewmodel.IProfileAppSettingsScreenViewModel
 import com.eyther.lumbridge.features.profile.settings.viewmodel.ProfileAppAppSettingsScreenViewModel
 import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModel
+import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.SwitchSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
@@ -40,7 +43,7 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun ProfileSettingsScreen(
-    label: String,
+    @StringRes label: Int,
     navController: NavHostController,
     viewModel: IProfileAppSettingsScreenViewModel = hiltViewModel<ProfileAppAppSettingsScreenViewModel>(),
     parentViewModel: MainActivityViewModel = hiltViewModel()
@@ -50,7 +53,9 @@ fun ProfileSettingsScreen(
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
-                topAppBarVariation = TopAppBarVariation.TitleAndIcon(title = label) {
+                topAppBarVariation = TopAppBarVariation.TitleAndIcon(
+                    title = stringResource(id = label)
+                ) {
                     navController.popBackStack()
                 }
             )
@@ -70,7 +75,7 @@ fun ProfileSettingsScreen(
                     onDarkModeChange = parentViewModel::toggleDarkMode
                 )
 
-                is ProfileAppSettingsScreenViewState.Loading -> Unit
+                is ProfileAppSettingsScreenViewState.Loading -> LoadingIndicator()
             }
         }
     }
@@ -85,7 +90,7 @@ private fun ColumnScope.Content(
         modifier = Modifier
             .padding(bottom = HalfPadding)
             .align(Alignment.Start),
-        text = "Change your preferences",
+        text = stringResource(id = R.string.app_settings_change_preferences),
         style = runescapeTypography.bodyLarge
     )
 
@@ -101,7 +106,7 @@ private fun ColumnScope.Content(
     ) {
         SwitchSetting(
             icon = R.drawable.ic_sun,
-            label = "Dark Mode",
+            label = stringResource(id = R.string.dark_mode),
             isChecked = state.isDarkModeEnabled ?: isSystemInDarkTheme(),
             onCheckedChange = { onDarkModeChange(it) }
         )

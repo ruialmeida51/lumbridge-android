@@ -1,6 +1,8 @@
 package com.eyther.lumbridge.model.finance
 
+import androidx.annotation.StringRes
+
 data class MoneyAllocationUi(
     val amount: Float,
-    val label: String
+    @StringRes val label: Int
 )

@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.tools.overview.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,12 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
 import com.eyther.lumbridge.features.tools.overview.viewmodel.IToolsScreenViewModel
@@ -32,19 +32,18 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.Lumbridge
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
-import com.eyther.lumbridge.ui.theme.LumbridgeTheme
 import com.eyther.lumbridge.ui.theme.QuarterPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun ToolsOverviewScreen(
     navController: NavHostController,
-    label: String,
+    @StringRes label: Int,
     toolsScreenViewModel: IToolsScreenViewModel = hiltViewModel<ToolsScreenViewModel>()
 ) {
     Scaffold(
         topBar = {
-            LumbridgeTopAppBar(TopAppBarVariation.Title(title = label))
+            LumbridgeTopAppBar(TopAppBarVariation.Title(title = stringResource(id = label)))
         }
     ) { paddingValues ->
         val state = toolsScreenViewModel.viewState.collectAsState()
@@ -66,7 +65,7 @@ fun ToolsOverviewScreen(
 }
 
 @Composable
-fun Content(
+private fun Content(
     state: ToolScreenViewState.Content,
     navController: NavController,
     onItemClick: (toolItem: ToolItem, navController: NavController) -> Unit
@@ -82,7 +81,7 @@ fun Content(
                 .fillMaxSize()
         ) {
             items(state.options.keys.size) { index ->
-                val key = state.options.keys.elementAt(index)
+                val keyRes = state.options.keys.elementAt(index)
                 Text(
                     modifier = Modifier
                         .padding(
@@ -90,9 +89,10 @@ fun Content(
                             bottom = HalfPadding
                         )
                         .align(Alignment.Start),
-                    text = key,
+                    text = stringResource(id = keyRes),
                     style = runescapeTypography.bodyLarge
                 )
+
                 Column(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
@@ -101,10 +101,10 @@ fun Content(
                         .padding(DefaultPadding),
                     verticalArrangement = Arrangement.spacedBy(DefaultPadding)
                 ) {
-                    state.options[key]?.forEach { item ->
+                    state.options[keyRes]?.forEach { item ->
                         MovementSetting(
                             icon = item.icon,
-                            label = item.text,
+                            label = stringResource(id = item.text),
                             onClick = { onItemClick(item, navController) }
                         )
                     }
@@ -112,11 +112,4 @@ fun Content(
             }
         }
     }
-}
-
-@Composable
-@Preview
-private fun Preview() {
-    val navController = rememberNavController()
-    LumbridgeTheme(darkTheme = false) { ToolsOverviewScreen(navController, "Tools") }
 }

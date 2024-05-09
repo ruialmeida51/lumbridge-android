@@ -1,7 +1,10 @@
 package com.eyther.lumbridge.mapper.finance
 
+import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.model.finance.Deduction
+import com.eyther.lumbridge.domain.model.finance.DeductionType
 import com.eyther.lumbridge.domain.model.finance.MoneyAllocation
+import com.eyther.lumbridge.domain.model.finance.MoneyAllocationType
 import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
@@ -25,20 +28,36 @@ fun Deduction.toUi(): DeductionUi {
         is Deduction.FlatDeduction -> DeductionUi(
             percentage = null,
             amount = value,
-            label = type.name
+            label = getLabelForDeductionType(type)
         )
 
         is Deduction.PercentageDeduction -> DeductionUi(
             percentage = (percentage * 100).toString(),
             amount = value,
-            label = type.name
+            label = getLabelForDeductionType(type)
         )
+    }
+}
+
+private fun getLabelForDeductionType(type: DeductionType): Int {
+    return when (type) {
+        DeductionType.PortugalDeductionType.IRS -> R.string.irs
+        DeductionType.PortugalDeductionType.SocialSecurity -> R.string.social_security
+        DeductionType.PortugalDeductionType.Flat -> R.string.flat_tax
     }
 }
 
 fun MoneyAllocation.toUi(): MoneyAllocationUi {
     return MoneyAllocationUi(
         amount = amount,
-        label = type.name
+        label = getLabelForMoneyAllocationType(type)
     )
+}
+
+private fun getLabelForMoneyAllocationType(type: MoneyAllocationType): Int {
+    return when (type) {
+        MoneyAllocationType.Luxuries -> R.string.luxuries
+        MoneyAllocationType.Necessities -> R.string.necessities
+        MoneyAllocationType.Savings -> R.string.savings
+    }
 }

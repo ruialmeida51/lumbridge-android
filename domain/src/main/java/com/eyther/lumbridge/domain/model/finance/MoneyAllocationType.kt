@@ -3,10 +3,9 @@ package com.eyther.lumbridge.domain.model.finance
 /**
  * Represents the type of money allocation. This is used to calculate the amount of money
  * that should be allocated to a specific category.
- * @property name The label of the money allocation type.
  */
-sealed class MoneyAllocationType(val name: String) {
-    data object Savings : MoneyAllocationType("Savings")
-    data object Necessities : MoneyAllocationType("Necessities")
-    data object Luxuries : MoneyAllocationType("Luxuries")
+sealed interface MoneyAllocationType {
+    data object Savings : MoneyAllocationType
+    data object Necessities : MoneyAllocationType
+    data object Luxuries : MoneyAllocationType
 }

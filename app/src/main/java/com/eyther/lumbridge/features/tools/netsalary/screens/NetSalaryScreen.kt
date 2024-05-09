@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.tools.netsalary.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -10,12 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.INetSalaryScreenViewModel
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.NetSalaryScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -23,7 +26,7 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 @Composable
 fun NetSalaryScreen(
     navController: NavHostController,
-    label: String,
+    @StringRes label: Int,
     viewModel: INetSalaryScreenViewModel = hiltViewModel<NetSalaryScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState()
@@ -32,7 +35,7 @@ fun NetSalaryScreen(
         topBar = {
             LumbridgeTopAppBar(
                 TopAppBarVariation.TitleAndIcon(
-                    title = label,
+                    title = stringResource(id = label),
                     onIconClick = { navController.popBackStack() }
                 )
             )
@@ -55,7 +58,7 @@ fun NetSalaryScreen(
                         onEditSalary = viewModel::onEditSalary
                     )
 
-                    is NetSalaryScreenViewState.Loading -> Unit
+                    is NetSalaryScreenViewState.Loading -> LoadingIndicator()
                 }
             }
         }
@@ -63,7 +66,7 @@ fun NetSalaryScreen(
 }
 
 @Composable
-fun ColumnScope.Content(
+private fun ColumnScope.Content(
     navController: NavHostController,
     state: NetSalaryScreenViewState.Content,
     onCalculateNetSalary: (Float, Float) -> Unit,

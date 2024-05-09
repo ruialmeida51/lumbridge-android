@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.eyther.lumbridge.features.editfinancialprofile.screens.EditFinancialProfileScreen
+import com.eyther.lumbridge.features.editmortgageprofile.screens.EditMortgageProfileScreen
 import com.eyther.lumbridge.features.profile.editprofile.screens.EditProfileScreen
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.screens.ProfileOverviewScreen
@@ -59,6 +60,21 @@ fun ProfileNavHost(
             EditFinancialProfileScreen(
                 navController = navController,
                 label = ProfileNavigationItem.EditFinancialProfile.label
+            )
+        }
+
+        composable(
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
+            },
+            route = ProfileNavigationItem.EditMortgageProfile.route
+        ) {
+            EditMortgageProfileScreen(
+                navController = navController,
+                label = ProfileNavigationItem.EditMortgageProfile.label
             )
         }
 

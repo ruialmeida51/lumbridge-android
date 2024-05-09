@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.feed.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -51,7 +53,7 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun FeedScreen(
-    label: String,
+    @StringRes label: Int,
     viewModel: IFeedScreenViewModel = hiltViewModel<FeedScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState().value
@@ -59,7 +61,7 @@ fun FeedScreen(
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
-                topAppBarVariation = TopAppBarVariation.Title(title = label)
+                topAppBarVariation = TopAppBarVariation.Title(title = stringResource(id = label))
             )
         }
     ) { paddingValues ->
@@ -230,14 +232,13 @@ private fun FeedItem(
 private fun ColumnScope.EmptyScreen(onRefresh: () -> Unit) {
     EmptyScreenWithButton(
         modifier = Modifier.padding(DefaultPadding),
-        text = "It seems we're having some trouble fetching the news feed. " +
-                "Please try again later.",
-        buttonText = "Refresh",
+        text = stringResource(id = R.string.feed_empty_message),
+        buttonText = stringResource(id = R.string.refresh),
         icon = {
             Icon(
                 modifier = Modifier.size(32.dp),
                 painter = painterResource(id = R.drawable.ic_news),
-                contentDescription = "News Feed"
+                contentDescription = stringResource(id = R.string.feed)
             )
         },
         onButtonClick = onRefresh

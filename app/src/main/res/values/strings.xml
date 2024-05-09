@@ -1,3 +1,117 @@
 <resources>
     <string name="app_name">Lumbridge</string>
+
+    <string name="feed">Feed</string>
+    <string name="feed_empty_message">It seems we\'re having some trouble fetching the news feed.\nPlease try again later.</string>
+    <string name="overview">Overview</string>
+
+    <string name="tools">Tools</string>
+    <string name="tools_personal_tools">Personal Tools</string>
+    <string name="tools_company_tools">Company Tools</string>
+    <string name="tools_mortgage_tools">Mortgage Tools</string>
+    <string name="tools_net_salary_calculator">Net Salary Calculator</string>
+    <string name="tools_savings_calculator">Savings Calculator</string>
+    <string name="tools_currency_converter">Currency Converter</string>
+    <string name="tools_mortgage_calculator">Mortgage Calculator</string>
+    <string name="tools_ctc_calculator_long">Cost To Company Calculator</string>
+    <string name="tools_ctc_calculator_short">CTC Calculator</string>
+
+    <string name="edit_financial_profile">Edit Financial Profile</string>
+    <string name="edit_financial_profile_income">What\'s your current income?</string>
+    <string name="edit_financial_profile_household">How does your household look like?</string>
+    <string name="edit_financial_profile_allocate_earnings">How do you plan to allocate your earnings?</string>
+    <string name="edit_financial_profile_annual_gross_salary">Annual Gross Salary</string>
+    <string name="edit_financial_profile_per_diem_food_card">Per Diem for Food Card</string>
+    <string name="edit_financial_profile_save">Save Financial Profile</string>
+    <string name="edit_financial_profile_suggested">Suggested: %1$s</string>
+    <string name="edit_financial_profile_invalid_income">Please enter a valid income</string>
+    <string name="edit_financial_profile_invalid_allocation">Total percentage must be less than or equal to %1$s</string>
+
+    <string name="edit_mortgage_profile">Edit Mortgage Profile</string>
+    <string name="edit_mortgage_profile_loan">What are the conditions of your loan?</string>
+    <string name="edit_mortgage_profile_owe">How much do you still owe?</string>
+    <string name="edit_mortgage_profile_save">Save Mortgage Profile</string>
+    <string name="edit_mortgage_profile_loan_amount">Loan Amount</string>
+    <string name="edit_mortgage_profile_loan_months_left">Months Left</string>
+    <string name="edit_mortgage_profile_loan_type">Do you have a variable or fixed rate?</string>
+    <string name="edit_mortgage_profile_invalid_interest_rate">Please enter a valid interest rate</string>
+    <string name="edit_mortgage_profile_invalid_euribor">Please enter a valid Euribor rate</string>
+    <string name="edit_mortgage_profile_invalid_spread">Please enter a valid spread rate</string>
+    <string name="edit_mortgage_profile_invalid_loan_amount">Please enter a valid loan amount</string>
+    <string name="edit_mortgage_profile_invalid_months_left">Please enter a valid number of months</string>
+
+    <string name="financial_overview">Financial Overview</string>
+    <string name="financial_overview_salary">Your Salary Overview</string>
+    <string name="financial_overview_annual_income">Annual Income</string>
+    <string name="financial_overview_monthly_income">Monthly Income</string>
+    <string name="financial_overview_food_card_monthly">Card Monthly</string>
+    <string name="financial_overview_food_card_daily">Card Daily</string>
+    <string name="financial_overview_deductions">Deductions Overview</string>
+    <string name="financial_overview_deductions_portugal">Portugal Deductions</string>
+    <string name="financial_overview_deductions_portugal_irs">IRS</string>
+    <string name="financial_overview_deductions_portugal_social_security">Social Security</string>
+    <string name="financial_overview_deductions_portugal_flat_tax">Flat Tax</string>
+    <string name="financial_overview_allocation">Money Allocation</string>
+    <string name="financial_overview_no_allocation_strategy">You haven\'t set a money allocation strategy.\nEdit your financial profile to set one.</string>
+    <string name="financial_overview_no_profile">You don\'t seem have a financial profile yet.\nPress the button below to create one.</string>
+    <string name="financial_overview_create_profile">Create Financial Profile</string>
+
+    <string name="profile">Profile</string>
+    <string name="profile_greeting">Hello, %1$s</string>
+    <string name="profile_greeting_no_name">Hello, Guest</string>
+    <string name="profile_greeting_locale">From %1$s</string>
+    <string name="profile_greeting_no_locale">From Unknown</string>
+    <string name="profile_app_settings">App Settings</string>
+    <string name="profile_financial_settings">Financial Settings</string>
+    <string name="profile_avatar_content_description">Profile Avatar</string>
+
+    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_profile_how_to_contact">How should we contact you?</string>
+    <string name="edit_profile_select_country">Select your preferred country</string>
+    <string name="edit_profile_save">Save Profile</string>
+
+    <string name="app_settings_change_preferences">Change your preferences</string>
+
+    <string-array name="loading_messages">
+        <item>Hold on tight, we\'re catching data waves!</item>
+        <item>Just brewing up some digital magic…</item>
+        <item>Tapping into the data dimension, one moment…</item>
+        <item>Spinning the wheel of progress, almost there…</item>
+        <item>Revving up the engines, sit back and relax…</item>
+        <item>Gathering stardust for your digital experience…</item>
+        <item>Summoning the internet elves to do their thing…</item>
+        <item>Charging up our virtual hamsters for some heavy lifting…</item>
+    </string-array>
+
+    <string name="dark_mode">Dark Mode</string>
+    <string name="irs">IRS</string>
+    <string name="social_security">Social Security</string>
+    <string name="flat_tax">Flat Tax</string>
+    <string name="refresh">Refresh</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="settings">Settings</string>
+    <string name="net_annual">Net Annual</string>
+    <string name="net_monthly">Net Monthly</string>
+    <string name="gross_annual">Gross Annual</string>
+    <string name="gross_monthly">Gross Monthly</string>
+    <string name="food_card">Food Card</string>
+    <string name="percentage">Percentage</string>
+    <string name="savings">Savings</string>
+    <string name="savings_percentage">Savings Percentage</string>
+    <string name="necessities">Necessities</string>
+    <string name="necessities_percentage">Necessities Percentage</string>
+    <string name="luxuries">Luxuries</string>
+    <string name="luxuries_percentage">Luxuries Percentage</string>
+    <string name="number_of_dependants">Number of Dependants</string>
+    <string name="single_incomne">Single Income</string>
+    <string name="handicapped">Handicapped</string>
+    <string name="married">Married</string>
+    <string name="error">Error</string>
+    <string name="loading">Loading</string>
+    <string name="euribor">Euribor</string>
+    <string name="spread">Spread</string>
+    <string name="interest_rate">Interest Rate</string>
+    <string name="loan_type_variable">Variable</string>
+    <string name="loan_type_fixed">Fixed</string>
 </resources>

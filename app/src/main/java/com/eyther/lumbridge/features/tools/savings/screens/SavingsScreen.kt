@@ -1,10 +1,12 @@
 package com.eyther.lumbridge.features.tools.savings.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.eyther.lumbridge.features.tools.savings.viewModel.ISavingsScreenViewModel
@@ -15,14 +17,14 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBar
 @Composable
 fun SavingsScreen(
     navController: NavController,
-    label: String,
+    @StringRes label: Int,
     viewModel: ISavingsScreenViewModel = hiltViewModel<SavingsScreenViewModel>()
 ) {
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
                 TopAppBarVariation.TitleAndIcon(
-                    title = label,
+                    title = stringResource(id = label),
                     onIconClick = { navController.popBackStack() }
                 )
             )

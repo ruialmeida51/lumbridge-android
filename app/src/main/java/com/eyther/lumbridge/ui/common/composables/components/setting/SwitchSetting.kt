@@ -24,7 +24,7 @@ fun SwitchSetting(
             enabled = enabled,
             modifier = Modifier.height(16.dp),
             checked = isChecked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
         )
     }
 }

@@ -12,7 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.overview.components.Salary
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.model.finance.DeductionUi
@@ -45,14 +47,14 @@ fun DeductionsBreakdown(currencySymbol: String, deductions: List<DeductionUi>) {
     ) {
         Text(
             modifier = Modifier.padding(bottom = QuarterPadding),
-            text = "Portugal Deductions",
+            text = stringResource(id = R.string.financial_overview_deductions_portugal),
             style = runescapeTypography.bodyLarge,
             color = MaterialTheme.colorScheme.tertiary
         )
 
         deductions.forEach { deductionUi ->
             Salary(
-                leftLabel = "${deductionUi.label}: ",
+                leftLabel = stringResource(id = deductionUi.label).plus(": "),
                 leftText = if (deductionUi.hasPercentage()) {
                     "${deductionUi.amount}$currencySymbol (${deductionUi.percentage}%)"
                 } else {

@@ -1,7 +1,9 @@
 package com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate
 
+import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileInputState
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
+import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -106,12 +108,12 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
      */
     override fun validateIncome(
         inputState: EditFinancialProfileInputState
-    ): String? {
+    ): TextResource? {
         val validIncome = inputState.annualGrossSalary.text?.toFloatOrNull() != null
         val validFoodCardPerDiem = inputState.foodCardPerDiem.text?.toFloatOrNull() != null
 
         return if (!validIncome || !validFoodCardPerDiem) {
-            "Please enter a valid income"
+            TextResource.Resource(R.string.edit_financial_profile_invalid_income)
         } else {
             null
         }
@@ -126,7 +128,7 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
      */
     override fun validatePercentages(
         inputState: EditFinancialProfileInputState
-    ): String? {
+    ): TextResource? {
         val percentages = listOf(
             inputState.savingsPercentage.text?.toIntOrNull(),
             inputState.necessitiesPercentage.text?.toIntOrNull(),
@@ -134,7 +136,7 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
         )
 
         if (percentages.mapNotNull { it }.sum() > MAX_PERCENTAGE) {
-            return "Total percentage must be less than or equal to $MAX_PERCENTAGE"
+            return TextResource.Resource(R.string.edit_financial_profile_invalid_allocation)
         }
 
         return null
@@ -171,8 +173,8 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
      * @return true if the button should be enabled, false otherwise.
      */
     override fun shouldEnableSaveButton(inputState: EditFinancialProfileInputState): Boolean {
-        return validatePercentages(inputState).isNullOrEmpty() &&
-                validateIncome(inputState).isNullOrEmpty()
+        return validatePercentages(inputState) == null &&
+                validateIncome(inputState) == null
     }
 
     /**

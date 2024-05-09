@@ -10,14 +10,13 @@ import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialPro
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.EditFinancialProfileInputHandler
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.IEditFinancialProfileInputHandler
 import com.eyther.lumbridge.model.user.UserFinancialsUi
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsStream
+import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -27,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditFinancialProfileScreenViewModel @Inject constructor(
     private val getLocaleOrDefault: GetLocaleOrDefault,
-    private val getUserFinancials: GetUserFinancialsStream,
+    private val getUserFinancials: GetUserFinancials,
     private val saveUserFinancials: SaveUserFinancials,
     private val editFinancialProfileInputHandler: EditFinancialProfileInputHandler
 ) : ViewModel(),
@@ -47,11 +46,9 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
 
     private fun observeUserFinancials() {
         viewModelScope.launch {
-            val userFinancialsFlow = getUserFinancials()
+            val initialUserFinancials = getUserFinancials()
             val locale = getLocaleOrDefault()
             val currencySymbol = locale.getCurrencySymbol()
-
-            val initialUserFinancials = userFinancialsFlow.firstOrNull()
 
             updateInput { state ->
                 state.copy(

@@ -1,3 +1,8 @@
 package com.eyther.lumbridge.ui.navigation
 
-abstract class NavigationItem(val route: String, val label: String)
+import androidx.annotation.StringRes
+
+abstract class NavigationItem(
+    val route: String,
+    @StringRes val label: Int
+)

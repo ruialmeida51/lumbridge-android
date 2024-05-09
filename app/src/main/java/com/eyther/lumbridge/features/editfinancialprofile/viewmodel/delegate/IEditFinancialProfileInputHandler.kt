@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate
 
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileInputState
+import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.StateFlow
 
 interface IEditFinancialProfileInputHandler {
@@ -25,14 +26,14 @@ interface IEditFinancialProfileInputHandler {
      * @return an error message if the percentages are invalid, null otherwise.
      * @see EditFinancialProfileInputState
      */
-    fun validatePercentages(inputState: EditFinancialProfileInputState): String?
+    fun validatePercentages(inputState: EditFinancialProfileInputState): TextResource?
 
     /**
      * Validates the income and returns an error message if the income is invalid.
      * @return an error message if the income is invalid, null otherwise.
      * @see EditFinancialProfileInputState
      */
-    fun validateIncome(inputState: EditFinancialProfileInputState): String?
+    fun validateIncome(inputState: EditFinancialProfileInputState): TextResource?
 
     /**
      * Checks if we have enough information available to enable the button.

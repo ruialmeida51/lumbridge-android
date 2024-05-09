@@ -49,7 +49,7 @@ class FeedScreenViewModel @Inject constructor(
                 viewState.update {
                     FeedScreenViewState.Content(
                         feedItems = newsFeed,
-                        availableFeeds = availableFeeds.sortedByDescending { it == selectedFeed },
+                        availableFeeds = availableFeeds,
                         selectedFeed = selectedFeed
                     )
                 }

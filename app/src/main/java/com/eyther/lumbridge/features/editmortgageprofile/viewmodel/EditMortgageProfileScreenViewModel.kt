@@ -1,0 +1,106 @@
+package com.eyther.lumbridge.features.editmortgageprofile.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
+import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewEffect
+import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewState
+import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewState.Loading
+import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate.EditMortgageProfileInputHandler
+import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate.IEditMortgageProfileInputHandler
+import com.eyther.lumbridge.model.user.UserMortgageUi
+import com.eyther.lumbridge.usecase.user.mortgage.GetUserMortgage
+import com.eyther.lumbridge.usecase.user.mortgage.SaveUserMortgage
+import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class EditMortgageProfileScreenViewModel @Inject constructor(
+    private val getLocaleOrDefault: GetLocaleOrDefault,
+    private val saveUserMortgage: SaveUserMortgage,
+    private val getUserMortgage: GetUserMortgage,
+    private val mortgageInputHandler: EditMortgageProfileInputHandler
+) : ViewModel(),
+    IEditMortgageProfileScreenViewModel,
+    IEditMortgageProfileInputHandler by mortgageInputHandler {
+
+    override val viewState = MutableStateFlow<EditMortgageProfileScreenViewState>(Loading)
+    override val viewEffect = MutableSharedFlow<EditMortgageProfileScreenViewEffect>()
+
+    init {
+        fetchMortgageProfile()
+    }
+
+    private fun fetchMortgageProfile() {
+        viewModelScope.launch {
+            val initialUserMortgage = getUserMortgage()
+            val locale = getLocaleOrDefault()
+
+            updateInput { state ->
+                state.copy(
+                    loanAmount = state.loanAmount.copy(
+                        text = initialUserMortgage?.loanAmount?.toString()
+                    ),
+                    euribor = state.euribor.copy(
+                        text = initialUserMortgage?.euribor?.toString()
+                    ),
+                    spread = state.spread.copy(
+                        text = initialUserMortgage?.spread?.toString()
+                    ),
+                    monthsLeft = state.monthsLeft.copy(
+                        text = initialUserMortgage?.monthsLeft?.toString()
+                    ),
+                    fixedInterestRate = state.fixedInterestRate.copy(
+                        text = initialUserMortgage?.fixedInterestRate?.toString()
+                    ),
+                    mortgageType = initialUserMortgage?.mortgageType
+                )
+            }
+
+            inputState
+                .onEach { inputState ->
+                    viewState.update {
+                        EditMortgageProfileScreenViewState.Content(
+                            locale = locale,
+                            shouldEnableSaveButton = shouldEnableSaveButton(inputState),
+                            inputState = inputState
+                        )
+                    }
+                }.launchIn(this)
+        }
+    }
+
+    override fun saveMortgageProfile(navController: NavHostController) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            viewModelScope.launch {
+                viewEffect.emit(
+                    EditMortgageProfileScreenViewEffect.ShowError(throwable.message.orEmpty())
+                )
+            }
+        }
+
+        viewModelScope.launch(coroutineExceptionHandler) {
+            val inputState = inputState.value
+            val userMortgage =  UserMortgageUi(
+                loanAmount = checkNotNull(inputState.loanAmount.text?.toFloatOrNull()),
+                euribor = inputState.euribor.text?.toFloatOrNull(),
+                spread = inputState.spread.text?.toFloatOrNull(),
+                monthsLeft = checkNotNull(inputState.monthsLeft.text?.toIntOrNull()),
+                fixedInterestRate = inputState.fixedInterestRate.text?.toFloatOrNull(),
+                mortgageType = checkNotNull(inputState.mortgageType)
+            )
+
+            saveUserMortgage(userMortgage)
+
+            navController.navigateUp()
+        }
+    }
+}

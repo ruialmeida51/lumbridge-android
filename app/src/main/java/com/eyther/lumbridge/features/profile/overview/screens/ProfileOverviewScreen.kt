@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.profile.overview.screens
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,6 +46,7 @@ import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.features.profile.overview.viewmodel.IProfileOverviewScreenViewModel
 import com.eyther.lumbridge.features.profile.overview.viewmodel.ProfileOverviewScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
@@ -55,13 +58,17 @@ import com.eyther.lumbridge.ui.theme.runescapeTypography
 @Composable
 fun ProfileOverviewScreen(
     navController: NavHostController,
-    label: String,
+    @StringRes label: Int,
     viewModel: IProfileOverviewScreenViewModel = hiltViewModel<ProfileOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsState().value
 
     Scaffold(
-        topBar = { LumbridgeTopAppBar(topAppBarVariation = TopAppBarVariation.Title(title = label)) }
+        topBar = {
+            LumbridgeTopAppBar(
+                topAppBarVariation = TopAppBarVariation.Title(title = stringResource(id = label))
+            )
+        }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -78,7 +85,7 @@ fun ProfileOverviewScreen(
                     state = state
                 )
 
-                is ProfileOverviewScreenViewState.Loading -> Unit
+                is ProfileOverviewScreenViewState.Loading -> LoadingIndicator()
             }
         }
     }
@@ -94,7 +101,7 @@ private fun Content(
         ProfileHeader(navController, state, viewModel::navigate)
 
         Text(
-            text = "Financial Settings",
+            text = stringResource(id = R.string.profile_financial_settings),
             style = runescapeTypography.bodyLarge,
             modifier = Modifier.padding(vertical = HalfPadding)
         )
@@ -102,7 +109,7 @@ private fun Content(
         ProfileFinancialSettings(navController, viewModel::navigate)
 
         Text(
-            text = "App Settings",
+            text = stringResource(id = R.string.profile_app_settings),
             style = runescapeTypography.bodyLarge,
             modifier = Modifier.padding(vertical = HalfPadding)
         )
@@ -127,11 +134,11 @@ private fun ProfileHeader(
         Row {
             Icon(
                 imageVector = Icons.Rounded.AccountCircle,
-                contentDescription = "Profile Image",
+                contentDescription = stringResource(id = R.string.profile_avatar_content_description),
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(80.dp),
-                tint = MaterialTheme.colorScheme.onPrimary
+                tint = MaterialTheme.colorScheme.onSurface
             )
 
             Column(
@@ -140,8 +147,30 @@ private fun ProfileHeader(
                     .align(Alignment.CenterVertically),
                 verticalArrangement = Arrangement.spacedBy(DefaultPadding),
             ) {
+                val usernameText = if (state.username != null) {
+                    stringResource(
+                        id = R.string.profile_greeting,
+                        state.username
+                    )
+                } else {
+                    stringResource(
+                        id = R.string.profile_greeting_no_name
+                    )
+                }
+
+                val localeText = if (state.locale != null) {
+                    stringResource(
+                        id = R.string.profile_greeting_locale,
+                        state.locale.name.capitalise()
+                    )
+                } else {
+                    stringResource(
+                        id = R.string.profile_greeting_no_locale
+                    )
+                }
+
                 Text(
-                    text = "Hello, ${state.username ?: "Guest"}",
+                    text = usernameText,
                     style = runescapeTypography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
 
@@ -153,7 +182,7 @@ private fun ProfileHeader(
                 }
 
                 Text(
-                    text = "From ${state.locale?.name?.capitalise() ?: "Unknown"}",
+                    text = localeText,
                     style = runescapeTypography.bodyMedium
                 )
             }
@@ -173,7 +202,7 @@ private fun ProfileHeader(
                         )
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
-                contentDescription = "Edit Profile"
+                contentDescription = stringResource(id = R.string.edit_profile)
             )
         }
     }
@@ -194,8 +223,14 @@ private fun ProfileFinancialSettings(
     ) {
         MovementSetting(
             icon = R.drawable.ic_savings,
-            label = "Edit Financial Profile",
+            label = stringResource(id = R.string.edit_financial_profile),
             onClick = { onNavigate(ProfileNavigationItem.EditFinancialProfile, navController) }
+        )
+
+        MovementSetting(
+            icon = R.drawable.ic_bank,
+            label = stringResource(id = R.string.edit_mortgage_profile),
+            onClick = { onNavigate(ProfileNavigationItem.EditMortgageProfile, navController) }
         )
     }
 }
@@ -215,7 +250,7 @@ private fun ProfileAppSettings(
     ) {
         MovementSetting(
             icon = R.drawable.ic_settings,
-            label = "App Settings",
+            label = stringResource(id = R.string.settings),
             onClick = { onNavigate(ProfileNavigationItem.Settings, navController) }
         )
     }

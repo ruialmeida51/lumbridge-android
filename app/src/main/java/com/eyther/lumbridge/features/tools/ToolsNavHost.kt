@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.eyther.lumbridge.features.tools.ctc.screens.CostToCompanyScreen
+import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
 import com.eyther.lumbridge.features.tools.mortgage.screens.MortgageScreen
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryScreen
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
@@ -83,6 +84,19 @@ fun ToolsNavHost(
             MortgageScreen(
                 navController = navController,
                 label = ToolsNavigationItem.Mortgage.label
+            )
+        }
+
+        composable(enterTransition = {
+            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+        },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
+            }, route = ToolsNavigationItem.CurrencyConverter.route
+        ) {
+            CurrencyConverterScreen(
+                navController = navController,
+                label = ToolsNavigationItem.CurrencyConverter.label
             )
         }
     }

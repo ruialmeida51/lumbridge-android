@@ -14,8 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import com.eyther.lumbridge.R
 import com.eyther.lumbridge.ui.common.composables.model.TextInputState
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
@@ -28,6 +32,8 @@ fun TextInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onInputChanged: ((String) -> Unit) = {}
 ) {
+    val context = LocalContext.current
+
     val text = remember {
         mutableStateOf(TextFieldValue(state.text.orEmpty()))
     }
@@ -68,7 +74,7 @@ fun TextInput(
         supportingText = {
             if (state.isError()) {
                 Text(
-                    text = state.error.orEmpty(),
+                    text = state.error!!.getString(context),
                     style = runescapeTypography.bodySmall
                 )
             }
@@ -77,7 +83,7 @@ fun TextInput(
             if (state.isError()) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
-                    contentDescription = "Error"
+                    contentDescription = stringResource(id = R.string.error)
                 )
             }
         },
@@ -91,6 +97,10 @@ fun NumberInput(
     state: TextInputState,
     label: String? = null,
     placeholder: String? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Number,
+        imeAction = ImeAction.Next
+    ),
     onInputChanged: ((String) -> Unit) = {}
 ) {
     TextInput(
@@ -98,7 +108,7 @@ fun NumberInput(
         state = state,
         label = label,
         placeholder = placeholder,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = keyboardOptions,
         onInputChanged = onInputChanged
     )
 }
