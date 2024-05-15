@@ -6,6 +6,7 @@ import com.eyther.lumbridge.data.model.user.UserProfileCached
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
+import com.eyther.lumbridge.domain.time.toIsoLocalDateString
 
 fun UserProfileDomain.toCached() = UserProfileCached(
     countryCode = locale.countryCode,
@@ -28,8 +29,9 @@ fun UserFinancialsDomain.toCached() = UserFinancialsCached(
 fun UserMortgageDomain.toCached() = UserMortgageCached(
     mortgageType = mortgageType.name,
     loanAmount = loanAmount,
-    monthsLeft = monthsLeft,
     euribor = euribor,
     spread = spread,
-    fixedInterestRate = fixedInterestRate
+    fixedInterestRate = fixedInterestRate,
+    startDate = startDate.toIsoLocalDateString(),
+    endDate = endDate.toIsoLocalDateString()
 )

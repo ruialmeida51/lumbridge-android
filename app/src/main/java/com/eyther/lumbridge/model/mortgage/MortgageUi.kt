@@ -1,6 +1,4 @@
-package com.eyther.lumbridge.model.finance
-
-import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
+package com.eyther.lumbridge.model.mortgage
 
 data class MortgageUi(
     val euribor: Float?,
@@ -9,9 +7,10 @@ data class MortgageUi(
     val loanAmount: Float,
     val monthsLeft: Int,
     val monthlyPayment: Float,
-    val totalPaid: Float,
-    val remainingAmount: Float,
-    val mortgageTypeUi: MortgageTypeUi
+    val monthlyPaymentInterest: Float,
+    val monthlyPaymentCapital: Float,
+    val mortgageTypeUi: MortgageTypeUi,
+    val amortizations: List<MortgageAmortizationUi>
 ) {
     init {
         when (mortgageTypeUi) {

@@ -3,9 +3,13 @@ package com.eyther.lumbridge.features.editmortgageprofile.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.eyther.lumbridge.domain.time.monthsUntil
+import com.eyther.lumbridge.domain.time.toLocalDate
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewEffect
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewState
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewState.Loading
+import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.IEditMortgageProfileScreenViewModel.Companion.MORTGAGE_MAX_DURATION
+import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.IEditMortgageProfileScreenViewModel.Companion.PADDING_YEARS
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate.EditMortgageProfileInputHandler
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate.IEditMortgageProfileInputHandler
 import com.eyther.lumbridge.model.user.UserMortgageUi
@@ -20,6 +24,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,8 +60,11 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
                     spread = state.spread.copy(
                         text = initialUserMortgage?.spread?.toString()
                     ),
-                    monthsLeft = state.monthsLeft.copy(
-                        text = initialUserMortgage?.monthsLeft?.toString()
+                    startDate = state.startDate.copy(
+                        date = initialUserMortgage?.startDate
+                    ),
+                    endDate = state.endDate.copy(
+                        date = initialUserMortgage?.endDate
                     ),
                     fixedInterestRate = state.fixedInterestRate.copy(
                         text = initialUserMortgage?.fixedInterestRate?.toString()
@@ -93,8 +101,9 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
                 loanAmount = checkNotNull(inputState.loanAmount.text?.toFloatOrNull()),
                 euribor = inputState.euribor.text?.toFloatOrNull(),
                 spread = inputState.spread.text?.toFloatOrNull(),
-                monthsLeft = checkNotNull(inputState.monthsLeft.text?.toIntOrNull()),
                 fixedInterestRate = inputState.fixedInterestRate.text?.toFloatOrNull(),
+                startDate = checkNotNull(inputState.startDate.date),
+                endDate = checkNotNull(inputState.endDate.date),
                 mortgageType = checkNotNull(inputState.mortgageType)
             )
 
@@ -102,5 +111,14 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
 
             navController.navigateUp()
         }
+    }
+
+    override fun getMaxSelectableYear(): Int {
+        return LocalDate.now().year + MORTGAGE_MAX_DURATION + PADDING_YEARS
+    }
+
+    override fun isSelectableEndDate(endDateInMillis: Long): Boolean {
+        val startDate = inputState.value.startDate.date ?: return false
+        return startDate.monthsUntil(endDateInMillis.toLocalDate()) >= 1
     }
 }

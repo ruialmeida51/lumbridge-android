@@ -9,5 +9,5 @@ data class UserFinancialsCached(
     val numberOfDependants: Int?,
     val singleIncome: Boolean,
     val married: Boolean,
-    val handicapped: Boolean,
+    val handicapped: Boolean
 )

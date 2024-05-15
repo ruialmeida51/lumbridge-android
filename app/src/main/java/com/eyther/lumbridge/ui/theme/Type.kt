@@ -32,12 +32,24 @@ val displayFontFamily = FontFamily(
 val baseline = Typography()
 
 val runescapeTypography = Typography(
-    displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
-    displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),
-    displaySmall = baseline.displaySmall.copy(fontFamily = displayFontFamily),
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = displayFontFamily),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = displayFontFamily),
-    headlineSmall = baseline.headlineSmall.copy(fontFamily = displayFontFamily),
+    displayLarge = baseline.displayLarge.copy(
+        fontFamily = displayFontFamily
+    ),
+    displayMedium = baseline.displayMedium.copy(
+        fontFamily = displayFontFamily
+    ),
+    displaySmall = baseline.displaySmall.copy(
+        fontFamily = displayFontFamily
+    ),
+    headlineLarge = baseline.headlineLarge.copy(
+        fontFamily = displayFontFamily
+    ),
+    headlineMedium = baseline.headlineMedium.copy(
+        fontFamily = displayFontFamily
+    ),
+    headlineSmall = baseline.headlineSmall.copy(
+        fontFamily = displayFontFamily
+    ),
     titleLarge = baseline.titleLarge.copy(
         fontFamily = displayFontFamily,
         fontSize = 28.sp,
@@ -68,8 +80,16 @@ val runescapeTypography = Typography(
         fontSize = 13.sp,
         fontWeight = FontWeight.Light,
     ),
-    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
-    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
+    labelLarge = baseline.labelLarge.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Bold
+    ),
+    labelMedium = baseline.labelMedium.copy(
+        fontFamily = bodyFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.SemiBold
+    ),
     labelSmall = baseline.labelSmall.copy(
         fontFamily = bodyFontFamily,
         fontSize = 12.sp,

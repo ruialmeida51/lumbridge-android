@@ -3,11 +3,12 @@ package com.eyther.lumbridge.domain.mapper.user
 import com.eyther.lumbridge.data.model.user.UserFinancialsCached
 import com.eyther.lumbridge.data.model.user.UserMortgageCached
 import com.eyther.lumbridge.data.model.user.UserProfileCached
-import com.eyther.lumbridge.domain.model.finance.MortgageType
+import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
+import com.eyther.lumbridge.domain.time.toLocalDate
 
 fun UserProfileCached.toDomain() = UserProfileDomain(
     name = name,
@@ -30,8 +31,9 @@ fun UserFinancialsCached.toDomain() = UserFinancialsDomain(
 fun UserMortgageCached.toDomain() = UserMortgageDomain(
     mortgageType = MortgageType.valueOf(mortgageType),
     loanAmount = loanAmount,
-    monthsLeft = monthsLeft,
     euribor = euribor,
     spread = spread,
     fixedInterestRate = fixedInterestRate,
+    startDate = startDate.toLocalDate(),
+    endDate = endDate.toLocalDate()
 )

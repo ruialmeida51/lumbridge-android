@@ -38,10 +38,13 @@
     <string name="edit_mortgage_profile_invalid_spread">Please enter a valid spread rate</string>
     <string name="edit_mortgage_profile_invalid_loan_amount">Please enter a valid loan amount</string>
     <string name="edit_mortgage_profile_invalid_months_left">Please enter a valid number of months</string>
+    <string name="edit_mortgage_profile_invalid_start_date">Please enter a valid start date</string>
+    <string name="edit_mortgage_profile_invalid_end_date">Please enter a valid end date</string>
 
     <string name="financial_overview">Financial Overview</string>
     <string name="financial_overview_personal">Personal</string>
     <string name="financial_overview_mortgage">Mortgage</string>
+    <string name="financial_overview_mortgage_amortization_simulator">Amortization Simulator</string>
     <string name="financial_overview_salary">Your Salary Overview</string>
     <string name="financial_overview_annual_income">Annual Income</string>
     <string name="financial_overview_monthly_income">Monthly Income</string>
@@ -53,15 +56,18 @@
     <string name="financial_overview_deductions_portugal_social_security">Social Security</string>
     <string name="financial_overview_deductions_portugal_flat_tax">Flat Tax</string>
     <string name="financial_overview_allocation">Money Allocation</string>
-    <string name="financial_overview_mortgage_mortgage_amount">Current Debt</string>
-    <string name="financial_overview_mortgage_remaining_amount">Remaining Debt</string>
+    <string name="financial_overview_mortgage_mortgage_amount">Mortgage Conditions</string>
+    <string name="financial_overview_mortgage_next_payment_capital">Capital</string>
+    <string name="financial_overview_mortgage_next_payment_interest">Interest</string>
     <string name="financial_overview_mortgage_next_payment">Next Payment</string>
-    <string name="financial_overview_mortgage_total_paid">Paid Debt</string>
+    <string name="financial_overview_mortgage_monthly_payment">Monthly Payment</string>
+    <string name="financial_overview_mortgage_payment_almost_complete">Congratulations! You have almost paid your entire loan! There is nothing else to show here.</string>
     <string name="financial_overview_no_allocation_strategy">You haven\'t set a money allocation strategy.\nEdit your financial profile to set one.</string>
     <string name="financial_overview_no_profile">You don\'t seem have a financial profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_no_mortgage_profile">You don\'t seem have a mortgage profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_create_profile">Create Financial Profile</string>
     <string name="financial_overview_create_mortgage_profile">Create Mortgage Profile</string>
+    <string name="financial_overview_mortgage_pay_a_month">Add Monthly Payment</string>
 
     <string name="profile">Profile</string>
     <string name="profile_greeting">Hello, %1$s</string>
@@ -92,6 +98,8 @@
         <item>Charging up our virtual hamsters for some heavy lifting…</item>
     </string-array>
 
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="irs">IRS</string>
     <string name="social_security">Social Security</string>
@@ -125,5 +133,8 @@
     <string name="loan_type_fixed">Fixed</string>
     <string name="months_left">Months Left</string>
     <string name="loan_amount">Loan Amount</string>
-    <string name="remaining">Remaining</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="amortization">Amortization</string>
+    <string name="remainder">Remainder</string>
 </resources>

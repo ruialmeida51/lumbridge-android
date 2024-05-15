@@ -24,7 +24,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,14 +36,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewState
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.EditProfileScreenViewModel
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.IEditProfileScreenViewModel
-import com.eyther.lumbridge.ui.common.composables.components.components.LumbridgeButton
-import com.eyther.lumbridge.ui.common.composables.components.components.TextInput
+import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
@@ -59,7 +59,7 @@ fun EditProfileScreen(
     @StringRes label: Int,
     viewModel: IEditProfileScreenViewModel = hiltViewModel<EditProfileScreenViewModel>()
 ) {
-    val state = viewModel.viewState.collectAsState().value
+    val state = viewModel.viewState.collectAsStateWithLifecycle().value
 
     Scaffold(
         topBar = {

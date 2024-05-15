@@ -3,7 +3,7 @@ package com.eyther.lumbridge.usecase.finance
 import com.eyther.lumbridge.domain.repository.mortgage.MortgageRepository
 import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.mapper.user.toDomain
-import com.eyther.lumbridge.model.finance.MortgageUi
+import com.eyther.lumbridge.model.mortgage.MortgageUi
 import com.eyther.lumbridge.model.user.UserMortgageUi
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import javax.inject.Inject

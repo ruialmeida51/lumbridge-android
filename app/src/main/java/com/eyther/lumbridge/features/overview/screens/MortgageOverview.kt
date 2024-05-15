@@ -4,12 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
@@ -20,15 +27,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
 import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.navigation.FinancialOverviewNavigationItem
+import com.eyther.lumbridge.model.mortgage.MortgageAmortizationUi
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.navigation.NavigationItem
@@ -37,12 +49,12 @@ import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 
-
 @Composable
 fun ColumnScope.MortgageOverview(
     navController: NavHostController,
     state: FinancialOverviewScreenViewState.Content,
     navigate: (NavigationItem, NavHostController) -> Unit,
+    onPayment: () -> Unit,
     currencySymbol: String
 ) {
     if (state.mortgage == null) {
@@ -73,8 +85,16 @@ fun ColumnScope.MortgageOverview(
             state = state,
             currencySymbol = currencySymbol,
             onNavigate = navigate,
+            onPayment = onPayment,
             navController = navController
         )
+
+        Amortizations(
+            state = state,
+            currencySymbol = currencySymbol
+        )
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
     }
 }
 
@@ -83,6 +103,7 @@ private fun ColumnScope.PaymentOverview(
     state: FinancialOverviewScreenViewState.Content,
     currencySymbol: String,
     onNavigate: (FinancialOverviewNavigationItem, NavHostController) -> Unit,
+    onPayment: () -> Unit,
     navController: NavHostController
 ) {
     // Mortgage cannot be null in the content state.
@@ -112,7 +133,6 @@ private fun ColumnScope.PaymentOverview(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-
             Text(
                 modifier = Modifier.padding(
                     bottom = QuarterPadding
@@ -124,47 +144,12 @@ private fun ColumnScope.PaymentOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.loan_amount),
-                text = "${state.mortgage.loanAmount}$currencySymbol"
+                text = "${state.mortgage.loanAmount.twoDecimalPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.months_left),
                 text = "${state.mortgage.monthsLeft}"
-            )
-
-            DataOverview(
-                label = stringResource(id = R.string.financial_overview_mortgage_next_payment),
-                text = "${state.mortgage.monthlyPayment}$currencySymbol"
-            )
-
-            Text(
-                modifier = Modifier.padding(
-                    top = DefaultPadding,
-                    bottom = QuarterPadding
-                ),
-                text = stringResource(id = R.string.remaining),
-                style = runescapeTypography.bodyLarge,
-                color = MaterialTheme.colorScheme.tertiary
-            )
-
-            DataOverview(
-                label = stringResource(id = R.string.financial_overview_mortgage_remaining_amount),
-                text = "${state.mortgage.remainingAmount}$currencySymbol"
-            )
-
-            DataOverview(
-                label = stringResource(id = R.string.financial_overview_mortgage_total_paid),
-                text = "${state.mortgage.totalPaid}$currencySymbol"
-            )
-
-            Text(
-                modifier = Modifier.padding(
-                    top = DefaultPadding,
-                    bottom = QuarterPadding
-                ),
-                text = stringResource(id = R.string.interest_rate),
-                style = runescapeTypography.bodyLarge,
-                color = MaterialTheme.colorScheme.tertiary
             )
 
             when (state.mortgage.mortgageTypeUi) {
@@ -187,22 +172,211 @@ private fun ColumnScope.PaymentOverview(
                     )
                 }
             }
+
+            Text(
+                modifier = Modifier.padding(
+                    top = DefaultPadding,
+                    bottom = QuarterPadding
+                ),
+                text = stringResource(id = R.string.financial_overview_mortgage_monthly_payment),
+                style = runescapeTypography.bodyLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+
+            DataOverview(
+                label = stringResource(id = R.string.financial_overview_mortgage_next_payment),
+                text = "${state.mortgage.monthlyPayment.twoDecimalPlaces()}$currencySymbol"
+            )
+
+            DataOverview(
+                label = stringResource(id = R.string.financial_overview_mortgage_next_payment_capital),
+                text = "${state.mortgage.monthlyPaymentCapital.twoDecimalPlaces()}$currencySymbol"
+            )
+
+            DataOverview(
+                label = stringResource(id = R.string.financial_overview_mortgage_next_payment_interest),
+                text = "${state.mortgage.monthlyPaymentInterest.twoDecimalPlaces()}$currencySymbol"
+            )
         }
 
-        Icon(
-            modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false)
-                ) {
-                    onNavigate(
-                        FinancialOverviewNavigationItem.EditMortgageProfile,
-                        navController
-                    )
-                },
-            painter = painterResource(id = R.drawable.ic_edit),
-            contentDescription = stringResource(id = R.string.edit_financial_profile)
-        )
+
+        Row {
+
+            Icon(
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(bounded = false)
+                    ) {
+                        onNavigate(
+                            FinancialOverviewNavigationItem.EditMortgageProfile,
+                            navController
+                        )
+                    },
+                painter = painterResource(id = R.drawable.ic_edit),
+                contentDescription = stringResource(id = R.string.edit_financial_profile)
+            )
+
+            Spacer(modifier = Modifier.width(HalfPadding))
+
+            Icon(
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(bounded = false)
+                    ) { onPayment() },
+                painter = painterResource(id = R.drawable.ic_repeat_one),
+                contentDescription = stringResource(id = R.string.financial_overview_mortgage_pay_a_month)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.Amortizations(
+    state: FinancialOverviewScreenViewState.Content,
+    currencySymbol: String
+) {
+    // Mortgage cannot be null in the content state.
+    checkNotNull(state.mortgage)
+
+    Text(
+        modifier = Modifier
+            .padding(
+                top = DefaultPadding,
+                bottom = HalfPadding,
+                start = DefaultPadding,
+                end = DefaultPadding
+            )
+            .align(Alignment.Start),
+        text = stringResource(id = R.string.financial_overview_mortgage_amortization_simulator),
+        style = runescapeTypography.bodyLarge
+    )
+
+    Row(
+        modifier = Modifier
+            .padding(horizontal = DefaultPadding)
+            .clip(RoundedCornerShape(8.dp))
+            .shadow(elevation = QuarterPadding)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .fillMaxWidth()
+            .padding(DefaultPadding),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column {
+            if (state.mortgage.amortizations.isEmpty()) {
+                Text(
+                    text = stringResource(id = R.string.financial_overview_mortgage_payment_almost_complete),
+                    style = runescapeTypography.bodyMedium,
+                    textAlign = TextAlign.Start,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+            } else {
+                AmortizationsTable(
+                    currencySymbol = currencySymbol,
+                    amortizations = state.mortgage.amortizations
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AmortizationsTable(
+    currencySymbol: String,
+    amortizations: List<MortgageAmortizationUi>
+) {
+    if (amortizations.isEmpty()) return
+
+    val nColumns = amortizations.first().numberOfElements
+    val labels = listOf(
+        stringResource(id = R.string.remainder),
+        stringResource(id = R.string.amortization),
+        stringResource(id = R.string.financial_overview_mortgage_next_payment)
+    )
+
+    Column {
+        Row {
+            labels.forEachIndexed { index, label ->
+                TableItem(
+                    content = {
+                        Text(
+                            textAlign = TextAlign.Center,
+                            text = label,
+                            style = runescapeTypography.bodyMedium,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
+                    }
+                )
+            }
+        }
     }
 
+    amortizations.forEach { amortization ->
+        Row {
+            repeat(nColumns) {
+                val text = when (it) {
+                    0 -> amortization.remainder.twoDecimalPlaces()
+                    1 -> amortization.amortization.twoDecimalPlaces()
+                    2 -> amortization.nextPayment.twoDecimalPlaces()
+                    else -> throw IllegalArgumentException("💥 Column index out of bounds")
+                }
+
+                TableItem(
+                    content = {
+                        Text(
+                            textAlign = TextAlign.Center,
+                            text = text.plus(currencySymbol),
+                            style = runescapeTypography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RowScope.TableItem(
+    content: @Composable BoxScope.() -> Unit
+) {
+    val strokeWidth = 1.dp
+    val color = MaterialTheme.colorScheme.onSurface
+
+    Box(
+        modifier = Modifier
+            .drawBehind {
+                val strokePx = strokeWidth.toPx()
+                drawLine(
+                    color = color,
+                    start = Offset.Zero,
+                    end = Offset(size.width, 0f),
+                    strokeWidth = strokePx
+                )
+                drawLine(
+                    color = color,
+                    start = Offset.Zero,
+                    end = Offset(0f, size.height),
+                    strokeWidth = strokePx
+                )
+                drawLine(
+                    color = color,
+                    start = Offset(size.width, 0f),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = strokePx
+                )
+                drawLine(
+                    color = color,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = strokePx
+                )
+            }
+            .heightIn(min = 50.dp)
+            .weight(1f),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
+    }
 }

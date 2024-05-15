@@ -35,8 +35,8 @@ import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialPro
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.EditFinancialProfileScreenViewModel
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.IEditFinancialProfileScreenViewModel
-import com.eyther.lumbridge.ui.common.composables.components.components.LumbridgeButton
-import com.eyther.lumbridge.ui.common.composables.components.components.NumberInput
+import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.SwitchSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar

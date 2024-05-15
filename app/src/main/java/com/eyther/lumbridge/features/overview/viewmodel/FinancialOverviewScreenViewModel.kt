@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewTabItem
 import com.eyther.lumbridge.ui.navigation.NavigationItem
+import com.eyther.lumbridge.usecase.finance.AddMonthlyPayment
 import com.eyther.lumbridge.usecase.finance.GetMortgageCalculation
 import com.eyther.lumbridge.usecase.finance.GetNetSalary
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsStream
@@ -26,7 +27,8 @@ class FinancialOverviewScreenViewModel @Inject constructor(
     private val getUserFinancialsStream: GetUserFinancialsStream,
     private val getUserMortgageStream: GetUserMortgageStream,
     private val getNetSalary: GetNetSalary,
-    private val getMortgageCalculation: GetMortgageCalculation
+    private val getMortgageCalculation: GetMortgageCalculation,
+    private val addMonthlyPayment: AddMonthlyPayment
 ) : ViewModel(),
     IFinancialOverviewScreenViewModel {
 
@@ -60,7 +62,8 @@ class FinancialOverviewScreenViewModel @Inject constructor(
                         },
                         mortgage = userMortgage?.let {
                             getMortgageCalculation(userMortgage)
-                        }
+                        },
+                        enablePaymentButton = userMortgage != null
                     )
                 }
             }.launchIn(this)
@@ -75,5 +78,13 @@ class FinancialOverviewScreenViewModel @Inject constructor(
 
     override fun navigate(navItem: NavigationItem, navController: NavHostController) {
         navController.navigate(navItem.route)
+    }
+
+    override fun onPayment() {
+        viewModelScope.launch {
+            viewState.value.asContent().mortgage?.let {
+                addMonthlyPayment(it)
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RssFeedModule {
+
     @Provides
     @Singleton
     fun provideEuroNewsClient(): EuronewsRssClient = Retrofit.Builder()

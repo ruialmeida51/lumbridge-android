@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
 import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.model.finance.DeductionUi
@@ -59,9 +60,9 @@ private fun DeductionsBreakdown(currencySymbol: String, deductions: List<Deducti
             DataOverview(
                 label = stringResource(id = deductionUi.label),
                 text = if (deductionUi.hasPercentage()) {
-                    "${deductionUi.amount}$currencySymbol (${deductionUi.percentage}%)"
+                    "${deductionUi.amount.twoDecimalPlaces()}$currencySymbol (${deductionUi.percentage}%)"
                 } else {
-                    "${deductionUi.amount}$currencySymbol"
+                    "${deductionUi.amount.twoDecimalPlaces()}$currencySymbol"
                 }
             )
         }

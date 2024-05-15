@@ -1,9 +1,9 @@
 package com.eyther.lumbridge.domain.repository.netsalary.portugal
 
-import com.eyther.lumbridge.domain.model.finance.Deduction
-import com.eyther.lumbridge.domain.model.finance.DeductionType
-import com.eyther.lumbridge.domain.model.finance.MoneyAllocation
-import com.eyther.lumbridge.domain.model.finance.MoneyAllocationType
+import com.eyther.lumbridge.domain.model.finance.deduction.Deduction
+import com.eyther.lumbridge.domain.model.finance.deduction.DeductionType
+import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocation
+import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocationType
 import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.netsalary.NetSalaryCalculator

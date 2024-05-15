@@ -1,20 +1,22 @@
 package com.eyther.lumbridge.mapper.finance
 
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.domain.model.finance.Deduction
-import com.eyther.lumbridge.domain.model.finance.DeductionType
-import com.eyther.lumbridge.domain.model.finance.MoneyAllocation
-import com.eyther.lumbridge.domain.model.finance.MoneyAllocationType
-import com.eyther.lumbridge.domain.model.finance.MortgageCalculation
-import com.eyther.lumbridge.domain.model.finance.MortgageType.FIXED
-import com.eyther.lumbridge.domain.model.finance.MortgageType.VARIABLE
 import com.eyther.lumbridge.domain.model.finance.NetSalary
+import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocation
+import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocationType
+import com.eyther.lumbridge.domain.model.finance.deduction.Deduction
+import com.eyther.lumbridge.domain.model.finance.deduction.DeductionType
+import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageAmortization
+import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageCalculation
+import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType.FIXED
+import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType.VARIABLE
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
-import com.eyther.lumbridge.model.finance.MortgageUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.model.mortgage.MortgageAmortizationUi
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi.Fixed
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi.Variable
+import com.eyther.lumbridge.model.mortgage.MortgageUi
 
 fun NetSalary.toUi(): NetSalaryUi {
     return NetSalaryUi(
@@ -71,7 +73,7 @@ private fun getLabelForMoneyAllocationType(type: MoneyAllocationType): Int {
 fun MortgageCalculation.toUi() = MortgageUi(
     monthlyPayment = monthlyPayment,
     loanAmount = loanAmount,
-    remainingAmount = remainingAmount,
+    monthlyPaymentCapital = monthlyPaymentCapital,
     monthsLeft = monthsLeft,
     euribor = euribor,
     spread = spread,
@@ -80,5 +82,12 @@ fun MortgageCalculation.toUi() = MortgageUi(
         FIXED -> Fixed
         VARIABLE -> Variable
     },
-    totalPaid = totalPaid
+    monthlyPaymentInterest = monthlyPaymentInterest,
+    amortizations = amortizations.map { it.toUi() }
+)
+
+fun MortgageAmortization.toUi() = MortgageAmortizationUi(
+    amortization = amortization,
+    remainder = remainder,
+    nextPayment = nextPayment
 )

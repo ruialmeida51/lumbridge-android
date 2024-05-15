@@ -16,7 +16,8 @@ interface IEditMortgageProfileInputHandler {
     fun onSpreadChanged(spread: Float?)
     fun onFixedInterestRateChanged(fixedInterestRate: Float?)
     fun onMortgageTypeChanged(mortgageType: MortgageTypeUi?)
-    fun onMonthsLeftChanged(monthsLeft: Int?)
+    fun onStartDateChanged(startDate: Long?)
+    fun onEndDateChanged(endDate: Long?)
 
     /**
      * Validates the entire input state and returns an error message if the input state is invalid.

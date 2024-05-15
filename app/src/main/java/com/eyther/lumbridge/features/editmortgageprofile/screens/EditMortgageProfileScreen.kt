@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+
 package com.eyther.lumbridge.features.editmortgageprofile.screens
 
 import androidx.annotation.StringRes
@@ -17,12 +19,17 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,20 +37,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.domain.time.toLocalDate
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewEffect
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewEffect.None
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileScreenViewState
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.EditMortgageProfileScreenViewModel
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.IEditMortgageProfileScreenViewModel
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
-import com.eyther.lumbridge.ui.common.composables.components.components.LumbridgeButton
-import com.eyther.lumbridge.ui.common.composables.components.components.NumberInput
+import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
+import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
+import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
@@ -51,6 +63,7 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
+import java.time.LocalDate
 
 @Composable
 fun EditMortgageProfileScreen(
@@ -137,6 +150,47 @@ private fun ColumnScope.RemainingAmount(
     state: EditMortgageProfileScreenViewState.Content,
     viewModel: IEditMortgageProfileScreenViewModel
 ) {
+    val selectableRange = object : SelectableDates {
+        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+            return utcTimeMillis.toLocalDate() >= LocalDate.now()
+        }
+
+        override fun isSelectableYear(year: Int): Boolean {
+            return year >= LocalDate.now().year
+        }
+    }
+
+    val selectableYears = LocalDate.now().year..viewModel.getMaxSelectableYear()
+    val isSelectableYear = { year: Int -> year >= LocalDate.now().year }
+
+    val showStartDateDialog = remember { mutableStateOf(false) }
+    val startDatePickerState = rememberDatePickerState(
+        yearRange = selectableYears,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis.toLocalDate() >= LocalDate.now()
+            }
+
+            override fun isSelectableYear(year: Int): Boolean {
+                return isSelectableYear(year)
+            }
+        }
+    )
+
+    val showEndDateDialog = remember { mutableStateOf(false) }
+    val endDatePickerState = rememberDatePickerState(
+        yearRange = selectableYears,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return viewModel.isSelectableEndDate(utcTimeMillis)
+            }
+
+            override fun isSelectableYear(year: Int): Boolean {
+                return isSelectableYear(year)
+            }
+        }
+    )
+
     Text(
         modifier = Modifier
             .padding(bottom = HalfPadding)
@@ -152,18 +206,45 @@ private fun ColumnScope.RemainingAmount(
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding)
     ) {
+        DateInput(
+            modifier = Modifier.padding(bottom = DefaultPadding),
+            state = state.inputState.startDate,
+            label = stringResource(id = R.string.start_date),
+            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_start_date),
+            onClick = { showStartDateDialog.value = true }
+        )
+
+        LumbridgeDatePickerDialog(
+            showDialog = showStartDateDialog,
+            datePickerState = startDatePickerState,
+            onSaveDate = { viewModel.onStartDateChanged(it) }
+        )
+
+        DateInput(
+            modifier = Modifier.padding(bottom = DefaultPadding),
+            state = state.inputState.endDate,
+            label = stringResource(id = R.string.end_date),
+            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_end_date),
+            onClick = {
+                if (state.inputState.hasStartDate()) {
+                    showEndDateDialog.value = true
+                } else {
+                    viewModel.onStartDateChanged(null) // Force error on start date.
+                }
+            }
+        )
+
+        LumbridgeDatePickerDialog(
+            showDialog = showEndDateDialog,
+            datePickerState = endDatePickerState,
+            onSaveDate = { viewModel.onEndDateChanged(it) }
+        )
+
         NumberInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.loanAmount,
             label = stringResource(id = R.string.loan_amount),
             onInputChanged = { viewModel.onMortgageAmountChanged(it.toFloatOrNull()) }
-        )
-
-        NumberInput(
-            modifier = Modifier.padding(bottom = DefaultPadding),
-            state = state.inputState.monthsLeft,
-            label = stringResource(id = R.string.months_left),
-            onInputChanged = { viewModel.onMonthsLeftChanged(it.toIntOrNull()) }
         )
     }
 }
@@ -291,7 +372,11 @@ private fun ColumnScope.VariableMortgageInput(
         modifier = Modifier.padding(bottom = DefaultPadding),
         state = state.inputState.spread,
         label = stringResource(id = R.string.spread),
-        onInputChanged = { viewModel.onSpreadChanged(it.toFloatOrNull()) }
+        onInputChanged = { viewModel.onSpreadChanged(it.toFloatOrNull()) },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        )
     )
 }
 
@@ -304,6 +389,10 @@ private fun ColumnScope.FixedMortgageInput(
         modifier = Modifier.padding(bottom = DefaultPadding),
         state = state.inputState.fixedInterestRate,
         label = stringResource(id = R.string.interest_rate),
-        onInputChanged = { viewModel.onFixedInterestRateChanged(it.toFloatOrNull()) }
+        onInputChanged = { viewModel.onFixedInterestRateChanged(it.toFloatOrNull()) },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        )
     )
 }

@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.model.finance
+package com.eyther.lumbridge.domain.model.finance.deduction
 
 /**
  * This class represents a deduction that can be applied to a salary.

@@ -21,10 +21,7 @@ fun LumbridgeNavigationHost(
         navController = navController,
         startDestination = LumbridgeNavigationItem.Feed.route,
     ) {
-        composable(route = LumbridgeNavigationItem.Feed.route) {
-            FeedScreen(LumbridgeNavigationItem.Feed.label)
-        }
-
+        composable(route = LumbridgeNavigationItem.Feed.route) { FeedScreen(LumbridgeNavigationItem.Feed.label) }
         composable(route = LumbridgeNavigationItem.Tools.route) { ToolsScreen() }
         composable(route = LumbridgeNavigationItem.Overview.route) { OverviewScreen() }
         composable(route = LumbridgeNavigationItem.Profile.route) { ProfileScreen() }

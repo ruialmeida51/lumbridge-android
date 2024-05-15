@@ -1,6 +1,5 @@
 package com.eyther.lumbridge.features.overview.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign
@@ -12,14 +11,12 @@ fun DataOverview(
     label: String,
     text: String
 ) {
-    Column {
-        Text(
-            text = buildAnnotatedStringTextWithLabel(
-                label = label.plus(": "),
-                remainingText = text
-            ),
-            style = runescapeTypography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-    }
+    Text(
+        text = buildAnnotatedStringTextWithLabel(
+            label = label.plus(": "),
+            remainingText = text
+        ),
+        style = runescapeTypography.bodyMedium,
+        textAlign = TextAlign.Center
+    )
 }

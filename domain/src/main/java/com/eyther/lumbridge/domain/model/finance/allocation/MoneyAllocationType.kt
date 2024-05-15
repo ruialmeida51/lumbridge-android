@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.model.finance
+package com.eyther.lumbridge.domain.model.finance.allocation
 
 /**
  * Represents the type of money allocation. This is used to calculate the amount of money

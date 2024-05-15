@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.mapper.user
 
-import com.eyther.lumbridge.domain.model.finance.MortgageType
+import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
@@ -33,8 +33,9 @@ fun UserMortgageDomain.toUi() = UserMortgageUi(
         MortgageType.VARIABLE -> MortgageTypeUi.Variable
     },
     loanAmount = loanAmount,
-    monthsLeft = monthsLeft,
     euribor = euribor,
     spread = spread,
-    fixedInterestRate = fixedInterestRate
+    fixedInterestRate = fixedInterestRate,
+    startDate = startDate,
+    endDate = endDate
 )

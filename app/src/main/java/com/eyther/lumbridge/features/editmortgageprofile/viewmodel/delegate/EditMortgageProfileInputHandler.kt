@@ -2,6 +2,7 @@ package com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate
 
 import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.domain.time.toLocalDate
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileInputState
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
@@ -79,15 +80,26 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
         }
     }
 
-    override fun onMonthsLeftChanged(monthsLeft: Int?) {
+    override fun onStartDateChanged(startDate: Long?) {
         updateInput { state ->
-            val monthsLeftText = monthsLeft?.toString()
-
             state.copy(
-                monthsLeft = state.monthsLeft.copy(
-                    text = monthsLeftText,
-                    error = monthsLeftText.getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_months_left
+                startDate = state.startDate.copy(
+                    date = startDate?.toLocalDate(),
+                    error = startDate?.toString().getErrorOrNull(
+                        R.string.edit_mortgage_profile_invalid_start_date
+                    )
+                )
+            )
+        }
+    }
+
+    override fun onEndDateChanged(endDate: Long?) {
+        updateInput { state ->
+            state.copy(
+                endDate = state.endDate.copy(
+                    date = endDate?.toLocalDate(),
+                    error = endDate?.toString().getErrorOrNull(
+                        R.string.edit_mortgage_profile_invalid_end_date
                     )
                 )
             )
@@ -108,7 +120,8 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
         }
 
         return inputState.loanAmount.error == null &&
-                inputState.monthsLeft.error == null &&
+                inputState.startDate.error == null &&
+                inputState.endDate.error == null &&
                 isMortgageTypeValid
     }
 

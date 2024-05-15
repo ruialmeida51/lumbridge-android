@@ -22,4 +22,9 @@ interface IFinancialOverviewScreenViewModel{
      * @param tabItem the tab item.
      */
     fun onTabSelected(tabItem: FinancialOverviewTabItem)
+
+    /**
+     * Flags a month as paid.
+     */
+    fun onPayment()
 }

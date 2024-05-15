@@ -12,11 +12,11 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewTabItem
@@ -35,7 +35,7 @@ fun FinancialOverviewScreen(
     @StringRes label: Int,
     viewModel: IFinancialOverviewScreenViewModel = hiltViewModel<FinancialOverviewScreenViewModel>()
 ) {
-    val state = viewModel.viewState.collectAsState().value
+    val state = viewModel.viewState.collectAsStateWithLifecycle().value
 
     Scaffold(
         topBar = {
@@ -55,7 +55,8 @@ fun FinancialOverviewScreen(
                     navController = navController,
                     state = state,
                     navigate = viewModel::navigate,
-                    onTabClicked = viewModel::onTabSelected
+                    onTabClicked = viewModel::onTabSelected,
+                    onPayment = viewModel::onPayment
                 )
 
                 is FinancialOverviewScreenViewState.Loading -> LoadingIndicator()
@@ -69,7 +70,8 @@ private fun ColumnScope.Overview(
     navController: NavHostController,
     state: FinancialOverviewScreenViewState.Content,
     navigate: (NavigationItem, NavHostController) -> Unit,
-    onTabClicked: (tabItem: FinancialOverviewTabItem) -> Unit
+    onTabClicked: (tabItem: FinancialOverviewTabItem) -> Unit,
+    onPayment: () -> Unit
 ) {
     val currencySymbol = remember { state.locale.getCurrencySymbol() }
 
@@ -103,7 +105,8 @@ private fun ColumnScope.Overview(
             navController = navController,
             state = state,
             navigate = navigate,
-            currencySymbol = currencySymbol
+            currencySymbol = currencySymbol,
+            onPayment = onPayment
         )
     }
 }

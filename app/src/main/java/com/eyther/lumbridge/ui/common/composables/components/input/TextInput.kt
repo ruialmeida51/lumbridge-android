@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.eyther.lumbridge.ui.common.composables.components.components
+package com.eyther.lumbridge.ui.common.composables.components.input
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions

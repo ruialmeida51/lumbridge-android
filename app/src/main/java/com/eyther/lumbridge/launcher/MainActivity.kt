@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.eyther.lumbridge.launcher.screens.MainScreen
 import com.eyther.lumbridge.launcher.viewmodel.IMainActivityViewModel
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         checkThemeSettings()
 
         setContent {
-            val viewState = viewModel.viewState.collectAsState()
+            val viewState = viewModel.viewState.collectAsStateWithLifecycle()
 
             LumbridgeTheme(darkTheme = viewState.value.uiMode.isDarkTheme()) {
                 MainScreen()

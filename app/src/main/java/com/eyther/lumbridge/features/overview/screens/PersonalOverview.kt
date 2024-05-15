@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
 import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.navigation.FinancialOverviewNavigationItem
@@ -140,12 +141,12 @@ private fun ColumnScope.IncomeOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.net_annual),
-                text = "${state.netSalary.annualNetSalary}$currencySymbol"
+                text = "${state.netSalary.annualNetSalary.twoDecimalPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.gross_annual),
-                text = "${state.netSalary.annualGrossSalary}$currencySymbol"
+                text = "${state.netSalary.annualGrossSalary.twoDecimalPlaces()}$currencySymbol"
             )
 
             Text(
@@ -157,12 +158,12 @@ private fun ColumnScope.IncomeOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.net_monthly),
-                text = "${state.netSalary.monthlyNetSalary}$currencySymbol"
+                text = "${state.netSalary.monthlyNetSalary.twoDecimalPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.gross_monthly),
-                text = "${state.netSalary.monthlyGrossSalary}$currencySymbol"
+                text = "${state.netSalary.monthlyGrossSalary.twoDecimalPlaces()}$currencySymbol"
             )
 
             Text(
@@ -174,12 +175,12 @@ private fun ColumnScope.IncomeOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.financial_overview_food_card_monthly),
-                text = "${state.netSalary.monthlyFoodCard}$currencySymbol"
+                text = "${state.netSalary.monthlyFoodCard.twoDecimalPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.financial_overview_food_card_daily),
-                text = "${state.netSalary.dailyFoodCard}$currencySymbol"
+                text = "${state.netSalary.dailyFoodCard.twoDecimalPlaces()}$currencySymbol"
             )
         }
 
@@ -244,7 +245,6 @@ private fun ColumnScope.MoneyAllocationBreakdown(
         style = runescapeTypography.bodyLarge
     )
 
-
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -274,7 +274,7 @@ private fun ColumnScope.MoneyAllocationBreakdown(
                 moneyAllocation.forEach { moneyAllocationUi ->
                     DataOverview(
                         label = stringResource(id = moneyAllocationUi.label),
-                        text = "${moneyAllocationUi.amount}$currencySymbol"
+                        text = "${moneyAllocationUi.amount.twoDecimalPlaces()}$currencySymbol"
                     )
                 }
             }

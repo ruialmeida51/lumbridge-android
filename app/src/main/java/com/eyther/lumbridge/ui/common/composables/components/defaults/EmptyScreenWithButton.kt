@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.eyther.lumbridge.ui.common.composables.components.components.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.runescapeTypography
 

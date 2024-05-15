@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.features.tools.netsalary.model.NetSalaryScreenViewState
@@ -29,7 +29,7 @@ fun NetSalaryScreen(
     @StringRes label: Int,
     viewModel: INetSalaryScreenViewModel = hiltViewModel<NetSalaryScreenViewModel>()
 ) {
-    val state = viewModel.viewState.collectAsState()
+    val state = viewModel.viewState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
