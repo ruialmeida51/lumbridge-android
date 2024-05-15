@@ -11,7 +11,7 @@ import kotlin.math.pow
 class PortugalMortgageCalculator @Inject constructor() : MortgageCalculator {
 
     companion object {
-        private const val PERCENTAGE = 100.0
+        private const val PERCENTAGE = 100.0f
         private const val DEFAULT_AMORTIZATION = 10000.0f
     }
 
@@ -74,7 +74,7 @@ class PortugalMortgageCalculator @Inject constructor() : MortgageCalculator {
         remainingMonths: Int
     ): Double {
         val monthlyInterestRate = calculateMonthlyInterestRate(
-            annualInterestRate = interestRate.toDouble()
+            annualInterestRate = interestRate
         )
 
         val denominator = calculateDenominator(
@@ -91,8 +91,8 @@ class PortugalMortgageCalculator @Inject constructor() : MortgageCalculator {
      * 1 - (1 + r)^-n
      * @see calculateNextPayment
      */
-    private fun calculateDenominator(remainingMonths: Int, monthlyInterestRate: Double): Double {
-        return 1 - (1 + monthlyInterestRate).pow(-remainingMonths.toDouble())
+    private fun calculateDenominator(remainingMonths: Int, monthlyInterestRate: Float): Float {
+        return 1 - (1 + monthlyInterestRate).pow(-remainingMonths)
     }
 
     /**
@@ -105,7 +105,7 @@ class PortugalMortgageCalculator @Inject constructor() : MortgageCalculator {
      * @param annualInterestRate The annual interest rate as a percentage.
      * @return The monthly interest rate as a decimal.
      */
-    private fun calculateMonthlyInterestRate(annualInterestRate: Double): Double {
+    private fun calculateMonthlyInterestRate(annualInterestRate: Float): Float {
         return annualInterestRate / PERCENTAGE / MONTHS_IN_YEAR
     }
 
@@ -135,7 +135,7 @@ class PortugalMortgageCalculator @Inject constructor() : MortgageCalculator {
         remainingLoanAmount: Double,
         interestRate: Float
     ): Pair<Double, Double> {
-        val monthlyInterestRate = calculateMonthlyInterestRate(interestRate.toDouble())
+        val monthlyInterestRate = calculateMonthlyInterestRate(interestRate)
         val interestPayment = remainingLoanAmount * monthlyInterestRate
         val capitalPayment = totalMonthlyPayment - interestPayment
 

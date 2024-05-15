@@ -150,16 +150,6 @@ private fun ColumnScope.RemainingAmount(
     state: EditMortgageProfileScreenViewState.Content,
     viewModel: IEditMortgageProfileScreenViewModel
 ) {
-    val selectableRange = object : SelectableDates {
-        override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-            return utcTimeMillis.toLocalDate() >= LocalDate.now()
-        }
-
-        override fun isSelectableYear(year: Int): Boolean {
-            return year >= LocalDate.now().year
-        }
-    }
-
     val selectableYears = LocalDate.now().year..viewModel.getMaxSelectableYear()
     val isSelectableYear = { year: Int -> year >= LocalDate.now().year }
 
@@ -225,13 +215,7 @@ private fun ColumnScope.RemainingAmount(
             state = state.inputState.endDate,
             label = stringResource(id = R.string.end_date),
             placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_end_date),
-            onClick = {
-                if (state.inputState.hasStartDate()) {
-                    showEndDateDialog.value = true
-                } else {
-                    viewModel.onStartDateChanged(null) // Force error on start date.
-                }
-            }
+            onClick = { showEndDateDialog.value = true }
         )
 
         LumbridgeDatePickerDialog(
