@@ -12,4 +12,14 @@ interface NetSalaryCalculator {
      * @return the net salary and the deductions made
      */
     fun calculate(userFinancialsDomain: UserFinancialsDomain): NetSalary
+
+    /**
+     * Calculates the annual salary based on the monthly salary.
+     */
+    fun calculateAnnualSalary(monthlySalary: Float): Float
+
+    /**
+     * Calculates the monthly salary based on the annual salary.
+     */
+    fun calculateMonthlySalary(annualSalary: Float): Float
 }

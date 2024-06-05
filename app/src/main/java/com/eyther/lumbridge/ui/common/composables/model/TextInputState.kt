@@ -8,4 +8,6 @@ data class TextInputState(
     val suffix: String? = null
 ) {
     fun isError() = error != null
+
+    fun isValid() = !isError() && text != null
 }

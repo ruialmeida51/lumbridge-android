@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.eyther.lumbridge.features.profile.editprofile.screens
 
 import androidx.annotation.StringRes
@@ -8,33 +6,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -44,14 +32,15 @@ import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreen
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.EditProfileScreenViewModel
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.IEditProfileScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun EditProfileScreen(
@@ -107,21 +96,17 @@ private fun ColumnScope.Content(
             )
             .align(Alignment.Start),
         text = stringResource(id = R.string.edit_profile_how_to_contact),
-        style = runescapeTypography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge
     )
 
     Column(
         modifier = Modifier
             .padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding)
     ) {
-        var dropDownExpanded by remember {
-            mutableStateOf(false)
-        }
-
         TextInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.name,
@@ -138,55 +123,19 @@ private fun ColumnScope.Content(
             label = stringResource(id = R.string.email),
             onInputChanged = viewModel::onEmailChanged,
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Email
             )
         )
 
-        Text(
-            text = stringResource(id = R.string.edit_profile_select_country),
-            style = runescapeTypography.bodyLarge,
-            modifier = Modifier.padding(bottom = QuarterPadding),
-            color = MaterialTheme.colorScheme.tertiary
-        )
-
-        ExposedDropdownMenuBox(
-            modifier = Modifier.padding(bottom = DefaultPadding),
-            expanded = dropDownExpanded,
-            onExpandedChange = { dropDownExpanded = !dropDownExpanded }
-        ) {
-            TextField(
-                value = state.inputState.locale.name.capitalise(),
-                onValueChange = {},
-                readOnly = true,
-                textStyle = runescapeTypography.bodyMedium,
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropDownExpanded)
-                },
-                modifier = Modifier
-                    .menuAnchor()
-                    .fillMaxWidth()
-            )
-
-            ExposedDropdownMenu(
-                expanded = dropDownExpanded,
-                onDismissRequest = { dropDownExpanded = false }
-            ) {
-                state.availableLocales.forEach {
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                it.name.capitalise(),
-                                style = runescapeTypography.bodyMedium
-                            )
-                        },
-                        onClick = {
-                            dropDownExpanded = false
-                            viewModel.onLocaleChanged(it)
-                        }
-                    )
-                }
+        DropdownInput(
+            label = stringResource(id = R.string.edit_profile_select_country),
+            selectedOption = state.inputState.locale.name.capitalise(),
+            items = state.availableLocales.map { it.countryCode to it.name.capitalise() },
+            onItemClick = { identifier, _ ->
+                viewModel.onLocaleChanged(identifier)
             }
-        }
+        )
     }
 
     Spacer(modifier = Modifier.height(DefaultPadding))

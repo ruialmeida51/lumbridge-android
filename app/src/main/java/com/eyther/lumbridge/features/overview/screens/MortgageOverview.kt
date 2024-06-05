@@ -45,9 +45,9 @@ import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun ColumnScope.MortgageOverview(
@@ -81,20 +81,30 @@ fun ColumnScope.MortgageOverview(
             }
         )
     } else {
-        PaymentOverview(
-            state = state,
-            currencySymbol = currencySymbol,
-            onNavigate = navigate,
-            onPayment = onPayment,
-            navController = navController
-        )
+        Column(
+            modifier = Modifier.padding(horizontal = DefaultPadding)
+        ) {
+            PaymentOverview(
+                state = state,
+                currencySymbol = currencySymbol,
+                onNavigate = navigate,
+                onPayment = onPayment,
+                navController = navController
+            )
 
-        Amortizations(
-            state = state,
-            currencySymbol = currencySymbol
-        )
+            Spacer(
+                modifier = Modifier.height(DefaultPadding)
+            )
 
-        Spacer(modifier = Modifier.height(DefaultPadding))
+            Amortizations(
+                state = state,
+                currencySymbol = currencySymbol
+            )
+
+            Spacer(
+                modifier = Modifier.height(DefaultPadding)
+            )
+        }
     }
 }
 
@@ -111,21 +121,15 @@ private fun ColumnScope.PaymentOverview(
 
     Text(
         modifier = Modifier
-            .padding(
-                top = DefaultPadding,
-                bottom = HalfPadding,
-                start = DefaultPadding,
-                end = DefaultPadding
-            )
+            .padding(bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.financial_overview_mortgage),
-        style = runescapeTypography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge
     )
 
     Row(
         modifier = Modifier
-            .padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .fillMaxWidth()
@@ -134,11 +138,9 @@ private fun ColumnScope.PaymentOverview(
     ) {
         Column {
             Text(
-                modifier = Modifier.padding(
-                    bottom = QuarterPadding
-                ),
+                modifier = Modifier.padding(bottom = QuarterPadding),
                 text = stringResource(id = R.string.financial_overview_mortgage_mortgage_amount),
-                style = runescapeTypography.bodyLarge,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.tertiary
             )
 
@@ -179,7 +181,7 @@ private fun ColumnScope.PaymentOverview(
                     bottom = QuarterPadding
                 ),
                 text = stringResource(id = R.string.financial_overview_mortgage_monthly_payment),
-                style = runescapeTypography.bodyLarge,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.tertiary
             )
 
@@ -242,21 +244,15 @@ private fun ColumnScope.Amortizations(
 
     Text(
         modifier = Modifier
-            .padding(
-                top = DefaultPadding,
-                bottom = HalfPadding,
-                start = DefaultPadding,
-                end = DefaultPadding
-            )
+            .padding(bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.financial_overview_mortgage_amortization_simulator),
-        style = runescapeTypography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge
     )
 
     Row(
         modifier = Modifier
-            .padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .fillMaxWidth()
@@ -267,7 +263,7 @@ private fun ColumnScope.Amortizations(
             if (state.mortgage.amortizations.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.financial_overview_mortgage_payment_almost_complete),
-                    style = runescapeTypography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Start,
                     modifier = Modifier.align(Alignment.Start)
                 )
@@ -297,13 +293,13 @@ private fun AmortizationsTable(
 
     Column {
         Row {
-            labels.forEachIndexed { index, label ->
+            labels.forEachIndexed { _, label ->
                 TableItem(
                     content = {
                         Text(
                             textAlign = TextAlign.Center,
                             text = label,
-                            style = runescapeTypography.bodyMedium,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.tertiary
                         )
                     }
@@ -327,7 +323,7 @@ private fun AmortizationsTable(
                         Text(
                             textAlign = TextAlign.Center,
                             text = text.plus(currencySymbol),
-                            style = runescapeTypography.bodyMedium,
+                            style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }

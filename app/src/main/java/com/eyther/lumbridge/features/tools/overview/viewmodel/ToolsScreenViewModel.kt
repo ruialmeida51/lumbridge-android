@@ -21,8 +21,7 @@ class ToolsScreenViewModel @Inject constructor() : ViewModel(), IToolsScreenView
     override fun navigate(toolItem: ToolItem, navController: NavController) {
         navController.navigate(
             when (toolItem) {
-                ToolItem.Personal.NetSalaryCalculator -> ToolsNavigationItem.NetSalary.route
-                ToolItem.Company.CostToCompanyCalculator -> ToolsNavigationItem.CostToCompany.route
+                ToolItem.Personal.NetSalaryCalculator -> ToolsNavigationItem.NetSalary.Input.route
                 ToolItem.Personal.CurrencyConverter -> ToolsNavigationItem.CurrencyConverter.route
                 ToolItem.Personal.SavingsCalculator -> ToolsNavigationItem.Savings.route
                 Mortgage.MortgageCalculator -> ToolsNavigationItem.Mortgage.route

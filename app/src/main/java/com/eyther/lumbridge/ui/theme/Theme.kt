@@ -110,7 +110,7 @@ fun LumbridgeTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = runescapeTypography,
+        typography = lumbridgeTypography,
         content = content
     )
 }

@@ -1,9 +1,9 @@
 package com.eyther.lumbridge.data.di
 
-import com.eyther.lumbridge.data.datasource.news.service.EconomyOECDRssClient
 import com.eyther.lumbridge.data.datasource.news.service.EuronewsRssClient
-import com.eyther.lumbridge.data.datasource.news.service.FinanceOECDRssClient
 import com.eyther.lumbridge.data.datasource.news.service.PortugalNewsRssClient
+import com.eyther.lumbridge.data.datasource.news.service.PublicoRssClient
+import com.eyther.lumbridge.data.datasource.news.service.RTPRssClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,17 +34,17 @@ object RssFeedModule {
 
     @Provides
     @Singleton
-    fun provideEconomyOECDClient(): EconomyOECDRssClient = Retrofit.Builder()
-        .baseUrl("https://www.oecd.org/economy/")
+    fun providePublicoNewsClient(): PublicoRssClient = Retrofit.Builder()
+        .baseUrl("https://feeds.feedburner.com/")
         .addConverterFactory(ScalarsConverterFactory.create())
         .build()
-        .create(EconomyOECDRssClient::class.java)
+        .create(PublicoRssClient::class.java)
 
     @Provides
     @Singleton
-    fun provideFinanceECDClient(): FinanceOECDRssClient = Retrofit.Builder()
-        .baseUrl("https://www.oecd.org/finance/")
+    fun provideRTPNewsClient(): RTPRssClient = Retrofit.Builder()
+        .baseUrl("https://www.rtp.pt/noticias/")
         .addConverterFactory(ScalarsConverterFactory.create())
         .build()
-        .create(FinanceOECDRssClient::class.java)
+        .create(RTPRssClient::class.java)
 }

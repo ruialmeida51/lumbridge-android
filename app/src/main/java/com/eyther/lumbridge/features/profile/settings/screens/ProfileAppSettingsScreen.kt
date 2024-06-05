@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -35,9 +34,9 @@ import com.eyther.lumbridge.ui.common.composables.components.setting.SwitchSetti
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun ProfileSettingsScreen(
@@ -88,14 +87,14 @@ private fun ColumnScope.Content(
             .padding(bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.app_settings_change_preferences),
-        style = runescapeTypography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge
     )
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding),

@@ -15,14 +15,14 @@ class NewsFeedRepository @Inject constructor(
     fun getAvailableFeeds() = listOf(
         RssFeed.Euronews,
         RssFeed.PortugalNews,
-        RssFeed.EconomyOECD,
-        RssFeed.FinanceOECD
+        RssFeed.RTP,
+        RssFeed.Publico
     )
 
     suspend fun getNewsFeed(rssFeed: RssFeed): Feed = withContext(Dispatchers.IO) {
         val result = when(rssFeed) {
-            RssFeed.EconomyOECD -> newsFeedRemoteDataSource.getEconomyOECDRssFeed()
-            RssFeed.FinanceOECD -> newsFeedRemoteDataSource.getFinanceOECDRssFeed()
+            RssFeed.RTP -> newsFeedRemoteDataSource.getRTPRssFeed()
+            RssFeed.Publico -> newsFeedRemoteDataSource.getPublicoRssFeed()
             RssFeed.Euronews -> newsFeedRemoteDataSource.getEuronewsRssFeed()
             RssFeed.PortugalNews -> newsFeedRemoteDataSource.getPortugalNewsRssFeed()
         }

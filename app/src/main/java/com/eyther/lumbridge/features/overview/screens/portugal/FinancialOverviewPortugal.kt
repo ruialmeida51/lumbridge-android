@@ -8,33 +8,27 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
 import com.eyther.lumbridge.features.overview.components.DataOverview
-import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.model.finance.DeductionUi
+import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun FinancialOverviewPortugal(
-    state: FinancialOverviewScreenViewState.Content
+    netSalaryUi: NetSalaryUi,
+    currencySymbol: String
 ) {
-    // Net salary cannot be null in the content state.
-    checkNotNull(state.netSalary)
-
-    val currencySymbol = remember { state.locale.getCurrencySymbol() }
-
     DeductionsBreakdown(
         currencySymbol = currencySymbol,
-        deductions = state.netSalary.deductions
+        deductions = netSalaryUi.deductions
     )
 }
 
@@ -43,8 +37,7 @@ private fun DeductionsBreakdown(currencySymbol: String, deductions: List<Deducti
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding)
@@ -52,7 +45,7 @@ private fun DeductionsBreakdown(currencySymbol: String, deductions: List<Deducti
         Text(
             modifier = Modifier.padding(bottom = QuarterPadding),
             text = stringResource(id = R.string.financial_overview_deductions_portugal),
-            style = runescapeTypography.bodyLarge,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.tertiary
         )
 

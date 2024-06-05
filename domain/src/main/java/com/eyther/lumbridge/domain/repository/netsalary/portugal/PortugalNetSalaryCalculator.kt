@@ -1,10 +1,10 @@
 package com.eyther.lumbridge.domain.repository.netsalary.portugal
 
-import com.eyther.lumbridge.domain.model.finance.deduction.Deduction
-import com.eyther.lumbridge.domain.model.finance.deduction.DeductionType
+import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocation
 import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocationType
-import com.eyther.lumbridge.domain.model.finance.NetSalary
+import com.eyther.lumbridge.domain.model.finance.deduction.Deduction
+import com.eyther.lumbridge.domain.model.finance.deduction.DeductionType
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.netsalary.NetSalaryCalculator
 import com.eyther.lumbridge.domain.repository.netsalary.portugal.irs.model.PortugalIrsBracketType
@@ -15,9 +15,41 @@ import kotlin.math.floor
 class PortugalNetSalaryCalculator @Inject constructor() : NetSalaryCalculator {
     companion object {
         private const val WORKING_DAYS_IN_MONTH = 22f
-        private const val RECEIVING_MONTHS_WITH_DUODECIMOS = 12
         private const val RECEIVING_MONTHS_WITHOUT_DUODECIMOS = 14
     }
+
+    /**
+     * Calculates the annual salary based on the monthly salary.
+     * In Portugal you get paid 14 months.
+     *
+     * @param monthlySalary the monthly salary to calculate the annual salary from
+     *
+     * @return the annual salary
+     */
+    override fun calculateAnnualSalary(monthlySalary: Float): Float {
+        return if (monthlySalary == 0f) {
+            0f
+        } else {
+            monthlySalary * RECEIVING_MONTHS_WITHOUT_DUODECIMOS
+        }
+    }
+
+    /**
+     * Calculates the monthly salary based on the annual salary.
+     * In Portugal you get paid 14 months.
+     *
+     * @param annualSalary the annual salary to calculate the monthly salary from
+     *
+     * @return the monthly salary
+     */
+    override fun calculateMonthlySalary(annualSalary: Float): Float {
+        return if (annualSalary == 0f) {
+            0f
+        } else {
+            annualSalary / RECEIVING_MONTHS_WITHOUT_DUODECIMOS
+        }
+    }
+
     /**
      * Calculates the net salary for Portugal and saves the deductions made.
      * In Portugal, typically, you get paid 14 months.

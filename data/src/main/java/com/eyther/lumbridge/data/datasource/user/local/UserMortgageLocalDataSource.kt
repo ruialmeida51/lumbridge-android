@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.eyther.lumbridge.data.di.LocalDataModule.UserMortgageDataStore
-import com.eyther.lumbridge.data.model.user.UserMortgageCached
+import com.eyther.lumbridge.data.model.user.local.UserMortgageCached
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -44,7 +44,6 @@ class UserMortgageLocalDataSource @Inject constructor(
             val euribor = preferences[PreferencesKeys.EURIBOR]
             val spread = preferences[PreferencesKeys.SPREAD]
             val fixedInterestRate = preferences[PreferencesKeys.FIXED_INTEREST_RATE]
-
 
             UserMortgageCached(
                 euribor = euribor,

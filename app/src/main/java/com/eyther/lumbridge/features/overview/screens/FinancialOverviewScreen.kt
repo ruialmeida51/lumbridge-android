@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -27,7 +28,6 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.Lumbridge
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun FinancialOverviewScreen(
@@ -84,7 +84,7 @@ private fun ColumnScope.Overview(
                 text = {
                     Text(
                         stringResource(id = tabItem.label),
-                        style = runescapeTypography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 },
                 selected = state.selectedTabItem.ordinal == tabItem.ordinal,

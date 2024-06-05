@@ -55,8 +55,8 @@ fun OverviewNavHost(
             route = FinancialOverviewNavigationItem.EditMortgageProfile.route
         ) {
             EditMortgageProfileScreen(
-                navController = navController, label =
-                FinancialOverviewNavigationItem.EditMortgageProfile.label
+                navController = navController,
+                label = FinancialOverviewNavigationItem.EditMortgageProfile.label
             )
         }
     }

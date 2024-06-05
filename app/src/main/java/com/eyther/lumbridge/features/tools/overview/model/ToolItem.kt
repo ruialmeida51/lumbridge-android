@@ -17,9 +17,6 @@ sealed class ToolItem(
             ),
             R.string.tools_mortgage_calculator to listOf(
                 Mortgage.MortgageCalculator
-            ),
-            R.string.tools_company_tools to listOf(
-                Company.CostToCompanyCalculator
             )
         )
     }
@@ -45,13 +42,6 @@ sealed class ToolItem(
         data object MortgageCalculator : ToolItem(
             text = R.string.tools_mortgage_calculator,
             icon = R.drawable.ic_bank
-        )
-    }
-
-    sealed class Company {
-        data object CostToCompanyCalculator : ToolItem(
-            text = R.string.tools_ctc_calculator_long,
-            icon = R.drawable.ic_work
         )
     }
 }

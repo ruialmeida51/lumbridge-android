@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -19,8 +20,6 @@ import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.time.toIsoLocalDateString
 import com.eyther.lumbridge.ui.common.composables.model.DateInputState
-import com.eyther.lumbridge.ui.theme.runescapeTypography
-
 
 @Composable
 fun DateInput(
@@ -50,13 +49,13 @@ fun DateInput(
             interactionSource = interactionSource,
             modifier = modifier.fillMaxWidth(),
             value = state.date?.toIsoLocalDateString().orEmpty(),
-            textStyle = runescapeTypography.bodyMedium,
+            textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = { },
             label = {
                 label?.let {
                     Text(
                         text = label,
-                        style = runescapeTypography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             },
@@ -64,7 +63,7 @@ fun DateInput(
                 placeholder?.let {
                     Text(
                         text = placeholder,
-                        style = runescapeTypography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             },
@@ -73,7 +72,7 @@ fun DateInput(
                 if (state.isError()) {
                     Text(
                         text = state.error!!.getString(context),
-                        style = runescapeTypography.bodySmall
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             },

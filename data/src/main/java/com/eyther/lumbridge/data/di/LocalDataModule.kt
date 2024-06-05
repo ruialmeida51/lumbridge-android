@@ -58,6 +58,19 @@ object LocalDataModule {
 
     @Provides
     @Singleton
+    @CurrencyRatesDataStore
+    fun provideCurrencyRatesDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = {
+                context.preferencesDataStoreFile("currency_rates_data_store.db")
+            }
+        )
+    }
+
+    @Provides
+    @Singleton
     @AppSettingsDataStore
     fun provideAppSettingsDataStore(
         @ApplicationContext context: Context
@@ -84,4 +97,8 @@ object LocalDataModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class AppSettingsDataStore
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class CurrencyRatesDataStore
 }

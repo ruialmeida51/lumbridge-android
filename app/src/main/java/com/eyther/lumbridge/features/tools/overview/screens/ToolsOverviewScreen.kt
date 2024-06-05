@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +31,9 @@ import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSet
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun ToolsOverviewScreen(
@@ -91,12 +90,12 @@ private fun Content(
                         )
                         .align(Alignment.Start),
                     text = stringResource(id = keyRes),
-                    style = runescapeTypography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge
                 )
 
                 Column(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(DefaultRoundedCorner))
                         .shadow(elevation = QuarterPadding)
                         .background(MaterialTheme.colorScheme.surfaceContainer)
                         .padding(DefaultPadding),

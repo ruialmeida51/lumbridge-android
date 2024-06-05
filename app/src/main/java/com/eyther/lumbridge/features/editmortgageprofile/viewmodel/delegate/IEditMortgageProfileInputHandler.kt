@@ -1,7 +1,6 @@
 package com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate
 
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileInputState
-import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
 import kotlinx.coroutines.flow.StateFlow
 
 interface IEditMortgageProfileInputHandler {
@@ -15,7 +14,7 @@ interface IEditMortgageProfileInputHandler {
     fun onEuriborRateChanged(euriborRate: Float?)
     fun onSpreadChanged(spread: Float?)
     fun onFixedInterestRateChanged(fixedInterestRate: Float?)
-    fun onMortgageTypeChanged(mortgageType: MortgageTypeUi?)
+    fun onMortgageTypeChanged(option: Int)
     fun onStartDateChanged(startDate: Long?)
     fun onEndDateChanged(endDate: Long?)
 

@@ -1,6 +1,9 @@
 package com.eyther.lumbridge.model.user
 
+import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
+
 data class UserFinancialsUi(
+    val salaryInputTypeUi: SalaryInputTypeUi,
     val annualGrossSalary: Float? = null,
     val foodCardPerDiem: Float? = null,
 

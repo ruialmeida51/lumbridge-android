@@ -12,6 +12,7 @@ import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.IEditMortgage
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.IEditMortgageProfileScreenViewModel.Companion.PADDING_YEARS
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate.EditMortgageProfileInputHandler
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate.IEditMortgageProfileInputHandler
+import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
 import com.eyther.lumbridge.model.user.UserMortgageUi
 import com.eyther.lumbridge.usecase.user.mortgage.GetUserMortgage
 import com.eyther.lumbridge.usecase.user.mortgage.SaveUserMortgage
@@ -69,7 +70,10 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
                     fixedInterestRate = state.fixedInterestRate.copy(
                         text = initialUserMortgage?.fixedInterestRate?.toString()
                     ),
-                    mortgageType = initialUserMortgage?.mortgageType
+                    mortgageChoiceState = state.mortgageChoiceState.copy(
+                        selectedTab = initialUserMortgage?.mortgageType?.ordinal ?: 0,
+                        tabsStringRes = MortgageTypeUi.entries().map { it.label }
+                    )
                 )
             }
 
@@ -97,6 +101,10 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
             val inputState = inputState.value
+            val mortgageType = MortgageTypeUi.fromOrdinal(
+                ordinal = inputState.mortgageChoiceState.selectedTab
+            )
+
             val userMortgage =  UserMortgageUi(
                 loanAmount = checkNotNull(inputState.loanAmount.text?.toFloatOrNull()),
                 euribor = inputState.euribor.text?.toFloatOrNull(),
@@ -104,7 +112,7 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
                 fixedInterestRate = inputState.fixedInterestRate.text?.toFloatOrNull(),
                 startDate = checkNotNull(inputState.startDate.date),
                 endDate = checkNotNull(inputState.endDate.date),
-                mortgageType = checkNotNull(inputState.mortgageType)
+                mortgageType = mortgageType
             )
 
             saveUserMortgage(userMortgage)

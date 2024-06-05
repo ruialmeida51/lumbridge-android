@@ -1,5 +1,9 @@
 package com.eyther.lumbridge.data.datasource.user.local
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -7,14 +11,17 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource.PreferencesKeys.COUNTRY_CODE
 import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource.PreferencesKeys.EMAIL
+import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource.PreferencesKeys.IMAGE_BITMAP
 import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource.PreferencesKeys.NAME
 import com.eyther.lumbridge.data.di.LocalDataModule.UserProfileDataSource
-import com.eyther.lumbridge.data.model.user.UserProfileCached
+import com.eyther.lumbridge.data.model.user.local.UserProfileCached
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import javax.inject.Inject
+
 
 class UserProfileLocalDataSource @Inject constructor(
     @UserProfileDataSource private val userProfileDataSource: DataStore<Preferences>
@@ -23,6 +30,7 @@ class UserProfileLocalDataSource @Inject constructor(
         val NAME = stringPreferencesKey("name")
         val EMAIL = stringPreferencesKey("email")
         val COUNTRY_CODE = stringPreferencesKey("country_code")
+        val IMAGE_BITMAP = stringPreferencesKey("image_bitmap")
     }
 
     val userProfileFlow: Flow<UserProfileCached?> = userProfileDataSource.data
@@ -38,11 +46,13 @@ class UserProfileLocalDataSource @Inject constructor(
             val name = preferences[NAME] ?: return@map null
             val email = preferences[EMAIL] ?: return@map null
             val countryCode = preferences[COUNTRY_CODE] ?: return@map null
+            val imageUri = convertStringToBitmap(preferences[IMAGE_BITMAP])
 
             UserProfileCached(
                 name = name,
                 email = email,
-                countryCode = countryCode
+                countryCode = countryCode,
+                imageBitmap = imageUri
             )
         }
 
@@ -51,6 +61,29 @@ class UserProfileLocalDataSource @Inject constructor(
             preferences[NAME] = userProfileCached.name
             preferences[EMAIL] = userProfileCached.email
             preferences[COUNTRY_CODE] = userProfileCached.countryCode
+
+            userProfileCached.imageBitmap?.let { nonNullImageUri ->
+                preferences[IMAGE_BITMAP] = convertBitmapToString(nonNullImageUri)
+            }
+        }
+    }
+
+    private fun convertBitmapToString(bitmap: Bitmap): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 100, byteArrayOutputStream)
+
+        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+    }
+
+    private fun convertStringToBitmap(bitmapAsString: String?): Bitmap? {
+        if (bitmapAsString.isNullOrEmpty()) return null
+
+        return try {
+            val encodeByte: ByteArray = Base64.decode(bitmapAsString, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception) {
+            Log.e(this::class.simpleName, "💥 Error decoding image", e)
+            null
         }
     }
 }

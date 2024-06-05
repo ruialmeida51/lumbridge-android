@@ -5,7 +5,11 @@ import com.eyther.lumbridge.model.news.RssFeedUi
 
 sealed interface FeedScreenViewState {
     data object Loading : FeedScreenViewState
-    data object Empty : FeedScreenViewState
+
+    data class Empty(
+        val availableFeeds: List<RssFeedUi>,
+        val selectedFeed: RssFeedUi? = null
+    ) : FeedScreenViewState
 
     data class Content(
         val feedItems: List<FeedItemUi>,

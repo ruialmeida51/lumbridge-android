@@ -33,13 +33,15 @@ class EditProfileScreenViewModel @Inject constructor(
     override val viewState = MutableStateFlow<EditProfileScreenViewState>(Loading)
     override val viewEffects = MutableSharedFlow<EditProfileScreenViewEffects>()
 
+    private var initialProfile: UserProfileUi? = null
+
     init {
         observeUserProfile()
     }
 
     private fun observeUserProfile() {
         viewModelScope.launch {
-            val userProfile = getUserProfile()
+            val userProfile = getUserProfile().also { initialProfile = it }
 
             updateInput {
                 it.copy(
@@ -80,7 +82,8 @@ class EditProfileScreenViewModel @Inject constructor(
                 UserProfileUi(
                     name = checkNotNull(input.name.text),
                     email = checkNotNull(input.email.text),
-                    locale = input.locale
+                    locale = input.locale,
+                    imageBitmap = initialProfile?.imageBitmap
                 )
             )
 

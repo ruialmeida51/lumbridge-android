@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.ANNUAL_GROSS_SALARY
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.FOOD_CARD_PER_DIEM
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.HANDICAPPED
@@ -14,10 +15,11 @@ import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSo
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.MARRIED
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.NECESSITIES_PERCENTAGE
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.NUMBER_OF_DEPENDANTS
+import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.SALARY_INPUT_TYPE
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.SAVINGS_PERCENTAGE
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.SINGLE_INCOME
 import com.eyther.lumbridge.data.di.LocalDataModule.UserFinancialsDataStore
-import com.eyther.lumbridge.data.model.user.UserFinancialsCached
+import com.eyther.lumbridge.data.model.user.local.UserFinancialsCached
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -37,6 +39,7 @@ class UserFinancialsLocalDataSource @Inject constructor(
         val SINGLE_INCOME = booleanPreferencesKey("single_income")
         val MARRIED = booleanPreferencesKey("married")
         val HANDICAPPED = booleanPreferencesKey("handicapped")
+        val SALARY_INPUT_TYPE = stringPreferencesKey("salary_input_type")
     }
 
     val userFinancialsFlow: Flow<UserFinancialsCached?> = userFinancialsDataStore.data
@@ -51,6 +54,7 @@ class UserFinancialsLocalDataSource @Inject constructor(
         .map { preferences ->
             val annualGrossSalary = preferences[ANNUAL_GROSS_SALARY] ?: return@map null
             val foodCardPerDiem = preferences[FOOD_CARD_PER_DIEM] ?: return@map null
+            val salaryInputType = preferences[SALARY_INPUT_TYPE] ?: return@map null
             val savingsPercentage = preferences[SAVINGS_PERCENTAGE]
             val necessitiesPercentage = preferences[NECESSITIES_PERCENTAGE]
             val luxuriesPercentage = preferences[LUXURIES_PERCENTAGE]
@@ -68,7 +72,8 @@ class UserFinancialsLocalDataSource @Inject constructor(
                 numberOfDependants = numberOfDependants,
                 singleIncome = singleIncome,
                 married = married,
-                handicapped = handicapped
+                handicapped = handicapped,
+                salaryInputType = salaryInputType
             )
         }
 
@@ -79,11 +84,11 @@ class UserFinancialsLocalDataSource @Inject constructor(
             preferences[SINGLE_INCOME] = userProfileCached.singleIncome
             preferences[MARRIED] = userProfileCached.married
             preferences[HANDICAPPED] = userProfileCached.handicapped
+            preferences[SALARY_INPUT_TYPE] = userProfileCached.salaryInputType
 
             userProfileCached.savingsPercentage?.toFloat()?.let {
                 preferences[SAVINGS_PERCENTAGE] = it
             } ?: preferences.remove(SAVINGS_PERCENTAGE)
-
 
             userProfileCached.necessitiesPercentage?.toFloat()?.let {
                 preferences[NECESSITIES_PERCENTAGE] = it

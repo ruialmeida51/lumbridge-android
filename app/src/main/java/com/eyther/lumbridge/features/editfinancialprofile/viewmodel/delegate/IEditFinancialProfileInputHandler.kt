@@ -11,7 +11,9 @@ interface IEditFinancialProfileInputHandler {
      * Methods called on different input changes. Each one updates the input state with
      * the new value and performs any necessary validation.
      */
+    fun onSalaryInputTypeChanged(option: Int)
     fun onAnnualGrossSalaryChanged(annualGrossSalary: Float?)
+    fun onMonthlyGrossSalaryChanged(monthlyGrossSalary: Float?)
     fun onFoodCardPerDiemChanged(foodCardPerDiem: Float?)
     fun onSavingsPercentageChanged(savingsPercentage: Int?)
     fun onNecessitiesPercentageChanged(necessitiesPercentage: Int?)

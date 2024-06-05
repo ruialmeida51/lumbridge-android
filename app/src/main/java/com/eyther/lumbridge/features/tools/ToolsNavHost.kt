@@ -1,16 +1,21 @@
 package com.eyther.lumbridge.features.tools
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.eyther.lumbridge.features.tools.ctc.screens.CostToCompanyScreen
+import androidx.navigation.navigation
+import com.eyther.lumbridge.extensions.platform.sharedViewModel
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
 import com.eyther.lumbridge.features.tools.mortgage.screens.MortgageScreen
-import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryScreen
+import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
+import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen
+import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryResultScreen
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.overview.screens.ToolsOverviewScreen
 import com.eyther.lumbridge.features.tools.savings.screens.SavingsScreen
@@ -31,33 +36,59 @@ fun ToolsNavHost(
             )
         }
 
-        composable(
-            enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-            },
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
-            },
-            route = ToolsNavigationItem.NetSalary.route
+        navigation(
+            startDestination = ToolsNavigationItem.NetSalary.Input.route,
+            route = ToolsNavigationItem.NetSalary.HOST_ROUTE
         ) {
-            NetSalaryScreen(
-                navController = navController,
-                label = ToolsNavigationItem.NetSalary.label
-            )
-        }
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                route = ToolsNavigationItem.NetSalary.Input.route
+            ) { backstackEntry ->
+                val argumentsCache =
+                    backstackEntry.sharedViewModel<NetSalaryScreenArgumentsCacheViewModel>(navController)
 
-        composable(
-            enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-            },
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
-            }, route = ToolsNavigationItem.CostToCompany.route
-        ) {
-            CostToCompanyScreen(
-                navController = navController,
-                label = ToolsNavigationItem.CostToCompany.label
-            )
+                NetSalaryInputScreen(
+                    navController = navController,
+                    argumentsCache = argumentsCache,
+                    label = ToolsNavigationItem.NetSalary.Input.label
+                )
+            }
+
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                route = ToolsNavigationItem.NetSalary.Result.route
+            ) { backstackEntry ->
+                val argumentsCache =
+                    backstackEntry.sharedViewModel<NetSalaryScreenArgumentsCacheViewModel>(navController)
+
+                NetSalaryResultScreen(
+                    navController = navController,
+                    argumentsCache = argumentsCache,
+                    label = ToolsNavigationItem.NetSalary.Result.label
+                )
+            }
         }
 
         composable(
@@ -74,9 +105,10 @@ fun ToolsNavHost(
             )
         }
 
-        composable(enterTransition = {
-            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-        },
+        composable(
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+            },
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
             }, route = ToolsNavigationItem.Mortgage.route
@@ -87,9 +119,10 @@ fun ToolsNavHost(
             )
         }
 
-        composable(enterTransition = {
-            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-        },
+        composable(
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+            },
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
             }, route = ToolsNavigationItem.CurrencyConverter.route

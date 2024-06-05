@@ -47,9 +47,9 @@ import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndi
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun FeedScreen(
@@ -72,11 +72,18 @@ fun FeedScreen(
         ) {
             when (state) {
                 is FeedScreenViewState.Content -> {
-                    Content(state, viewModel)
+                    Content(
+                        state = state,
+                        viewModel = viewModel
+                    )
                 }
 
                 is FeedScreenViewState.Empty -> {
-                    EmptyScreen(onRefresh = viewModel::refresh)
+                    EmptyScreen(
+                        state = state,
+                        onFeedSelected = viewModel::selectFeed,
+                        onRefresh = viewModel::refresh
+                    )
                 }
 
                 is FeedScreenViewState.Loading -> {
@@ -100,25 +107,11 @@ private fun Content(
             if (index == 0) {
                 Spacer(modifier = Modifier.height(DefaultPadding))
 
-                LazyRow {
-                    items(state.availableFeeds.count()) { index ->
-                        val feed = state.availableFeeds[index]
-
-                        if (index == 0) {
-                            Spacer(modifier = Modifier.width(DefaultPadding))
-                        }
-
-                        FeedOption(
-                            feed = feed,
-                            isSelected = state.selectedFeed == feed,
-                            onFeedSelected = viewModel::selectFeed
-                        )
-
-                        if (index == state.availableFeeds.lastIndex) {
-                            Spacer(modifier = Modifier.width(DefaultPadding))
-                        }
-                    }
-                }
+                AvailableFeeds(
+                    availableFeeds = state.availableFeeds,
+                    selectedFeed = state.selectedFeed,
+                    onFeedSelected = viewModel::selectFeed
+                )
             }
 
             Spacer(modifier = Modifier.height(HalfPadding))
@@ -152,12 +145,12 @@ private fun FeedOption(
 
     Text(
         text = feed.label,
-        style = runescapeTypography.bodyLarge,
+        style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .padding(end = QuarterPadding)
             .background(
                 color = backgroundColor,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(DefaultRoundedCorner)
             )
             .clickable { onFeedSelected(feed) }
             .padding(HalfPadding),
@@ -175,9 +168,10 @@ private fun FeedItem(
         modifier = Modifier
             .clickable { uriHandler.openUri(feedItemUi.link) }
             .padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
+            .fillMaxWidth()
             .padding(DefaultPadding)
     ) {
         val scalingType = remember { mutableStateOf(ContentScale.Crop) }
@@ -190,7 +184,7 @@ private fun FeedItem(
                     .fillMaxWidth()
                     .height(192.dp)
                     .padding(bottom = HalfPadding)
-                    .clip(shape = RoundedCornerShape(8.dp)),
+                    .clip(shape = RoundedCornerShape(DefaultRoundedCorner)),
                 contentScale = scalingType.value,
                 error = painterResource(id = R.drawable.ic_image_not_supported),
                 onSuccess = {
@@ -211,36 +205,82 @@ private fun FeedItem(
         Text(
             modifier = Modifier.padding(bottom = QuarterPadding),
             text = feedItemUi.title,
-            style = runescapeTypography.titleSmall
+            style = MaterialTheme.typography.titleSmall
         )
 
         Text(
             modifier = Modifier.padding(bottom = QuarterPadding),
             text = feedItemUi.description,
-            style = runescapeTypography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium
         )
 
         Text(
             text = feedItemUi.pubDate,
-            style = runescapeTypography.labelSmall,
+            style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.align(Alignment.End)
         )
     }
 }
 
 @Composable
-private fun ColumnScope.EmptyScreen(onRefresh: () -> Unit) {
-    EmptyScreenWithButton(
-        modifier = Modifier.padding(DefaultPadding),
-        text = stringResource(id = R.string.feed_empty_message),
-        buttonText = stringResource(id = R.string.refresh),
-        icon = {
-            Icon(
-                modifier = Modifier.size(32.dp),
-                painter = painterResource(id = R.drawable.ic_news),
-                contentDescription = stringResource(id = R.string.feed)
+private fun ColumnScope.EmptyScreen(
+    state: FeedScreenViewState.Empty,
+    onRefresh: () -> Unit,
+    onFeedSelected: (RssFeedUi) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
+        if (state.availableFeeds.isNotEmpty()) {
+            AvailableFeeds(
+                availableFeeds = state.availableFeeds,
+                selectedFeed = state.selectedFeed,
+                onFeedSelected = onFeedSelected
             )
-        },
-        onButtonClick = onRefresh
-    )
+        }
+
+        EmptyScreenWithButton(
+            modifier = Modifier.padding(DefaultPadding),
+            text = stringResource(id = R.string.feed_empty_message),
+            buttonText = stringResource(id = R.string.refresh),
+            icon = {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    painter = painterResource(id = R.drawable.ic_news),
+                    contentDescription = stringResource(id = R.string.feed)
+                )
+            },
+            onButtonClick = onRefresh
+        )
+    }
+}
+
+@Composable
+private fun AvailableFeeds(
+    availableFeeds: List<RssFeedUi>,
+    selectedFeed: RssFeedUi?,
+    onFeedSelected: (RssFeedUi) -> Unit
+) {
+    LazyRow {
+        items(availableFeeds.count()) { index ->
+            val feed = availableFeeds[index]
+
+            if (index == 0) {
+                Spacer(modifier = Modifier.width(DefaultPadding))
+            }
+
+            FeedOption(
+                feed = feed,
+                isSelected = selectedFeed == feed,
+                onFeedSelected = onFeedSelected
+            )
+
+            if (index == availableFeeds.lastIndex) {
+                Spacer(modifier = Modifier.width(DefaultPadding))
+            }
+        }
+    }
 }

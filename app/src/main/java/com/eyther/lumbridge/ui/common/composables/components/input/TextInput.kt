@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -21,7 +22,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.ui.common.composables.model.TextInputState
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun TextInput(
@@ -29,6 +29,7 @@ fun TextInput(
     state: TextInputState,
     label: String? = null,
     placeholder: String? = null,
+    maxLength : Int = 128, // 8 bits in a byte = 256 chars
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onInputChanged: ((String) -> Unit) = {}
 ) {
@@ -45,20 +46,20 @@ fun TextInput(
             state.suffix?.let {
                 Text(
                     text = state.suffix,
-                    style = runescapeTypography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         },
-        textStyle = runescapeTypography.bodyMedium,
+        textStyle = MaterialTheme.typography.bodyMedium,
         onValueChange = {
-            text.value = it
-            onInputChanged(it.text)
+            text.value = it.copy(text = it.text.take(maxLength))
+            onInputChanged(it.text.take(maxLength))
         },
         label = {
             label?.let {
                 Text(
                     text = label,
-                    style = runescapeTypography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         },
@@ -66,17 +67,25 @@ fun TextInput(
             placeholder?.let {
                 Text(
                     text = placeholder,
-                    style = runescapeTypography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         },
         isError = state.isError(),
         supportingText = {
-            if (state.isError()) {
-                Text(
-                    text = state.error!!.getString(context),
-                    style = runescapeTypography.bodySmall
-                )
+            when {
+                state.isError() -> {
+                    Text(
+                        text = state.error!!.getString(context),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                text.value.text.length == maxLength -> {
+                    Text(
+                        text = context.getString(R.string.max_length_reached, maxLength),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
             }
         },
         trailingIcon = {
@@ -101,6 +110,7 @@ fun NumberInput(
         keyboardType = KeyboardType.Number,
         imeAction = ImeAction.Next
     ),
+    maxDigits: Int = 10,
     onInputChanged: ((String) -> Unit) = {}
 ) {
     TextInput(
@@ -109,6 +119,7 @@ fun NumberInput(
         label = label,
         placeholder = placeholder,
         keyboardOptions = keyboardOptions,
-        onInputChanged = onInputChanged
+        onInputChanged = onInputChanged,
+        maxLength = maxDigits
     )
 }

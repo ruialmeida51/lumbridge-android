@@ -7,7 +7,7 @@ import android.icu.text.DecimalFormat
  * @return the formatted float
  */
 fun Float.twoDecimalPlaces(): String {
-    val decimalFormatter = DecimalFormat("#.##")
+    val decimalFormatter = DecimalFormat("##.##")
     decimalFormatter.maximumFractionDigits = 2
     decimalFormatter.minimumFractionDigits = 2
     return decimalFormatter.format(this)

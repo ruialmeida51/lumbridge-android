@@ -1,12 +1,11 @@
 package com.eyther.lumbridge.features.editmortgageprofile.viewmodel.delegate
 
-import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.time.toLocalDate
+import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfileInputState
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
-import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -74,9 +73,13 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
         }
     }
 
-    override fun onMortgageTypeChanged(mortgageType: MortgageTypeUi?) {
+    override fun onMortgageTypeChanged(option: Int) {
         updateInput { state ->
-            state.copy(mortgageType = mortgageType)
+            state.copy(
+                mortgageChoiceState = state.mortgageChoiceState.copy(
+                    selectedTab = option
+                )
+            )
         }
     }
 
@@ -107,21 +110,22 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
     }
 
     override fun validateInput(inputState: EditMortgageProfileInputState): Boolean {
-        val isMortgageTypeValid = when (inputState.mortgageType) {
-            MortgageTypeUi.Fixed -> {
-                inputState.fixedInterestRate.error == null
+        val isMortgageTypeValid = when (inputState.mortgageChoiceState.selectedTab) {
+            MortgageTypeUi.Fixed.ordinal -> {
+                inputState.fixedInterestRate.isValid()
             }
 
-            MortgageTypeUi.Variable -> {
-                inputState.euribor.error == null && inputState.spread.error == null
+            MortgageTypeUi.Variable.ordinal -> {
+                inputState.euribor.isValid() && inputState.spread.isValid()
             }
 
             else -> false
         }
 
-        return inputState.loanAmount.error == null &&
-                inputState.startDate.error == null &&
-                inputState.endDate.error == null &&
+        return inputState.loanAmount.isValid() &&
+                inputState.loanAmount.isValid() &&
+                inputState.startDate.isValid() &&
+                inputState.endDate.isValid() &&
                 isMortgageTypeValid
     }
 
@@ -141,18 +145,5 @@ class EditMortgageProfileInputHandler @Inject constructor() : IEditMortgageProfi
         inputState.update { currentState ->
             update(currentState)
         }
-    }
-
-    /**
-     * Helper function to get the error message of the text input.
-     * This is just a boilerplate code to avoid code duplication.
-     * @param errorRes the error message resource id.
-     * @return the updated state with the error message of the text input.
-     * @see validateInput
-     */
-    private fun String?.getErrorOrNull(@StringRes errorRes: Int) = if (isNullOrEmpty()) {
-        TextResource.Resource(resId = errorRes)
-    } else {
-        null
     }
 }

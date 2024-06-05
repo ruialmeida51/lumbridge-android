@@ -1,5 +1,9 @@
 package com.eyther.lumbridge.model.finance
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class NetSalaryUi(
     val monthlyGrossSalary: Float,
     val monthlyNetSalary: Float,
@@ -9,4 +13,4 @@ data class NetSalaryUi(
     val dailyFoodCard: Float,
     val deductions: List<DeductionUi>,
     val moneyAllocations: List<MoneyAllocationUi>?
-)
+): Parcelable

@@ -22,8 +22,8 @@ fun FeedItem.toUi(): FeedItemUi {
 
 fun RssFeed.toUi(): RssFeedUi {
     return when (this) {
-        RssFeed.EconomyOECD -> RssFeedUi("Economy OECD")
-        RssFeed.FinanceOECD -> RssFeedUi("Finance OECD")
+        RssFeed.RTP -> RssFeedUi("RTP")
+        RssFeed.Publico -> RssFeedUi("Publico")
         RssFeed.Euronews -> RssFeedUi("Euronews")
         RssFeed.PortugalNews -> RssFeedUi("The Portugal News")
     }

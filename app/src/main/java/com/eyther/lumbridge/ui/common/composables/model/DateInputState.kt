@@ -8,4 +8,6 @@ data class DateInputState(
     val error: TextResource? = null
 ) {
     fun isError() = error != null
+
+    fun isValid() = !isError() && date != null
 }

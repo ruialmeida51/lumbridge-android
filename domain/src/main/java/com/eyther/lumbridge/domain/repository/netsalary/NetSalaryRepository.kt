@@ -31,4 +31,45 @@ class NetSalaryRepository @Inject constructor(
                 )
             }
         }
+
+    /**
+     * Calculates the annual salary based on the monthly salary. The calculation is done
+     * by the net salary calculator of each locale.
+     *
+     * @param monthlySalary the monthly salary to calculate the annual salary from
+     * @param locale the locale to calculate the annual salary from
+     *
+     * @return the annual salary
+     */
+    suspend fun getAnnualSalary(
+        monthlySalary: Float,
+        locale: SupportedLocales
+    ): Float = withContext(Dispatchers.Default) {
+        return@withContext when (locale) {
+            SupportedLocales.PORTUGAL -> portugalNetSalaryCalculator.calculateAnnualSalary(
+                monthlySalary
+            )
+        }
+    }
+
+    /**
+     * Calculates the monthly salary based on the annual salary. The calculation is done
+     * by the net salary calculator of each locale.
+     *
+     * @param annualSalary the annual salary to calculate the monthly salary from
+     * @param locale the locale to calculate the monthly salary from
+     *
+     * @return the monthly salary
+     */
+    suspend fun getMonthlySalary(
+        annualSalary: Float,
+        locale: SupportedLocales
+    ): Float = withContext(Dispatchers.Default) {
+        return@withContext when (locale) {
+            SupportedLocales.PORTUGAL -> portugalNetSalaryCalculator.calculateMonthlySalary(
+                annualSalary
+            )
+        }
+    }
 }
+

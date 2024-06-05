@@ -1,35 +1,43 @@
 package com.eyther.lumbridge.features.profile.overview.screens
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
@@ -49,9 +58,9 @@ import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSet
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 
 @Composable
 fun ProfileOverviewScreen(
@@ -68,7 +77,7 @@ fun ProfileOverviewScreen(
             )
         }
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(paddingValues)
@@ -95,11 +104,17 @@ private fun Content(
     state: ProfileOverviewScreenViewState.Content
 ) {
     Column {
-        ProfileHeader(navController, state, viewModel::navigate)
+        ProfileHeader(
+            navController = navController,
+            state = state,
+            constructBitmap = viewModel::constructBitmapFromUri,
+            saveImage = viewModel::saveImage,
+            onNavigate = viewModel::navigate
+        )
 
         Text(
             text = stringResource(id = R.string.profile_financial_settings),
-            style = runescapeTypography.bodyLarge,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(vertical = HalfPadding)
         )
 
@@ -107,7 +122,7 @@ private fun Content(
 
         Text(
             text = stringResource(id = R.string.profile_app_settings),
-            style = runescapeTypography.bodyLarge,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(vertical = HalfPadding)
         )
 
@@ -119,27 +134,58 @@ private fun Content(
 private fun ProfileHeader(
     navController: NavHostController,
     state: ProfileOverviewScreenViewState.Content,
+    constructBitmap: suspend (Uri, Context) -> Bitmap,
+    saveImage: (Bitmap) -> Unit,
     onNavigate: (ProfileNavigationItem, NavController) -> Unit
 ) {
+    val context = LocalContext.current
+    var selectedImage by remember { mutableStateOf<Uri?>(null) }
+
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            selectedImage = it
+        }
+    )
+
+    LaunchedEffect(selectedImage) {
+        selectedImage?.let { nonNullUri ->
+            saveImage(constructBitmap(nonNullUri, context))
+        }
+    }
+
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding)
     ) {
         Row {
-            Icon(
-                imageVector = Icons.Rounded.AccountCircle,
+            AsyncImage(
+                model = state.imageBitmap,
                 contentDescription = stringResource(id = R.string.profile_avatar_content_description),
+                error = painterResource(id = R.drawable.ic_profile_circle),
+                onError = {
+                    Log.e("tag", "boom", it.result.throwable)
+                },
                 modifier = Modifier
                     .clip(CircleShape)
-                    .size(80.dp),
-                tint = MaterialTheme.colorScheme.onSurface
+                    .size(80.dp)
+                    .clickable {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
+                        )
+                    },
+                contentScale = ContentScale.Crop
             )
 
             Column(
                 modifier = Modifier
+                    .weight(1f)
                     .padding(start = DefaultPadding)
                     .align(Alignment.CenterVertically),
                 verticalArrangement = Arrangement.spacedBy(DefaultPadding),
@@ -168,27 +214,26 @@ private fun ProfileHeader(
 
                 Text(
                     text = usernameText,
-                    style = runescapeTypography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
 
                 state.email?.let {
                     Text(
                         text = it,
-                        style = runescapeTypography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
 
                 Text(
                     text = localeText,
-                    style = runescapeTypography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
-
             Icon(
                 modifier = Modifier
-                    .wrapContentSize()
+                    .weight(0.2f)
+                    .padding(start = HalfPadding)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(bounded = false)
@@ -212,7 +257,7 @@ private fun ProfileFinancialSettings(
 ) {
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding),
@@ -239,7 +284,7 @@ private fun ProfileAppSettings(
 ) {
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding),

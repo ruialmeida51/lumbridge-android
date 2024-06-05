@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.eyther.lumbridge.features.expenses.ExpensesScreen
 import com.eyther.lumbridge.features.feed.screens.FeedScreen
 import com.eyther.lumbridge.features.overview.OverviewScreen
 import com.eyther.lumbridge.features.profile.ProfileScreen
@@ -23,6 +24,7 @@ fun LumbridgeNavigationHost(
     ) {
         composable(route = LumbridgeNavigationItem.Feed.route) { FeedScreen(LumbridgeNavigationItem.Feed.label) }
         composable(route = LumbridgeNavigationItem.Tools.route) { ToolsScreen() }
+        composable(route = LumbridgeNavigationItem.Expenses.route) { ExpensesScreen() }
         composable(route = LumbridgeNavigationItem.Overview.route) { OverviewScreen() }
         composable(route = LumbridgeNavigationItem.Profile.route) { ProfileScreen() }
     }

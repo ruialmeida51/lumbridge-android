@@ -2,6 +2,7 @@ package dependencies
 
 import versions.AppVersions.COIL_VERSION
 import versions.AppVersions.COMPOSE_BOM_VERSION
+import versions.AppVersions.COMPOSE_GOOGLE_FONTS
 import versions.AppVersions.COMPOSE_LIFECYCLE_VERSION
 import versions.AppVersions.COMPOSE_MATERIAL_3_CORE_VERSION
 import versions.AppVersions.COMPOSE_TOOLING_VERSION
@@ -10,7 +11,6 @@ import versions.AppVersions.HILT_NAVIGATION_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
 import versions.AppVersions.KTX_VERSION
 import versions.AppVersions.NAVIGATION_VERSION
-import versions.AppVersions.COMPOSE_GOOGLE_FONTS
 import versions.SharedVersions.HILT_VERSION
 import versions.SharedVersions.KOTLIN_VERSION
 
@@ -30,6 +30,7 @@ object AppDependencies {
         "androidx.compose.ui:ui-tooling-preview:$COMPOSE_TOOLING_VERSION",
         "androidx.lifecycle:lifecycle-runtime-compose:$COMPOSE_LIFECYCLE_VERSION",
         "androidx.compose.ui:ui-text-google-fonts:$COMPOSE_GOOGLE_FONTS",
+
         // Coil
         "io.coil-kt:coil:$COIL_VERSION",
         "io.coil-kt:coil-compose:$COIL_VERSION",

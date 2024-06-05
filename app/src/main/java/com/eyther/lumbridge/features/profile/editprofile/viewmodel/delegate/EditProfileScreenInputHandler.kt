@@ -1,11 +1,10 @@
 package com.eyther.lumbridge.features.profile.editprofile.viewmodel.delegate
 
-import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenInputState
-import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -36,9 +35,9 @@ class EditProfileScreenInputHandler @Inject constructor() : IEditProfileScreenIn
         }
     }
 
-    override fun onLocaleChanged(locale: SupportedLocales) {
+    override fun onLocaleChanged(countryCode: String) {
         updateInput { state ->
-            state.copy(locale = locale)
+            state.copy(locale = SupportedLocales.get(countryCode))
         }
     }
 
@@ -51,7 +50,7 @@ class EditProfileScreenInputHandler @Inject constructor() : IEditProfileScreenIn
      * @return true if the button should be enabled, false otherwise.
      */
     override fun shouldEnableSaveButton(inputState: EditProfileScreenInputState): Boolean {
-        return inputState.email.error == null && inputState.name.error == null
+        return inputState.email.isValid() && inputState.name.isValid()
     }
 
     /**
@@ -66,17 +65,5 @@ class EditProfileScreenInputHandler @Inject constructor() : IEditProfileScreenIn
         inputState.update { currentState ->
             update(currentState)
         }
-    }
-
-    /**
-     * Helper function to get the error message of the text input.
-     * This is just a boilerplate code to avoid code duplication.
-     * @param errorRes the error message resource id.
-     * @return the updated state with the error message of the text input.
-     */
-    private fun String?.getErrorOrNull(@StringRes errorRes: Int) = if (isNullOrEmpty()) {
-        TextResource.Resource(resId = errorRes)
-    } else {
-        null
     }
 }

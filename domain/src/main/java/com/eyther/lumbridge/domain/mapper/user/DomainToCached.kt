@@ -1,8 +1,8 @@
 package com.eyther.lumbridge.domain.mapper.user
 
-import com.eyther.lumbridge.data.model.user.UserFinancialsCached
-import com.eyther.lumbridge.data.model.user.UserMortgageCached
-import com.eyther.lumbridge.data.model.user.UserProfileCached
+import com.eyther.lumbridge.data.model.user.local.UserFinancialsCached
+import com.eyther.lumbridge.data.model.user.local.UserMortgageCached
+import com.eyther.lumbridge.data.model.user.local.UserProfileCached
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
@@ -11,7 +11,8 @@ import com.eyther.lumbridge.domain.time.toIsoLocalDateString
 fun UserProfileDomain.toCached() = UserProfileCached(
     countryCode = locale.countryCode,
     name = name,
-    email = email
+    email = email,
+    imageBitmap = imageBitmap
 )
 
 fun UserFinancialsDomain.toCached() = UserFinancialsCached(
@@ -23,7 +24,8 @@ fun UserFinancialsDomain.toCached() = UserFinancialsCached(
     numberOfDependants = numberOfDependants,
     singleIncome = singleIncome,
     married = married,
-    handicapped = handicapped
+    handicapped = handicapped,
+    salaryInputType = salaryInputType.name
 )
 
 fun UserMortgageDomain.toCached() = UserMortgageCached(

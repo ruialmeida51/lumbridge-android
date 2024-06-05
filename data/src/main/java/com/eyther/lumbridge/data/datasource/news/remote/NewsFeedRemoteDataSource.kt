@@ -1,28 +1,28 @@
 package com.eyther.lumbridge.data.datasource.news.remote
 
-import com.eyther.lumbridge.data.datasource.news.service.EconomyOECDRssClient
 import com.eyther.lumbridge.data.datasource.news.service.EuronewsRssClient
-import com.eyther.lumbridge.data.datasource.news.service.FinanceOECDRssClient
 import com.eyther.lumbridge.data.datasource.news.service.PortugalNewsRssClient
+import com.eyther.lumbridge.data.datasource.news.service.PublicoRssClient
+import com.eyther.lumbridge.data.datasource.news.service.RTPRssClient
 import javax.inject.Inject
 
 class NewsFeedRemoteDataSource @Inject constructor(
-    private val economyOECDRssClient: EconomyOECDRssClient,
-    private val financeOECDRssClient: FinanceOECDRssClient,
+    private val publicoRssClient: PublicoRssClient,
+    private val RTPRssClient: RTPRssClient,
     private val euronewsRssClient: EuronewsRssClient,
     private val portugalNewsRssClient: PortugalNewsRssClient
 ) {
-    suspend fun getEconomyOECDRssFeed(): String? {
-        return if (economyOECDRssClient.getRssFeed().isSuccessful) {
-            economyOECDRssClient.getRssFeed().body()
+    suspend fun getPublicoRssFeed(): String? {
+        return if (publicoRssClient.getRssFeed().isSuccessful) {
+            publicoRssClient.getRssFeed().body()
         } else {
             null
         }
     }
 
-    suspend fun getFinanceOECDRssFeed(): String? {
-        return if (financeOECDRssClient.getRssFeed().isSuccessful) {
-            financeOECDRssClient.getRssFeed().body()
+    suspend fun getRTPRssFeed(): String? {
+        return if (RTPRssClient.getRssFeed().isSuccessful) {
+            RTPRssClient.getRssFeed().body()
         } else {
             null
         }

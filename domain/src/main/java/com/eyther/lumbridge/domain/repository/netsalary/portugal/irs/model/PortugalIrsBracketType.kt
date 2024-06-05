@@ -83,8 +83,7 @@ sealed interface PortugalIrsBracketType {
 
                 val dependantsFlatRate = when {
                     monthlySalary <= 820.00 -> 0f
-                    monthlySalary > 820.00 -> 21.43f * (userFinancialsDomain.numberOfDependants?.toFloat()
-                        ?: 0f)
+                    monthlySalary > 820.00 -> 21.43f * (userFinancialsDomain.numberOfDependants?.toFloat() ?: 0f)
 
                     else -> error("💥 Could not match salary to tax bracket.")
                 }

@@ -9,7 +9,10 @@ import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialPro
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Loading
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.EditFinancialProfileInputHandler
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.IEditFinancialProfileInputHandler
+import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
+import com.eyther.lumbridge.usecase.finance.GetAnnualSalary
+import com.eyther.lumbridge.usecase.finance.GetMonthlySalary
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
@@ -28,7 +31,9 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val getUserFinancials: GetUserFinancials,
     private val saveUserFinancials: SaveUserFinancials,
-    private val editFinancialProfileInputHandler: EditFinancialProfileInputHandler
+    private val editFinancialProfileInputHandler: EditFinancialProfileInputHandler,
+    private val getAnnualSalary: GetAnnualSalary,
+    private val getMonthlySalary: GetMonthlySalary
 ) : ViewModel(),
     IEditFinancialProfileScreenViewModel,
     IEditFinancialProfileInputHandler by editFinancialProfileInputHandler {
@@ -48,12 +53,18 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val initialUserFinancials = getUserFinancials()
             val locale = getLocaleOrDefault()
+            val annualGrossSalary = initialUserFinancials?.annualGrossSalary
+            val monthlyGrossSalary = annualGrossSalary?.let { getMonthlySalary(it) }
             val currencySymbol = locale.getCurrencySymbol()
 
             updateInput { state ->
                 state.copy(
                     annualGrossSalary = state.annualGrossSalary.copy(
-                        text = initialUserFinancials?.annualGrossSalary?.toString(),
+                        text = annualGrossSalary?.toString(),
+                        suffix = currencySymbol
+                    ),
+                    monthlyGrossSalary = state.monthlyGrossSalary.copy(
+                        text = monthlyGrossSalary?.toString(),
                         suffix = currencySymbol
                     ),
                     foodCardPerDiem = state.foodCardPerDiem.copy(
@@ -74,6 +85,10 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
                     ),
                     numberOfDependants = state.numberOfDependants.copy(
                         text = initialUserFinancials?.numberOfDependants?.toString()
+                    ),
+                    salaryInputChoiceState = state.salaryInputChoiceState.copy(
+                        selectedTab = initialUserFinancials?.salaryInputTypeUi?.ordinal ?: 0,
+                        tabsStringRes = SalaryInputTypeUi.entries().map { it.label }
                     ),
                     singleIncome = initialUserFinancials?.singleIncome ?: false,
                     married = initialUserFinancials?.married ?: false,
@@ -105,9 +120,18 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
             val inputState = inputState.value
+            val salaryType = SalaryInputTypeUi.fromOrdinal(
+                ordinal = inputState.salaryInputChoiceState.selectedTab
+            )
+
+            val annualGrossSalary = if (salaryType == SalaryInputTypeUi.Annually) {
+                inputState.annualGrossSalary.text?.toFloatOrNull()
+            } else {
+                getAnnualSalary(inputState.monthlyGrossSalary.text?.toFloatOrNull())
+            }
 
             val userFinancials = UserFinancialsUi(
-                annualGrossSalary = inputState.annualGrossSalary.text?.toFloatOrNull(),
+                annualGrossSalary = annualGrossSalary,
                 foodCardPerDiem = inputState.foodCardPerDiem.text?.toFloatOrNull(),
                 savingsPercentage = inputState.savingsPercentage.text?.toIntOrNull(),
                 necessitiesPercentage = inputState.necessitiesPercentage.text?.toIntOrNull(),
@@ -115,7 +139,8 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
                 numberOfDependants = inputState.numberOfDependants.text?.toIntOrNull(),
                 singleIncome = inputState.singleIncome,
                 married = inputState.married,
-                handicapped = inputState.handicapped
+                handicapped = inputState.handicapped,
+                salaryInputTypeUi = salaryType
             )
 
             saveUserFinancials(userFinancials)

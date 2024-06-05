@@ -7,17 +7,13 @@
 
     <string name="tools">Tools</string>
     <string name="tools_personal_tools">Personal Tools</string>
-    <string name="tools_company_tools">Company Tools</string>
     <string name="tools_mortgage_tools">Mortgage Tools</string>
-    <string name="tools_net_salary_calculator">Net Salary Calculator</string>
     <string name="tools_savings_calculator">Savings Calculator</string>
-    <string name="tools_currency_converter">Currency Converter</string>
     <string name="tools_mortgage_calculator">Mortgage Calculator</string>
-    <string name="tools_ctc_calculator_long">Cost To Company Calculator</string>
-    <string name="tools_ctc_calculator_short">CTC Calculator</string>
 
     <string name="edit_financial_profile">Edit Financial Profile</string>
     <string name="edit_financial_profile_income">What\'s your current income?</string>
+    <string name="edit_financial_profile_choice">Do you prefer to input a monthly or annual salary?</string>
     <string name="edit_financial_profile_household">How does your household look like?</string>
     <string name="edit_financial_profile_allocate_earnings">How do you plan to allocate your earnings?</string>
     <string name="edit_financial_profile_annual_gross_salary">Annual Gross Salary</string>
@@ -85,6 +81,29 @@
     <string name="edit_profile_invalid_email">Please enter a valid email address</string>
     <string name="edit_profile_invalid_name">Please enter a valid name</string>
 
+    <string name="tools_currency_converter">Currency Converter</string>
+    <string name="tools_currency_converter_input">Please input the currencies to convert</string>
+    <string name="tools_currency_converter_result">Conversion Result</string>
+    <string name="tools_currency_converter_amount_error">Invalid amount</string>
+    <string name="tools_currency_converter_exchange_currency">Exchange Currency</string>
+    <string name="tools_currency_converter_from_currency">Base Currency</string>
+    <string name="tools_currency_converter_to_currency">To Currency</string>
+    <string name="tools_currency_converter_from_amount">Amount to convert</string>
+    <string name="tools_exchange_rate">Exchange Rate</string>
+    <string name="tools_currency_converter_to">Conversion</string>
+    <string name="tools_currency_converter_to_value">%1$s %2$s is equal to %3$s %4$s</string>
+    <string name="tools_exchange_rate_value">1.00 %1$s is equal to %2$s %3$s</string>
+    <string name="tools_exchange_error">Something went wrong while performing the currency exchange. Please, try again later.</string>
+
+    <string name="tools_net_salary_calculate_button">Calculate Net Salary</string>
+    <string name="tools_net_salary_calculate_another_button">Calculate Another</string>
+    <string name="tools_net_salary_calculate_error">Something went wrong while calculating your salary. Please, try again.</string>
+    <string name="tools_net_salary_calculator">Net Salary Calculator</string>
+    <string name="tools_net_salary_result">Net Salary Result</string>
+
+    <string name="expenses">Expenses</string>
+    <string name="expenses_overview">Expenses Overview</string>
+
     <string name="app_settings_change_preferences">Change your preferences</string>
 
     <string-array name="loading_messages">
@@ -137,4 +156,7 @@
     <string name="end_date">End Date</string>
     <string name="amortization">Amortization</string>
     <string name="remainder">Remainder</string>
+    <string name="retry">Retry</string>
+    <string name="edit">Edit</string>
+    <string name="max_length_reached">Char limit reached: %d</string>
 </resources>

@@ -1,9 +1,10 @@
 package com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate
 
-import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileInputState
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
+import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -17,9 +18,20 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
         private const val MAX_PERCENTAGE = 100
     }
 
+    override fun onSalaryInputTypeChanged(option: Int) {
+        updateInput { state ->
+            state.copy(
+                salaryInputChoiceState = state.salaryInputChoiceState.copy(
+                    selectedTab = option
+                )
+            )
+        }
+    }
+
     override fun onAnnualGrossSalaryChanged(annualGrossSalary: Float?) {
         updateInput { state ->
             val annualGrossSalaryText = annualGrossSalary?.toString()
+
             state.copy(
                 annualGrossSalary = state.annualGrossSalary.copy(
                     text = annualGrossSalaryText,
@@ -27,7 +39,19 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
                 )
             )
         }
+    }
 
+    override fun onMonthlyGrossSalaryChanged(monthlyGrossSalary: Float?) {
+        updateInput { state ->
+            val monthlyGrossSalaryText = monthlyGrossSalary?.toString()
+
+            state.copy(
+                monthlyGrossSalary = state.monthlyGrossSalary.copy(
+                    text = monthlyGrossSalaryText,
+                    error = monthlyGrossSalaryText.getErrorOrNull(R.string.edit_financial_profile_invalid_income)
+                )
+            )
+        }
     }
 
     override fun onFoodCardPerDiemChanged(foodCardPerDiem: Float?) {
@@ -131,6 +155,21 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
     }
 
     /**
+     * Validates the salary input of the user.
+     * The salary input must be greater than 0.
+     *
+     * @param inputState the current input state of the screen.
+     * @return true if the salary input is valid, false otherwise.
+     */
+    private fun validateSalaryInput(inputState: EditFinancialProfileInputState): Boolean {
+        return when (inputState.salaryInputChoiceState.selectedTab) {
+            SalaryInputTypeUi.Monthly.ordinal -> inputState.monthlyGrossSalary.isValid()
+            SalaryInputTypeUi.Annually.ordinal -> inputState.annualGrossSalary.isValid()
+            else -> false
+        }
+    }
+
+    /**
      * Checks if the save button should be enabled.
      *
      * The button should be enabled if the user has entered valid data.
@@ -140,8 +179,8 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
      */
     override fun shouldEnableSaveButton(inputState: EditFinancialProfileInputState): Boolean {
         return validatePercentages(inputState) == null &&
-                inputState.annualGrossSalary.error == null &&
-                inputState.foodCardPerDiem.error == null
+                validateSalaryInput(inputState) &&
+                inputState.foodCardPerDiem.isValid()
     }
 
     /**
@@ -178,17 +217,5 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
                 error = validatePercentages(inputState)
             ),
         )
-    }
-
-    /**
-     * Helper function to get the error message of the text input.
-     * This is just a boilerplate code to avoid code duplication.
-     * @param errorRes the error message resource id.
-     * @return the updated state with the error message of the text input.
-     */
-    private fun String?.getErrorOrNull(@StringRes errorRes: Int) = if (isNullOrEmpty()) {
-        TextResource.Resource(resId = errorRes)
-    } else {
-        null
     }
 }

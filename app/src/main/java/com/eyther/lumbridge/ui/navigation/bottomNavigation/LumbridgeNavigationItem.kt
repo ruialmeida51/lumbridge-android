@@ -11,7 +11,7 @@ sealed class LumbridgeNavigationItem(
     @DrawableRes val icon: Int
 ) : NavigationItem(route, label) {
     companion object {
-        fun items() = listOf(Feed, Tools, Overview, Profile)
+        fun items() = listOf(Feed, Tools, Expenses, Overview, Profile)
     }
 
     data object Feed : LumbridgeNavigationItem(
@@ -20,6 +20,10 @@ sealed class LumbridgeNavigationItem(
 
     data object Tools : LumbridgeNavigationItem(
         route = "tools", icon = R.drawable.ic_calculator, label = R.string.tools
+    )
+
+    data object Expenses : LumbridgeNavigationItem(
+        route = "expenses", icon = R.drawable.ic_payments, label = R.string.expenses
     )
 
     data object Overview : LumbridgeNavigationItem(

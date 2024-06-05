@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.data.di
 
+import com.eyther.lumbridge.data.datasource.currencyexchange.service.CurrencyExchangeClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +29,25 @@ object RemoteDataModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    @Provides
+    @Singleton
+    @CurrencyExchangeRetrofitClient
+    fun provideCurrencyExchangeRetrofit(): Retrofit = Retrofit.Builder()
+        .baseUrl("https://api.exchangerate-api.com/v4/latest/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideCurrencyExchangeClient(
+        @CurrencyExchangeRetrofitClient retrofit: Retrofit
+    ): CurrencyExchangeClient = retrofit.create(CurrencyExchangeClient::class.java)
+
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class AppRetrofitClient
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class CurrencyExchangeRetrofitClient
 }

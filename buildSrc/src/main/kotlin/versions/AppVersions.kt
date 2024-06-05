@@ -17,6 +17,4 @@ object AppVersions {
     const val HILT_NAVIGATION_VERSION = "1.2.0"
 
     const val FIREBASE_BOM_VERSION = "32.8.1"
-
-    const val YCHARTS_VERSION = "2.1.0"
 }

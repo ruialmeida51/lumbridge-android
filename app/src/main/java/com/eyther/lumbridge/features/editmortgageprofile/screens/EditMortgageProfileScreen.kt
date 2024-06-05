@@ -3,19 +3,12 @@
 package com.eyther.lumbridge.features.editmortgageprofile.screens
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,12 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -52,6 +42,7 @@ import com.eyther.lumbridge.features.editmortgageprofile.model.EditMortgageProfi
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.EditMortgageProfileScreenViewModel
 import com.eyther.lumbridge.features.editmortgageprofile.viewmodel.IEditMortgageProfileScreenViewModel
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
+import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
 import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
@@ -60,9 +51,9 @@ import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndi
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.runescapeTypography
 import java.time.LocalDate
 
 @Composable
@@ -121,7 +112,6 @@ fun Content(
     Column(
         Modifier
             .padding(DefaultPadding)
-            .animateContentSize()
     ) {
         RemainingAmount(
             state = state,
@@ -186,12 +176,12 @@ private fun ColumnScope.RemainingAmount(
             .padding(bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.edit_mortgage_profile_owe),
-        style = runescapeTypography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge
     )
 
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding)
@@ -243,99 +233,28 @@ private fun ColumnScope.MortgageType(
             .padding(bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.edit_mortgage_profile_loan),
-        style = runescapeTypography.bodyLarge
+        style = MaterialTheme.typography.bodyLarge
     )
 
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(DefaultPadding)
     ) {
-        Text(
-            modifier = Modifier.padding(bottom = HalfPadding),
-            text = stringResource(id = R.string.edit_mortgage_profile_loan_type),
-            style = runescapeTypography.bodyMedium
+
+        ChoiceTab(
+            title = stringResource(id = R.string.edit_mortgage_profile_loan_type),
+            choiceTabState = state.inputState.mortgageChoiceState,
+            onOptionClicked = { viewModel.onMortgageTypeChanged(it) }
         )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 40.dp)
-                .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
-                    RoundedCornerShape(8.dp)
-                )
-                .padding(QuarterPadding),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val backgroundColor: @Composable (isSelected: Boolean) -> Color = { isSelected ->
-                if (isSelected) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.surfaceVariant
-                }
-            }
-
-            val textColor: @Composable (isSelected: Boolean) -> Color = { isSelected ->
-                if (isSelected) {
-                    MaterialTheme.colorScheme.onPrimary
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                }
-            }
-
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        viewModel.onMortgageTypeChanged(MortgageTypeUi.Variable)
-                    }
-                    .background(
-                        color = backgroundColor(state.inputState.mortgageType?.isVariable() == true),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(QuarterPadding),
-                text = stringResource(id = MortgageTypeUi.Variable.label),
-                style = runescapeTypography.bodyMedium,
-                textAlign = TextAlign.Center,
-                color = textColor(state.inputState.mortgageType?.isVariable() == true)
-            )
-
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) {
-                        viewModel.onMortgageTypeChanged(MortgageTypeUi.Fixed)
-                    }
-                    .background(
-                        color = backgroundColor(state.inputState.mortgageType?.isFixed() == true),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(QuarterPadding),
-                text = stringResource(id = MortgageTypeUi.Fixed.label),
-                style = runescapeTypography.bodyMedium,
-                textAlign = TextAlign.Center,
-                color = textColor(state.inputState.mortgageType?.isFixed() == true)
-            )
-
-        }
-
 
         Spacer(modifier = Modifier.height(DefaultPadding))
 
-        when (state.inputState.mortgageType) {
-            MortgageTypeUi.Variable -> VariableMortgageInput(state, viewModel)
-            MortgageTypeUi.Fixed -> FixedMortgageInput(state, viewModel)
-            else -> Unit
+        when (state.inputState.mortgageChoiceState.selectedTab) {
+            MortgageTypeUi.Variable.ordinal -> VariableMortgageInput(state, viewModel)
+            MortgageTypeUi.Fixed.ordinal -> FixedMortgageInput(state, viewModel)
         }
     }
 }
@@ -377,6 +296,6 @@ private fun ColumnScope.FixedMortgageInput(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
-        )
+        ),
     )
 }

@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.feed.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
@@ -19,6 +20,9 @@ class FeedScreenViewModel @Inject constructor(
     private val getAvailableFeeds: GetAvailableFeeds
 ) : ViewModel(), IFeedScreenViewModel {
 
+    private var cachedAvailableFeeds = emptyList<RssFeedUi>()
+    private var lastUserSelectedRssFeed: RssFeedUi? = null
+
     override val viewState: MutableStateFlow<FeedScreenViewState> =
         MutableStateFlow(FeedScreenViewState.Loading)
 
@@ -30,21 +34,49 @@ class FeedScreenViewModel @Inject constructor(
         selectFeed()
     }
 
-    override fun selectFeed(rssFeedUi: RssFeedUi?) {
-        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
-            viewState.update { FeedScreenViewState.Empty }
+    override fun selectFeed(userSelectedRssFeed: RssFeedUi?) {
+        if (userSelectedRssFeed != null) {
+            lastUserSelectedRssFeed = userSelectedRssFeed
         }
 
-        viewState.update { FeedScreenViewState.Loading }
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(this::class.java.simpleName, "💥 Failed to fetch news feed", throwable)
+
+            viewState.update {
+                FeedScreenViewState.Empty(
+                    availableFeeds = cachedAvailableFeeds,
+                    selectedFeed = lastUserSelectedRssFeed
+                )
+            }
+        }
 
         viewModelScope.launch(coroutineExceptionHandler) {
+            viewState.update {
+                FeedScreenViewState.Loading
+            }
+
             val availableFeeds = getAvailableFeeds()
-            val selectedFeed = rssFeedUi ?: availableFeeds.first()
+
+            if (availableFeeds.isNotEmpty()) {
+                cachedAvailableFeeds = availableFeeds
+            }
+
+            // If the user selected a feed, use that. Otherwise, use the last selected feed.
+            // If there is neither a user selected feed nor a last selected feed,
+            // use the first available feed.
+            val selectedFeed = userSelectedRssFeed
+                ?: lastUserSelectedRssFeed
+                ?: availableFeeds.first()
+
             val newsFeed = getNewsFeed(selectedFeed)
 
             if (newsFeed.isEmpty()) {
-                viewState.update { FeedScreenViewState.Empty }
+                viewState.update {
+                    FeedScreenViewState.Empty(
+                        availableFeeds = availableFeeds,
+                        selectedFeed = userSelectedRssFeed
+                    )
+                }
             } else {
                 viewState.update {
                     FeedScreenViewState.Content(
