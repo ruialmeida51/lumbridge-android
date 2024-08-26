@@ -12,6 +12,7 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.overview.screens.portugal.FinancialOverviewPortugal
 import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 
 @Composable
@@ -22,7 +23,7 @@ fun ColumnScope.PerCountryBreakdown(
 ) {
     Text(
         modifier = Modifier
-            .padding(bottom = HalfPadding)
+            .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.financial_overview_deductions),
         style = MaterialTheme.typography.bodyLarge

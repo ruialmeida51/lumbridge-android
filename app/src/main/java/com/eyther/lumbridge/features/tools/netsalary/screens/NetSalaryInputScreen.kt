@@ -1,7 +1,6 @@
 package com.eyther.lumbridge.features.tools.netsalary.screens
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -10,15 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,14 +29,13 @@ import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputS
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.INetSalaryInputScreenViewModel
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.NetSalaryInputScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
-import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
-import com.eyther.lumbridge.ui.theme.QuarterPadding
 
 @Composable
 fun NetSalaryInputScreen(
@@ -66,7 +60,6 @@ fun NetSalaryInputScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .padding(DefaultPadding)
                 .verticalScroll(rememberScrollState())
         ) {
             when (val currentState = state.value) {
@@ -154,13 +147,7 @@ private fun ColumnScope.Content(
 
     Spacer(modifier = Modifier.height(DefaultPadding))
 
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(DefaultPadding)
-    ) {
+    ColumnCardWrapper {
         DropdownInput(
             label = stringResource(id = R.string.edit_profile_select_country),
             selectedOption = state.inputState.locale.name.capitalise(),

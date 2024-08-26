@@ -5,6 +5,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.room.Room
+import com.eyther.lumbridge.data.database.room.LumbridgeRoomDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +18,26 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalDataModule {
+
+    @Provides
+    @Singleton
+    fun provideLumbridgeRoomDatabase(
+        @ApplicationContext context: Context
+    ): LumbridgeRoomDatabase {
+        return Room.databaseBuilder(
+            context,
+            LumbridgeRoomDatabase::class.java,
+            "lumbridge_room_database"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideExpensesDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.expensesDao()
 
     @Provides
     @Singleton
@@ -96,9 +118,10 @@ object LocalDataModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class AppSettingsDataStore
+    annotation class CurrencyRatesDataStore
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class CurrencyRatesDataStore
+    annotation class AppSettingsDataStore
+
 }

@@ -8,6 +8,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.appdistribution")
+    id("com.google.firebase.crashlytics")
     kotlin("kapt")
 }
 
@@ -69,6 +70,10 @@ android {
 
     kapt {
         correctErrorTypes = true
+    }
+
+    hilt {
+        enableAggregatingTask = true
     }
 
     buildFeatures {

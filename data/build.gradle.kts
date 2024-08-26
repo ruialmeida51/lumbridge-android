@@ -60,5 +60,4 @@ android {
 dependencies {
     SdkDependencies.getImplementation().map { implementation(it) }
     SdkDependencies.getKapt().map { kapt(it) }
-    SdkDependencies.getAnnotationProcessor().map { annotationProcessor(it) }
 }

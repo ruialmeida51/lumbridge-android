@@ -1,9 +1,7 @@
 package com.eyther.lumbridge.features.overview.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -11,13 +9,11 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,9 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,10 +36,10 @@ import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewS
 import com.eyther.lumbridge.features.overview.navigation.FinancialOverviewNavigationItem
 import com.eyther.lumbridge.model.mortgage.MortgageAmortizationUi
 import com.eyther.lumbridge.model.mortgage.MortgageTypeUi
+import com.eyther.lumbridge.ui.common.composables.components.card.RowCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
-import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
 
@@ -81,9 +75,7 @@ fun ColumnScope.MortgageOverview(
             }
         )
     } else {
-        Column(
-            modifier = Modifier.padding(horizontal = DefaultPadding)
-        ) {
+        Column {
             PaymentOverview(
                 state = state,
                 currencySymbol = currencySymbol,
@@ -121,21 +113,13 @@ private fun ColumnScope.PaymentOverview(
 
     Text(
         modifier = Modifier
-            .padding(bottom = HalfPadding)
+            .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.financial_overview_mortgage),
         style = MaterialTheme.typography.bodyLarge
     )
 
-    Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .fillMaxWidth()
-            .padding(DefaultPadding),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
+    RowCardWrapper {
         Column {
             Text(
                 modifier = Modifier.padding(bottom = QuarterPadding),
@@ -244,21 +228,13 @@ private fun ColumnScope.Amortizations(
 
     Text(
         modifier = Modifier
-            .padding(bottom = HalfPadding)
+            .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
         text = stringResource(id = R.string.financial_overview_mortgage_amortization_simulator),
         style = MaterialTheme.typography.bodyLarge
     )
 
-    Row(
-        modifier = Modifier
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .fillMaxWidth()
-            .padding(DefaultPadding),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
+    RowCardWrapper {
         Column {
             if (state.mortgage.amortizations.isEmpty()) {
                 Text(

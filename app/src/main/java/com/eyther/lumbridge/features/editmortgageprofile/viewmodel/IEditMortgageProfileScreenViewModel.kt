@@ -14,7 +14,7 @@ interface IEditMortgageProfileScreenViewModel : IEditMortgageProfileInputHandler
     }
 
     val viewState: StateFlow<EditMortgageProfileScreenViewState>
-    val viewEffect: SharedFlow<EditMortgageProfileScreenViewEffect>
+    val viewEffects: SharedFlow<EditMortgageProfileScreenViewEffect>
 
     /**
      * Saves the user data inputted by the user.

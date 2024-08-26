@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface IEditFinancialProfileScreenViewModel : IEditFinancialProfileInputHandler {
     val viewState: StateFlow<EditFinancialProfileScreenViewState>
-    val viewEffect: SharedFlow<EditFinancialProfileScreenViewEffect>
+    val viewEffects: SharedFlow<EditFinancialProfileScreenViewEffect>
 
     /**
      * Saves the user data inputted by the user.

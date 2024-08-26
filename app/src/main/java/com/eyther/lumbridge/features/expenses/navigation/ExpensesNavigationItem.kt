@@ -13,4 +13,19 @@ sealed class ExpensesNavigationItem(
         route = "expenses_overview",
         label = R.string.expenses_overview
     )
+
+    data object AddExpense : ExpensesNavigationItem(
+        route = "add_expense",
+        label = R.string.expenses_overview_add_expense
+    )
+
+    data object EditFinancialProfile : ExpensesNavigationItem(
+        route = "edit_financial_profile",
+        label = R.string.edit_financial_profile
+    )
+
+    data object EditExpense : ExpensesNavigationItem(
+        route = "edit_expense/{expenseId}",
+        label = R.string.expenses_overview_edit_expense
+    )
 }

@@ -44,7 +44,7 @@ object AppDependencies {
         "com.google.dagger:hilt-android:$HILT_VERSION",
 
         // Firebase
-        "com.google.firebase:firebase-bom:$FIREBASE_BOM_VERSION",
+        "com.google.firebase:firebase-bom:$FIREBASE_BOM_VERSION"
     )
 
     fun debugImplementation() = listOf(

@@ -1,7 +1,6 @@
 package com.eyther.lumbridge.features.profile.editprofile.screens
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -9,17 +8,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,19 +29,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
+import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewEffects
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewState
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.EditProfileScreenViewModel
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.IEditProfileScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
-import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
-import com.eyther.lumbridge.ui.theme.QuarterPadding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun EditProfileScreen(
@@ -49,6 +52,22 @@ fun EditProfileScreen(
     viewModel: IEditProfileScreenViewModel = hiltViewModel<EditProfileScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEffects
+            .onEach { viewEffects ->
+                when (viewEffects) {
+                    is EditProfileScreenViewEffects.ShowError -> {
+                        snackbarHostState.showSnackbar(
+                            message = viewEffects.message,
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+            .collect()
+    }
 
     Scaffold(
         topBar = {
@@ -58,6 +77,11 @@ fun EditProfileScreen(
                 ) {
                     navController.popBackStack()
                 }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState
             )
         }
     ) { paddingValues ->
@@ -99,14 +123,7 @@ private fun ColumnScope.Content(
         style = MaterialTheme.typography.bodyLarge
     )
 
-    Column(
-        modifier = Modifier
-            .padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(DefaultPadding)
-    ) {
+    ColumnCardWrapper {
         TextInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.name,

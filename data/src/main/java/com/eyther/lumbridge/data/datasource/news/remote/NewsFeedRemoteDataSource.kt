@@ -1,44 +1,33 @@
 package com.eyther.lumbridge.data.datasource.news.remote
 
-import com.eyther.lumbridge.data.datasource.news.service.EuronewsRssClient
-import com.eyther.lumbridge.data.datasource.news.service.PortugalNewsRssClient
-import com.eyther.lumbridge.data.datasource.news.service.PublicoRssClient
-import com.eyther.lumbridge.data.datasource.news.service.RTPRssClient
+import com.eyther.lumbridge.data.extensions.okhttp.await
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import javax.inject.Inject
 
-class NewsFeedRemoteDataSource @Inject constructor(
-    private val publicoRssClient: PublicoRssClient,
-    private val RTPRssClient: RTPRssClient,
-    private val euronewsRssClient: EuronewsRssClient,
-    private val portugalNewsRssClient: PortugalNewsRssClient
-) {
-    suspend fun getPublicoRssFeed(): String? {
-        return if (publicoRssClient.getRssFeed().isSuccessful) {
-            publicoRssClient.getRssFeed().body()
-        } else {
-            null
-        }
-    }
+class NewsFeedRemoteDataSource @Inject constructor() {
+    /**
+     * We don't use retrofit here because the URL is different for each RSS feed.
+     * Thus, we need a way to build the URL dynamically. We use OkHttp for this.
+     */
+    private val okHttpClient = OkHttpClient.Builder()
+        .build()
 
-    suspend fun getRTPRssFeed(): String? {
-        return if (RTPRssClient.getRssFeed().isSuccessful) {
-            RTPRssClient.getRssFeed().body()
-        } else {
-            null
-        }
-    }
+    /**
+     * Request builder for the RSS feed. It is a GET request with the content type set to application/xml.
+     *
+     * @see Request.Builder
+     */
+    private val requestBuilder = Request.Builder()
+        .addHeader("Content-Type", "application/xml")
+        .method("GET", null)
 
-    suspend fun getEuronewsRssFeed(): String? {
-        return if (euronewsRssClient.getRssFeed().isSuccessful) {
-            euronewsRssClient.getRssFeed().body()
-        } else {
-            null
-        }
-    }
+    suspend fun getRssFeed(url: String): String? {
+        val request = requestBuilder.url(url).build()
+        val response = okHttpClient.newCall(request).await()
 
-    suspend fun getPortugalNewsRssFeed(): String? {
-        return if (portugalNewsRssClient.getRssFeed().isSuccessful) {
-            portugalNewsRssClient.getRssFeed().body()
+        return if (response.isSuccessful) {
+            response.body()?.string()
         } else {
             null
         }

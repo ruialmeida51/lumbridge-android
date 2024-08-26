@@ -3,12 +3,14 @@ package com.eyther.lumbridge.features.feed.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eyther.lumbridge.features.feed.model.FeedScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.usecase.news.GetAvailableFeeds
 import com.eyther.lumbridge.usecase.news.GetNewsFeed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,7 +26,10 @@ class FeedScreenViewModel @Inject constructor(
     private var lastUserSelectedRssFeed: RssFeedUi? = null
 
     override val viewState: MutableStateFlow<FeedScreenViewState> =
-        MutableStateFlow(FeedScreenViewState.Loading)
+        MutableStateFlow(FeedScreenViewState.Loading())
+
+    override val viewEffects: MutableSharedFlow<FeedScreenViewEffects> =
+        MutableSharedFlow()
 
     init {
         fetchAvailableFeeds()
@@ -34,9 +39,9 @@ class FeedScreenViewModel @Inject constructor(
         selectFeed()
     }
 
-    override fun selectFeed(userSelectedRssFeed: RssFeedUi?) {
-        if (userSelectedRssFeed != null) {
-            lastUserSelectedRssFeed = userSelectedRssFeed
+    override fun selectFeed(rssFeedUi: RssFeedUi?, index: Int) {
+        if (rssFeedUi != null) {
+            lastUserSelectedRssFeed = rssFeedUi
         }
 
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -52,7 +57,7 @@ class FeedScreenViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
             viewState.update {
-                FeedScreenViewState.Loading
+                FeedScreenViewState.Loading(it.availableFeeds, it.selectedFeed)
             }
 
             val availableFeeds = getAvailableFeeds()
@@ -64,7 +69,7 @@ class FeedScreenViewModel @Inject constructor(
             // If the user selected a feed, use that. Otherwise, use the last selected feed.
             // If there is neither a user selected feed nor a last selected feed,
             // use the first available feed.
-            val selectedFeed = userSelectedRssFeed
+            val selectedFeed = rssFeedUi
                 ?: lastUserSelectedRssFeed
                 ?: availableFeeds.first()
 
@@ -74,7 +79,7 @@ class FeedScreenViewModel @Inject constructor(
                 viewState.update {
                     FeedScreenViewState.Empty(
                         availableFeeds = availableFeeds,
-                        selectedFeed = userSelectedRssFeed
+                        selectedFeed = rssFeedUi
                     )
                 }
             } else {
@@ -85,12 +90,14 @@ class FeedScreenViewModel @Inject constructor(
                         selectedFeed = selectedFeed
                     )
                 }
+
+                viewEffects.emit(FeedScreenViewEffects.ScrollToIndex(index))
             }
         }
     }
 
     override fun refresh() {
-        viewState.update { FeedScreenViewState.Loading }
+        viewState.update { FeedScreenViewState.Loading(it.availableFeeds, it.selectedFeed) }
         fetchAvailableFeeds()
     }
 }

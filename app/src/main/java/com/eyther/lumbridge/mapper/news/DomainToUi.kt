@@ -21,10 +21,5 @@ fun FeedItem.toUi(): FeedItemUi {
 }
 
 fun RssFeed.toUi(): RssFeedUi {
-    return when (this) {
-        RssFeed.RTP -> RssFeedUi("RTP")
-        RssFeed.Publico -> RssFeedUi("Publico")
-        RssFeed.Euronews -> RssFeedUi("Euronews")
-        RssFeed.PortugalNews -> RssFeedUi("The Portugal News")
-    }
+    return RssFeedUi(this.name)
 }

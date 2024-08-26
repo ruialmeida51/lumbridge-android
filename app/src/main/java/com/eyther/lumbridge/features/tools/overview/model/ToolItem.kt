@@ -12,11 +12,7 @@ sealed class ToolItem(
         fun getItems() = mapOf(
             R.string.tools_personal_tools to listOf(
                 Personal.NetSalaryCalculator,
-                Personal.SavingsCalculator,
                 Personal.CurrencyConverter
-            ),
-            R.string.tools_mortgage_calculator to listOf(
-                Mortgage.MortgageCalculator
             )
         )
     }
@@ -27,21 +23,9 @@ sealed class ToolItem(
             icon = R.drawable.ic_money
         )
 
-        data object SavingsCalculator : ToolItem(
-            text = R.string.tools_savings_calculator,
-            icon = R.drawable.ic_savings
-        )
-
         data object CurrencyConverter : ToolItem(
             text = R.string.tools_currency_converter,
             icon = R.drawable.ic_currency_exchange
-        )
-    }
-
-    sealed class Mortgage {
-        data object MortgageCalculator : ToolItem(
-            text = R.string.tools_mortgage_calculator,
-            icon = R.drawable.ic_bank
         )
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.MinButtonHeight
 
@@ -20,19 +21,20 @@ fun LumbridgeButton(
     label: String,
     enableButton: Boolean = true,
     isLoading: Boolean = false,
-    onClick: () -> Unit,
+    minHeight: Dp = MinButtonHeight,
+    onClick: () -> Unit
 ) {
     Button(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = MinButtonHeight),
+            .heightIn(min = minHeight),
         enabled = enableButton,
         onClick = onClick
     ) {
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier
-                    .height(MinButtonHeight / 2)
+                    .height(minHeight / 2)
                     .aspectRatio(1f),
                 color = MaterialTheme.colorScheme.onPrimary
             )

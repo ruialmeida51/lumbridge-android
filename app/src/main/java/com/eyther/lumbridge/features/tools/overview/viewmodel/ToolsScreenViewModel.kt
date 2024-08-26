@@ -3,7 +3,6 @@ package com.eyther.lumbridge.features.tools.overview.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
-import com.eyther.lumbridge.features.tools.overview.model.ToolItem.Mortgage
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,8 +22,6 @@ class ToolsScreenViewModel @Inject constructor() : ViewModel(), IToolsScreenView
             when (toolItem) {
                 ToolItem.Personal.NetSalaryCalculator -> ToolsNavigationItem.NetSalary.Input.route
                 ToolItem.Personal.CurrencyConverter -> ToolsNavigationItem.CurrencyConverter.route
-                ToolItem.Personal.SavingsCalculator -> ToolsNavigationItem.Savings.route
-                Mortgage.MortgageCalculator -> ToolsNavigationItem.Mortgage.route
             }
         )
     }

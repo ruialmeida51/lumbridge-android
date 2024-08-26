@@ -13,22 +13,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,11 +40,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.features.feed.model.FeedScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
 import com.eyther.lumbridge.features.feed.viewmodel.FeedScreenViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.IFeedScreenViewModel
 import com.eyther.lumbridge.model.news.FeedItemUi
 import com.eyther.lumbridge.model.news.RssFeedUi
+import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
@@ -50,6 +55,8 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun FeedScreen(
@@ -57,6 +64,22 @@ fun FeedScreen(
     viewModel: IFeedScreenViewModel = hiltViewModel<FeedScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
+    val availableFeedsListState = rememberLazyListState()
+    val feedPaddingInPx = LocalDensity.current.run { DefaultPadding.toPx() }.toInt()
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEffects
+            .onEach { viewEffects ->
+                when (viewEffects) {
+                    is FeedScreenViewEffects.ScrollToIndex -> scrollToSelectedFeed(
+                        listState = availableFeedsListState,
+                        selectedIndex = viewEffects.index,
+                        defaultPaddingInPx = feedPaddingInPx
+                    )
+                }
+            }
+            .collect()
+    }
 
     Scaffold(
         topBar = {
@@ -65,23 +88,34 @@ fun FeedScreen(
             )
         }
     ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            Spacer(modifier = Modifier.height(DefaultPadding))
+
+            AvailableFeeds(
+                availableFeeds = state.availableFeeds,
+                selectedFeed = state.selectedFeed,
+                listState = availableFeedsListState,
+                onFeedSelected = { feed ->
+                    viewModel.selectFeed(rssFeedUi = feed, index = state.availableFeeds.indexOf(feed))
+                }
+            )
+
+            Spacer(modifier = Modifier.height(HalfPadding))
+
             when (state) {
                 is FeedScreenViewState.Content -> {
                     Content(
-                        state = state,
-                        viewModel = viewModel
+                        state = state
                     )
                 }
 
                 is FeedScreenViewState.Empty -> {
                     EmptyScreen(
-                        state = state,
-                        onFeedSelected = viewModel::selectFeed,
                         onRefresh = viewModel::refresh
                     )
                 }
@@ -96,24 +130,13 @@ fun FeedScreen(
 
 @Composable
 private fun Content(
-    state: FeedScreenViewState.Content,
-    viewModel: IFeedScreenViewModel
+    state: FeedScreenViewState.Content
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
     ) {
         items(state.feedItems.count()) { index ->
-            if (index == 0) {
-                Spacer(modifier = Modifier.height(DefaultPadding))
-
-                AvailableFeeds(
-                    availableFeeds = state.availableFeeds,
-                    selectedFeed = state.selectedFeed,
-                    onFeedSelected = viewModel::selectFeed
-                )
-            }
-
             Spacer(modifier = Modifier.height(HalfPadding))
 
             FeedItem(feedItemUi = state.feedItems[index])
@@ -164,15 +187,8 @@ private fun FeedItem(
 ) {
     val uriHandler = LocalUriHandler.current
 
-    Column(
-        modifier = Modifier
-            .clickable { uriHandler.openUri(feedItemUi.link) }
-            .padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .fillMaxWidth()
-            .padding(DefaultPadding)
+    ColumnCardWrapper(
+        onClick = { uriHandler.openUri(feedItemUi.link) }
     ) {
         val scalingType = remember { mutableStateOf(ContentScale.Crop) }
         val colorFilter = remember { mutableStateOf<ColorFilter?>(null) }
@@ -224,24 +240,12 @@ private fun FeedItem(
 
 @Composable
 private fun ColumnScope.EmptyScreen(
-    state: FeedScreenViewState.Empty,
-    onRefresh: () -> Unit,
-    onFeedSelected: (RssFeedUi) -> Unit
+    onRefresh: () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(DefaultPadding))
-
-        if (state.availableFeeds.isNotEmpty()) {
-            AvailableFeeds(
-                availableFeeds = state.availableFeeds,
-                selectedFeed = state.selectedFeed,
-                onFeedSelected = onFeedSelected
-            )
-        }
-
         EmptyScreenWithButton(
             modifier = Modifier.padding(DefaultPadding),
             text = stringResource(id = R.string.feed_empty_message),
@@ -262,11 +266,13 @@ private fun ColumnScope.EmptyScreen(
 private fun AvailableFeeds(
     availableFeeds: List<RssFeedUi>,
     selectedFeed: RssFeedUi?,
+    listState: LazyListState,
     onFeedSelected: (RssFeedUi) -> Unit
 ) {
-    LazyRow {
+    LazyRow(state = listState) {
         items(availableFeeds.count()) { index ->
             val feed = availableFeeds[index]
+            val isSelected = selectedFeed == feed
 
             if (index == 0) {
                 Spacer(modifier = Modifier.width(DefaultPadding))
@@ -274,7 +280,7 @@ private fun AvailableFeeds(
 
             FeedOption(
                 feed = feed,
-                isSelected = selectedFeed == feed,
+                isSelected = isSelected,
                 onFeedSelected = onFeedSelected
             )
 
@@ -283,4 +289,27 @@ private fun AvailableFeeds(
             }
         }
     }
+}
+
+/**
+ * Scroll to the selected feed in the list.
+ *
+ * @param listState The state of the list to scroll.
+ * @param selectedIndex The index of the selected feed.
+ *
+ * @see LazyListState
+ */
+private suspend fun scrollToSelectedFeed(
+    listState: LazyListState,
+    defaultPaddingInPx: Int,
+    selectedIndex: Int
+) {
+    if (selectedIndex < 0) {
+        return
+    }
+
+    listState.animateScrollToItem(
+        index = selectedIndex,
+        scrollOffset = -defaultPaddingInPx
+    )
 }

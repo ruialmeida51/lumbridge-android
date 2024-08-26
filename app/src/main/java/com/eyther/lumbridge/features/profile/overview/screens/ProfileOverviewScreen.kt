@@ -8,7 +8,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
@@ -35,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -53,14 +50,15 @@ import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.features.profile.overview.viewmodel.IProfileOverviewScreenViewModel
 import com.eyther.lumbridge.features.profile.overview.viewmodel.ProfileOverviewScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
-import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
-import com.eyther.lumbridge.ui.theme.QuarterPadding
+
+private const val LOG_TAG = "ProfileOverviewScreen"
 
 @Composable
 fun ProfileOverviewScreen(
@@ -82,7 +80,6 @@ fun ProfileOverviewScreen(
                 .fillMaxWidth()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
-                .padding(DefaultPadding)
         ) {
             when (state) {
                 is ProfileOverviewScreenViewState.Content -> Content(
@@ -115,7 +112,7 @@ private fun Content(
         Text(
             text = stringResource(id = R.string.profile_financial_settings),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(vertical = HalfPadding)
+            modifier = Modifier.padding(horizontal = DefaultPadding, vertical = HalfPadding)
         )
 
         ProfileFinancialSettings(navController, viewModel::navigate)
@@ -123,7 +120,7 @@ private fun Content(
         Text(
             text = stringResource(id = R.string.profile_app_settings),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(vertical = HalfPadding)
+            modifier = Modifier.padding(horizontal = DefaultPadding, vertical = HalfPadding)
         )
 
         ProfileAppSettings(navController, viewModel::navigate)
@@ -154,13 +151,8 @@ private fun ProfileHeader(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(DefaultPadding)
+    ColumnCardWrapper(
+        verticalArrangement = Arrangement.spacedBy(DefaultPadding)
     ) {
         Row {
             AsyncImage(
@@ -168,7 +160,7 @@ private fun ProfileHeader(
                 contentDescription = stringResource(id = R.string.profile_avatar_content_description),
                 error = painterResource(id = R.drawable.ic_profile_circle),
                 onError = {
-                    Log.e("tag", "boom", it.result.throwable)
+                    Log.e(LOG_TAG, "Error loading image: $it")
                 },
                 modifier = Modifier
                     .clip(CircleShape)
@@ -255,12 +247,7 @@ private fun ProfileFinancialSettings(
     navController: NavHostController,
     onNavigate: (ProfileNavigationItem, NavController) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(DefaultPadding),
+    ColumnCardWrapper(
         verticalArrangement = Arrangement.spacedBy(DefaultPadding)
     ) {
         MovementSetting(
@@ -282,14 +269,7 @@ private fun ProfileAppSettings(
     navController: NavHostController,
     onNavigate: (ProfileNavigationItem, NavController) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(DefaultPadding),
-        verticalArrangement = Arrangement.spacedBy(DefaultPadding)
-    ) {
+    ColumnCardWrapper {
         MovementSetting(
             icon = R.drawable.ic_settings,
             label = stringResource(id = R.string.settings),

@@ -12,13 +12,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.eyther.lumbridge.extensions.platform.sharedViewModel
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
-import com.eyther.lumbridge.features.tools.mortgage.screens.MortgageScreen
 import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryResultScreen
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.overview.screens.ToolsOverviewScreen
-import com.eyther.lumbridge.features.tools.savings.screens.SavingsScreen
 
 @Composable
 fun ToolsNavHost(
@@ -89,34 +87,6 @@ fun ToolsNavHost(
                     label = ToolsNavigationItem.NetSalary.Result.label
                 )
             }
-        }
-
-        composable(
-            enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-            },
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
-            }, route = ToolsNavigationItem.Savings.route
-        ) {
-            SavingsScreen(
-                navController = navController,
-                label = ToolsNavigationItem.Savings.label
-            )
-        }
-
-        composable(
-            enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-            },
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
-            }, route = ToolsNavigationItem.Mortgage.route
-        ) {
-            MortgageScreen(
-                navController = navController,
-                label = ToolsNavigationItem.Mortgage.label
-            )
         }
 
         composable(

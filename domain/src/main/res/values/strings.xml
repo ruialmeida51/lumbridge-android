@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="food">Food</string>
+    <string name="transportation">Transportation</string>
+    <string name="healthcare">Healthcare</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="housing">Housing</string>
+    <string name="education">Education</string>
+    <string name="other">Other</string>
+</resources>

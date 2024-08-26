@@ -30,16 +30,6 @@ sealed class ToolsNavigationItem(
         )
     }
 
-    data object Savings : ToolsNavigationItem(
-        route = "savings",
-        label = R.string.tools_savings_calculator
-    )
-
-    data object Mortgage : ToolsNavigationItem(
-        route = "mortgage",
-        label = R.string.tools_mortgage_calculator
-    )
-
     data object CurrencyConverter : ToolsNavigationItem(
         route = "currency_converter",
         label = R.string.tools_currency_converter

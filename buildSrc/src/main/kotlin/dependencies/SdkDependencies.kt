@@ -17,21 +17,17 @@ object SdkDependencies {
 
         // Room
         "androidx.room:room-runtime:$ROOM_VERSION",
+        "androidx.room:room-ktx:$ROOM_VERSION",
 
         // Hilt
-        "com.google.dagger:hilt-android:$HILT_VERSION",
+        "com.google.dagger:hilt-android:$HILT_VERSION"
     )
 
     fun getKapt() = listOf(
         // Room
-        "androidx.room:room-runtime:$ROOM_VERSION",
+        "androidx.room:room-compiler:$ROOM_VERSION",
 
         // Hilt
         "com.google.dagger:hilt-compiler:$HILT_VERSION"
-    )
-
-    fun getAnnotationProcessor() = listOf(
-        // Room
-        "androidx.room:room-runtime:$ROOM_VERSION",
     )
 }

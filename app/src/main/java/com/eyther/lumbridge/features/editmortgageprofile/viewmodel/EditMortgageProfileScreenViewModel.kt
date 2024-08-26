@@ -39,7 +39,7 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
     IEditMortgageProfileInputHandler by mortgageInputHandler {
 
     override val viewState = MutableStateFlow<EditMortgageProfileScreenViewState>(Loading)
-    override val viewEffect = MutableSharedFlow<EditMortgageProfileScreenViewEffect>()
+    override val viewEffects = MutableSharedFlow<EditMortgageProfileScreenViewEffect>()
 
     init {
         fetchMortgageProfile()
@@ -93,7 +93,7 @@ class EditMortgageProfileScreenViewModel @Inject constructor(
     override fun saveMortgageProfile(navController: NavHostController) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             viewModelScope.launch {
-                viewEffect.emit(
+                viewEffects.emit(
                     EditMortgageProfileScreenViewEffect.ShowError(throwable.message.orEmpty())
                 )
             }

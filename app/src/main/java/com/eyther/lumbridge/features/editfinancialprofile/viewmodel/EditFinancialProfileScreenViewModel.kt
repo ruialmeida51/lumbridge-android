@@ -43,7 +43,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
     }
 
     override val viewState = MutableStateFlow<EditFinancialProfileScreenViewState>(Loading)
-    override val viewEffect = MutableSharedFlow<EditFinancialProfileScreenViewEffect>()
+    override val viewEffects = MutableSharedFlow<EditFinancialProfileScreenViewEffect>()
 
     init {
         observeUserFinancials()
@@ -112,7 +112,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
     override fun saveUserData(navController: NavHostController) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             viewModelScope.launch {
-                viewEffect.emit(
+                viewEffects.emit(
                     EditFinancialProfileScreenViewEffect.ShowError(throwable.message.orEmpty())
                 )
             }

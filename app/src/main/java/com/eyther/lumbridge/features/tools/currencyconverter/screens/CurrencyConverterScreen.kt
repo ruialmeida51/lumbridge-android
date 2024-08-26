@@ -1,15 +1,12 @@
 package com.eyther.lumbridge.features.tools.currencyconverter.screens
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -18,8 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,15 +27,14 @@ import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.tools.currencyconverter.model.CurrencyConverterScreenViewState
 import com.eyther.lumbridge.features.tools.currencyconverter.viewmodel.CurrencyConverterScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
+import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
-import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
-import com.eyther.lumbridge.ui.theme.QuarterPadding
 
 @Composable
 fun CurrencyConverterScreen(
@@ -81,9 +75,7 @@ private fun Content(
     state: CurrencyConverterScreenViewState.Content,
     viewModel: CurrencyConverterScreenViewModel
 ) {
-    Column(
-        Modifier.padding(DefaultPadding)
-    ) {
+    Column {
         Input(
             state = state,
             viewModel = viewModel
@@ -103,6 +95,8 @@ private fun ColumnScope.Input(
     Text(
         modifier = Modifier
             .padding(
+                start = DefaultPadding,
+                end = DefaultPadding,
                 top = DefaultPadding,
                 bottom = HalfPadding
             )
@@ -111,13 +105,7 @@ private fun ColumnScope.Input(
         style = MaterialTheme.typography.bodyLarge
     )
 
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .padding(DefaultPadding)
-    ) {
+    ColumnCardWrapper {
         DropdownInput(
             label = stringResource(id = R.string.tools_currency_converter_from_currency),
             selectedOption = state.inputState.fromCurrency.getHumanReadableName(),
@@ -178,14 +166,7 @@ private fun ColumnScope.Calculation(state: CurrencyConverterScreenViewState.Cont
             style = MaterialTheme.typography.bodyLarge
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(DefaultRoundedCorner))
-                .shadow(elevation = QuarterPadding)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
-                .padding(DefaultPadding)
-        ) {
+        ColumnCardWrapper {
             when {
                 state.hasError -> {
                     Text(

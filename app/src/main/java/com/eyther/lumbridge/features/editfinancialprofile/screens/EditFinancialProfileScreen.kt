@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.Text
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,7 +25,6 @@ import com.eyther.lumbridge.features.editfinancialprofile.components.Demographic
 import com.eyther.lumbridge.features.editfinancialprofile.components.SalaryBreakdownInput
 import com.eyther.lumbridge.features.editfinancialprofile.components.SavingsBreakdownInput
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewEffect
-import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewEffect.None
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.EditFinancialProfileScreenViewModel
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.IEditFinancialProfileScreenViewModel
@@ -31,6 +33,8 @@ import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndi
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun EditFinancialProfileScreen(
@@ -39,7 +43,22 @@ fun EditFinancialProfileScreen(
     viewModel: IEditFinancialProfileScreenViewModel = hiltViewModel<EditFinancialProfileScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
-    val sideEffects = viewModel.viewEffect.collectAsStateWithLifecycle(None).value
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEffects
+            .onEach { viewEffects ->
+                when (viewEffects) {
+                    is EditFinancialProfileScreenViewEffect.ShowError -> {
+                        snackbarHostState.showSnackbar(
+                            message = viewEffects.message,
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                }
+            }
+            .collect()
+    }
 
     Scaffold(
         topBar = {
@@ -50,6 +69,11 @@ fun EditFinancialProfileScreen(
                     navController.popBackStack()
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState
+            )
         }
     ) { paddingValues ->
         Column(
@@ -58,14 +82,6 @@ fun EditFinancialProfileScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            when (sideEffects) {
-                is EditFinancialProfileScreenViewEffect.ShowError -> Snackbar {
-                    Text(text = sideEffects.message)
-                }
-
-                else -> Unit
-            }
-
             when (state) {
                 is EditFinancialProfileScreenViewState.Content -> Content(
                     navController = navController,
@@ -87,9 +103,7 @@ private fun Content(
 ) {
     val currencySymbol = state.locale.getCurrencySymbol()
 
-    Column(
-        Modifier.padding(DefaultPadding)
-    ) {
+    Column {
 
         SalaryBreakdownInput(
             currencySymbol = currencySymbol,
@@ -131,6 +145,7 @@ private fun Content(
         Spacer(modifier = Modifier.height(DefaultPadding))
 
         LumbridgeButton(
+            modifier = Modifier.padding(horizontal = DefaultPadding),
             label = stringResource(id = R.string.edit_financial_profile_save),
             enableButton = state.shouldEnableSaveButton,
             onClick = { viewModel.saveUserData(navController) }

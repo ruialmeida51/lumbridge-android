@@ -3,17 +3,23 @@ package com.eyther.lumbridge.features.feed.model
 import com.eyther.lumbridge.model.news.FeedItemUi
 import com.eyther.lumbridge.model.news.RssFeedUi
 
-sealed interface FeedScreenViewState {
-    data object Loading : FeedScreenViewState
+sealed class FeedScreenViewState(
+    open val availableFeeds: List<RssFeedUi>,
+    open val selectedFeed: RssFeedUi?
+) {
+    data class Loading(
+        override val availableFeeds: List<RssFeedUi> = emptyList(),
+        override val selectedFeed: RssFeedUi? = null
+    ) : FeedScreenViewState(availableFeeds, selectedFeed)
 
     data class Empty(
-        val availableFeeds: List<RssFeedUi>,
-        val selectedFeed: RssFeedUi? = null
-    ) : FeedScreenViewState
+        override val availableFeeds: List<RssFeedUi> = emptyList(),
+        override val selectedFeed: RssFeedUi? = null
+    ) : FeedScreenViewState(availableFeeds, selectedFeed)
 
     data class Content(
-        val feedItems: List<FeedItemUi>,
-        val availableFeeds: List<RssFeedUi>,
-        val selectedFeed: RssFeedUi? = null
-    ) : FeedScreenViewState
+        override val availableFeeds: List<RssFeedUi>,
+        override val selectedFeed: RssFeedUi,
+        val feedItems: List<FeedItemUi>
+    ) : FeedScreenViewState(availableFeeds, selectedFeed)
 }
