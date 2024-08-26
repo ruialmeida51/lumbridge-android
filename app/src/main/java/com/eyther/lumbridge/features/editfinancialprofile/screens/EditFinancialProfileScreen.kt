@@ -104,6 +104,7 @@ private fun Content(
     val currencySymbol = state.locale.getCurrencySymbol()
 
     Column {
+        Spacer(modifier = Modifier.height(DefaultPadding))
 
         SalaryBreakdownInput(
             currencySymbol = currencySymbol,
@@ -150,5 +151,7 @@ private fun Content(
             enableButton = state.shouldEnableSaveButton,
             onClick = { viewModel.saveUserData(navController) }
         )
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
     }
 }

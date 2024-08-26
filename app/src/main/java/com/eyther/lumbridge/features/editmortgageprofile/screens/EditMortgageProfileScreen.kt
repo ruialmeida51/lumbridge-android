@@ -121,6 +121,8 @@ fun Content(
     viewModel: IEditMortgageProfileScreenViewModel
 ) {
     Column {
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
         RemainingAmount(
             state = state,
             viewModel = viewModel
