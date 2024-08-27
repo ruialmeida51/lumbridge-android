@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -15,11 +16,15 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -48,6 +53,7 @@ fun ExpensesEditScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
+    val shouldShowDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.viewEffects
@@ -88,6 +94,9 @@ fun ExpensesEditScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(vertical = DefaultPadding)
+                .then(
+                    if (shouldShowDialog.value) Modifier.blur(5.dp) else Modifier
+                )
         ) {
             when (state) {
                 is ExpensesEditScreenViewState.Loading -> {
@@ -97,7 +106,8 @@ fun ExpensesEditScreen(
                 is ExpensesEditScreenViewState.Content -> {
                     Content(
                         state = state,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        shouldShowDialog = shouldShowDialog
                     )
                 }
             }
@@ -108,8 +118,10 @@ fun ExpensesEditScreen(
 @Composable
 private fun ColumnScope.Content(
     state: ExpensesEditScreenViewState.Content,
-    viewModel: IExpensesEditScreenViewModel
+    viewModel: IExpensesEditScreenViewModel,
+    shouldShowDialog: MutableState<Boolean>
 ) {
+
     Text(
         modifier = Modifier
             .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
@@ -146,6 +158,49 @@ private fun ColumnScope.Content(
             label = stringResource(id = R.string.save),
             enableButton = state.shouldEnableSaveButton,
             onClick = viewModel::save
+        )
+
+        Spacer(modifier = Modifier.padding(top = DefaultPadding))
+
+        LumbridgeButton(
+            modifier = Modifier.padding(horizontal = DefaultPadding),
+            label = stringResource(id = R.string.delete),
+            enableButton = true,
+            onClick = { shouldShowDialog.value = true }
+        )
+    }
+
+
+    if (shouldShowDialog.value) {
+        AlertDialog(
+            onDismissRequest = { shouldShowDialog.value = false },
+            confirmButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.yes),
+                    onClick = {
+                        viewModel.delete()
+                        shouldShowDialog.value = false
+                    }
+                )
+            },
+            dismissButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.no),
+                    onClick = { shouldShowDialog.value = false }
+                )
+            },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.delete),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(id = R.string.expense_delete_confirmation),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         )
     }
 }

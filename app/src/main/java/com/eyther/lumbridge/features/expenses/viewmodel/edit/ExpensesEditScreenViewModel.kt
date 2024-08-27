@@ -88,6 +88,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
             deleteDetailedExpenseUseCase(detailedExpenseId)
+            viewEffects.emit(ExpensesEditScreenViewEffect.Finish)
         }
     }
 

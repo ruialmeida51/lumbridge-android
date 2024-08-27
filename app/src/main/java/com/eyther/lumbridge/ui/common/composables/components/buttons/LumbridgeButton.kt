@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,6 +29,8 @@ fun LumbridgeButton(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight),
+        colors = ButtonDefaults.buttonColors().copy(
+        ),
         enabled = enableButton,
         onClick = onClick
     ) {

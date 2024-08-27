@@ -102,7 +102,7 @@
     <string name="expenses_overview">Expenses</string>
     <string name="expenses_overview_add_expense">Add Expense</string>
     <string name="expenses_overview_edit_expense">Edit Expense</string>
-    <string name="expense_delete_confirmation">Are you sure you want to delete this expense?</string>
+    <string name="expense_delete_confirmation">Are you sure you want to delete?</string>
     <string name="expenses_invalid_amount">Please, enter a valid amount</string>
     <string name="expenses_invalid_name">Please, enter a valid name</string>
     <string name="expenses_invalid_date">Please, enter a valid date</string>

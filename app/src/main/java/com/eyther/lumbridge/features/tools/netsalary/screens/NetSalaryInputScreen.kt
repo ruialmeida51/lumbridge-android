@@ -117,6 +117,8 @@ private fun ColumnScope.Content(
     argumentsCache: INetSalaryScreenArgumentsCacheViewModel,
     navController: NavHostController
 ) {
+    Spacer(modifier = Modifier.height(DefaultPadding))
+
     val currencySymbol = state.locale.getCurrencySymbol()
 
     SalaryBreakdownInput(

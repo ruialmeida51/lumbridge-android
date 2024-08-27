@@ -42,6 +42,6 @@ fun RowScope.TabbedDataOverview(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = MaterialTheme.typography.bodyMedium
     )
 }

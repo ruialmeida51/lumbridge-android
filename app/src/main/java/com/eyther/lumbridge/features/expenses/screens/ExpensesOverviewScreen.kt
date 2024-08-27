@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,10 +29,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -81,6 +84,7 @@ fun ExpensesOverviewScreen(
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val snackbarHostState = remember { SnackbarHostState() }
+    val shouldShowDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.viewEffects
@@ -116,6 +120,9 @@ fun ExpensesOverviewScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(vertical = DefaultPadding)
+                .then(
+                    if (shouldShowDialog.value) Modifier.blur(5.dp) else Modifier
+                )
         ) {
             when (state) {
                 is Loading -> {
@@ -127,6 +134,7 @@ fun ExpensesOverviewScreen(
                         state = state,
                         navController = navController,
                         onSelectMonth = viewModel::expandMonth,
+                        shouldShowDialog = shouldShowDialog,
                         onSelectCategory = viewModel::expandCategory,
                         onDeleteExpense = viewModel::onDeleteExpense,
                         onEditExpense = { viewModel.onEditExpense(navController, it) },
@@ -150,6 +158,7 @@ fun ExpensesOverviewScreen(
 private fun Content(
     state: Content,
     navController: NavHostController,
+    shouldShowDialog: MutableState<Boolean>,
     onSelectMonth: (ExpensesMonthUi) -> Unit,
     onSelectCategory: (ExpensesCategoryUi) -> Unit,
     onEditExpense: (ExpensesDetailedUi) -> Unit,
@@ -184,6 +193,7 @@ private fun Content(
                 expensesMonthUi = monthExpensesUi,
                 onSelectMonth = onSelectMonth,
                 onSelectCategory = onSelectCategory,
+                shouldShowDialog = shouldShowDialog,
                 currencySymbol = state.locale.getCurrencySymbol(),
                 onDeleteExpense = onDeleteExpense,
                 onEditExpense = onEditExpense
@@ -321,12 +331,12 @@ private fun HasFinancialProfile(
 private fun MonthCard(
     expensesMonthUi: ExpensesMonthUi,
     currencySymbol: String,
+    shouldShowDialog: MutableState<Boolean>,
     onSelectMonth: (ExpensesMonthUi) -> Unit,
     onSelectCategory: (ExpensesCategoryUi) -> Unit,
     onEditExpense: (ExpensesDetailedUi) -> Unit,
     onDeleteExpense: (ExpensesMonthUi) -> Unit
 ) {
-    val shouldShowDialog = remember { mutableStateOf(false) }
 
     ColumnCardWrapper(
         onClick = { onSelectMonth(expensesMonthUi) }
@@ -341,7 +351,7 @@ private fun MonthCard(
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(16.dp)
+                        .size(24.dp)
                         .clickable { shouldShowDialog.value = true },
                     imageVector = Icons.Outlined.Delete,
                     contentDescription = null
@@ -351,7 +361,7 @@ private fun MonthCard(
 
                 Icon(
                     modifier = Modifier
-                        .size(16.dp)
+                        .size(24.dp)
                         .rotate(if (expensesMonthUi.expanded) 180f else 0f),
                     imageVector = Icons.Outlined.ArrowDropDown,
                     contentDescription = null
@@ -392,7 +402,6 @@ private fun MonthCard(
             }
         }
     }
-
 
     if (shouldShowDialog.value) {
         AlertDialog(
@@ -440,6 +449,7 @@ private fun CategoriesCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .heightIn(40.dp)
                     .clickable { onSelectCategory(category) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -485,7 +495,10 @@ private fun DetailsCard(
     Column {
         expensesDetailed.forEach { detail ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(32.dp)
+                    .clickable { onEditExpense(detail) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.height(HalfPadding))
@@ -511,11 +524,7 @@ private fun DetailsCard(
 
                 Icon(
                     modifier = Modifier
-                        .size(16.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false)
-                        ) { onEditExpense(detail) },
+                        .size(16.dp),
                     painter = painterResource(id = R.drawable.ic_edit_note),
                     contentDescription = stringResource(id = R.string.edit)
                 )
