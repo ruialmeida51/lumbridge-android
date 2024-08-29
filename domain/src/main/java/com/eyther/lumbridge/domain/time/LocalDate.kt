@@ -1,8 +1,11 @@
 package com.eyther.lumbridge.domain.time
 
+import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
+import java.time.Month
 import java.time.Period
+import java.time.Year
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -33,8 +36,8 @@ fun LocalDate.monthsUntil(other: LocalDate, startOnDayOne: Boolean = true): Int 
     }
 
     return (periodBetween.years * MONTHS_IN_YEAR) +
-            periodBetween.months +
-            (periodBetween.days / DAYS_IN_MONTH)
+        periodBetween.months +
+        (periodBetween.days / DAYS_IN_MONTH)
 }
 
 /**
@@ -54,3 +57,10 @@ fun String.toLocalDate(): LocalDate =
 fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this)
     .atZone(ZoneId.systemDefault())
     .toLocalDate()
+
+/**
+ * Converts a [Pair] of [Year] and [Month] to a [LocalDate].
+ *
+ * @return [LocalDate] representation of the [Pair].
+ */
+fun Pair<Year, Month>.toLocalDate(): LocalDate = LocalDate.of(first.value, second, DayOfWeek.MONDAY.value)

@@ -13,8 +13,6 @@ import com.eyther.lumbridge.model.finance.NetSalaryUi
 fun ExpensesMonthDomain.toUi(
     netSalaryUi: NetSalaryUi?
 ): ExpensesMonthUi{
-    // 🔨 TODO Improvements: sumOf only accepts Double, so we need to convert to Double and then to Float. Not ideal.
-    //      See if can find a better way to sum Floats.
     val totalSpent = categoryExpenses
         .flatMap { it.detailedExpenses }
         .sumOf { it.expenseAmount.toDouble() }

@@ -89,5 +89,4 @@ class ExpensesAddScreenInputHandler @Inject constructor() : IExpensesAddScreenIn
             update(currentState)
         }
     }
-
 }

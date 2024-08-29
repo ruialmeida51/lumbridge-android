@@ -29,8 +29,8 @@ interface ExpensesDao {
     suspend fun getExpensesForCategory(categoryId: Long): ExpensesForCategoryWithDetails
 
     @Transaction
-    @Query("SELECT * FROM $EXPENSES_CATEGORY_TABLE_NAME WHERE parentMonthId = :monthId")
-    suspend fun getExpensesForMonthCategories(monthId: Long): List<ExpensesForCategoryWithDetails>
+    @Query("SELECT * FROM $EXPENSES_CATEGORY_TABLE_NAME WHERE parentMonthId = :parentMonthId")
+    suspend fun getAllCategoriesOfMonthById(parentMonthId: Long): List<ExpensesForCategoryWithDetails>
 
     @Transaction
     @Query("SELECT * FROM $EXPENSES_MONTH_TABLE_NAME WHERE monthId = :monthId")
@@ -38,11 +38,11 @@ interface ExpensesDao {
 
     @Transaction
     @Query("SELECT * FROM $EXPENSES_MONTH_TABLE_NAME WHERE year = :year AND month = :month")
-    suspend fun getExpensesForMonthByMonthYear(year: Int, month: Int): ExpensesForMonthWithCategoryAndDetails?
+    suspend fun getMonthOfExpensesByYearMonth(year: Int, month: Int): ExpensesForMonthWithCategoryAndDetails?
 
     @Transaction
     @Query("SELECT * FROM $EXPENSES_CATEGORY_TABLE_NAME WHERE categoryId = :categoryId")
-    suspend fun getExpensesCategoryById(categoryId: Long): ExpensesCategoryEntity?
+    suspend fun getExpensesCategoryById(categoryId: Long): ExpensesForCategoryWithDetails?
 
     @Transaction
     @Query("SELECT * FROM $EXPENSES_DETAILED_TABLE_NAME WHERE detailId = :detailedExpenseId")

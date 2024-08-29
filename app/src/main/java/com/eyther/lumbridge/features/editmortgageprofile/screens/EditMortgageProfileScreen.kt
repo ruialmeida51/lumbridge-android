@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -135,8 +136,6 @@ fun Content(
             viewModel = viewModel
         )
 
-        Spacer(modifier = Modifier.height(DefaultPadding))
-
         LumbridgeButton(
             modifier = Modifier.padding(DefaultPadding),
             label = stringResource(id = R.string.edit_mortgage_profile_save),
@@ -192,7 +191,7 @@ private fun ColumnScope.RemainingAmount(
 
     ColumnCardWrapper {
         DateInput(
-            modifier = Modifier.padding(bottom = DefaultPadding),
+            modifier = Modifier.fillMaxWidth().padding(bottom = DefaultPadding),
             state = state.inputState.startDate,
             label = stringResource(id = R.string.start_date),
             placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_start_date),
@@ -206,7 +205,7 @@ private fun ColumnScope.RemainingAmount(
         )
 
         DateInput(
-            modifier = Modifier.padding(bottom = DefaultPadding),
+            modifier = Modifier.fillMaxWidth().padding(bottom = DefaultPadding),
             state = state.inputState.endDate,
             label = stringResource(id = R.string.end_date),
             placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_end_date),

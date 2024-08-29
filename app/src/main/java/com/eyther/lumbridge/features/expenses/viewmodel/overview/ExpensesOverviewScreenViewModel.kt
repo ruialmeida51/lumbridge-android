@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -76,9 +77,6 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                         )
                     }
                 }
-            }
-            .onEach {
-                Log.d(ExpensesOverviewScreenViewModel::class.java.simpleName, "Expenses updated ${viewState.value}")
             }
             .flowOn(Dispatchers.Default)
             .launchIn(viewModelScope)
@@ -233,16 +231,12 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         return if (netSalaryUi == null) {
             ExpensesOverviewScreenViewState.Content.NoFinancialProfile(
                 expensesMonthUi = monthlyExpensesWithSelectedMonth,
-                // 🔨 TODO Improvements: sumOf only accepts Double, so we need to convert to Double and then to Float. Not ideal.
-                //      See if can find a better way to sum Floats.
                 totalExpenses = monthlyExpensesWithSelectedMonth.sumOf { it.spent.toDouble() }.toFloat(),
                 locale = locale
             )
         } else {
             ExpensesOverviewScreenViewState.Content.HasFinancialProfile(
                 netSalaryUi = netSalaryUi,
-                // 🔨 TODO Improvements: sumOf only accepts Double, so we need to convert to Double and then to Float. Not ideal.
-                //      See if can find a better way to sum Floats.
                 totalExpenses = monthlyExpensesWithSelectedMonth.sumOf { it.spent.toDouble() }.toFloat(),
                 expensesMonthUi = monthlyExpensesWithSelectedMonth,
                 locale = locale
@@ -268,4 +262,59 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             )
         }
     }
+
+    // TODO Improvements: Implement date filtering
+
+//    private fun filterExpensesByDateRange(
+//        expenses: List<ExpensesMonthUi>,
+//        startDate: LocalDate?,
+//        endDate: LocalDate?
+//    ): List<ExpensesMonthUi> = when {
+//        startDate == null && endDate != null -> {
+//            expenses.filter { expense ->
+//                val endMonth = endDate.monthValue
+//                val endYear = endDate.year
+//
+//                expense.year.value == endYear && expense.month.value <= endMonth
+//            }
+//        }
+//
+//        startDate != null && endDate == null -> {
+//            expenses.filter { expense ->
+//                val startMonth = startDate.monthValue
+//                val startYear = startDate.year
+//
+//                expense.year.value == startYear && expense.month.value >= startMonth
+//            }
+//        }
+//
+//        startDate != null && endDate != null -> {
+//            expenses.filter { expense ->
+//                val startMonth = startDate.monthValue
+//                val startYear = startDate.year
+//                val endMonth = endDate.monthValue
+//                val endYear = endDate.year
+//
+//                expense.year.value in startYear..endYear &&
+//                    expense.month.value in startMonth..endMonth
+//            }
+//        }
+//
+//        else -> expenses
+//    }
+//
+//    private fun getSelectableDates(): ClosedRange<LocalDate>? {
+//        if (!viewState.value.isContent()) return null
+//
+//        val viewStateAsContent = viewState.value.asContent()
+//
+//        val dates = viewStateAsContent
+//            .expensesMonthUi
+//            .map { it.year to it.month }
+//
+//        val minStartDate = dates.minOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
+//        val maxEndDate = dates.maxOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
+//
+//        return minStartDate..maxEndDate
+//    }
 }

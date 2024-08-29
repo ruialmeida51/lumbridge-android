@@ -25,6 +25,7 @@ import com.eyther.lumbridge.ui.common.composables.model.DateInputState
 fun DateInput(
     modifier: Modifier = Modifier,
     state: DateInputState,
+    enabled: Boolean = true,
     label: String? = null,
     placeholder: String? = null,
     onClick: () -> Unit
@@ -42,12 +43,14 @@ fun DateInput(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+            .then(
+                if (enabled) Modifier.clickable { onClick() } else Modifier
+            )
     ) {
         TextField(
+            enabled = enabled,
             interactionSource = interactionSource,
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             value = state.date?.toIsoLocalDateString().orEmpty(),
             textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = { },
@@ -78,6 +81,83 @@ fun DateInput(
             },
             trailingIcon = {
                 if (state.isError()) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = stringResource(id = R.string.error)
+                    )
+                }
+            },
+            singleLine = true,
+            readOnly = true
+        )
+    }
+}
+
+@Composable
+fun DateRangeInput(
+    modifier: Modifier = Modifier,
+    startDate: DateInputState,
+    endDate: DateInputState,
+    enabled: Boolean = true,
+    label: String? = null,
+    placeholder: String? = null,
+    onClick: () -> Unit
+) {
+    val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect {
+            if (it is PressInteraction.Release) {
+                onClick()
+            }
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .then(
+                if (enabled) Modifier.clickable { onClick() } else Modifier
+            )
+    ) {
+        TextField(
+            enabled = enabled,
+            interactionSource = interactionSource,
+            modifier = Modifier.fillMaxWidth(),
+            value = if (startDate.date == null || endDate.date == null ) {
+                ""
+            } else {
+                "${startDate.date.toIsoLocalDateString()} - ${endDate.date.toIsoLocalDateString()}"
+            },
+            textStyle = MaterialTheme.typography.bodyMedium,
+            onValueChange = { },
+            label = {
+                label?.let {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            },
+            placeholder = {
+                placeholder?.let {
+                    Text(
+                        text = placeholder,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            },
+            isError = startDate.isError() || endDate.isError(),
+            supportingText = {
+                if (startDate.isError() || endDate.isError()) {
+                    Text(
+                        text = (startDate.error ?: endDate.error)!!.getString(context),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            },
+            trailingIcon = {
+                if (startDate.isError() || endDate.isError()) {
                     Icon(
                         imageVector = Icons.Outlined.Info,
                         contentDescription = stringResource(id = R.string.error)

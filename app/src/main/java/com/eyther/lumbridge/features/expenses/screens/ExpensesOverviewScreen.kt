@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.eyther.lumbridge.features.expenses.screens
 
 import androidx.annotation.StringRes
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,7 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,7 +87,7 @@ fun ExpensesOverviewScreen(
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val snackbarHostState = remember { SnackbarHostState() }
-    val shouldShowDialog = remember { mutableStateOf(false) }
+    val selectedMonth = remember { mutableLongStateOf(-1L) }
 
     LaunchedEffect(Unit) {
         viewModel.viewEffects
@@ -121,7 +124,7 @@ fun ExpensesOverviewScreen(
                 .padding(paddingValues)
                 .padding(vertical = DefaultPadding)
                 .then(
-                    if (shouldShowDialog.value) Modifier.blur(5.dp) else Modifier
+                    if (selectedMonth.longValue >= 0L) Modifier.blur(5.dp) else Modifier
                 )
         ) {
             when (state) {
@@ -133,11 +136,11 @@ fun ExpensesOverviewScreen(
                     Content(
                         state = state,
                         navController = navController,
+                        selectedMonth = selectedMonth,
                         onSelectMonth = viewModel::expandMonth,
-                        shouldShowDialog = shouldShowDialog,
                         onSelectCategory = viewModel::expandCategory,
-                        onDeleteExpense = viewModel::onDeleteExpense,
                         onEditExpense = { viewModel.onEditExpense(navController, it) },
+                        onDeleteExpense = viewModel::onDeleteExpense,
                         navigate = viewModel::navigate
                     )
                 }
@@ -158,34 +161,36 @@ fun ExpensesOverviewScreen(
 private fun Content(
     state: Content,
     navController: NavHostController,
-    shouldShowDialog: MutableState<Boolean>,
+    selectedMonth: MutableState<Long>,
     onSelectMonth: (ExpensesMonthUi) -> Unit,
     onSelectCategory: (ExpensesCategoryUi) -> Unit,
     onEditExpense: (ExpensesDetailedUi) -> Unit,
     onDeleteExpense: (ExpensesMonthUi) -> Unit,
     navigate: (NavigationItem, NavHostController) -> Unit
 ) {
-    FinancialProfile(
-        state = state,
-        navigate = navigate,
-        navController = navController
-    )
-
-    Spacer(modifier = Modifier.height(DefaultPadding))
-
-    LumbridgeButton(
-        modifier = Modifier.padding(horizontal = DefaultPadding),
-        label = stringResource(id = R.string.expenses_overview_add_expense),
-        minHeight = SmallButtonHeight
-    ) {
-        navigate(ExpensesNavigationItem.AddExpense, navController)
-    }
-
-    Spacer(modifier = Modifier.height(HalfPadding))
-
     LazyColumn {
-        items(state.expensesMonthUi.size) { index ->
+        items(state.expensesMonthUi.count()) { index ->
             val monthExpensesUi = state.expensesMonthUi[index]
+
+            if (index == 0) {
+                FinancialProfile(
+                    state = state,
+                    navigate = navigate,
+                    navController = navController
+                )
+
+                Spacer(modifier = Modifier.height(HalfPadding))
+
+                LumbridgeButton(
+                    modifier = Modifier.padding(horizontal = DefaultPadding),
+                    label = stringResource(id = R.string.expenses_overview_add_expense),
+                    minHeight = SmallButtonHeight
+                ) {
+                    navigate(ExpensesNavigationItem.AddExpense, navController)
+                }
+
+                Spacer(modifier = Modifier.height(HalfPadding))
+            }
 
             Spacer(modifier = Modifier.height(HalfPadding))
 
@@ -193,9 +198,8 @@ private fun Content(
                 expensesMonthUi = monthExpensesUi,
                 onSelectMonth = onSelectMonth,
                 onSelectCategory = onSelectCategory,
-                shouldShowDialog = shouldShowDialog,
+                selectedMonth = selectedMonth,
                 currencySymbol = state.locale.getCurrencySymbol(),
-                onDeleteExpense = onDeleteExpense,
                 onEditExpense = onEditExpense
             )
 
@@ -204,6 +208,12 @@ private fun Content(
             }
         }
     }
+
+    ShowConfirmationDialog(
+        expensesMonthUi = state.expensesMonthUi.find { it.id == selectedMonth.value },
+        selectedMonth = selectedMonth,
+        onDeleteExpense = onDeleteExpense
+    )
 }
 
 @Composable
@@ -331,11 +341,10 @@ private fun HasFinancialProfile(
 private fun MonthCard(
     expensesMonthUi: ExpensesMonthUi,
     currencySymbol: String,
-    shouldShowDialog: MutableState<Boolean>,
+    selectedMonth: MutableState<Long>,
     onSelectMonth: (ExpensesMonthUi) -> Unit,
     onSelectCategory: (ExpensesCategoryUi) -> Unit,
-    onEditExpense: (ExpensesDetailedUi) -> Unit,
-    onDeleteExpense: (ExpensesMonthUi) -> Unit
+    onEditExpense: (ExpensesDetailedUi) -> Unit
 ) {
 
     ColumnCardWrapper(
@@ -352,7 +361,7 @@ private fun MonthCard(
                 Icon(
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { shouldShowDialog.value = true },
+                        .clickable { selectedMonth.value = expensesMonthUi.id },
                     imageVector = Icons.Outlined.Delete,
                     contentDescription = null
                 )
@@ -401,39 +410,6 @@ private fun MonthCard(
                 }
             }
         }
-    }
-
-    if (shouldShowDialog.value) {
-        AlertDialog(
-            onDismissRequest = { shouldShowDialog.value = false },
-            confirmButton = {
-                LumbridgeButton(
-                    label = stringResource(id = R.string.yes),
-                    onClick = {
-                        onDeleteExpense(expensesMonthUi)
-                        shouldShowDialog.value = false
-                    }
-                )
-            },
-            dismissButton = {
-                LumbridgeButton(
-                    label = stringResource(id = R.string.no),
-                    onClick = { shouldShowDialog.value = false }
-                )
-            },
-            title = {
-                Text(
-                    text = stringResource(id = R.string.delete),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            },
-            text = {
-                Text(
-                    text = stringResource(id = R.string.expense_delete_confirmation),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-        )
     }
 }
 
@@ -566,3 +542,44 @@ private fun NoExpenses(navController: NavHostController, navigate: (NavigationIt
         )
     }
 }
+
+@Composable
+private fun ShowConfirmationDialog(
+    expensesMonthUi: ExpensesMonthUi?,
+    selectedMonth: MutableState<Long>,
+    onDeleteExpense: (ExpensesMonthUi) -> Unit
+) {
+    if (selectedMonth.value >= 0L && expensesMonthUi != null) {
+        AlertDialog(
+            onDismissRequest = { selectedMonth.value = -1L },
+            confirmButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.yes),
+                    onClick = {
+                        onDeleteExpense(expensesMonthUi)
+                        selectedMonth.value = -1L
+                    }
+                )
+            },
+            dismissButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.no),
+                    onClick = { selectedMonth.value = -1L }
+                )
+            },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.delete),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(id = R.string.expense_delete_confirmation),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        )
+    }
+}
+

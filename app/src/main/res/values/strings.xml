@@ -106,6 +106,8 @@
     <string name="expenses_invalid_amount">Please, enter a valid amount</string>
     <string name="expenses_invalid_name">Please, enter a valid name</string>
     <string name="expenses_invalid_date">Please, enter a valid date</string>
+    <string name="expenses_date_range">Tap to filter by date range</string>
+    <string name="expenses_filter_by_date">Filter by Date</string>
     <string name="expenses_edit_hint">Edit the details of your expense</string>
     <string name="expenses_add_hint">Please, fill out the expense information</string>
     <string name="expenses_add_type">Expense Type</string>
@@ -169,10 +171,12 @@
     <string name="spent">Spent</string>
     <string name="retry">Retry</string>
     <string name="edit">Edit</string>
+    <string name="clear">Clear</string>
     <string name="delete">Delete</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="total">Total</string>
+    <string name="filter">Filter</string>
     <string name="max_length_reached">Char limit reached: %d</string>
 
 </resources>

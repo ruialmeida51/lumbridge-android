@@ -20,16 +20,16 @@ class ExpensesRepository @Inject constructor(
             expensesList.map { expense -> expense.toDomain() }
         }
 
-    suspend fun getExpenseByYearMonth(year: Int, month: Int): ExpensesMonthDomain? = withContext(Dispatchers.IO) {
-        expensesLocalDataSource.getExpenseByYearMonth(year, month)?.toDomain()
+    suspend fun getMonthOfExpensesByYearMonth(year: Int, month: Int): ExpensesMonthDomain? = withContext(Dispatchers.IO) {
+        expensesLocalDataSource.getMonthOfExpensesByYearMonth(year, month)?.toDomain()
     }
 
-    suspend fun getMonthCategoryExpense(categoryId: Long): List<ExpensesCategoryDomain> = withContext(Dispatchers.IO) {
-        expensesLocalDataSource.getMonthCategoriesExpense(categoryId).map { it.toDomain() }
+    suspend fun getAllCategoriesOfMonthById(categoryId: Long): List<ExpensesCategoryDomain> = withContext(Dispatchers.IO) {
+        expensesLocalDataSource.getAllCategoriesOfMonthById(categoryId).map { it.toDomain() }
     }
 
-    suspend fun getDetailedExpense(detailedExpenseId: Long): ExpensesDetailedDomain = withContext(Dispatchers.IO) {
-        expensesLocalDataSource.getDetailedExpense(detailedExpenseId).toDomain()
+    suspend fun getDetailedExpenseById(detailedExpenseId: Long): ExpensesDetailedDomain = withContext(Dispatchers.IO) {
+        expensesLocalDataSource.getDetailedExpenseById(detailedExpenseId).toDomain()
     }
 
     suspend fun saveNewExpense(expenses: ExpensesMonthDomain) = withContext(Dispatchers.IO) {

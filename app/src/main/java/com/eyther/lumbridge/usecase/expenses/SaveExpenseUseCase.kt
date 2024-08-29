@@ -13,6 +13,10 @@ import javax.inject.Inject
 class SaveExpenseUseCase @Inject constructor(
     private val expensesRepository: ExpensesRepository
 ) {
+    /**
+     * TODO Improvements: Maybe some of this logic belongs in the repository.
+     *  All the object creation part, perhaps.
+     */
     suspend operator fun invoke(
         month: Month,
         year: Year,
@@ -21,12 +25,12 @@ class SaveExpenseUseCase @Inject constructor(
         type: ExpensesCategoryTypes
     ) {
         // Check if the year-month combination already exists
-        val monthExpense = expensesRepository.getExpenseByYearMonth(year.value, month.value)
+        val monthExpense = expensesRepository.getMonthOfExpensesByYearMonth(year.value, month.value)
 
         // If it does, update the existing month
         if (monthExpense != null) {
             // First, check if the category already exists
-            val categories = expensesRepository.getMonthCategoryExpense(monthExpense.id)
+            val categories = expensesRepository.getAllCategoriesOfMonthById(monthExpense.id)
             val category = categories.find { it.categoryType == type }
 
             if (category != null) {

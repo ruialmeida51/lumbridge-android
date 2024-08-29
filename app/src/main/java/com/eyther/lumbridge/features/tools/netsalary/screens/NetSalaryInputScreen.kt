@@ -161,6 +161,7 @@ private fun ColumnScope.Content(
     Spacer(modifier = Modifier.height(DefaultPadding))
 
     LumbridgeButton(
+        modifier = Modifier.padding(horizontal = DefaultPadding),
         label = stringResource(id = R.string.tools_net_salary_calculate_button),
         enableButton = state.shouldEnableSaveButton,
         onClick = {

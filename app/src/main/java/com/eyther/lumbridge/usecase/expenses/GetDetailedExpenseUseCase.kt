@@ -9,6 +9,6 @@ class GetDetailedExpenseUseCase @Inject constructor(
     private val expensesRepository: ExpensesRepository
 ) {
     suspend operator fun invoke(detailedExpenseId: Long): ExpensesDetailedUi {
-        return expensesRepository.getDetailedExpense(detailedExpenseId).toUi()
+        return expensesRepository.getDetailedExpenseById(detailedExpenseId).toUi()
     }
 }

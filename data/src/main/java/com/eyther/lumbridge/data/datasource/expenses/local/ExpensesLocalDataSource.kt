@@ -23,7 +23,7 @@ class ExpensesLocalDataSource @Inject constructor(
      *
      * @param detailedExpenseId The ID of the detailed expense to fetch.
      */
-    suspend fun getDetailedExpense(detailedExpenseId: Long): ExpensesDetailedCached {
+    suspend fun getDetailedExpenseById(detailedExpenseId: Long): ExpensesDetailedCached {
         val detailedExpense = expensesDao.getExpensesDetailedById(detailedExpenseId)
             ?: throw IllegalArgumentException("No detailed expense found with ID $detailedExpenseId")
 
@@ -36,17 +36,17 @@ class ExpensesLocalDataSource @Inject constructor(
      * @param year The year to fetch expenses for.
      * @param month The month to fetch expenses for.
      */
-    suspend fun getExpenseByYearMonth(year: Int, month: Int): ExpensesMonthCached? {
-        return expensesDao.getExpensesForMonthByMonthYear(year, month)?.toCached()
+    suspend fun getMonthOfExpensesByYearMonth(year: Int, month: Int): ExpensesMonthCached? {
+        return expensesDao.getMonthOfExpensesByYearMonth(year, month)?.toCached()
     }
 
     /**
-     * Fetches the expenses for the given category from the local data source.
+     * Fetches all categories for the given month from the local data source.
      *
-     * @param monthId The ID of the month to fetch categories for.
+     * @param parentMonthId The ID of the month to fetch categories for.
      */
-    suspend fun getMonthCategoriesExpense(monthId: Long): List<ExpensesCategoryCached> {
-        return runCatching { expensesDao.getExpensesForMonthCategories(monthId) }
+    suspend fun getAllCategoriesOfMonthById(parentMonthId: Long): List<ExpensesCategoryCached> {
+        return runCatching { expensesDao.getAllCategoriesOfMonthById(parentMonthId) }
             .getOrNull()
             .orEmpty()
             .map { it.expensesCategoryEntity.toCached(it.detailedExpenses) }
@@ -83,7 +83,7 @@ class ExpensesLocalDataSource @Inject constructor(
         expensesCategoryCached: ExpensesCategoryCached,
         expensesDetailedCached: ExpensesDetailedCached
     ) {
-        val categoryEntity = kotlin.runCatching { expensesDao.getExpensesCategoryById(expensesCategoryCached.id) }.getOrNull()
+        val categoryEntity = runCatching { expensesDao.getExpensesCategoryById(expensesCategoryCached.id)?.expensesCategoryEntity }.getOrNull()
 
         if (categoryEntity == null) {
             val newCategory = expensesCategoryCached.toEntity(expensesMonthCached.id)
@@ -139,7 +139,7 @@ class ExpensesLocalDataSource @Inject constructor(
             ?: throw IllegalArgumentException("No detailed expense found with ID $detailedExpenseId")
 
         // Fetch the parent category for the detail
-        val parentCategory = expensesDao.getExpensesCategoryById(detailedExpense.parentCategoryId)
+        val parentCategory = expensesDao.getExpensesCategoryById(detailedExpense.parentCategoryId)?.expensesCategoryEntity
 
         // Fetch the parent month for the category
         val parentMonth = expensesDao.getExpensesForMonthById(parentCategory?.parentMonthId ?: 0)

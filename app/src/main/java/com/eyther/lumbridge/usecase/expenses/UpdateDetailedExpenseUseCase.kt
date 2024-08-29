@@ -8,7 +8,9 @@ import javax.inject.Inject
 class UpdateDetailedExpenseUseCase @Inject constructor(
     private val expensesRepository: ExpensesRepository
 ){
-    suspend operator fun invoke(expensesDetailedUi: ExpensesDetailedUi) {
+    suspend operator fun invoke(
+        expensesDetailedUi: ExpensesDetailedUi
+    ) {
         expensesRepository.updateExpensesDetail(expensesDetailedUi.toDomain())
     }
 }

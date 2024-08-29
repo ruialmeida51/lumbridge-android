@@ -154,7 +154,6 @@ private fun ColumnScope.Content(
         Spacer(modifier = Modifier.padding(top = DefaultPadding))
 
         LumbridgeButton(
-            modifier = Modifier.padding(horizontal = DefaultPadding),
             label = stringResource(id = R.string.save),
             enableButton = state.shouldEnableSaveButton,
             onClick = viewModel::save
@@ -163,7 +162,6 @@ private fun ColumnScope.Content(
         Spacer(modifier = Modifier.padding(top = DefaultPadding))
 
         LumbridgeButton(
-            modifier = Modifier.padding(horizontal = DefaultPadding),
             label = stringResource(id = R.string.delete),
             enableButton = true,
             onClick = { shouldShowDialog.value = true }
