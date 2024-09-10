@@ -52,7 +52,8 @@ This app is **open-source** because I believe in the value in the spirit of comm
 
 ## ☕ Buy Me a Coffee
 
-If you enjoy Lumbridge or find it useful, feel free to support the project!  
+If you enjoy Lumbridge or find it useful, feel free to buy me a coffee for the late nights!
+
 <a href="https://www.buymeacoffee.com/ruialmeida51" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 
 ---
