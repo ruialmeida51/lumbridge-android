@@ -44,15 +44,7 @@ class ExpensesAddScreenViewModel @Inject constructor(
             viewState.update {
                 ExpensesAddScreenViewState.Content(
                     inputState = expensesAddScreenInputHandler.inputState.value,
-                    availableCategories = listOf(
-                        ExpensesCategoryTypes.Food,
-                        ExpensesCategoryTypes.Transportation,
-                        ExpensesCategoryTypes.Housing,
-                        ExpensesCategoryTypes.Entertainment,
-                        ExpensesCategoryTypes.HealthCare,
-                        ExpensesCategoryTypes.Education,
-                        ExpensesCategoryTypes.Other
-                    ),
+                    availableCategories = ExpensesCategoryTypes.get(),
                     shouldEnableSaveButton = false
                 )
             }

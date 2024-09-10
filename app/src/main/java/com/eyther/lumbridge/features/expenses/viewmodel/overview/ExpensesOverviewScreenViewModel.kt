@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.domain.time.DAYS_IN_MONTH
+import com.eyther.lumbridge.domain.time.toLocalDate
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
@@ -71,7 +73,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                         )
                     } else {
                         getContentState(
-                            monthlyExpensesWithSelectedMonth = expenses,
+                            monthlyExpenses = expenses,
                             netSalaryUi = netSalaryUi,
                             locale = locale
                         )
@@ -92,7 +94,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
             // Update the state with the new list of month expenses.
             getContentState(
-                monthlyExpensesWithSelectedMonth = monthExpensesUiList,
+                monthlyExpenses = monthExpensesUiList,
                 netSalaryUi = cachedNetSalaryUi,
                 locale = cachedLocale
             )
@@ -114,7 +116,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
             // Update the state with the new list of month expenses.
             getContentState(
-                monthlyExpensesWithSelectedMonth = monthExpensesUiList,
+                monthlyExpenses = monthExpensesUiList,
                 netSalaryUi = cachedNetSalaryUi,
                 locale = cachedLocale
             )
@@ -123,7 +125,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
     override fun onDeleteExpense(expensesMonth: ExpensesMonthUi) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesOverviewScreenViewModel::class.java.simpleName, "\uD83D\uDCA5 Error deleting expense", throwable)
+            Log.e(ExpensesOverviewScreenViewModel::class.java.simpleName, "💥 Error deleting expense", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(ExpensesOverviewScreenViewEffect.ShowError(throwable.message.orEmpty()))
@@ -220,25 +222,25 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     /**
      * Helper function to get the content state of the view state. It assumes that the view state is of type Content.
      *
-     * @param monthlyExpensesWithSelectedMonth The list of month expenses with the selected month expanded.
+     * @param monthlyExpenses The list of month expenses with the selected month expanded.
      * @param netSalaryUi The net salary UI to set in the new state.
      */
     private fun getContentState(
-        monthlyExpensesWithSelectedMonth: List<ExpensesMonthUi>,
+        monthlyExpenses: List<ExpensesMonthUi>,
         netSalaryUi: NetSalaryUi?,
         locale: SupportedLocales
     ): ExpensesOverviewScreenViewState.Content {
         return if (netSalaryUi == null) {
             ExpensesOverviewScreenViewState.Content.NoFinancialProfile(
-                expensesMonthUi = monthlyExpensesWithSelectedMonth,
-                totalExpenses = monthlyExpensesWithSelectedMonth.sumOf { it.spent.toDouble() }.toFloat(),
+                expensesMonthUi = monthlyExpenses,
+                totalExpenses = monthlyExpenses.sumOf { it.spent.toDouble() }.toFloat(),
                 locale = locale
             )
         } else {
             ExpensesOverviewScreenViewState.Content.HasFinancialProfile(
                 netSalaryUi = netSalaryUi,
-                totalExpenses = monthlyExpensesWithSelectedMonth.sumOf { it.spent.toDouble() }.toFloat(),
-                expensesMonthUi = monthlyExpensesWithSelectedMonth,
+                totalExpenses = monthlyExpenses.sumOf { it.spent.toDouble() }.toFloat(),
+                expensesMonthUi = monthlyExpenses,
                 locale = locale
             )
         }
@@ -263,58 +265,80 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         }
     }
 
-    // TODO Improvements: Implement date filtering
+    // TODO Improvements: Add a filter function to filter the expenses by a date range.
 
-//    private fun filterExpensesByDateRange(
-//        expenses: List<ExpensesMonthUi>,
-//        startDate: LocalDate?,
-//        endDate: LocalDate?
-//    ): List<ExpensesMonthUi> = when {
-//        startDate == null && endDate != null -> {
-//            expenses.filter { expense ->
-//                val endMonth = endDate.monthValue
-//                val endYear = endDate.year
-//
-//                expense.year.value == endYear && expense.month.value <= endMonth
-//            }
-//        }
-//
-//        startDate != null && endDate == null -> {
-//            expenses.filter { expense ->
-//                val startMonth = startDate.monthValue
-//                val startYear = startDate.year
-//
-//                expense.year.value == startYear && expense.month.value >= startMonth
-//            }
-//        }
-//
-//        startDate != null && endDate != null -> {
-//            expenses.filter { expense ->
-//                val startMonth = startDate.monthValue
-//                val startYear = startDate.year
-//                val endMonth = endDate.monthValue
-//                val endYear = endDate.year
-//
-//                expense.year.value in startYear..endYear &&
-//                    expense.month.value in startMonth..endMonth
-//            }
-//        }
-//
-//        else -> expenses
-//    }
-//
-//    private fun getSelectableDates(): ClosedRange<LocalDate>? {
-//        if (!viewState.value.isContent()) return null
-//
-//        val viewStateAsContent = viewState.value.asContent()
-//
-//        val dates = viewStateAsContent
-//            .expensesMonthUi
-//            .map { it.year to it.month }
-//
-//        val minStartDate = dates.minOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
-//        val maxEndDate = dates.maxOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
-//
-//        return minStartDate..maxEndDate
-//    }
+    /**
+     * Helper function to filter the expenses by a date range.
+     *
+     * The way this works is as follows:
+     * - If the start date is null and the end date is not, we filter the expenses by the end date.
+     * - If the start date is not null and the end date is, we filter the expenses by the start date.
+     * - If both the start date and the end date are not null, we filter the expenses by the range between the start and end dates.
+     * - If both the start date and the end date are null, we return the expenses as is.
+     *
+     * @param expenses The list of expenses to filter.
+     * @param startDate The start date of the range.
+     * @param endDate The end date of the range.
+     *
+     * @return The list of expenses filtered by the date range.
+     */
+    private fun List<ExpensesMonthUi>.filterExpensesByDateRange(
+        startDate: LocalDate?,
+        endDate: LocalDate?
+    ): List<ExpensesMonthUi> = when {
+        startDate == null && endDate != null -> {
+            filter { expense ->
+                val endMonth = endDate.monthValue
+                val endYear = endDate.year
+
+                expense.year.value == endYear && expense.month.value <= endMonth
+            }
+        }
+
+        startDate != null && endDate == null -> {
+            filter { expense ->
+                val startMonth = startDate.monthValue
+                val startYear = startDate.year
+
+                expense.year.value == startYear && expense.month.value >= startMonth
+            }
+        }
+
+        startDate != null && endDate != null -> {
+            filter { expense ->
+                val startMonth = startDate.monthValue
+                val startYear = startDate.year
+                val endMonth = endDate.monthValue
+                val endYear = endDate.year
+
+                expense.year.value in startYear..endYear &&
+                    expense.month.value in startMonth..endMonth
+            }
+        }
+
+        else -> this
+    }
+
+    /**
+     * Gets the selectable dates for the date range picker.
+     *
+     * The way this works is as follows:
+     * - If the view state is content, we get the minimum start date and the maximum end date from the expenses.
+     *
+     * @return The selectable dates for the date range picker.
+     */
+    private fun getSelectableDates(): ClosedRange<LocalDate>? {
+        if (!viewState.value.isContent()) return null
+
+        val viewStateAsContent = viewState.value.asContent()
+
+        val dates = viewStateAsContent
+            .expensesMonthUi
+            .map { it.year to it.month }
+
+        val minStartDate = dates.minOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
+        val maxEndDate = dates.maxOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
+
+        return minStartDate..maxEndDate
+    }
 }

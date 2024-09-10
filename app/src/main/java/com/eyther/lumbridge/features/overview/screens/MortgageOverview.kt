@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
+import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.navigation.FinancialOverviewNavigationItem
@@ -130,7 +130,7 @@ private fun ColumnScope.PaymentOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.loan_amount),
-                text = "${state.mortgage.loanAmount.twoDecimalPlaces()}$currencySymbol"
+                text = "${state.mortgage.loanAmount.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             DataOverview(
@@ -171,17 +171,17 @@ private fun ColumnScope.PaymentOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.financial_overview_mortgage_next_payment),
-                text = "${state.mortgage.monthlyPayment.twoDecimalPlaces()}$currencySymbol"
+                text = "${state.mortgage.monthlyPayment.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.financial_overview_mortgage_next_payment_capital),
-                text = "${state.mortgage.monthlyPaymentCapital.twoDecimalPlaces()}$currencySymbol"
+                text = "${state.mortgage.monthlyPaymentCapital.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.financial_overview_mortgage_next_payment_interest),
-                text = "${state.mortgage.monthlyPaymentInterest.twoDecimalPlaces()}$currencySymbol"
+                text = "${state.mortgage.monthlyPaymentInterest.forceTwoDecimalsPlaces()}$currencySymbol"
             )
         }
 
@@ -288,9 +288,9 @@ private fun AmortizationsTable(
         Row {
             repeat(nColumns) {
                 val text = when (it) {
-                    0 -> amortization.remainder.twoDecimalPlaces()
-                    1 -> amortization.amortization.twoDecimalPlaces()
-                    2 -> amortization.nextPayment.twoDecimalPlaces()
+                    0 -> amortization.remainder.forceTwoDecimalsPlaces()
+                    1 -> amortization.amortization.forceTwoDecimalsPlaces()
+                    2 -> amortization.nextPayment.forceTwoDecimalsPlaces()
                     else -> throw IllegalArgumentException("💥 Column index out of bounds")
                 }
 

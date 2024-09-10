@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
+import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewState
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.ExpensesEditScreenInputHandler
@@ -11,6 +13,7 @@ import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.IExpensesE
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.usecase.expenses.DeleteDetailedExpenseUseCase
 import com.eyther.lumbridge.usecase.expenses.GetDetailedExpenseUseCase
+import com.eyther.lumbridge.usecase.expenses.GetExpenseCategoryTypeUseCase
 import com.eyther.lumbridge.usecase.expenses.UpdateDetailedExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -26,6 +29,7 @@ import javax.inject.Inject
 class ExpensesEditScreenViewModel @Inject constructor(
     private val deleteDetailedExpenseUseCase: DeleteDetailedExpenseUseCase,
     private val getDetailedExpenseUseCase: GetDetailedExpenseUseCase,
+    private val getExpenseCategoryTypeUseCase: GetExpenseCategoryTypeUseCase,
     private val updateDetailedExpenseUseCase: UpdateDetailedExpenseUseCase,
     private val expensesEditScreenInputHandler: ExpensesEditScreenInputHandler,
     savedStateHandle: SavedStateHandle
@@ -46,13 +50,13 @@ class ExpensesEditScreenViewModel @Inject constructor(
         MutableSharedFlow()
 
     init {
-        Log.d(ExpensesEditScreenViewModel::class.java.simpleName, "Initializing ExpensesEditScreenViewModel: $detailedExpenseId")
         fetchExpensesDetailData()
     }
 
     private fun fetchExpensesDetailData() {
         viewModelScope.launch {
             cachedExpense = getDetailedExpenseUseCase(detailedExpenseId)
+            val cachedCategory = getExpenseCategoryTypeUseCase(cachedExpense!!.parentCategoryId)
 
             updateInput { state ->
                 state.copy(
@@ -60,7 +64,10 @@ class ExpensesEditScreenViewModel @Inject constructor(
                         text = cachedExpense?.expenseName
                     ),
                     expenseAmount = state.expenseAmount.copy(
-                        text = cachedExpense?.expenseAmount.toString()
+                        text = cachedExpense?.expenseAmount?.twoDecimalPlaces()
+                    ),
+                    categoryType = ExpensesCategoryTypes.of(
+                        ordinal = cachedCategory.ordinal
                     )
                 )
             }
@@ -70,7 +77,8 @@ class ExpensesEditScreenViewModel @Inject constructor(
                     viewState.update {
                         ExpensesEditScreenViewState.Content(
                             shouldEnableSaveButton = shouldEnableSaveButton(inputState),
-                            inputState = inputState
+                            inputState = inputState,
+                            availableCategories = ExpensesCategoryTypes.get()
                         )
                     }
                 }.launchIn(this)
@@ -103,10 +111,11 @@ class ExpensesEditScreenViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
             updateDetailedExpenseUseCase(
-                cachedExpense!!.copy(
+                expensesDetailedUi = cachedExpense!!.copy(
                     expenseName = inputState.value.expenseName.text.orEmpty(),
                     expenseAmount = inputState.value.expenseAmount.text?.toFloat() ?: 0f
-                )
+                ),
+                categoryType = inputState.value.categoryType
             )
 
             viewEffects.emit(ExpensesEditScreenViewEffect.Finish)

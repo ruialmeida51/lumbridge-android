@@ -8,6 +8,16 @@ sealed class ExpensesCategoryTypes(
     val ordinal: Int
 ) {
     companion object {
+        fun get() = listOf(
+            Food,
+            Transportation,
+            HealthCare,
+            Entertainment,
+            Housing,
+            Education,
+            Other
+        )
+
         fun of(ordinal: Int): ExpensesCategoryTypes {
             return when (ordinal) {
                 Food.ordinal -> Food

@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.time.toIsoLocalDateString
-import com.eyther.lumbridge.ui.common.composables.model.DateInputState
+import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
 
 @Composable
 fun DateInput(

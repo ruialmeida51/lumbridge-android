@@ -37,4 +37,5 @@ sealed interface ExpensesOverviewScreenViewState {
     }
 
     fun asContent(): Content = this as Content
+    fun isContent(): Boolean = this is Content
 }

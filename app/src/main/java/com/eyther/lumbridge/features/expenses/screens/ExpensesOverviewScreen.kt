@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,14 +40,13 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
-import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
+import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState.Content
@@ -298,7 +296,7 @@ private fun HasFinancialProfile(
 
                 DataOverview(
                     label = stringResource(id = R.string.net_monthly),
-                    text = "${netSalaryUi.monthlyNetSalary.twoDecimalPlaces()}$currencySymbol"
+                    text = "${netSalaryUi.monthlyNetSalary.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
             }
 
@@ -319,7 +317,7 @@ private fun HasFinancialProfile(
 
                     DataOverview(
                         label = stringResource(id = R.string.total),
-                        text = "${totalSpent.twoDecimalPlaces()}$currencySymbol"
+                        text = "${totalSpent.forceTwoDecimalsPlaces()}$currencySymbol"
                     )
                 }
             }
@@ -390,12 +388,12 @@ private fun MonthCard(
 
                 DataOverview(
                     label = stringResource(id = R.string.spent),
-                    text = "${expensesMonthUi.spent.twoDecimalPlaces()}$currencySymbol"
+                    text = "${expensesMonthUi.spent.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
 
                 DataOverview(
                     label = stringResource(id = R.string.remainder),
-                    text = "${expensesMonthUi.remainder.twoDecimalPlaces()}$currencySymbol"
+                    text = "${expensesMonthUi.remainder.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
 
                 if (expensesMonthUi.expanded) {
@@ -425,7 +423,7 @@ private fun CategoriesCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(40.dp)
+                    .height(40.dp)
                     .clickable { onSelectCategory(category) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -438,17 +436,19 @@ private fun CategoriesCard(
                 Spacer(modifier = Modifier.width(QuarterPadding))
 
                 TabbedDataOverview(
+                    icon = {
+                        Icon(
+                            modifier = Modifier
+                                .size(16.dp)
+                                .rotate(if (category.expanded) 180f else 0f),
+                            imageVector = Icons.Outlined.ArrowDropDown,
+                            contentDescription = null
+                        )
+                    },
                     label = stringResource(category.categoryType.categoryRes),
-                    text = "${category.spent.twoDecimalPlaces()}$currencySymbol"
+                    text = "${category.spent.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
 
-                Icon(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .rotate(if (category.expanded) 180f else 0f),
-                    imageVector = Icons.Outlined.ArrowDropDown,
-                    contentDescription = null
-                )
             }
 
             if (category.expanded) {
@@ -473,36 +473,28 @@ private fun DetailsCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(32.dp)
+                    .height(32.dp)
                     .clickable { onEditExpense(detail) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.height(HalfPadding))
 
-                Text(
-                    modifier = Modifier.padding(start = DefaultAndAHalfPadding),
-                    text = detail.expenseName,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = "${detail.expenseAmount.twoDecimalPlaces()}$currencySymbol",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.tertiary
-                )
-
-                Spacer(modifier = Modifier.width(HalfPadding))
-
-                Icon(
-                    modifier = Modifier
-                        .size(16.dp),
-                    painter = painterResource(id = R.drawable.ic_edit_note),
-                    contentDescription = stringResource(id = R.string.edit)
+                TabbedDataOverview(
+                    startPadding = DefaultAndAHalfPadding,
+                    textStyle = MaterialTheme.typography.bodySmall,
+                    labelStyle = MaterialTheme.typography.bodySmall,
+                    labelColour = MaterialTheme.colorScheme.onSurface,
+                    textColour = MaterialTheme.colorScheme.tertiary,
+                    label = detail.expenseName,
+                    icon = {
+                        Icon(
+                            modifier = Modifier
+                                .size(16.dp),
+                            painter = painterResource(id = R.drawable.ic_edit_note),
+                            contentDescription = stringResource(id = R.string.edit)
+                        )
+                    },
+                    text = "${detail.expenseAmount.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
 
                 Spacer(modifier = Modifier.width(HalfPadding))
@@ -582,4 +574,3 @@ private fun ShowConfirmationDialog(
         )
     }
 }
-

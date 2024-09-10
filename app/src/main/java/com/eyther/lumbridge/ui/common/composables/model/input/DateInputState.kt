@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.ui.common.composables.model
+package com.eyther.lumbridge.ui.common.composables.model.input
 
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 import java.time.LocalDate

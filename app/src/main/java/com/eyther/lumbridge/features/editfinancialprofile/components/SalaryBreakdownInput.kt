@@ -15,8 +15,8 @@ import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
-import com.eyther.lumbridge.ui.common.composables.model.ChoiceTabState
-import com.eyther.lumbridge.ui.common.composables.model.TextInputState
+import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
+import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 

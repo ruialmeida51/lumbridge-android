@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.editfinancialprofile.model
 
-import com.eyther.lumbridge.ui.common.composables.model.ChoiceTabState
-import com.eyther.lumbridge.ui.common.composables.model.TextInputState
+import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
+import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 
 data class EditFinancialProfileInputState(
     val annualGrossSalary: TextInputState = TextInputState(),

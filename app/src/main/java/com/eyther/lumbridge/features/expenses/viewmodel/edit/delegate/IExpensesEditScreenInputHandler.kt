@@ -12,6 +12,7 @@ interface IExpensesEditScreenInputHandler {
      */
     fun onExpenseNameChanged(expenseName: String?)
     fun onExpenseAmountChanged(expenseAmount: Float?)
+    fun onTypeChanged(typeOrdinal: Int?)
 
     /**
      * Validates the entire input state and returns an error message if the input state is invalid.

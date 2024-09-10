@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
+import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.ui.common.composables.components.card.RowCardWrapper
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -48,12 +48,12 @@ fun ColumnScope.IncomeOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.net_annual),
-                text = "${netSalaryUi.annualNetSalary.twoDecimalPlaces()}$currencySymbol"
+                text = "${netSalaryUi.annualNetSalary.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.gross_annual),
-                text = "${netSalaryUi.annualGrossSalary.twoDecimalPlaces()}$currencySymbol"
+                text = "${netSalaryUi.annualGrossSalary.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             Text(
@@ -65,12 +65,12 @@ fun ColumnScope.IncomeOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.net_monthly),
-                text = "${netSalaryUi.monthlyNetSalary.twoDecimalPlaces()}$currencySymbol"
+                text = "${netSalaryUi.monthlyNetSalary.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.gross_monthly),
-                text = "${netSalaryUi.monthlyGrossSalary.twoDecimalPlaces()}$currencySymbol"
+                text = "${netSalaryUi.monthlyGrossSalary.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             Text(
@@ -82,12 +82,12 @@ fun ColumnScope.IncomeOverview(
 
             DataOverview(
                 label = stringResource(id = R.string.financial_overview_food_card_monthly),
-                text = "${netSalaryUi.monthlyFoodCard.twoDecimalPlaces()}$currencySymbol"
+                text = "${netSalaryUi.monthlyFoodCard.forceTwoDecimalsPlaces()}$currencySymbol"
             )
 
             DataOverview(
                 label = stringResource(id = R.string.financial_overview_food_card_daily),
-                text = "${netSalaryUi.dailyFoodCard.twoDecimalPlaces()}$currencySymbol"
+                text = "${netSalaryUi.dailyFoodCard.forceTwoDecimalsPlaces()}$currencySymbol"
             )
         }
 

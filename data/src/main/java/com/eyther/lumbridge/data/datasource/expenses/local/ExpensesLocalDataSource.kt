@@ -31,6 +31,29 @@ class ExpensesLocalDataSource @Inject constructor(
     }
 
     /**
+     * Fetches the category with the given ID from the local data source.
+     *
+     * @param categoryId The ID of the category to fetch.
+     */
+    suspend fun getCategoryById(categoryId: Long): ExpensesCategoryCached {
+        val category = expensesDao.getExpensesCategoryById(categoryId)
+            ?: throw IllegalArgumentException("No category found with ID $categoryId")
+
+        return category.expensesCategoryEntity.toCached(category.detailedExpenses)
+    }
+
+    /**
+     * Fetches the month with the given ID from the local data source.
+     *
+     * @param monthId The ID of the month to fetch.
+     */
+    suspend fun getMonthById(monthId: Long): ExpensesMonthCached? {
+        val month = runCatching { expensesDao.getExpensesForMonthById(monthId) }.getOrNull()
+
+        return month?.toCached()
+    }
+
+    /**
      * Fetches the expenses for the given year and month from the local data source.
      *
      * @param year The year to fetch expenses for.
@@ -72,6 +95,17 @@ class ExpensesLocalDataSource @Inject constructor(
     }
 
     /**
+     * Saves the given category to the local data source.
+     *
+     * @return The ID of the saved category.
+     */
+    suspend fun saveCategory(category: ExpensesCategoryCached): Long {
+        return expensesDao.saveExpensesCategory(
+            expensesCategory = category.toEntity(category.parentMonthId)
+        )
+    }
+
+    /**
      * Updates the given expenses in the local data source.
      *
      * This assumes that the given expenses month already exist in the local data source.
@@ -88,10 +122,10 @@ class ExpensesLocalDataSource @Inject constructor(
         if (categoryEntity == null) {
             val newCategory = expensesCategoryCached.toEntity(expensesMonthCached.id)
 
-            expensesDao.saveExpensesCategory(newCategory)
+            val categoryId = expensesDao.saveExpensesCategory(newCategory)
 
             val detailedEntity = expensesDetailedCached
-                .toEntity(newCategory.categoryId)
+                .toEntity(categoryId)
 
             expensesDao.saveExpensesDetail(detailedEntity)
         } else {
@@ -105,14 +139,14 @@ class ExpensesLocalDataSource @Inject constructor(
     /**
      * Saves the given detailed expense to the local data source.
      *
-     * @param expensesDetailedCached The detailed expense to save.
+     * @param expensesDetailedCached The detailed expense to save
      */
     suspend fun updateExpensesDetail(expensesDetailedCached: ExpensesDetailedCached) {
-        val entity = expensesDetailedCached
+        val detailEntity = expensesDetailedCached
             .toEntity(expensesDetailedCached.parentCategoryId)
             .copy(detailId = expensesDetailedCached.id)
 
-        expensesDao.updateExpensesDetail(entity)
+        expensesDao.updateExpensesDetail(detailEntity)
     }
 
     /**
@@ -160,5 +194,35 @@ class ExpensesLocalDataSource @Inject constructor(
             .getExpensesForMonthById(parentCategory?.parentMonthId ?: 0)
             .categories
             .ifEmpty { expensesDao.deleteExpensesMonth(parentMonth.expensesMonthEntity) }
+    }
+
+    /**
+     * Deletes the given category from the local data source.
+     * If the month has no other categories, the month will also be deleted.
+     *
+     * @param categoryId The ID of the category to delete.
+     * @param deleteMonthIfEmpty Whether to delete the month if it has no other categories.
+     */
+    suspend fun deleteExpenseCategory(
+        categoryId: Long,
+        deleteMonthIfEmpty: Boolean = true
+    ) {
+        // Fetch the current cached category
+        val category = expensesDao.getExpensesCategoryById(categoryId)?.expensesCategoryEntity
+
+        // Fetch the parent month for the category
+        val month = expensesDao.getExpensesForMonthById(category?.parentMonthId ?: 0)
+
+        // Delete the category
+        expensesDao.deleteExpensesCategory(category!!)
+
+        if (deleteMonthIfEmpty) {
+            // After deleting the category, check if the month has any other categories.
+            // If not, delete the month.
+            expensesDao
+                .getExpensesForMonthById(category.parentMonthId)
+                .categories
+                .ifEmpty { expensesDao.deleteExpensesMonth(month.expensesMonthEntity) }
+        }
     }
 }

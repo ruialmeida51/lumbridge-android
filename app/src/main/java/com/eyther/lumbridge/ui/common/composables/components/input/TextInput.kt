@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.ui.common.composables.model.TextInputState
+import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 
 @Composable
 fun TextInput(
@@ -29,7 +29,7 @@ fun TextInput(
     state: TextInputState,
     label: String? = null,
     placeholder: String? = null,
-    maxLength : Int = 128, // 8 bits in a byte = 256 chars
+    maxLength : Int = 128,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onInputChanged: ((String) -> Unit) = {}
 ) {
@@ -52,8 +52,9 @@ fun TextInput(
         },
         textStyle = MaterialTheme.typography.bodyMedium,
         onValueChange = {
-            text.value = it.copy(text = it.text.take(maxLength))
-            onInputChanged(it.text.take(maxLength))
+            if (it.text.filter { char -> char.isLetterOrDigit() }.length > maxLength) return@TextField
+            text.value = it.copy(text = it.text)
+            onInputChanged(it.text)
         },
         label = {
             label?.let {
@@ -80,7 +81,7 @@ fun TextInput(
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                text.value.text.length == maxLength -> {
+                text.value.text.filter { char -> char.isLetterOrDigit() }.length >= maxLength -> {
                     Text(
                         text = context.getString(R.string.max_length_reached, maxLength),
                         style = MaterialTheme.typography.bodySmall

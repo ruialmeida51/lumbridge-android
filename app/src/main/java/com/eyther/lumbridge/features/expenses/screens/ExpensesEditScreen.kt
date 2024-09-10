@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
@@ -35,6 +36,7 @@ import com.eyther.lumbridge.features.expenses.viewmodel.edit.ExpensesEditScreenV
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.IExpensesEditScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
+import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
@@ -131,6 +133,15 @@ private fun ColumnScope.Content(
     )
 
     ColumnCardWrapper {
+        DropdownInput(
+            label = stringResource(id = R.string.expenses_add_type),
+            selectedOption = stringResource(state.inputState.categoryType.categoryRes),
+            items = state.availableCategories.map { it.ordinal.toString() to stringResource(it.categoryRes) },
+            onItemClick = { ordinal, _ -> viewModel.onTypeChanged(ordinal.toIntOrNull()) }
+        )
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
         TextInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.expenseName,
@@ -167,7 +178,6 @@ private fun ColumnScope.Content(
             onClick = { shouldShowDialog.value = true }
         )
     }
-
 
     if (shouldShowDialog.value) {
         AlertDialog(

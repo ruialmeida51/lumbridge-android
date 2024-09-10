@@ -16,7 +16,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
-import com.eyther.lumbridge.ui.common.composables.model.TextInputState
+import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 

@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate
 
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenInputState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,6 +43,14 @@ class ExpensesEditScreenInputHandler @Inject constructor() : IExpensesEditScreen
                         R.string.expenses_invalid_amount
                     )
                 )
+            )
+        }
+    }
+
+    override fun onTypeChanged(typeOrdinal: Int?) {
+        updateInput { state ->
+            state.copy(
+                categoryType = ExpensesCategoryTypes.of(typeOrdinal ?: 0)
             )
         }
     }

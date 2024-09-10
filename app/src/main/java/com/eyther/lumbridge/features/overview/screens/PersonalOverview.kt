@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
+import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.overview.components.IncomeOverview
 import com.eyther.lumbridge.features.overview.components.PerCountryBreakdown
@@ -143,7 +143,7 @@ private fun ColumnScope.MoneyAllocationBreakdown(
                 moneyAllocation.forEach { moneyAllocationUi ->
                     DataOverview(
                         label = stringResource(id = moneyAllocationUi.label),
-                        text = "${moneyAllocationUi.amount.twoDecimalPlaces()}$currencySymbol"
+                        text = "${moneyAllocationUi.amount.forceTwoDecimalsPlaces()}$currencySymbol"
                     )
                 }
             }

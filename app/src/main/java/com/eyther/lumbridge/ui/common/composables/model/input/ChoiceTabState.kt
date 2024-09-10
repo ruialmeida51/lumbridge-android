@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.ui.common.composables.model
+package com.eyther.lumbridge.ui.common.composables.model.input
 
 import androidx.annotation.StringRes
 

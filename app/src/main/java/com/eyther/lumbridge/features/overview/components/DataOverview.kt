@@ -1,7 +1,5 @@
 package com.eyther.lumbridge.features.overview.components
 
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,24 +22,5 @@ fun DataOverview(
         ),
         style = MaterialTheme.typography.bodyMedium,
         textAlign = textAlign
-    )
-}
-
-@Composable
-fun RowScope.TabbedDataOverview(
-    label: String,
-    text: String
-) {
-    Text(
-        text = "$label: ",
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.secondary
-    )
-
-    Spacer(modifier = Modifier.weight(1f))
-
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyMedium
     )
 }

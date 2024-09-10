@@ -22,7 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
+import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.tools.currencyconverter.model.CurrencyConverterScreenViewState
 import com.eyther.lumbridge.features.tools.currencyconverter.viewmodel.CurrencyConverterScreenViewModel
@@ -158,6 +158,8 @@ private fun ColumnScope.Calculation(state: CurrencyConverterScreenViewState.Cont
         Text(
             modifier = Modifier
                 .padding(
+                    start = DefaultPadding,
+                    end = DefaultPadding,
                     top = DefaultPadding,
                     bottom = HalfPadding
                 )
@@ -184,7 +186,7 @@ private fun ColumnScope.Calculation(state: CurrencyConverterScreenViewState.Cont
                         text = stringResource(
                             id = R.string.tools_exchange_rate_value,
                             state.inputState.fromCurrency.getCurrencySymbol(),
-                            requireNotNull(state.exchangeRate).twoDecimalPlaces(),
+                            requireNotNull(state.exchangeRate).forceTwoDecimalsPlaces(),
                             state.inputState.toCurrency.getCurrencySymbol()
                         )
                     )
@@ -193,9 +195,9 @@ private fun ColumnScope.Calculation(state: CurrencyConverterScreenViewState.Cont
                         label = stringResource(id = R.string.tools_currency_converter_to),
                         text = stringResource(
                             id = R.string.tools_currency_converter_to_value,
-                            state.inputState.fromAmount.text?.toFloatOrNull()?.twoDecimalPlaces().orEmpty(),
+                            state.inputState.fromAmount.text?.toFloatOrNull()?.forceTwoDecimalsPlaces().orEmpty(),
                             state.inputState.fromCurrency.getCurrencySymbol(),
-                            state.toExchangedAmount?.twoDecimalPlaces().orEmpty(),
+                            state.toExchangedAmount?.forceTwoDecimalsPlaces().orEmpty(),
                             state.inputState.toCurrency.getCurrencySymbol()
                         )
                     )
