@@ -10,6 +10,13 @@ Lumbridge is more than just a financial utility app — it's a playground for me
 
 ---
 
+## ⚠️ Disclaimer 🇵🇹
+
+**Please note:** The **Net Salary Calculator** and **Tax Calculations** in Lumbridge are currently tailored to **Portugal's tax system**. As such, they may not be accurate or applicable to other countries. Stay tuned for future updates that could include broader support!
+
+---
+
+You can place this disclaimer near the "Notable Features" section or wherever you think it will get the most visibility!
 ## 💡 Some notable features
 
 - **Track Expenses**: Easily manage your day-to-day expenses.
@@ -21,7 +28,17 @@ Lumbridge is more than just a financial utility app — it's a playground for me
 
 ## 📱 Play Store
 
-You can download Lumbridge from the Google Play Store: [Lumbridge on Play Store](#)  ⚠️ - Still trying to get the app accepted, as now one needs 25 active users/testers.
+You can download Lumbridge from the Google Play Store: [Lumbridge on Play Store](https://play.google.com/store/apps/details?id=com.eyther.lumbridge)  
+
+_⚠️ - Still trying to get the app accepted, as now one needs 20 active users/testers. Contact me if you'd like to participate in early access_
+
+---
+
+## 📷 Screenshots
+
+| feed | tools | expenses | financial overview | profile |
+| ---- | ----- | -------- | ------------------ | ------- |
+| TBA | TBA | TBA | TBA | TBA |
 
 ---
 
@@ -44,7 +61,7 @@ Lumbridge leverages a modern Android development stack to ensure scalability, ma
 
 This app is **open-source** because I believe in the value in the spirit of community contributions. So, contributions are always welcome! If you find any bugs, have suggestions, or want to add new features, feel free to open an issue or submit a pull request.
 
-- Report issues or feature requests on the [Issues page](https://github.com/yourusername/lumbridge/issues)
+- Report issues or feature requests on the [Issues page](https://github.com/ruialmeida51/lumbridge/issues)
 - Fork the repo and submit PRs for new features, bug fixes, or improvements!
 - Feedback and suggestions are highly appreciated!
 
@@ -60,7 +77,7 @@ If you enjoy Lumbridge or find it useful, feel free to buy me a coffee for the l
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/ruialmeida51/lumbridge-android/blob/master/LICENSE) file for details.
 
 ---
 
