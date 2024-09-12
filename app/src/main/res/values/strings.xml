@@ -70,6 +70,18 @@
     <string name="profile_app_settings">App Settings</string>
     <string name="profile_financial_settings">Financial Settings</string>
     <string name="profile_avatar_content_description">Profile Avatar</string>
+    <string name="profile_support_the_app">Support &amp; Community Hub</string>
+    <string name="profile_support_feedback">Feedback &amp; Bug Report</string>
+    <string name="profile_support_source_code">Source Code</string>
+    <string name="profile_support_donate">Buy me a coffee!</string>
+    <string name="profile_support_donate_disclaimer">Donations are a great way to support Lumbridge, but they’re completely optional!\n\nDonating won’t unlock any special features or give you an edge, and not donating won’t hold you back either.\n\nWe’re just happy to have you using Lumbridge – thanks for being part of the community!</string>
+    <string name="profile_support_feedback_email_subject">Feedback on Lumbridge from %1$s</string>
+    <string name="profile_support_feedback_email_subject_no_name">Feedback on Lumbridge</string>
+    <string name="profile_support_feedback_email_selector">Select an email client to send your feedback</string>
+    <string name="profile_support_feedback_email_body">Hi,\n\nI have some feedback on Lumbridge that I would like to share with you:\n\n</string>
+    <string name="profile_support_feedback_email_sent">Your feedback has been sent. Thank you for helping us improve Lumbridge!</string>
+    <string name="profile_support_feedback_email_error_no_clients">There are no email clients installed on your device. Please, install one and try again.</string>
+    <string name="profile_support_feedback_email_error_sending">There was an error sending your feedback. Please, try again later.</string>
 
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_how_to_contact">How should we contact you?</string>
@@ -177,6 +189,8 @@
     <string name="no">No</string>
     <string name="total">Total</string>
     <string name="filter">Filter</string>
+    <string name="proceed">Proceed</string>
+    <string name="back">Back</string>
     <string name="max_length_reached">Char limit reached: %d</string>
 
 </resources>

@@ -22,21 +22,28 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -48,10 +55,13 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
+import com.eyther.lumbridge.extensions.platform.SendEmailStatus
+import com.eyther.lumbridge.extensions.platform.sendEmail
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.features.profile.overview.viewmodel.IProfileOverviewScreenViewModel
 import com.eyther.lumbridge.features.profile.overview.viewmodel.ProfileOverviewScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
@@ -59,6 +69,7 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.Lumbridge
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
+import kotlinx.coroutines.launch
 
 private const val LOG_TAG = "ProfileOverviewScreen"
 
@@ -69,11 +80,17 @@ fun ProfileOverviewScreen(
     viewModel: IProfileOverviewScreenViewModel = hiltViewModel<ProfileOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
                 topAppBarVariation = TopAppBarVariation.Title(title = stringResource(id = label))
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState
             )
         }
     ) { paddingValues ->
@@ -87,6 +104,7 @@ fun ProfileOverviewScreen(
                 is ProfileOverviewScreenViewState.Content -> Content(
                     navController = navController,
                     viewModel = viewModel,
+                    snackbarHostState = snackbarHostState,
                     state = state
                 )
 
@@ -100,6 +118,7 @@ fun ProfileOverviewScreen(
 private fun Content(
     viewModel: IProfileOverviewScreenViewModel,
     navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
     state: ProfileOverviewScreenViewState.Content
 ) {
     Column {
@@ -128,6 +147,17 @@ private fun Content(
         )
 
         ProfileAppSettings(navController, viewModel::navigate)
+
+        Text(
+            text = stringResource(id = R.string.profile_support_the_app),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(horizontal = DefaultPadding, vertical = HalfPadding)
+        )
+
+        SupportAndCommunityHub(
+            state = state,
+            snackbarHostState = snackbarHostState
+        )
     }
 }
 
@@ -278,6 +308,107 @@ private fun ProfileAppSettings(
             icon = R.drawable.ic_settings,
             label = stringResource(id = R.string.settings),
             onClick = { onNavigate(ProfileNavigationItem.Settings, navController) }
+        )
+    }
+}
+
+@Composable
+private fun SupportAndCommunityHub(
+    state: ProfileOverviewScreenViewState.Content,
+    snackbarHostState: SnackbarHostState
+) {
+    val uriHandler = LocalUriHandler.current
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val shouldShowDonationDialog = remember { mutableStateOf(false) }
+
+    val emailAppNotFoundErrorMessage = stringResource(id = R.string.profile_support_feedback_email_error_no_clients)
+    val emailUnexpectedErrorMessage = stringResource(id = R.string.profile_support_feedback_email_error_sending)
+
+    ColumnCardWrapper(
+        verticalArrangement = Arrangement.spacedBy(DefaultPadding)
+    ) {
+        MovementSetting(
+            icon = R.drawable.ic_feedback,
+            label = stringResource(id = R.string.profile_support_feedback),
+            onClick = {
+                val sendEmailResult = context.sendEmail(
+                    emailTo = arrayOf(context.getString(R.string.developer_email)),
+                    subject = if (state.username != null) {
+                        context.getString(R.string.profile_support_feedback_email_subject, state.username)
+                    } else {
+                        context.getString(R.string.profile_support_feedback_email_subject_no_name)
+                    },
+                    body = context.getString(R.string.profile_support_feedback_email_body),
+                    selectorTitle = context.getString(R.string.profile_support_feedback_email_selector)
+                )
+
+                coroutineScope.launch {
+                    when (sendEmailResult) {
+                        SendEmailStatus.NoEmailAppAvailable -> snackbarHostState.showSnackbar(emailAppNotFoundErrorMessage)
+                        SendEmailStatus.UnexpectedError -> snackbarHostState.showSnackbar(emailUnexpectedErrorMessage)
+                        else -> Unit
+                    }
+                }
+            }
+        )
+
+        MovementSetting(
+            icon = R.drawable.ic_code,
+            label = stringResource(id = R.string.profile_support_source_code),
+            onClick = { uriHandler.openUri(context.getString(R.string.source_code_url)) }
+        )
+
+        MovementSetting(
+            icon = R.drawable.ic_bmc,
+            label = stringResource(id = R.string.profile_support_donate),
+            onClick = { shouldShowDonationDialog.value = true }
+        )
+    }
+
+    DonationDialog(
+        shouldShowDialog = shouldShowDonationDialog,
+        uriHandler = uriHandler,
+        context = context
+    )
+}
+
+@Composable
+fun DonationDialog(
+    shouldShowDialog: MutableState<Boolean>,
+    uriHandler: UriHandler,
+    context: Context
+) {
+    if (shouldShowDialog.value) {
+        AlertDialog(
+            onDismissRequest = { shouldShowDialog.value = false },
+            confirmButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.proceed),
+                    onClick = {
+                        uriHandler.openUri(context.getString(R.string.buy_me_a_coffee_url))
+                        shouldShowDialog.value = false
+                    }
+                )
+            },
+            dismissButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.back),
+                    onClick = { shouldShowDialog.value = false }
+                )
+            },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.profile_support_donate),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(id = R.string.profile_support_donate_disclaimer),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         )
     }
 }
