@@ -19,13 +19,14 @@ import com.eyther.lumbridge.ui.theme.QuarterPadding
 
 @Composable
 fun ColumnCardWrapper(
+    modifier: Modifier = Modifier,
     verticalArrangement: Arrangement.Vertical? = null,
     onClick: (() -> Unit)? = null,
     composable: @Composable ColumnScope.() -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .padding(horizontal = DefaultPadding)
+        modifier = modifier.then(
+            Modifier.padding(horizontal = DefaultPadding)
             .clip(RoundedCornerShape(DefaultRoundedCorner))
             .shadow(elevation = QuarterPadding)
             .then(
@@ -35,6 +36,7 @@ fun ColumnCardWrapper(
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .fillMaxWidth()
             .padding(DefaultPadding),
+        ),
         verticalArrangement = verticalArrangement ?: Arrangement.Top,
     ) {
         composable()

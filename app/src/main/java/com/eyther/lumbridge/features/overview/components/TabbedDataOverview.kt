@@ -54,6 +54,7 @@ private enum class FinalComponents {
  * of the label and text value exceeds the available width, it will try to shrink the longer of the two
  * to fit the available space, considering the icon's width if it exists.
  *
+ * @param modifier The modifier to be applied to the layout.
  * @param label The label to be displayed at the start of the row.
  * @param text The text value to be displayed at the end of the row.
  * @param startPadding The padding to be applied at the start of the row.
@@ -65,6 +66,7 @@ private enum class FinalComponents {
  */
 @Composable
 fun TabbedDataOverview(
+    modifier: Modifier = Modifier,
     label: String,
     text: String,
     startPadding: Dp = 0.dp,
@@ -74,10 +76,21 @@ fun TabbedDataOverview(
     textColour: Color = MaterialTheme.colorScheme.onSurface,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
-    SubcomposeLayout { constraints ->
+    SubcomposeLayout(
+        modifier = modifier
+    ) { constraints ->
         // Gather our constraints, and the maximum width and height
         val maxWidth = constraints.maxWidth
         val maxHeight = constraints.maxHeight
+
+        // Helper function to get the constraints for the components to measure.
+        // Since they're all the same, we can reuse this function for all components.
+        val getConstraintsToMeasure = {
+            Constraints(
+                maxWidth = maxWidth,
+                maxHeight = maxHeight
+            )
+        }
 
         // The composable function for our label to be displayed at the start of the row
         val labelComposable = @Composable {
@@ -119,17 +132,18 @@ fun TabbedDataOverview(
         }
 
         // Measure all of our placeables to determine their size.
-        val labelPlaceable = subcompose(Label) { labelComposable() }.first().measure(Constraints())
-        val textSpacerPlaceable = subcompose(TextSpacer) { textSpacer() }.first().measure(Constraints())
-        val textPlaceable = subcompose(Text) { textComposable() }.first().measure(Constraints())
+        val labelPlaceable = subcompose(Label) { labelComposable() }.first().measure(getConstraintsToMeasure())
+        val textSpacerPlaceable = subcompose(TextSpacer) { textSpacer() }.first().measure(getConstraintsToMeasure())
+        val textPlaceable = subcompose(Text) { textComposable() }.first().measure(getConstraintsToMeasure())
 
         // Since icon is optional, we only measure it if it exists, along with the spacer that comes before it.
-        val iconSpacerPlaceable = if (icon != null) subcompose(IconSpacer) { iconSpacerComposable() }.first().measure(Constraints()) else null
-        val iconPlaceable = if (icon != null) subcompose(Icon) { icon() }.first().measure(Constraints()) else null
+        val iconSpacerPlaceable = if (icon != null) subcompose(IconSpacer) { iconSpacerComposable() }.first().measure(getConstraintsToMeasure()) else null
+        val iconPlaceable = if (icon != null) subcompose(Icon) { icon() }.first().measure(getConstraintsToMeasure()) else null
 
         // Helper variables to determine the width of the optional icon and the spacer before it.
         val iconSpacerWidth = iconSpacerPlaceable?.width ?: 0
         val iconWidth = iconPlaceable?.width ?: 0
+        val iconHeight = iconPlaceable?.height ?: 0
 
         // The total width that all the components combined occupy
         val combinedWith = labelPlaceable.width + textPlaceable.width + textSpacerPlaceable.width + iconWidth
@@ -176,18 +190,33 @@ fun TabbedDataOverview(
             }
         }
 
-        val finalLabelPlaceable = subcompose(FinalComponents.FinalLabel) { labelComposable() }.first().measure(Constraints(maxWidth = labelWidth))
-        val finalTextPlaceable = subcompose(FinalComponents.FinalText) { textComposable() }.first().measure(Constraints(maxWidth = textWidth))
+        val finalLabelPlaceable = subcompose(FinalComponents.FinalLabel) { labelComposable() }.first().measure(
+            Constraints(
+                maxWidth = labelWidth,
+                maxHeight = maxHeight
+            )
+        )
+
+        val finalTextPlaceable = subcompose(FinalComponents.FinalText) { textComposable() }.first().measure(
+            Constraints(
+                maxWidth = textWidth,
+                maxHeight = maxHeight
+            )
+        )
 
         // Attempt to calculate the height of the content by taking the max height a component can have.
-        val contentHeight = listOf(finalLabelPlaceable.height, finalTextPlaceable.height, iconPlaceable?.height).mapNotNull { it }.max()
+        val contentHeight = listOf(finalLabelPlaceable.height, finalTextPlaceable.height, iconHeight).max()
+        val contentMaxHeight = contentHeight.coerceAtMost(maxHeight)
 
         layout(
             width = maxWidth,
-            height = constraints.maxHeight
+            height = contentMaxHeight
         ) {
             // Calculate the vertical offset to center the content. This will be used for all components to align them vertically.
-            val yAlignCenterVertical = (maxHeight - contentHeight) / 2
+            // We take the max height the content can be divide it by two to get the center of the row. We then need to subtract
+            // the content itself divided by two to place it properly in the middle, otherwise it would be placed at the bottom
+            // of the center line.
+            val yAlignCenterVertical = contentMaxHeight / 2 - contentHeight / 2
 
             // Place the label on the left. We use x = 0 to place it at the start of the row.
             finalLabelPlaceable.placeRelative(x = 0, y = yAlignCenterVertical)

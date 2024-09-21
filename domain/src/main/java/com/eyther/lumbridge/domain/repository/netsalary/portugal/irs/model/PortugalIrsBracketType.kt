@@ -6,21 +6,50 @@ sealed interface PortugalIrsBracketType {
     companion object {
         const val SOCIAL_SECURITY_RATE = 0.11f
 
-        fun of(userFinancialsDomain: UserFinancialsDomain) = getIrsBracket(userFinancialsDomain)
-
-        private fun getIrsBracket(
+        /**
+         * Returns the IRS bracket for the user financials provided.
+         *
+         * @param userFinancialsDomain the user financials to calculate the IRS bracket from
+         *
+         * @return the IRS bracket
+         */
+        fun of(
             userFinancialsDomain: UserFinancialsDomain
-        ): PortugalIrsBracketType {
-            return when {
-                NoHandicap.FirstTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.FirstTable
-                NoHandicap.SecondTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.SecondTable
-                NoHandicap.ThirdTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.ThirdTable
-                NoHandicap.FourthTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.FourthTable
-                Handicapped.FifthTable.isIrsBracket(userFinancialsDomain) -> Handicapped.FifthTable
-                Handicapped.SixthTable.isIrsBracket(userFinancialsDomain) -> Handicapped.SixthTable
-                Handicapped.SeventhTable.isIrsBracket(userFinancialsDomain) -> Handicapped.SeventhTable
-                else -> throw IllegalArgumentException("No IRS bracket found for user financials")
-            }
+        ) = when {
+            NoHandicap.FirstTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.FirstTable
+            NoHandicap.SecondTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.SecondTable
+            NoHandicap.ThirdTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.ThirdTable
+            NoHandicap.FourthTable.isIrsBracket(userFinancialsDomain) -> NoHandicap.FourthTable
+            Handicapped.FifthTable.isIrsBracket(userFinancialsDomain) -> Handicapped.FifthTable
+            Handicapped.SixthTable.isIrsBracket(userFinancialsDomain) -> Handicapped.SixthTable
+            Handicapped.SeventhTable.isIrsBracket(userFinancialsDomain) -> Handicapped.SeventhTable
+            else -> throw IllegalArgumentException("No IRS bracket found for user financials")
+        }
+
+        /**
+         * Calculates the IRS percentage for the user financials provided.
+         *
+         * It the rule of three to calculate the percentage of the IRS deduction. Example:
+         *
+         * 3000€ monthly salary
+         * 500€ IRS deduction
+         *
+         * 3000€ === 100%
+         * 500€ === x%
+         *
+         * x% = (500€ * 100%) / 3000€
+         * x% = 16.67%
+         *
+         * @param irsDeduction the IRS deduction to calculate the percentage from
+         * @param monthlySalary the monthly salary to calculate the percentage from
+         *
+         * @return the actual IRS percentage
+         */
+        private fun calculateIrsPercentage(
+            irsDeduction: Float,
+            monthlySalary: Float
+        ): Float {
+            return ((100 * irsDeduction) / monthlySalary) / 100
         }
     }
 
@@ -89,15 +118,15 @@ sealed interface PortugalIrsBracketType {
                 }
 
                 val irsDeduction = (monthlySalary * taxPercentage) - (flatRate + dependantsFlatRate)
+                val irsPercentage = calculateIrsPercentage(irsDeduction, monthlySalary)
                 val ssDeduction = monthlySalary * SOCIAL_SECURITY_RATE
                 val netSalary = monthlySalary - irsDeduction - ssDeduction
 
                 return PortugalIrsBracket(
                     irsDeductionValue = irsDeduction,
-                    irsBracketPercentage = taxPercentage,
+                    irsBracketPercentage = irsPercentage,
                     ssDeductionValue = ssDeduction,
                     ssDeductionPercentage = SOCIAL_SECURITY_RATE,
-                    flatRate = flatRate - dependantsFlatRate,
                     netSalary = netSalary
                 )
             }
@@ -163,15 +192,15 @@ sealed interface PortugalIrsBracketType {
                 }
 
                 val irsDeduction = (monthlySalary * taxPercentage) - (flatRate + dependantsFlatRate)
+                val irsPercentage = calculateIrsPercentage(irsDeduction, monthlySalary)
                 val ssDeduction = monthlySalary * SOCIAL_SECURITY_RATE
                 val netSalary = monthlySalary - irsDeduction - ssDeduction
 
                 return PortugalIrsBracket(
                     irsDeductionValue = irsDeduction,
-                    irsBracketPercentage = taxPercentage,
+                    irsBracketPercentage = irsPercentage,
                     ssDeductionValue = ssDeduction,
                     ssDeductionPercentage = SOCIAL_SECURITY_RATE,
-                    flatRate = flatRate - dependantsFlatRate,
                     netSalary = netSalary
                 )
             }
@@ -229,15 +258,15 @@ sealed interface PortugalIrsBracketType {
                 }
 
                 val irsDeduction = (monthlySalary * taxPercentage) - (flatRate + dependantsFlatRate)
+                val irsPercentage = calculateIrsPercentage(irsDeduction, monthlySalary)
                 val ssDeduction = monthlySalary * SOCIAL_SECURITY_RATE
                 val netSalary = monthlySalary - irsDeduction - ssDeduction
 
                 return PortugalIrsBracket(
                     irsDeductionValue = irsDeduction,
-                    irsBracketPercentage = taxPercentage,
+                    irsBracketPercentage = irsPercentage,
                     ssDeductionValue = ssDeduction,
                     ssDeductionPercentage = SOCIAL_SECURITY_RATE,
-                    flatRate = flatRate - dependantsFlatRate,
                     netSalary = netSalary
                 )
             }
@@ -281,15 +310,15 @@ sealed interface PortugalIrsBracketType {
                 }
 
                 val irsDeduction = (monthlySalary * taxPercentage) - flatRate
+                val irsPercentage = calculateIrsPercentage(irsDeduction, monthlySalary)
                 val ssDeduction = monthlySalary * SOCIAL_SECURITY_RATE
                 val netSalary = monthlySalary - irsDeduction - ssDeduction
 
                 return PortugalIrsBracket(
                     irsDeductionValue = irsDeduction,
-                    irsBracketPercentage = taxPercentage,
+                    irsBracketPercentage = irsPercentage,
                     ssDeductionValue = ssDeduction,
                     ssDeductionPercentage = SOCIAL_SECURITY_RATE,
-                    flatRate = flatRate,
                     netSalary = netSalary
                 )
             }
@@ -341,15 +370,15 @@ sealed interface PortugalIrsBracketType {
                 }
 
                 val irsDeduction = (monthlySalary * taxPercentage) - (flatRate + dependantsFlatRate)
+                val irsPercentage = calculateIrsPercentage(irsDeduction, monthlySalary)
                 val ssDeduction = monthlySalary * SOCIAL_SECURITY_RATE
                 val netSalary = monthlySalary - irsDeduction - ssDeduction
 
                 return PortugalIrsBracket(
                     irsDeductionValue = irsDeduction,
-                    irsBracketPercentage = taxPercentage,
+                    irsBracketPercentage = irsPercentage,
                     ssDeductionValue = ssDeduction,
                     ssDeductionPercentage = SOCIAL_SECURITY_RATE,
-                    flatRate = flatRate - dependantsFlatRate,
                     netSalary = netSalary
                 )
             }
@@ -401,15 +430,15 @@ sealed interface PortugalIrsBracketType {
                 }
 
                 val irsDeduction = (monthlySalary * taxPercentage) - (flatRate + dependantsFlatRate)
+                val irsPercentage = calculateIrsPercentage(irsDeduction, monthlySalary)
                 val ssDeduction = monthlySalary * SOCIAL_SECURITY_RATE
                 val netSalary = monthlySalary - irsDeduction - ssDeduction
 
                 return PortugalIrsBracket(
                     irsDeductionValue = irsDeduction,
-                    irsBracketPercentage = taxPercentage,
+                    irsBracketPercentage = irsPercentage,
                     ssDeductionValue = ssDeduction,
                     ssDeductionPercentage = SOCIAL_SECURITY_RATE,
-                    flatRate = flatRate - dependantsFlatRate,
                     netSalary = netSalary
                 )
             }
@@ -454,15 +483,15 @@ sealed interface PortugalIrsBracketType {
                 }
 
                 val irsDeduction = (monthlySalary * taxPercentage) - (flatRate + dependantsFlatRate)
+                val irsPercentage = calculateIrsPercentage(irsDeduction, monthlySalary)
                 val ssDeduction = monthlySalary * SOCIAL_SECURITY_RATE
                 val netSalary = monthlySalary - irsDeduction - ssDeduction
 
                 return PortugalIrsBracket(
                     irsDeductionValue = irsDeduction,
-                    irsBracketPercentage = taxPercentage,
+                    irsBracketPercentage = irsPercentage,
                     ssDeductionValue = ssDeduction,
                     ssDeductionPercentage = SOCIAL_SECURITY_RATE,
-                    flatRate = flatRate - dependantsFlatRate,
                     netSalary = netSalary
                 )
             }
@@ -474,5 +503,4 @@ sealed interface PortugalIrsBracketType {
             }
         }
     }
-
 }

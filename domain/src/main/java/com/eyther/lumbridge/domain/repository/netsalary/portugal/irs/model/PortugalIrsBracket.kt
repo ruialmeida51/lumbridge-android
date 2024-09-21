@@ -5,6 +5,5 @@ data class PortugalIrsBracket(
     val irsBracketPercentage: Float,
     val ssDeductionValue: Float,
     val ssDeductionPercentage: Float,
-    val flatRate: Float,
     val netSalary: Float
 )

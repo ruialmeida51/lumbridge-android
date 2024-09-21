@@ -358,17 +358,21 @@ private fun MonthCard(
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(24.dp)
-                        .clickable { selectedMonth.value = expensesMonthUi.id },
+                        .padding(horizontal = HalfPadding)
+                        .size(20.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false)
+                        ) {
+                            selectedMonth.value = expensesMonthUi.id
+                        },
                     imageVector = Icons.Outlined.Delete,
                     contentDescription = null
                 )
 
-                Spacer(modifier = Modifier.width(DefaultPadding))
-
                 Icon(
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(20.dp)
                         .rotate(if (expensesMonthUi.expanded) 180f else 0f),
                     imageVector = Icons.Outlined.ArrowDropDown,
                     contentDescription = null

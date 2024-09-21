@@ -45,22 +45,22 @@
     <string name="financial_overview_food_card_daily">Card Daily</string>
     <string name="financial_overview_deductions">Deductions Overview</string>
     <string name="financial_overview_deductions_portugal">Portugal Deductions</string>
-    <string name="financial_overview_deductions_portugal_irs">IRS</string>
-    <string name="financial_overview_deductions_portugal_social_security">Social Security</string>
-    <string name="financial_overview_deductions_portugal_flat_tax">Flat Tax</string>
     <string name="financial_overview_allocation">Money Allocation</string>
+    <string name="financial_overview_allocation_breakdown">Breakdown</string>
     <string name="financial_overview_mortgage_mortgage_amount">Mortgage Conditions</string>
     <string name="financial_overview_mortgage_next_payment_capital">Capital</string>
     <string name="financial_overview_mortgage_next_payment_interest">Interest</string>
     <string name="financial_overview_mortgage_next_payment">Next Payment</string>
     <string name="financial_overview_mortgage_monthly_payment">Monthly Payment</string>
     <string name="financial_overview_mortgage_payment_almost_complete">Congratulations! You have almost paid your entire loan! There is nothing else to show here.</string>
+    <string name="financial_overview_mortgage_payment_dialog_confirmation_title">Register Payment</string>
+    <string name="financial_overview_mortgage_payment_dialog_confirmation_message">Are you sure you want to register a new monthly payment?\n\nThis will subtract your loan by the capital amount and update your remaining time.</string>
     <string name="financial_overview_no_allocation_strategy">You haven\'t set a money allocation strategy.\nEdit your financial profile to set one.</string>
     <string name="financial_overview_no_profile">You don\'t seem have a financial profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_no_mortgage_profile">You don\'t seem have a mortgage profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_create_profile">Create Financial Profile</string>
     <string name="financial_overview_create_mortgage_profile">Create Mortgage Profile</string>
-    <string name="financial_overview_mortgage_pay_a_month">Add Monthly Payment</string>
+    <string name="financial_overview_mortgage_pay_a_month">Register Monthly Payment</string>
 
     <string name="profile">Profile</string>
     <string name="profile_greeting">Hello, %1$s</string>
@@ -145,7 +145,6 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="irs">IRS</string>
     <string name="social_security">Social Security</string>
-    <string name="flat_tax">Flat Tax</string>
     <string name="refresh">Refresh</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
@@ -191,6 +190,7 @@
     <string name="filter">Filter</string>
     <string name="proceed">Proceed</string>
     <string name="back">Back</string>
+    <string name="register">Register</string>
     <string name="max_length_reached">Char limit reached: %d</string>
 
 </resources>

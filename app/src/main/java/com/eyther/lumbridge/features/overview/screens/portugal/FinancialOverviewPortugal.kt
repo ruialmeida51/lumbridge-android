@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.features.overview.components.DataOverview
+import com.eyther.lumbridge.features.overview.components.TabbedDataOverview
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
@@ -36,7 +36,7 @@ private fun DeductionsBreakdown(currencySymbol: String, deductions: List<Deducti
         )
 
         deductions.forEach { deductionUi ->
-            DataOverview(
+            TabbedDataOverview(
                 label = stringResource(id = deductionUi.label),
                 text = if (deductionUi.hasPercentage()) {
                     "${deductionUi.amount.forceTwoDecimalsPlaces()}$currencySymbol (${deductionUi.percentage}%)"

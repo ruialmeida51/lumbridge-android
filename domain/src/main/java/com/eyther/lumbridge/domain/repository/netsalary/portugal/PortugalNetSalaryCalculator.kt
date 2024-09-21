@@ -65,8 +65,7 @@ class PortugalNetSalaryCalculator @Inject constructor() : NetSalaryCalculator {
         userFinancialsDomain: UserFinancialsDomain
     ): NetSalary {
         val foodCardMonthly = userFinancialsDomain.foodCardPerDiem * WORKING_DAYS_IN_MONTH
-        val portugalIrsBracket =
-            PortugalIrsBracketType.of(userFinancialsDomain).getIrsBracket(userFinancialsDomain)
+        val portugalIrsBracket = PortugalIrsBracketType.of(userFinancialsDomain).getIrsBracket(userFinancialsDomain)
 
         return NetSalary(
             monthlyGrossSalary = userFinancialsDomain.annualGrossSalary / RECEIVING_MONTHS_WITHOUT_DUODECIMOS,
@@ -78,7 +77,6 @@ class PortugalNetSalaryCalculator @Inject constructor() : NetSalaryCalculator {
             deductions = getDeductions(
                 irsDeduction = portugalIrsBracket.irsDeductionValue,
                 ssDeduction = portugalIrsBracket.ssDeductionValue,
-                flatRate = portugalIrsBracket.flatRate,
                 irsBracket = portugalIrsBracket.irsBracketPercentage,
                 ssBracket = portugalIrsBracket.ssDeductionPercentage
             ),
@@ -97,7 +95,6 @@ class PortugalNetSalaryCalculator @Inject constructor() : NetSalaryCalculator {
     private fun getDeductions(
         irsDeduction: Float,
         ssDeduction: Float,
-        flatRate: Float,
         irsBracket: Float,
         ssBracket: Float
     ) = listOf(
@@ -110,10 +107,6 @@ class PortugalNetSalaryCalculator @Inject constructor() : NetSalaryCalculator {
             type = DeductionType.PortugalDeductionType.SocialSecurity,
             value = floor(ssDeduction),
             percentage = ssBracket
-        ),
-        Deduction.FlatDeduction(
-            type = DeductionType.PortugalDeductionType.Flat,
-            value = floor(flatRate)
         )
     )
 

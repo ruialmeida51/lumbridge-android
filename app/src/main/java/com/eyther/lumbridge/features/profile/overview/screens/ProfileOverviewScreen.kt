@@ -158,6 +158,8 @@ private fun Content(
             state = state,
             snackbarHostState = snackbarHostState
         )
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
     }
 }
 

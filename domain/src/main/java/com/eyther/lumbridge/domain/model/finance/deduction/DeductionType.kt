@@ -10,7 +10,6 @@ sealed interface DeductionType {
      * These are the deduction types that exist in Portugal.
      */
     sealed class PortugalDeductionType : DeductionType {
-        data object Flat : PortugalDeductionType()
         data object SocialSecurity : PortugalDeductionType()
         data object IRS : PortugalDeductionType()
     }

@@ -10,6 +10,7 @@ import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageAmortization
 import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageCalculation
 import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType.FIXED
 import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType.VARIABLE
+import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
@@ -40,7 +41,7 @@ fun Deduction.toUi(): DeductionUi {
         )
 
         is Deduction.PercentageDeduction -> DeductionUi(
-            percentage = (percentage * 100).toString(),
+            percentage = (percentage * 100).forceTwoDecimalsPlaces(),
             amount = value,
             label = getLabelForDeductionType(type)
         )
@@ -51,7 +52,6 @@ private fun getLabelForDeductionType(type: DeductionType): Int {
     return when (type) {
         DeductionType.PortugalDeductionType.IRS -> R.string.irs
         DeductionType.PortugalDeductionType.SocialSecurity -> R.string.social_security
-        DeductionType.PortugalDeductionType.Flat -> R.string.flat_tax
     }
 }
 
