@@ -16,12 +16,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 
+/**
+ * A setting composable that displays a label and an optional icon at the start of the row. The [composableRight] lambda can be used to add a
+ * composable to the end of the row.
+ *
+ * @param modifier The modifier to apply to the setting.
+ * @param label The label/text to display.
+ * @param icon The icon to display at the start of the row.
+ * @param composableRight The composable to display at the end of the row, e.g a switch or an icon.
+ */
 @Composable
 fun Settings(
     modifier : Modifier = Modifier,
-    @DrawableRes icon: Int? = null,
     label: String,
-    option: @Composable () -> Unit
+    @DrawableRes icon: Int? = null,
+    composableRight: (@Composable () -> Unit)? = null
 ) {
     Row(
         modifier = Modifier.sizeIn(minHeight = 32.dp).then(modifier),
@@ -44,6 +53,6 @@ fun Settings(
 
         Spacer(Modifier.weight(1f))
 
-        option()
+        composableRight?.invoke()
     }
 }

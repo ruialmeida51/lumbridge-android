@@ -112,6 +112,7 @@
 
     <string name="expenses">Expenses</string>
     <string name="expenses_overview">Expenses</string>
+    <string name="expenses_overview_title">Overview</string>
     <string name="expenses_overview_add_expense">Add Expense</string>
     <string name="expenses_overview_edit_expense">Edit Expense</string>
     <string name="expense_delete_confirmation">Are you sure you want to delete?</string>
@@ -129,6 +130,24 @@
 
     <string name="app_settings_change_preferences">Change your preferences</string>
 
+    <string name="filter">Filter</string>
+    <string name="filter_by">Filtering by</string>
+    <string name="filter_none">None</string>
+    <string name="filter_date_up_to">Date: Up to</string>
+    <string name="filter_date_start_from">Date: Start From</string>
+    <string name="filter_date_range">Date: Range</string>
+    <string name="filter_date_dialog_title">Select a date</string>
+    <string name="filter_date_start_from_dialog">From which date do you want to see your expenses?</string>
+    <string name="filter_date_up_to_dialog">Up to which date do you want to see your expenses?</string>
+    <string name="filter_date_range_dialog">Select a date range to filter your expenses</string>
+
+    <string name="sort_by">Sort by</string>
+    <string name="sorting_by">Sorting by</string>
+    <string name="sort_by_date_ascending">Date: Ascending</string>
+    <string name="sort_by_date_descending">Date: Descending</string>
+    <string name="sort_by_spent_ascending">Spent: Ascending</string>
+    <string name="sort_by_spent_descending">Spent: Descending</string>
+
     <string-array name="loading_messages">
         <item>Hold on tight, we\'re catching data waves!</item>
         <item>Just brewing up some digital magic…</item>
@@ -138,6 +157,12 @@
         <item>Gathering stardust for your digital experience…</item>
         <item>Summoning the internet elves to do their thing…</item>
         <item>Charging up our virtual hamsters for some heavy lifting…</item>
+        <item>Warming up the data pipes, almost ready…</item>
+        <item>Just a few more bytes to go, hang in there…</item>
+        <item>Connecting the dots, almost there…</item>
+        <item>Just a few more ones and zeroes to go…</item>
+        <item>Spinning the digital wheel of fortune…</item>
+        <item>Just a few more pixels to go, hang in there…</item>
     </string-array>
 
     <string name="save">Save</string>
@@ -187,10 +212,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="total">Total</string>
-    <string name="filter">Filter</string>
     <string name="proceed">Proceed</string>
     <string name="back">Back</string>
     <string name="register">Register</string>
+    <string name="apply">Apply</string>
     <string name="max_length_reached">Char limit reached: %d</string>
-
 </resources>

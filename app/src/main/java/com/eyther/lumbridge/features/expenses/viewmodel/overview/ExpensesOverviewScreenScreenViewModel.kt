@@ -5,11 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.domain.time.DAYS_IN_MONTH
-import com.eyther.lumbridge.domain.time.toLocalDate
+import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
+import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
+import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.ExpensesOverviewScreenFilterDelegate
+import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.ExpensesOverviewScreenSortByDelegate
+import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenFilterDelegate
+import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenSortByDelegate
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
@@ -29,16 +33,33 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ExpensesOverviewScreenViewModel @Inject constructor(
+class ExpensesOverviewScreenScreenViewModel @Inject constructor(
     private val getExpensesStreamUseCase: GetExpensesStreamUseCase,
     private val getLocaleOrDefaultStream: GetLocaleOrDefaultStream,
-    private val deleteMonthExpenseUseCase: DeleteMonthExpenseUseCase
+    private val deleteMonthExpenseUseCase: DeleteMonthExpenseUseCase,
+    private val sortByDelegate: ExpensesOverviewScreenSortByDelegate,
+    private val filterDelegate: ExpensesOverviewScreenFilterDelegate
 ) : ViewModel(),
-    IExpensesOverviewScreenViewModel {
+    IExpensesOverviewScreenViewModel,
+    IExpensesOverviewScreenSortByDelegate by sortByDelegate,
+    IExpensesOverviewScreenFilterDelegate by filterDelegate {
+
+    companion object {
+        /**
+         * A helper class to hold the data emitted by the expenses stream, to be used in the combine operator.
+         */
+        private data class ExpensesStreamData(
+            val netSalaryUi: NetSalaryUi?,
+            val expenses: List<ExpensesMonthUi>,
+            val locale: SupportedLocales,
+            val sortBy: ExpensesOverviewSortBy,
+            val filter: ExpensesOverviewFilter
+        )
+    }
 
     override val viewState: MutableStateFlow<ExpensesOverviewScreenViewState> =
         MutableStateFlow(ExpensesOverviewScreenViewState.Loading)
@@ -46,8 +67,13 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     override val viewEffects: MutableSharedFlow<ExpensesOverviewScreenViewEffect> =
         MutableSharedFlow()
 
+    private val sortBy: MutableStateFlow<ExpensesOverviewSortBy> =
+        MutableStateFlow(viewState.value.getDefaultDisplaySortBy())
+
+    private val filter: MutableStateFlow<ExpensesOverviewFilter> =
+        MutableStateFlow(viewState.value.getDefaultDisplayFilter())
+
     private var cachedNetSalaryUi: NetSalaryUi? = null
-    private lateinit var cachedLocale: SupportedLocales
 
     init {
         viewModelScope.launch {
@@ -58,24 +84,35 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     private suspend fun observeExpenses() {
         combine(
             getExpensesStreamUseCase(),
-            getLocaleOrDefaultStream()
-        ) { (netSalaryUi, expenses), locale -> Triple(netSalaryUi, expenses, locale) }
+            getLocaleOrDefaultStream(),
+            sortBy,
+            filter
+        ) { (netSalaryUi, expenses), locale, sortBy, filter ->
+            ExpensesStreamData(
+                netSalaryUi = netSalaryUi,
+                expenses = expenses,
+                locale = locale,
+                sortBy = sortBy,
+                filter = filter
+            )
+        }
             .flowOn(Dispatchers.IO)
-            .onEach { (netSalaryUi, expenses, locale) ->
-                cachedNetSalaryUi = netSalaryUi
-                cachedLocale = locale
+            .onEach { streamData ->
+                cachedNetSalaryUi = streamData.netSalaryUi
 
                 viewState.update {
-                    if (expenses.isEmpty()) {
+                    if (streamData.expenses.isEmpty()) {
                         getEmptyState(
-                            netSalaryUi = netSalaryUi,
-                            locale = locale
+                            netSalaryUi = streamData.netSalaryUi,
+                            locale = streamData.locale
                         )
                     } else {
                         getContentState(
-                            monthlyExpenses = expenses,
-                            netSalaryUi = netSalaryUi,
-                            locale = locale
+                            monthlyExpenses = streamData.expenses,
+                            netSalaryUi = streamData.netSalaryUi,
+                            locale = streamData.locale,
+                            sortBy = streamData.sortBy,
+                            filter = streamData.filter
                         )
                     }
                 }
@@ -96,7 +133,9 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             getContentState(
                 monthlyExpenses = monthExpensesUiList,
                 netSalaryUi = cachedNetSalaryUi,
-                locale = cachedLocale
+                locale = oldState.asContent().locale,
+                sortBy = sortBy.value,
+                filter = filter.value
             )
         }
     }
@@ -118,14 +157,16 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             getContentState(
                 monthlyExpenses = monthExpensesUiList,
                 netSalaryUi = cachedNetSalaryUi,
-                locale = cachedLocale
+                locale = oldState.asContent().locale,
+                sortBy = sortBy.value,
+                filter = filter.value
             )
         }
     }
 
     override fun onDeleteExpense(expensesMonth: ExpensesMonthUi) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesOverviewScreenViewModel::class.java.simpleName, "💥 Error deleting expense", throwable)
+            Log.e(ExpensesOverviewScreenScreenViewModel::class.java.simpleName, "💥 Error deleting expense", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(ExpensesOverviewScreenViewEffect.ShowError(throwable.message.orEmpty()))
@@ -222,26 +263,46 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     /**
      * Helper function to get the content state of the view state. It assumes that the view state is of type Content.
      *
+     * It will apply the filter and sort by to the list of month expenses, by making use of two delegates:
+     * - [IExpensesOverviewScreenFilterDelegate] to apply the filter
+     * - [IExpensesOverviewScreenSortByDelegate] to apply the sort by
+     *
      * @param monthlyExpenses The list of month expenses with the selected month expanded.
      * @param netSalaryUi The net salary UI to set in the new state.
      */
     private fun getContentState(
         monthlyExpenses: List<ExpensesMonthUi>,
         netSalaryUi: NetSalaryUi?,
-        locale: SupportedLocales
+        locale: SupportedLocales,
+        sortBy: ExpensesOverviewSortBy,
+        filter: ExpensesOverviewFilter
     ): ExpensesOverviewScreenViewState.Content {
+        val filteredExpenses = filterDelegate.applyFilter(monthlyExpenses, filter)
+        val sortedExpenses = sortByDelegate.applySortBy(filteredExpenses, sortBy)
+        val totalExpenses = sortedExpenses.sumOf { it.spent.toDouble() }.toFloat()
+        val availableFilters = ExpensesOverviewFilter.get()
+        val availableSorts = ExpensesOverviewSortBy.get()
+
         return if (netSalaryUi == null) {
             ExpensesOverviewScreenViewState.Content.NoFinancialProfile(
-                expensesMonthUi = monthlyExpenses,
-                totalExpenses = monthlyExpenses.sumOf { it.spent.toDouble() }.toFloat(),
-                locale = locale
+                expensesMonthUi = sortedExpenses,
+                totalExpenses = totalExpenses,
+                locale = locale,
+                availableSorts = ExpensesOverviewSortBy.get(),
+                availableFilters = availableFilters,
+                selectedSort = sortBy,
+                selectedFilter = filter
             )
         } else {
             ExpensesOverviewScreenViewState.Content.HasFinancialProfile(
                 netSalaryUi = netSalaryUi,
-                totalExpenses = monthlyExpenses.sumOf { it.spent.toDouble() }.toFloat(),
-                expensesMonthUi = monthlyExpenses,
-                locale = locale
+                totalExpenses = totalExpenses,
+                expensesMonthUi = sortedExpenses,
+                locale = locale,
+                availableSorts = availableSorts,
+                availableFilters = availableFilters,
+                selectedSort = sortBy,
+                selectedFilter = filter
             )
         }
     }
@@ -265,80 +326,49 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         }
     }
 
-    // TODO Improvements: Add a filter function to filter the expenses by a date range.
+    override fun onFilter(filterOrdinal: Int, startYear: Int?, startMonth: Int?, endYear: Int?, endMonth: Int?) {
+        viewModelScope.launch {
+            val filterType = withContext(Dispatchers.Default) {
+                ExpensesOverviewFilter.of(
+                    ordinal = filterOrdinal,
+                    startYear = startYear,
+                    startMonth = startMonth,
+                    endYear = endYear,
+                    endMonth = endMonth
+                )
+            }
 
-    /**
-     * Helper function to filter the expenses by a date range.
-     *
-     * The way this works is as follows:
-     * - If the start date is null and the end date is not, we filter the expenses by the end date.
-     * - If the start date is not null and the end date is, we filter the expenses by the start date.
-     * - If both the start date and the end date are not null, we filter the expenses by the range between the start and end dates.
-     * - If both the start date and the end date are null, we return the expenses as is.
-     *
-     * @param expenses The list of expenses to filter.
-     * @param startDate The start date of the range.
-     * @param endDate The end date of the range.
-     *
-     * @return The list of expenses filtered by the date range.
-     */
-    private fun List<ExpensesMonthUi>.filterExpensesByDateRange(
-        startDate: LocalDate?,
-        endDate: LocalDate?
-    ): List<ExpensesMonthUi> = when {
-        startDate == null && endDate != null -> {
-            filter { expense ->
-                val endMonth = endDate.monthValue
-                val endYear = endDate.year
-
-                expense.year.value == endYear && expense.month.value <= endMonth
+            withContext(Dispatchers.IO) {
+                filter.value = filterType
             }
         }
-
-        startDate != null && endDate == null -> {
-            filter { expense ->
-                val startMonth = startDate.monthValue
-                val startYear = startDate.year
-
-                expense.year.value == startYear && expense.month.value >= startMonth
-            }
-        }
-
-        startDate != null && endDate != null -> {
-            filter { expense ->
-                val startMonth = startDate.monthValue
-                val startYear = startDate.year
-                val endMonth = endDate.monthValue
-                val endYear = endDate.year
-
-                expense.year.value in startYear..endYear &&
-                    expense.month.value in startMonth..endMonth
-            }
-        }
-
-        else -> this
     }
 
-    /**
-     * Gets the selectable dates for the date range picker.
-     *
-     * The way this works is as follows:
-     * - If the view state is content, we get the minimum start date and the maximum end date from the expenses.
-     *
-     * @return The selectable dates for the date range picker.
-     */
-    private fun getSelectableDates(): ClosedRange<LocalDate>? {
-        if (!viewState.value.isContent()) return null
+    override fun onSortBy(sortByOrdinal: Int) {
+        viewModelScope.launch {
+            val sortByType = withContext(Dispatchers.Default) {
+                ExpensesOverviewSortBy.of(sortByOrdinal)
+            }
 
-        val viewStateAsContent = viewState.value.asContent()
+            withContext(Dispatchers.IO) {
+                sortBy.value = sortByType
+            }
+        }
+    }
 
-        val dates = viewStateAsContent
-            .expensesMonthUi
-            .map { it.year to it.month }
+    override fun onClearFilter() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                filter.value = ExpensesOverviewFilter.None
+            }
+        }
+    }
 
-        val minStartDate = dates.minOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
-        val maxEndDate = dates.maxOf { it.toLocalDate().withDayOfMonth(DAYS_IN_MONTH) }
-
-        return minStartDate..maxEndDate
+    override fun onClearSortBy() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                sortBy.value = ExpensesOverviewSortBy.DateDescending
+            }
+        }
     }
 }

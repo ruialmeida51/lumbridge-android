@@ -90,14 +90,13 @@ private val darkScheme = darkColorScheme(
 @Composable
 fun LumbridgeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) {
         darkScheme
     } else {
         lightScheme
     }
-
 
     val view = LocalView.current
     if (!view.isInEditMode) {
