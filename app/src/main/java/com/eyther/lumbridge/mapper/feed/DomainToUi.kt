@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.mapper.news
+package com.eyther.lumbridge.mapper.feed
 
 import com.eyther.lumbridge.domain.model.news.Feed
 import com.eyther.lumbridge.domain.model.news.FeedItem
@@ -20,6 +20,9 @@ fun FeedItem.toUi(): FeedItemUi {
     )
 }
 
-fun RssFeed.toUi(): RssFeedUi {
-    return RssFeedUi(this.name)
-}
+fun RssFeed.toUi() = RssFeedUi(
+    label = name,
+    url = url
+)
+
+fun List<RssFeed>.toUi() = map { it.toUi() }

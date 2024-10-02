@@ -2,7 +2,21 @@
     <string name="app_name">Lumbridge</string>
 
     <string name="feed">Feed</string>
-    <string name="feed_empty_message">It seems we\'re having some trouble fetching the news feed.\nPlease try again later.</string>
+    <string name="feed_edit">Edit Feed</string>
+    <string name="feed_error_message">It seems we\'re having some trouble fetching the news feed.\nPlease, make sure the URL is correct and try again.</string>
+    <string name="feed_add_message">Looks like you have no news feed sources.\nTap the button below to add some!</string>
+    <string name="feed_add_feeds_button">Add Feeds</string>
+    <string name="feed_no_feeds_start_adding">Add your first feed by tapping the button below!</string>
+    <string name="feed_edit_feeds_list">Your Feeds</string>
+    <string name="feed_edit_message">Fill out the details below to add or update a RSS feed</string>
+    <string name="feed_edit_rss_name">RSS Name</string>
+    <string name="feed_edit_rss_url">RSS Url</string>
+    <string name="feed_edit_rss_invalid_name">Please enter a valid RSS feed name</string>
+    <string name="feed_edit_rss_invalid_url">Please enter a valid RSS feed URL</string>
+    <string name="feed_edit_feed_button">Save Feed</string>
+    <string name="feed_edit_delete_button">Delete Feed</string>
+    <string name="feed_edit_add_button">Add Feed</string>
+
     <string name="overview">Overview</string>
 
     <string name="tools">Tools</string>
@@ -216,5 +230,8 @@
     <string name="back">Back</string>
     <string name="register">Register</string>
     <string name="apply">Apply</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+    <string name="url">Url</string>
     <string name="max_length_reached">Char limit reached: %d</string>
 </resources>

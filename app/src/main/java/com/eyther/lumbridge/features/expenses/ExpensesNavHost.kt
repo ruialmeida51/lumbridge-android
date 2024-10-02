@@ -12,6 +12,7 @@ import androidx.navigation.navArgument
 import com.eyther.lumbridge.features.editfinancialprofile.screens.EditFinancialProfileScreen
 import com.eyther.lumbridge.features.editmortgageprofile.screens.EditMortgageProfileScreen
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
+import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_EXPENSE_ID
 import com.eyther.lumbridge.features.expenses.screens.ExpensesAddScreen
 import com.eyther.lumbridge.features.expenses.screens.ExpensesEditScreen
 import com.eyther.lumbridge.features.expenses.screens.ExpensesOverviewScreen
@@ -73,7 +74,7 @@ fun ExpensesNavHost(
             },
             route = ExpensesNavigationItem.EditExpense.route,
             arguments = listOf(
-                navArgument("expenseId") {
+                navArgument(ARG_EXPENSE_ID) {
                     type = NavType.LongType
                     nullable = false
                     defaultValue = 0L

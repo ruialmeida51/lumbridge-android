@@ -92,6 +92,16 @@ interface IExpensesOverviewScreenViewModel {
     fun onClearSortBy()
 
     /**
+     * Collapses all the views, including months and categories.
+     */
+    fun collapseAll()
+
+    /**
+     * Expands all the views, including months and categories.
+     */
+    fun expandAll()
+
+    /**
      * Navigate to the selected expenses screen, based on the selected navigation item.
      *
      * @param navigationItem The selected navigation item

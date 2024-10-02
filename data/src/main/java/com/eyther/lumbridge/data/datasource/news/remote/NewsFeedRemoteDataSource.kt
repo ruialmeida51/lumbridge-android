@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.data.datasource.news.remote
 
+import android.webkit.URLUtil
 import com.eyther.lumbridge.data.extensions.okhttp.await
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -23,6 +24,10 @@ class NewsFeedRemoteDataSource @Inject constructor() {
         .method("GET", null)
 
     suspend fun getRssFeed(url: String): String? {
+        if (!URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url)) {
+            return null
+        }
+
         val request = requestBuilder.url(url).build()
         val response = okHttpClient.newCall(request).await()
 

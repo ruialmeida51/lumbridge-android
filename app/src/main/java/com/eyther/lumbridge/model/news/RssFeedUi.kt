@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.model.news
 
 data class RssFeedUi(
-    val label: String
+    val label: String,
+    val url: String
 )

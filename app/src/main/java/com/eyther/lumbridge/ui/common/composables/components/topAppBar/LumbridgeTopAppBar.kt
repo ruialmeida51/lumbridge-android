@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.ui.common.composables.components.topAppBar
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 @Composable
 fun LumbridgeTopAppBar(
     topAppBarVariation: TopAppBarVariation,
+    showIcons: Boolean = true,
     actions: @Composable (RowScope.() -> Unit)? = null
 ) {
     TopAppBar(
@@ -53,11 +55,14 @@ fun LumbridgeTopAppBar(
             }
         },
         actions = {
-            Row(
-                modifier = Modifier.padding(horizontal = DefaultPadding),
-                horizontalArrangement = Arrangement.spacedBy(DefaultPadding)
-            ) {
-                actions?.invoke(this)
+
+            AnimatedVisibility(showIcons) {
+                Row(
+                    modifier = Modifier.padding(horizontal = DefaultPadding),
+                    horizontalArrangement = Arrangement.spacedBy(DefaultPadding)
+                ) {
+                    actions?.invoke(this@Row)
+                }
             }
         }
     )

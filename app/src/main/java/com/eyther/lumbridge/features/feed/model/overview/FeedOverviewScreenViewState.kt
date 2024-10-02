@@ -1,25 +1,29 @@
-package com.eyther.lumbridge.features.feed.model
+package com.eyther.lumbridge.features.feed.model.overview
 
 import com.eyther.lumbridge.model.news.FeedItemUi
 import com.eyther.lumbridge.model.news.RssFeedUi
 
-sealed class FeedScreenViewState(
+sealed class FeedOverviewScreenViewState(
     open val availableFeeds: List<RssFeedUi>,
     open val selectedFeed: RssFeedUi?
 ) {
+    data object Empty : FeedOverviewScreenViewState(emptyList(), null)
+
     data class Loading(
         override val availableFeeds: List<RssFeedUi> = emptyList(),
         override val selectedFeed: RssFeedUi? = null
-    ) : FeedScreenViewState(availableFeeds, selectedFeed)
+    ) : FeedOverviewScreenViewState(availableFeeds, selectedFeed)
 
-    data class Empty(
+    data class Error(
         override val availableFeeds: List<RssFeedUi> = emptyList(),
         override val selectedFeed: RssFeedUi? = null
-    ) : FeedScreenViewState(availableFeeds, selectedFeed)
+    ) : FeedOverviewScreenViewState(availableFeeds, selectedFeed)
 
     data class Content(
         override val availableFeeds: List<RssFeedUi>,
         override val selectedFeed: RssFeedUi,
         val feedItems: List<FeedItemUi>
-    ) : FeedScreenViewState(availableFeeds, selectedFeed)
+    ) : FeedOverviewScreenViewState(availableFeeds, selectedFeed)
+
+    fun shouldDisplayEditFeedIcon() = this.availableFeeds.isNotEmpty()
 }

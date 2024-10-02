@@ -10,6 +10,4 @@ sealed interface ExpensesEditScreenViewState {
         val availableCategories: List<ExpensesCategoryTypes>,
         val shouldEnableSaveButton: Boolean
     ) : ExpensesEditScreenViewState
-
-    fun asContent(): Content? = this as? Content
 }

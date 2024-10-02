@@ -192,8 +192,8 @@ class ExpensesOverviewScreenScreenViewModel @Inject constructor(
     }
 
     /**
-     * Helper function that returns the monthly expenses with a selected month expanded, collapsing
-     * the rest of the months.
+     * Helper function that returns the monthly expenses with a selected month expanded, maintaining whatever expanded state
+     * the other months have.
      *
      * @param monthlyExpenses The list of month expenses.
      * @param selectedMonth The month to expand.
@@ -211,23 +211,22 @@ class ExpensesOverviewScreenScreenViewModel @Inject constructor(
             return monthlyExpenses
         }
 
-        // Check if the selected month is already expanded.
-        val isAlreadyExpanded = monthlyExpenses
-            .find { it == selectedMonth }
-            ?.expanded
-
-        // Create a new list of month expenses where the selected month is expanded and the rest are not.
-        // If the selected month is already expanded, collapse it.
         return monthlyExpenses.mapIndexed { index, monthExpensesUi ->
-            monthExpensesUi.copy(
-                expanded = selectedIndex == index && isAlreadyExpanded != true
-            )
+            if (index == selectedIndex) {
+                monthExpensesUi.copy(
+                    expanded = !monthExpensesUi.expanded
+                )
+            } else {
+                monthExpensesUi.copy(
+                    expanded = monthExpensesUi.expanded
+                )
+            }
         }
     }
 
     /**
-     * Helper function that returns the category expenses with a selected category expanded, collapsing
-     * the rest of the categories.
+     * Helper function that returns the category expenses with a selected category expanded, maintaining whatever expanded state
+     * the other categories have.
      *
      * @param categoryExpenses The list of category expenses.
      * @param selectedCategory The category to expand.
@@ -245,8 +244,6 @@ class ExpensesOverviewScreenScreenViewModel @Inject constructor(
             return categoryExpenses
         }
 
-        // Create a new list of category expenses where the selected category is expanded and the rest are not.
-        // If the selected category is already expanded, collapse it.
         return categoryExpenses.mapIndexed { index, categoryExpensesUi ->
             if (index == selectedIndex) {
                 categoryExpensesUi.copy(
@@ -369,6 +366,54 @@ class ExpensesOverviewScreenScreenViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 sortBy.value = ExpensesOverviewSortBy.DateDescending
             }
+        }
+    }
+
+    override fun collapseAll() {
+        viewState.update { oldState ->
+            val monthlyExpenses = oldState
+                .asContent()
+                .expensesMonthUi
+                .map { monthExpensesUi ->
+                    monthExpensesUi.copy(
+                        expanded = false,
+                        categoryExpenses = monthExpensesUi.categoryExpenses.map { categoryExpensesUi ->
+                            categoryExpensesUi.copy(expanded = false)
+                        }
+                    )
+                }
+
+            getContentState(
+                monthlyExpenses = monthlyExpenses,
+                netSalaryUi = cachedNetSalaryUi,
+                locale = oldState.asContent().locale,
+                sortBy = sortBy.value,
+                filter = filter.value
+            )
+        }
+    }
+
+    override fun expandAll() {
+        viewState.update { oldState ->
+            val monthlyExpenses = oldState
+                .asContent()
+                .expensesMonthUi
+                .map { monthExpensesUi ->
+                    monthExpensesUi.copy(
+                        expanded = true,
+                        categoryExpenses = monthExpensesUi.categoryExpenses.map { categoryExpensesUi ->
+                            categoryExpensesUi.copy(expanded = true)
+                        }
+                    )
+                }
+
+            getContentState(
+                monthlyExpenses = monthlyExpenses,
+                netSalaryUi = cachedNetSalaryUi,
+                locale = oldState.asContent().locale,
+                sortBy = sortBy.value,
+                filter = filter.value
+            )
         }
     }
 }

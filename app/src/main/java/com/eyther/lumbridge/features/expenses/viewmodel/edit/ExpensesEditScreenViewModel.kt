@@ -8,6 +8,7 @@ import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewState
+import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_EXPENSE_ID
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.ExpensesEditScreenInputHandler
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.IExpensesEditScreenInputHandler
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
@@ -37,7 +38,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
     IExpensesEditScreenViewModel,
     IExpensesEditScreenInputHandler by expensesEditScreenInputHandler {
 
-    private val detailedExpenseId = checkNotNull(savedStateHandle.get<Long>("expenseId")) {
+    private val detailedExpenseId = checkNotNull(savedStateHandle.get<Long>(ARG_EXPENSE_ID)) {
         "Detailed expense ID is null"
     }
 

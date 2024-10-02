@@ -2,6 +2,7 @@ package com.eyther.lumbridge.data.datasource.user.local
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.util.Base64
 import android.util.Log
 import androidx.datastore.core.DataStore
@@ -70,7 +71,12 @@ class UserProfileLocalDataSource @Inject constructor(
 
     private fun convertBitmapToString(bitmap: Bitmap): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 100, byteArrayOutputStream)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 100, byteArrayOutputStream)
+        } else {
+            bitmap.compress(Bitmap.CompressFormat.WEBP, 100, byteArrayOutputStream)
+        }
 
         return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
     }

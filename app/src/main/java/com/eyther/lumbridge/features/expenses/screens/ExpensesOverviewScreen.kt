@@ -1,8 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 
 package com.eyther.lumbridge.features.expenses.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Delete
@@ -128,7 +131,40 @@ fun ExpensesOverviewScreen(
                 topAppBarVariation = TopAppBarVariation.Title(
                     title = stringResource(id = label)
                 ),
+                showIcons = state.isContent(),
                 actions = {
+                    Icon(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false),
+                            onClick = { viewModel.navigate(ExpensesNavigationItem.AddExpense, navController) }
+                        ),
+                        painter = painterResource(R.drawable.ic_add),
+                        contentDescription = stringResource(
+                            id = R.string.expenses_overview_add_expense
+                        )
+                    )
+
+                    Icon(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false),
+                            onClick = viewModel::collapseAll
+                        ),
+                        painter = painterResource(R.drawable.ic_unfold_less),
+                        contentDescription = stringResource(id = R.string.collapse)
+                    )
+
+                    Icon(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false),
+                            onClick = viewModel::expandAll
+                        ),
+                        painter = painterResource(R.drawable.ic_unfold_more),
+                        contentDescription = stringResource(id = R.string.expand)
+                    )
+
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
@@ -224,9 +260,9 @@ private fun Content(
     navigate: (NavigationItem, NavHostController) -> Unit
 ) {
     LazyColumn {
-        items(state.expensesMonthUi.count()) { index ->
-            val monthExpensesUi = state.expensesMonthUi[index]
-
+        itemsIndexed(
+            items = state.expensesMonthUi
+        ) { index, monthExpensesUi ->
             if (index == 0) {
                 FinancialProfile(
                     state = state,
@@ -235,7 +271,6 @@ private fun Content(
                     onClearSortBy = onClearSortBy,
                     navController = navController
                 )
-
 
                 Spacer(modifier = Modifier.height(HalfPadding))
 
@@ -406,15 +441,14 @@ private fun HasFinancialProfile(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(HalfPadding)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_dollar),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp)
             )
-
-            Spacer(modifier = Modifier.height(DefaultPadding))
 
             TabbedDataOverview(
                 label = stringResource(id = R.string.net_monthly),
@@ -426,15 +460,14 @@ private fun HasFinancialProfile(
         if (totalSpent != null) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(HalfPadding)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_chart),
                     contentDescription = null,
                     modifier = Modifier.size(16.dp)
                 )
-
-                Spacer(modifier = Modifier.height(DefaultPadding))
 
                 TabbedDataOverview(
                     label = stringResource(id = R.string.total),
@@ -445,15 +478,14 @@ private fun HasFinancialProfile(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(HalfPadding)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_sort_by),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp)
             )
-
-            Spacer(modifier = Modifier.height(DefaultPadding))
 
             TabbedDataOverview(
                 label = stringResource(id = R.string.sorting_by),
@@ -464,7 +496,7 @@ private fun HasFinancialProfile(
                             painter = painterResource(id = R.drawable.ic_clear),
                             contentDescription = stringResource(id = R.string.clear),
                             modifier = Modifier
-                                .size(20.dp)
+                                .size(16.dp)
                                 .clickable { onClearSortBy() }
                         )
                     }
@@ -476,15 +508,14 @@ private fun HasFinancialProfile(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(HalfPadding)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_filter),
                 contentDescription = null,
                 modifier = Modifier.size(16.dp)
             )
-
-            Spacer(modifier = Modifier.height(DefaultPadding))
 
             TabbedDataOverview(
                 label = stringResource(id = R.string.filter_by),
@@ -495,7 +526,7 @@ private fun HasFinancialProfile(
                             painter = painterResource(id = R.drawable.ic_clear),
                             contentDescription = stringResource(id = R.string.clear),
                             modifier = Modifier
-                                .size(20.dp)
+                                .size(16.dp)
                                 .clickable { onClearFilter() }
                         )
                     }
@@ -510,6 +541,7 @@ private fun HasFinancialProfile(
 
 @Composable
 private fun MonthCard(
+    modifier: Modifier = Modifier,
     expensesMonthUi: ExpensesMonthUi,
     currencySymbol: String,
     selectedMonth: MutableState<Long>,
@@ -517,12 +549,13 @@ private fun MonthCard(
     onSelectCategory: (ExpensesCategoryUi) -> Unit,
     onEditExpense: (ExpensesDetailedUi) -> Unit
 ) {
-
     ColumnCardWrapper(
+        modifier = modifier,
         onClick = { onSelectMonth(expensesMonthUi) }
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             contentAlignment = Alignment.CenterStart
         ) {
 
@@ -573,7 +606,9 @@ private fun MonthCard(
                     text = "${expensesMonthUi.remainder.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
 
-                if (expensesMonthUi.expanded) {
+                AnimatedVisibility(
+                    visible = expensesMonthUi.expanded
+                ) {
                     Spacer(modifier = Modifier.height(HalfPadding))
 
                     CategoriesCard(
@@ -628,7 +663,9 @@ private fun CategoriesCard(
 
             }
 
-            if (category.expanded) {
+            AnimatedVisibility(
+                visible = category.expanded
+            ) {
                 DetailsCard(
                     expensesDetailed = category.expensesDetailedUi,
                     currencySymbol = currencySymbol,

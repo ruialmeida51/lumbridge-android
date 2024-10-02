@@ -3,8 +3,8 @@ package com.eyther.lumbridge.features.feed.screens
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,15 +36,18 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.features.feed.model.FeedScreenViewEffects
-import com.eyther.lumbridge.features.feed.model.FeedScreenViewState
-import com.eyther.lumbridge.features.feed.viewmodel.FeedScreenViewModel
-import com.eyther.lumbridge.features.feed.viewmodel.IFeedScreenViewModel
+import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewEffects
+import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState
+import com.eyther.lumbridge.features.feed.navigation.FeedNavigationItem
+import com.eyther.lumbridge.features.feed.viewmodel.overview.FeedOverviewScreenViewModel
+import com.eyther.lumbridge.features.feed.viewmodel.overview.IFeedOverviewScreenViewModel
 import com.eyther.lumbridge.model.news.FeedItemUi
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
@@ -59,19 +63,23 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun FeedScreen(
+fun FeedOverviewScreen(
     @StringRes label: Int,
-    viewModel: IFeedScreenViewModel = hiltViewModel<FeedScreenViewModel>()
+    navController: NavHostController,
+    viewModel: IFeedOverviewScreenViewModel = hiltViewModel<FeedOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
+
     val availableFeedsListState = rememberLazyListState()
     val feedPaddingInPx = LocalDensity.current.run { DefaultPadding.toPx() }.toInt()
+
+    val showAddFeedBottomSheet = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.viewEffects
             .onEach { viewEffects ->
                 when (viewEffects) {
-                    is FeedScreenViewEffects.ScrollToIndex -> scrollToSelectedFeed(
+                    is FeedOverviewScreenViewEffects.ScrollToIndex -> scrollToSelectedFeed(
                         listState = availableFeedsListState,
                         selectedIndex = viewEffects.index,
                         defaultPaddingInPx = feedPaddingInPx
@@ -84,7 +92,19 @@ fun FeedScreen(
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
-                topAppBarVariation = TopAppBarVariation.Title(title = stringResource(id = label))
+                topAppBarVariation = TopAppBarVariation.Title(title = stringResource(id = label)),
+                showIcons = state.shouldDisplayEditFeedIcon(),
+                actions = {
+                    Icon(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false),
+                            onClick = { viewModel.navigate(FeedNavigationItem.FeedEdit, navController) }
+                        ),
+                        painter = painterResource(R.drawable.ic_edit),
+                        contentDescription = stringResource(id = R.string.edit)
+                    )
+                }
             )
         }
     ) { paddingValues ->
@@ -107,21 +127,33 @@ fun FeedScreen(
             Spacer(modifier = Modifier.height(HalfPadding))
 
             when (state) {
-                is FeedScreenViewState.Content -> {
+                is FeedOverviewScreenViewState.Empty -> {
+                    EmptyScreen(
+                        onEditFeeds = { showAddFeedBottomSheet.value = true }
+                    )
+                }
+
+                is FeedOverviewScreenViewState.Content -> {
                     Content(
                         state = state
                     )
                 }
 
-                is FeedScreenViewState.Empty -> {
-                    EmptyScreen(
+                is FeedOverviewScreenViewState.Error -> {
+                    ErrorScreen(
                         onRefresh = viewModel::refresh
                     )
                 }
 
-                is FeedScreenViewState.Loading -> {
+                is FeedOverviewScreenViewState.Loading -> {
                     LoadingIndicator()
                 }
+            }
+
+            if (showAddFeedBottomSheet.value) {
+                FeedAddOrEditBottomSheet(
+                    showBottomSheet = showAddFeedBottomSheet
+                )
             }
         }
     }
@@ -129,7 +161,7 @@ fun FeedScreen(
 
 @Composable
 private fun Content(
-    state: FeedScreenViewState.Content
+    state: FeedOverviewScreenViewState.Content
 ) {
     LazyColumn(
         modifier = Modifier
@@ -168,6 +200,7 @@ private fun FeedOption(
     Text(
         text = feed.label,
         style = MaterialTheme.typography.bodyLarge,
+        textAlign = TextAlign.Center,
         modifier = Modifier
             .padding(end = QuarterPadding)
             .background(
@@ -238,7 +271,31 @@ private fun FeedItem(
 }
 
 @Composable
-private fun ColumnScope.EmptyScreen(
+private fun EmptyScreen(
+    onEditFeeds: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        EmptyScreenWithButton(
+            modifier = Modifier.padding(DefaultPadding),
+            text = stringResource(id = R.string.feed_add_message),
+            buttonText = stringResource(id = R.string.feed_add_feeds_button),
+            icon = {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    painter = painterResource(id = R.drawable.ic_rss),
+                    contentDescription = stringResource(id = R.string.feed)
+                )
+            },
+            onButtonClick = onEditFeeds
+        )
+    }
+}
+
+@Composable
+private fun ErrorScreen(
     onRefresh: () -> Unit
 ) {
     Column(
@@ -247,7 +304,7 @@ private fun ColumnScope.EmptyScreen(
     ) {
         EmptyScreenWithButton(
             modifier = Modifier.padding(DefaultPadding),
-            text = stringResource(id = R.string.feed_empty_message),
+            text = stringResource(id = R.string.feed_error_message),
             buttonText = stringResource(id = R.string.refresh),
             icon = {
                 Icon(

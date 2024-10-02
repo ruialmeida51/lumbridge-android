@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.eyther.lumbridge.data.di.LocalDataModule.CurrencyRatesDataStore
-import com.eyther.lumbridge.data.di.UtilModule
 import com.eyther.lumbridge.data.di.UtilModule.DefaultGson
 import com.eyther.lumbridge.data.model.currencyexchange.local.CurrencyRatesCached
 import com.google.gson.Gson

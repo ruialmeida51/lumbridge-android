@@ -9,6 +9,10 @@ sealed class ExpensesNavigationItem(
     @StringRes label: Int
 ) : NavigationItem(route, label) {
 
+    companion object {
+        const val ARG_EXPENSE_ID = "expenseId"
+    }
+
     data object ExpensesOverview : ExpensesNavigationItem(
         route = "expenses_overview",
         label = R.string.expenses_overview
@@ -25,7 +29,7 @@ sealed class ExpensesNavigationItem(
     )
 
     data object EditExpense : ExpensesNavigationItem(
-        route = "edit_expense/{expenseId}",
+        route = "edit_expense/{$ARG_EXPENSE_ID}",
         label = R.string.expenses_overview_edit_expense
     )
 }

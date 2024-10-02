@@ -1,38 +1,60 @@
 package com.eyther.lumbridge.domain.repository.news
 
 import android.text.Html
+import com.eyther.lumbridge.data.datasource.news.local.RssFeedLocalDataSource
 import com.eyther.lumbridge.data.datasource.news.remote.NewsFeedRemoteDataSource
+import com.eyther.lumbridge.domain.mapper.feed.toCached
+import com.eyther.lumbridge.domain.mapper.feed.toDomain
 import com.eyther.lumbridge.domain.model.news.Feed
 import com.eyther.lumbridge.domain.model.news.FeedItem
 import com.eyther.lumbridge.domain.model.news.RssFeed
-import com.eyther.lumbridge.domain.model.news.RssFeed.AndroidDevelopment
-import com.eyther.lumbridge.domain.model.news.RssFeed.News
 import com.prof18.rssparser.RssParserBuilder
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NewsFeedRepository @Inject constructor(
-    private val newsFeedRemoteDataSource: NewsFeedRemoteDataSource
+    private val newsFeedRemoteDataSource: NewsFeedRemoteDataSource,
+    private val rssFeedLocalDataSource: RssFeedLocalDataSource
 ) {
+    fun getAvailableFeedsFlow(): Flow<List<RssFeed>> {
+        return rssFeedLocalDataSource
+            .rssFeedFlow
+            .mapNotNull { it?.toDomain() }
+    }
 
-    /**
-     * The current available feeds. It doesn't necessarily mean we don't have more feeds available,
-     * but these are the ones we are currently displaying.
-     *
-     * @return a list of available feeds
-     */
-    fun getAvailableFeeds() = listOf(
-        News.Euronews,
-        News.PortugalNews,
-        News.JornalDeNegocios,
-        News.RTP,
-        News.Publico,
-        AndroidDevelopment.Medium,
-        AndroidDevelopment.JoeBirch,
-        AndroidDevelopment.ProAndroidDev,
-        AndroidDevelopment.AndroidCentral
-    )
+    suspend fun getAvailableFeeds(): List<RssFeed> {
+        return rssFeedLocalDataSource.rssFeedFlow.firstOrNull()
+            .orEmpty()
+            .toDomain()
+    }
+
+    suspend fun saveRssFeed(rssFeed: RssFeed) {
+        val currentFeeds = rssFeedLocalDataSource.rssFeedFlow.firstOrNull().orEmpty()
+        val cachedFeedToAdd = rssFeed.toCached()
+
+        val sanitisedListOfFeeds = currentFeeds.map { it.copy(name = it.name.replace("\\s".toRegex(), "")) }
+        val sanitisedFeedToAdd = cachedFeedToAdd.copy(name = cachedFeedToAdd.name.replace("\\s".toRegex(), ""))
+
+        // Check if the feed is already in the list. If it is, update it.
+        val newFeeds = if (sanitisedListOfFeeds.any { it.name.equals(sanitisedFeedToAdd.name, true) }) {
+            sanitisedListOfFeeds.filter { it.name != sanitisedFeedToAdd.name } + sanitisedFeedToAdd
+        } else {
+            sanitisedListOfFeeds + sanitisedFeedToAdd
+        }
+
+        rssFeedLocalDataSource.saveRssFeed(newFeeds)
+    }
+
+    suspend fun removeRssFeed(rssFeed: RssFeed) {
+        val currentFeeds = rssFeedLocalDataSource.rssFeedFlow.firstOrNull().orEmpty()
+        val newFeeds = currentFeeds.filter { it.name != rssFeed.toCached().name }
+
+        rssFeedLocalDataSource.saveRssFeed(newFeeds)
+    }
 
     suspend fun getNewsFeed(rssFeed: RssFeed): Feed = withContext(Dispatchers.IO) {
         val result = newsFeedRemoteDataSource.getRssFeed(rssFeed.url).orEmpty()

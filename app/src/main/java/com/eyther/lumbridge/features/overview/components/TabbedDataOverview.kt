@@ -236,7 +236,7 @@ fun TabbedDataOverview(
 
             // Place the icon on the right if it exists. To calculate the x position offset, we need to take our maxAvailable width and
             // subtract the icon's width.
-            iconPlaceable?.placeRelative(x = maxWidth - iconWidth, y = yAlignCenterVertical)
+            iconPlaceable?.placeRelative(x = maxWidth - iconWidth, y = yAlignCenterVertical + (contentHeight - iconHeight) / 2)
         }
     }
 }

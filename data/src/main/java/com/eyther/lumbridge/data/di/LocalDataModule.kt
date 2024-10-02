@@ -104,6 +104,19 @@ object LocalDataModule {
         )
     }
 
+    @Provides
+    @Singleton
+    @RssFeedDataStore
+    fun provideRssFeedDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = {
+                context.preferencesDataStoreFile("rss_feed_data_store.db")
+            }
+        )
+    }
+
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class UserProfileDataSource
@@ -124,4 +137,7 @@ object LocalDataModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class AppSettingsDataStore
 
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class RssFeedDataStore
 }
