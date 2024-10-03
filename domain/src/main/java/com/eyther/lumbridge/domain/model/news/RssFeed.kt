@@ -7,6 +7,7 @@ package com.eyther.lumbridge.domain.model.news
  * @property url The URL of the RSS feed.
  */
 data class RssFeed(
+    val id: Long = -1,
     val name: String,
     val url: String
 )

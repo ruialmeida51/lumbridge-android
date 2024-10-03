@@ -11,7 +11,6 @@ import com.eyther.lumbridge.domain.model.news.RssFeed
 import com.prof18.rssparser.RssParserBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -23,37 +22,19 @@ class NewsFeedRepository @Inject constructor(
     fun getAvailableFeedsFlow(): Flow<List<RssFeed>> {
         return rssFeedLocalDataSource
             .rssFeedFlow
-            .mapNotNull { it?.toDomain() }
+            .mapNotNull { it.toDomain() }
     }
 
-    suspend fun getAvailableFeeds(): List<RssFeed> {
-        return rssFeedLocalDataSource.rssFeedFlow.firstOrNull()
-            .orEmpty()
-            .toDomain()
+    suspend fun saveRssFeed(rssFeed: RssFeed) = withContext(Dispatchers.IO) {
+        val sanitisedFeedToAdd = rssFeed
+            .toCached()
+            .copy(name = rssFeed.name.replace("\\s".toRegex(), ""))
+
+        rssFeedLocalDataSource.saveRssFeed(sanitisedFeedToAdd)
     }
 
-    suspend fun saveRssFeed(rssFeed: RssFeed) {
-        val currentFeeds = rssFeedLocalDataSource.rssFeedFlow.firstOrNull().orEmpty()
-        val cachedFeedToAdd = rssFeed.toCached()
-
-        val sanitisedListOfFeeds = currentFeeds.map { it.copy(name = it.name.replace("\\s".toRegex(), "")) }
-        val sanitisedFeedToAdd = cachedFeedToAdd.copy(name = cachedFeedToAdd.name.replace("\\s".toRegex(), ""))
-
-        // Check if the feed is already in the list. If it is, update it.
-        val newFeeds = if (sanitisedListOfFeeds.any { it.name.equals(sanitisedFeedToAdd.name, true) }) {
-            sanitisedListOfFeeds.filter { it.name != sanitisedFeedToAdd.name } + sanitisedFeedToAdd
-        } else {
-            sanitisedListOfFeeds + sanitisedFeedToAdd
-        }
-
-        rssFeedLocalDataSource.saveRssFeed(newFeeds)
-    }
-
-    suspend fun removeRssFeed(rssFeed: RssFeed) {
-        val currentFeeds = rssFeedLocalDataSource.rssFeedFlow.firstOrNull().orEmpty()
-        val newFeeds = currentFeeds.filter { it.name != rssFeed.toCached().name }
-
-        rssFeedLocalDataSource.saveRssFeed(newFeeds)
+    suspend fun removeRssFeed(rssFeedId: Long) = withContext(Dispatchers.IO) {
+        rssFeedLocalDataSource.deleteRssFeed(rssFeedId)
     }
 
     suspend fun getNewsFeed(rssFeed: RssFeed): Feed = withContext(Dispatchers.IO) {

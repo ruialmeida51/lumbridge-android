@@ -43,17 +43,6 @@ class ExpensesLocalDataSource @Inject constructor(
     }
 
     /**
-     * Fetches the month with the given ID from the local data source.
-     *
-     * @param monthId The ID of the month to fetch.
-     */
-    suspend fun getMonthById(monthId: Long): ExpensesMonthCached? {
-        val month = runCatching { expensesDao.getExpensesForMonthById(monthId) }.getOrNull()
-
-        return month?.toCached()
-    }
-
-    /**
      * Fetches the expenses for the given year and month from the local data source.
      *
      * @param year The year to fetch expenses for.

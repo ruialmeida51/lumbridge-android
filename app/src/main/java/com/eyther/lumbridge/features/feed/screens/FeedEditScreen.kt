@@ -63,22 +63,19 @@ fun FeedEditScreen(
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
 
     val showAddOrUpdateFeedBottomSheet = remember { mutableStateOf(false) }
-    val feedName = remember { mutableStateOf("") }
-    val feedUrl = remember { mutableStateOf("") }
+    val selectedFeed = remember { mutableStateOf<RssFeedUi?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.viewEffects
             .onEach { viewEffects ->
                 when (viewEffects) {
                     is FeedEditScreenViewEffects.AddFeed -> {
-                        feedName.value = ""
-                        feedUrl.value = ""
+                        selectedFeed.value = null
                         showAddOrUpdateFeedBottomSheet.value = true
                     }
 
                     is FeedEditScreenViewEffects.EditFeed -> {
-                        feedName.value = viewEffects.feedName
-                        feedUrl.value = viewEffects.feedUrl
+                        selectedFeed.value = viewEffects.selectedFeed
                         showAddOrUpdateFeedBottomSheet.value = true
                     }
                 }
@@ -131,8 +128,7 @@ fun FeedEditScreen(
         if (showAddOrUpdateFeedBottomSheet.value) {
             FeedAddOrEditBottomSheet(
                 showBottomSheet = showAddOrUpdateFeedBottomSheet,
-                feedName = feedName.value,
-                feedUrl = feedUrl.value
+                selectedFeed = selectedFeed.value
             )
         }
     }
@@ -142,7 +138,7 @@ fun FeedEditScreen(
 private fun ColumnScope.HasFeeds(
     feeds: List<RssFeedUi>,
     onAddFeedClick: () -> Unit,
-    onEditFeedClick: (feedName: String, feedUrl: String) -> Unit
+    onEditFeedClick: (selectedFeed: RssFeedUi) -> Unit
 ) {
     Text(
         modifier = Modifier
@@ -157,13 +153,14 @@ private fun ColumnScope.HasFeeds(
     ) {
         itemsIndexed(
             items = feeds,
-            key = { _, feed -> feed.label }
+            key = { _, feed -> feed.id }
         ) { index, feed ->
             ColumnCardWrapper {
                 TabbedDataOverview(
                     modifier = Modifier
+                        .fillMaxSize()
+                        .clickable { onEditFeedClick(feed) }
                         .animateContentSize()
-                        .clickable { onEditFeedClick(feed.label, feed.url) }
                         .padding(vertical = HalfPadding),
                     label = feed.label,
                     text = feed.url,
