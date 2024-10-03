@@ -2,6 +2,7 @@ package com.eyther.lumbridge.features.feed.viewmodel.bottomsheet
 
 import com.eyther.lumbridge.features.feed.model.bottomsheet.FeedAddOrEditBottomSheetViewState
 import com.eyther.lumbridge.features.feed.viewmodel.delegate.IFeedAddOrEditBottomSheetInputHandler
+import com.eyther.lumbridge.model.news.RssFeedUi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import kotlinx.coroutines.flow.StateFlow
@@ -27,8 +28,7 @@ interface IFeedAddOrEditBottomSheetViewModel : IFeedAddOrEditBottomSheetInputHan
     @AssistedFactory
     interface Factory {
         fun create(
-            @Assisted("feedName") feedName: String,
-            @Assisted("feedUrl") feedUrl: String
+            @Assisted("selectedFeed") selectedRssFeedUi: RssFeedUi?
         ): FeedAddOrEditBottomSheetViewModel
     }
 }

@@ -26,16 +26,17 @@ fun ColumnCardWrapper(
 ) {
     Column(
         modifier = modifier.then(
-            Modifier.padding(horizontal = DefaultPadding)
-            .clip(RoundedCornerShape(DefaultRoundedCorner))
-            .shadow(elevation = QuarterPadding)
-            .then(
-                if (onClick != null) Modifier.clickable { onClick() }
-                else Modifier
-            )
-            .background(MaterialTheme.colorScheme.surfaceContainer)
-            .fillMaxWidth()
-            .padding(DefaultPadding),
+            Modifier
+                .padding(horizontal = DefaultPadding)
+                .clip(RoundedCornerShape(DefaultRoundedCorner))
+                .shadow(elevation = QuarterPadding)
+                .then(
+                    if (onClick != null) Modifier.clickable { onClick() }
+                    else Modifier
+                )
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .fillMaxWidth()
+                .padding(DefaultPadding),
         ),
         verticalArrangement = verticalArrangement ?: Arrangement.Top,
     ) {

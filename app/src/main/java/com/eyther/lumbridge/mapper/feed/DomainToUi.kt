@@ -21,6 +21,7 @@ fun FeedItem.toUi(): FeedItemUi {
 }
 
 fun RssFeed.toUi() = RssFeedUi(
+    id = id,
     label = name,
     url = url
 )

@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.feed.viewmodel.bottomsheet.FeedAddOrEditBottomSheetViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.bottomsheet.IFeedAddOrEditBottomSheetViewModel
+import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -28,16 +29,10 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 @Composable
 fun FeedAddOrEditBottomSheet(
     showBottomSheet: MutableState<Boolean>,
-    feedName: String? = null,
-    feedUrl: String? = null,
+    selectedFeed: RssFeedUi? = null,
     viewModel: IFeedAddOrEditBottomSheetViewModel = hiltViewModel<FeedAddOrEditBottomSheetViewModel, IFeedAddOrEditBottomSheetViewModel.Factory>(
-        key = feedName.orEmpty() + feedUrl.orEmpty(),
-        creationCallback = { factory ->
-            factory.create(
-                feedName = feedName.orEmpty(),
-                feedUrl = feedUrl.orEmpty()
-            )
-        }
+        key = selectedFeed?.id?.toString().orEmpty(),
+        creationCallback = { factory -> factory.create(selectedFeed) }
     )
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

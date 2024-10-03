@@ -12,13 +12,12 @@ import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewS
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.usecase.news.GetAvailableFeedsFlowUseCase
-import com.eyther.lumbridge.usecase.news.GetAvailableFeedsUseCase
 import com.eyther.lumbridge.usecase.news.GetNewsFeedUseCase
-import com.eyther.lumbridge.usecase.news.SaveRssFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,9 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedOverviewScreenViewModel @Inject constructor(
     private val getNewsFeed: GetNewsFeedUseCase,
-    private val getAvailableFeedsFlowUseCase: GetAvailableFeedsFlowUseCase,
-    private val getAvailableFeedsUseCase: GetAvailableFeedsUseCase,
-    private val saveRssFeedUseCase: SaveRssFeedUseCase
+    private val getAvailableFeedsFlowUseCase: GetAvailableFeedsFlowUseCase
 ) : ViewModel(),
     IFeedOverviewScreenViewModel {
 
@@ -48,7 +45,7 @@ class FeedOverviewScreenViewModel @Inject constructor(
     private fun observeFeeds() {
         viewModelScope.launch {
             val availableFeedsFlow = getAvailableFeedsFlowUseCase()
-            val firstFeedResult = getAvailableFeedsUseCase()
+            val firstFeedResult = availableFeedsFlow.firstOrNull() ?: emptyList()
 
             availableFeedsFlow
                 .stateIn(this, SharingStarted.Lazily, firstFeedResult)

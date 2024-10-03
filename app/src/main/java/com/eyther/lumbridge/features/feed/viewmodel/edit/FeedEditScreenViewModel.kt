@@ -4,12 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewState
+import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.usecase.news.GetAvailableFeedsFlowUseCase
-import com.eyther.lumbridge.usecase.news.GetAvailableFeedsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,8 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedEditScreenViewModel @Inject constructor(
-    private val getAvailableFeedsFlowUseCase: GetAvailableFeedsFlowUseCase,
-    private val getAvailableFeedsUseCase: GetAvailableFeedsUseCase
+    private val getAvailableFeedsFlowUseCase: GetAvailableFeedsFlowUseCase
 ) : ViewModel(),
     IFeedEditScreenViewModel {
 
@@ -35,10 +35,9 @@ class FeedEditScreenViewModel @Inject constructor(
     private fun loadFeeds() {
         viewModelScope.launch {
             val availableFeedsFlow = getAvailableFeedsFlowUseCase()
-            val firstFeedResult = getAvailableFeedsUseCase()
 
             availableFeedsFlow
-                .stateIn(this, SharingStarted.Lazily, firstFeedResult)
+                .stateIn(this, SharingStarted.Lazily, availableFeedsFlow.firstOrNull() ?: emptyList())
                 .collect { feeds ->
                     viewState.update {
                         if (feeds.isEmpty()) {
@@ -51,9 +50,9 @@ class FeedEditScreenViewModel @Inject constructor(
         }
     }
 
-    override fun onEditFeedClick(feedName: String, feedUrl: String) {
+    override fun onEditFeedClick(selectedFeed: RssFeedUi) {
         viewModelScope.launch {
-            viewEffects.emit(FeedEditScreenViewEffects.EditFeed(feedName, feedUrl))
+            viewEffects.emit(FeedEditScreenViewEffects.EditFeed(selectedFeed))
         }
     }
 

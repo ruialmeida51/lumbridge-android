@@ -9,5 +9,5 @@ data class TextInputState(
 ) {
     fun isError() = error != null
 
-    fun isValid() = !isError() && text != null
+    fun isValid() = !isError() && !text.isNullOrEmpty()
 }
