@@ -24,7 +24,7 @@ class NewsFeedRemoteDataSource @Inject constructor() {
         .method("GET", null)
 
     suspend fun getRssFeed(url: String): String? {
-        if (!URLUtil.isHttpUrl(url) && !URLUtil.isHttpsUrl(url)) {
+        if (!URLUtil.isNetworkUrl(url)) {
             return null
         }
 

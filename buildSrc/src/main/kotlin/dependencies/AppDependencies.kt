@@ -15,7 +15,6 @@ import versions.SharedVersions.HILT_VERSION
 import versions.SharedVersions.KOTLIN_VERSION
 
 object AppDependencies {
-
     fun getImplementation() = listOf(
         // Kotlin
         "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION",

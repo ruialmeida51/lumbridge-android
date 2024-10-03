@@ -12,7 +12,9 @@ import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
+import com.eyther.lumbridge.model.user.UserProfileUi
 import com.eyther.lumbridge.ui.navigation.NavigationItem
+import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import com.eyther.lumbridge.usecase.user.profile.GetUserProfileStream
 import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +22,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -30,7 +33,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileOverviewScreenViewModel @Inject constructor(
     private val getUserProfileStream: GetUserProfileStream,
-    private val saveUserProfile: SaveUserProfile
+    private val saveUserProfile: SaveUserProfile,
+    private val getLocaleOrDefault: GetLocaleOrDefault
 ) : ViewModel(), IProfileOverviewScreenViewModel {
 
     override val viewState = MutableStateFlow<ProfileOverviewScreenViewState>(
@@ -61,10 +65,12 @@ class ProfileOverviewScreenViewModel @Inject constructor(
 
     override fun saveImage(image: Bitmap) {
         viewModelScope.launch {
-            getUserProfileStream().first()?.let { user ->
-                saveUserProfile(
-                    user.copy(imageBitmap = image)
-                )
+            val currentUser = getUserProfileStream().firstOrNull()
+
+            if (currentUser != null) {
+                saveUserProfile(currentUser.copy(imageBitmap = image))
+            } else {
+                saveUserProfile(UserProfileUi(imageBitmap = image, locale = getLocaleOrDefault()))
             }
         }
     }

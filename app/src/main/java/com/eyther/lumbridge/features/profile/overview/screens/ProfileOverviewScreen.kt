@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -172,20 +173,18 @@ private fun ProfileHeader(
     onNavigate: (ProfileNavigationItem, NavController) -> Unit
 ) {
     val context = LocalContext.current
-    var selectedImage by remember { mutableStateOf<Uri?>(null) }
+    val coroutineScope = rememberCoroutineScope()
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = {
-            selectedImage = it
+        onResult = { imageUri ->
+            imageUri?.let {
+                coroutineScope.launch {
+                    saveImage(constructBitmap(imageUri, context))
+                }
+            }
         }
     )
-
-    LaunchedEffect(selectedImage) {
-        selectedImage?.let { nonNullUri ->
-            saveImage(constructBitmap(nonNullUri, context))
-        }
-    }
 
     ColumnCardWrapper(
         verticalArrangement = Arrangement.spacedBy(DefaultPadding)
@@ -218,10 +217,10 @@ private fun ProfileHeader(
                     .align(Alignment.CenterVertically),
                 verticalArrangement = Arrangement.spacedBy(DefaultPadding),
             ) {
-                val usernameText = if (state.username != null) {
+                val usernameText = if (!state.username.isNullOrEmpty()) {
                     stringResource(
                         id = R.string.profile_greeting,
-                        state.username
+                        state.username.orEmpty()
                     )
                 } else {
                     stringResource(
@@ -245,9 +244,9 @@ private fun ProfileHeader(
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
 
-                state.email?.let {
+                if (!state.email.isNullOrEmpty()) {
                     Text(
-                        text = it,
+                        text = state.email,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

@@ -26,7 +26,7 @@ class FeedAddOrEditBottomSheetInputHandler @Inject constructor() : IFeedAddOrEdi
     }
 
     override fun onUrlChanged(url: String?) {
-        val urlText = url.takeIf { URLUtil.isHttpUrl(it) || URLUtil.isHttpsUrl(it) }
+        val urlText = url.takeIf { URLUtil.isNetworkUrl(url) }
 
         updateInput { state ->
             state.copy(
