@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -28,7 +29,11 @@ fun LumbridgeBottomNavigationBar(navController: NavHostController) {
             NavigationBarItem(
                 selected = currentDestinationHierarchy.any { it.route == navigationItem.route },
                 label = {
-                    Text(stringResource(id = navigationItem.label))
+                    Text(stringResource(
+                        id = navigationItem.label),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 icon = {
                     Icon(

@@ -8,6 +8,8 @@ import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
+import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState.Content.HasFinancialProfile
+import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState.Content.NoFinancialProfile
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.ExpensesOverviewScreenFilterDelegate
@@ -37,7 +39,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ExpensesOverviewScreenScreenViewModel @Inject constructor(
+class ExpensesOverviewScreenViewModel @Inject constructor(
     private val getExpensesStreamUseCase: GetExpensesStreamUseCase,
     private val getLocaleOrDefaultStream: GetLocaleOrDefaultStream,
     private val deleteMonthExpenseUseCase: DeleteMonthExpenseUseCase,
@@ -166,7 +168,7 @@ class ExpensesOverviewScreenScreenViewModel @Inject constructor(
 
     override fun onDeleteExpense(expensesMonth: ExpensesMonthUi) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesOverviewScreenScreenViewModel::class.java.simpleName, "💥 Error deleting expense", throwable)
+            Log.e(ExpensesOverviewScreenViewModel::class.java.simpleName, "💥 Error deleting expense", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(ExpensesOverviewScreenViewEffect.ShowError(throwable.message.orEmpty()))
@@ -281,7 +283,7 @@ class ExpensesOverviewScreenScreenViewModel @Inject constructor(
         val availableSorts = ExpensesOverviewSortBy.get()
 
         return if (netSalaryUi == null) {
-            ExpensesOverviewScreenViewState.Content.NoFinancialProfile(
+            NoFinancialProfile(
                 expensesMonthUi = sortedExpenses,
                 totalExpenses = totalExpenses,
                 locale = locale,
@@ -291,7 +293,7 @@ class ExpensesOverviewScreenScreenViewModel @Inject constructor(
                 selectedFilter = filter
             )
         } else {
-            ExpensesOverviewScreenViewState.Content.HasFinancialProfile(
+            HasFinancialProfile(
                 netSalaryUi = netSalaryUi,
                 totalExpenses = totalExpenses,
                 expensesMonthUi = sortedExpenses,

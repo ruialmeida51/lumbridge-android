@@ -8,14 +8,15 @@
     <string name="feed_add_feeds_button">Add Feeds</string>
     <string name="feed_no_feeds_start_adding">Add your first feed by tapping the button below!</string>
     <string name="feed_edit_feeds_list">Your Feeds</string>
-    <string name="feed_edit_message">Fill out the details below to add or update a RSS feed</string>
+    <string name="feed_edit_message">Fill out the details below to add or update a RSS Feed</string>
     <string name="feed_edit_rss_name">RSS Name</string>
-    <string name="feed_edit_rss_url">RSS Url</string>
+    <string name="feed_edit_rss_url">RSS URL</string>
     <string name="feed_edit_rss_invalid_name">Please enter a valid RSS feed name</string>
     <string name="feed_edit_rss_invalid_url">Please enter a valid RSS feed URL</string>
     <string name="feed_edit_feed_button">Save Feed</string>
     <string name="feed_edit_delete_button">Delete Feed</string>
     <string name="feed_edit_add_button">Add Feed</string>
+    <string name="feed_edit_delete_confirmation">Are you sure you want to delete this feed?</string>
 
     <string name="overview">Overview</string>
 
@@ -101,11 +102,11 @@
     <string name="edit_profile_how_to_contact">How should we contact you?</string>
     <string name="edit_profile_select_country">Select your preferred country</string>
     <string name="edit_profile_save">Save Profile</string>
-    <string name="edit_profile_invalid_email">Please enter a valid email address</string>
-    <string name="edit_profile_invalid_name">Please enter a valid name</string>
+    <string name="edit_profile_invalid_email">Please, enter a valid email address</string>
+    <string name="edit_profile_invalid_name">Please, enter a valid name</string>
 
     <string name="tools_currency_converter">Currency Converter</string>
-    <string name="tools_currency_converter_input">Please input the currencies to convert</string>
+    <string name="tools_currency_converter_input">Please, input the currencies to convert</string>
     <string name="tools_currency_converter_result">Conversion Result</string>
     <string name="tools_currency_converter_amount_error">Invalid amount</string>
     <string name="tools_currency_converter_exchange_currency">Exchange Currency</string>
@@ -129,7 +130,7 @@
     <string name="expenses_overview_title">Overview</string>
     <string name="expenses_overview_add_expense">Add Expense</string>
     <string name="expenses_overview_edit_expense">Edit Expense</string>
-    <string name="expense_delete_confirmation">Are you sure you want to delete?</string>
+    <string name="expense_delete_confirmation">Are you sure you want to delete this expense?</string>
     <string name="expenses_invalid_amount">Please, enter a valid amount</string>
     <string name="expenses_invalid_name">Please, enter a valid name</string>
     <string name="expenses_invalid_date">Please, enter a valid date</string>
@@ -162,7 +163,7 @@
     <string name="sort_by_spent_ascending">Spent: Ascending</string>
     <string name="sort_by_spent_descending">Spent: Descending</string>
 
-    <string-array name="loading_messages">
+    <string-array name="loading_messages" translatable="true">
         <item>Hold on tight, we\'re catching data waves!</item>
         <item>Just brewing up some digital magic…</item>
         <item>Tapping into the data dimension, one moment…</item>

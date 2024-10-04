@@ -4,6 +4,7 @@ package com.eyther.lumbridge.features.expenses.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -54,6 +55,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.domain.time.toLocalDate
+import com.eyther.lumbridge.domain.time.toMonthYearDateString
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
@@ -72,7 +75,7 @@ import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSor
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy.Companion.DisplaySortBy
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy.Companion.toDisplaySortBy
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
-import com.eyther.lumbridge.features.expenses.viewmodel.overview.ExpensesOverviewScreenScreenViewModel
+import com.eyther.lumbridge.features.expenses.viewmodel.overview.ExpensesOverviewScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.IExpensesOverviewScreenViewModel
 import com.eyther.lumbridge.features.overview.components.DataOverview
 import com.eyther.lumbridge.features.overview.components.TabbedDataOverview
@@ -102,7 +105,7 @@ import kotlinx.coroutines.flow.onEach
 fun ExpensesOverviewScreen(
     navController: NavHostController,
     @StringRes label: Int,
-    viewModel: IExpensesOverviewScreenViewModel = hiltViewModel<ExpensesOverviewScreenScreenViewModel>()
+    viewModel: IExpensesOverviewScreenViewModel = hiltViewModel<ExpensesOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val snackbarHostState = remember { SnackbarHostState() }
@@ -131,7 +134,7 @@ fun ExpensesOverviewScreen(
                 topAppBarVariation = TopAppBarVariation.Title(
                     title = stringResource(id = label)
                 ),
-                showIcons = state.isContent(),
+                showIcons = state.hasExpensesOrFilterApplied(),
                 actions = {
                     Icon(
                         modifier = Modifier.clickable(
@@ -259,6 +262,30 @@ private fun Content(
     onClearSortBy: () -> Unit,
     navigate: (NavigationItem, NavHostController) -> Unit
 ) {
+    if (!state.hasExpenses()) {
+        FinancialProfile(
+            state = state,
+            navigate = navigate,
+            onClearFilter = onClearFilter,
+            onClearSortBy = onClearSortBy,
+            navController = navController
+        )
+
+        Spacer(modifier = Modifier.height(HalfPadding))
+
+        LumbridgeButton(
+            modifier = Modifier.padding(horizontal = DefaultPadding),
+            label = stringResource(id = R.string.expenses_overview_add_expense),
+            minHeight = SmallButtonHeight
+        ) {
+            navigate(ExpensesNavigationItem.AddExpense, navController)
+        }
+
+        Spacer(modifier = Modifier.height(HalfPadding))
+
+        return
+    }
+
     LazyColumn {
         itemsIndexed(
             items = state.expensesMonthUi
@@ -356,17 +383,20 @@ private fun FinancialProfile(
     navigate: (NavigationItem, NavHostController) -> Unit
 ) {
     when (state) {
-        is Content.NoFinancialProfile,
         is Empty.NoFinancialProfile -> {
-            NoFinancialProfile(navController, navigate)
+            EmptyAndNoFinancialProfile(
+                navController = navController,
+                navigate = navigate
+            )
         }
 
-        is Content.HasFinancialProfile -> {
+        is Empty.HasFinancialProfile -> {
             HasFinancialProfile(
                 netSalaryUi = state.netSalaryUi,
-                totalSpent = state.totalExpenses,
-                sortBy = state.selectedSort,
-                filter = state.selectedFilter,
+                totalSpent = null,
+                sortBy = state.getDefaultDisplaySortBy(),
+                filter = state.getDefaultDisplayFilter(),
+                showFilterAndSort = state.hasExpensesOrFilterApplied(),
                 defaultFilter = state.getDefaultDisplayFilter(),
                 defaultSortBy = state.getDefaultDisplaySortBy(),
                 navController = navController,
@@ -377,12 +407,30 @@ private fun FinancialProfile(
             )
         }
 
-        is Empty.HasFinancialProfile -> {
+        is Content.NoFinancialProfile -> {
+            NoFinancialProfile(
+                totalSpent = state.totalExpenses,
+                sortBy = state.selectedSort,
+                filter = state.selectedFilter,
+                showFilterAndSort = state.hasExpensesOrFilterApplied(),
+                defaultFilter = state.getDefaultDisplayFilter(),
+                defaultSortBy = state.getDefaultDisplaySortBy(),
+                navController = navController,
+                onClearFilter = onClearFilter,
+                onClearSortBy = onClearSortBy,
+                navigate = navigate,
+                currencySymbol = state.locale.getCurrencySymbol()
+
+            )
+        }
+
+        is Content.HasFinancialProfile -> {
             HasFinancialProfile(
                 netSalaryUi = state.netSalaryUi,
-                totalSpent = null,
-                sortBy = state.getDefaultDisplaySortBy(),
-                filter = state.getDefaultDisplayFilter(),
+                totalSpent = state.totalExpenses,
+                sortBy = state.selectedSort,
+                filter = state.selectedFilter,
+                showFilterAndSort = state.hasExpensesOrFilterApplied(),
                 defaultFilter = state.getDefaultDisplayFilter(),
                 defaultSortBy = state.getDefaultDisplaySortBy(),
                 navController = navController,
@@ -406,12 +454,14 @@ private fun HasFinancialProfile(
     sortBy: ExpensesOverviewSortBy,
     filter: ExpensesOverviewFilter,
     currencySymbol: String,
+    showFilterAndSort: Boolean,
     navController: NavHostController,
     onClearFilter: () -> Unit,
     onClearSortBy: () -> Unit,
     navigate: (NavigationItem, NavHostController) -> Unit
 ) {
     ColumnCardWrapper(
+        modifier = Modifier.animateContentSize(),
         verticalArrangement = Arrangement.spacedBy(HalfPadding)
     ) {
         Row(
@@ -456,8 +506,7 @@ private fun HasFinancialProfile(
             )
         }
 
-
-        if (totalSpent != null) {
+        AnimatedVisibility(totalSpent != null) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -471,71 +520,74 @@ private fun HasFinancialProfile(
 
                 TabbedDataOverview(
                     label = stringResource(id = R.string.total),
-                    text = "${totalSpent.forceTwoDecimalsPlaces()}$currencySymbol"
+                    text = "${totalSpent?.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
             }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(HalfPadding)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_sort_by),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
+        AnimatedVisibility(showFilterAndSort) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(HalfPadding)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_sort_by),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
 
-            TabbedDataOverview(
-                label = stringResource(id = R.string.sorting_by),
-                text = stringResource(sortBy.toDisplaySortBy().nameRes),
-                icon = if (sortBy != defaultSortBy) {
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_clear),
-                            contentDescription = stringResource(id = R.string.clear),
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clickable { onClearSortBy() }
-                        )
+                TabbedDataOverview(
+                    label = stringResource(id = R.string.sorting_by),
+                    text = stringResource(sortBy.toDisplaySortBy().nameRes),
+                    icon = if (sortBy != defaultSortBy) {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_clear),
+                                contentDescription = stringResource(id = R.string.clear),
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .clickable { onClearSortBy() }
+                            )
+                        }
+                    } else {
+                        null
                     }
-                } else {
-                    null
-                }
-            )
+                )
+            }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(HalfPadding)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_filter),
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
-            )
+        AnimatedVisibility(showFilterAndSort) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(HalfPadding)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_filter),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
 
-            TabbedDataOverview(
-                label = stringResource(id = R.string.filter_by),
-                text = getFilterText(filter),
-                icon = if (filter != defaultFilter) {
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_clear),
-                            contentDescription = stringResource(id = R.string.clear),
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clickable { onClearFilter() }
-                        )
+                TabbedDataOverview(
+                    label = stringResource(id = R.string.filter_by),
+                    text = getFilterText(filter),
+                    icon = if (filter != defaultFilter) {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_clear),
+                                contentDescription = stringResource(id = R.string.clear),
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .clickable { onClearFilter() }
+                            )
+                        }
+                    } else {
+                        null
                     }
-                } else {
-                    null
-                }
-            )
+                )
+            }
         }
-
     }
 }
 
@@ -588,10 +640,9 @@ private fun MonthCard(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-
                 Text(
                     modifier = Modifier.padding(bottom = QuarterPadding),
-                    text = "${expensesMonthUi.month.name.capitalise()} ${expensesMonthUi.year}",
+                    text = expensesMonthUi.getDateWithLocale(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.tertiary
                 )
@@ -718,7 +769,123 @@ private fun DetailsCard(
 }
 
 @Composable
-private fun NoFinancialProfile(navController: NavHostController, navigate: (NavigationItem, NavHostController) -> Unit) {
+private fun NoFinancialProfile(
+    navController: NavHostController,
+    totalSpent: Float?,
+    defaultSortBy: ExpensesOverviewSortBy,
+    defaultFilter: ExpensesOverviewFilter,
+    sortBy: ExpensesOverviewSortBy,
+    filter: ExpensesOverviewFilter,
+    currencySymbol: String,
+    showFilterAndSort: Boolean,
+    onClearFilter: () -> Unit,
+    onClearSortBy: () -> Unit,
+    navigate: (NavigationItem, NavHostController) -> Unit
+) {
+    ColumnCardWrapper {
+        AnimatedVisibility(totalSpent != null) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(HalfPadding)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_chart),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+
+                TabbedDataOverview(
+                    label = stringResource(id = R.string.total),
+                    text = "${totalSpent?.forceTwoDecimalsPlaces()}$currencySymbol"
+                )
+            }
+        }
+
+        AnimatedVisibility(showFilterAndSort) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(HalfPadding)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_sort_by),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+
+                TabbedDataOverview(
+                    label = stringResource(id = R.string.sorting_by),
+                    text = stringResource(sortBy.toDisplaySortBy().nameRes),
+                    icon = if (sortBy != defaultSortBy) {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_clear),
+                                contentDescription = stringResource(id = R.string.clear),
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .clickable { onClearSortBy() }
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }
+        }
+
+        AnimatedVisibility(showFilterAndSort) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(HalfPadding)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_filter),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+
+                TabbedDataOverview(
+                    label = stringResource(id = R.string.filter_by),
+                    text = getFilterText(filter),
+                    icon = if (filter != defaultFilter) {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_clear),
+                                contentDescription = stringResource(id = R.string.clear),
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .clickable { onClearFilter() }
+                            )
+                        }
+                    } else {
+                        null
+                    }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
+        EmptyComponentWithButton(
+            text = stringResource(id = R.string.expenses_overview_no_financial_profile),
+            buttonText = stringResource(id = R.string.financial_overview_create_profile),
+            onButtonClick = {
+                navigate(
+                    ExpensesNavigationItem.EditFinancialProfile,
+                    navController
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun EmptyAndNoFinancialProfile(
+    navController: NavHostController,
+    navigate: (NavigationItem, NavHostController) -> Unit
+) {
     ColumnCardWrapper {
         EmptyComponentWithButton(
             text = stringResource(id = R.string.expenses_overview_no_financial_profile),
@@ -938,26 +1105,31 @@ private fun ShowFilterDialog(
 private fun getFilterText(selectedFilter: ExpensesOverviewFilter): String {
     val filterName = selectedFilter.toDisplayFilter().nameRes
 
-    return stringResource(filterName).plus(
-        when (selectedFilter) {
-            is ExpensesOverviewFilter.None -> {
-                String()
-            }
+    return stringResource(filterName)
+        .plus(
+            when (selectedFilter) {
+                is ExpensesOverviewFilter.None -> {
+                    String()
+                }
 
-            is ExpensesOverviewFilter.DateRange -> {
-                " (${selectedFilter.startYear}/${selectedFilter.startMonth.toString().capitalise()} - " +
-                    "${selectedFilter.endYear}/${selectedFilter.endMonth.toString().capitalise()})"
-            }
+                is ExpensesOverviewFilter.DateRange -> {
+                    " "
+                        .plus((selectedFilter.startYear to selectedFilter.startMonth).toLocalDate().toMonthYearDateString().capitalise())
+                        .plus(" - ")
+                        .plus((selectedFilter.endYear to selectedFilter.endMonth).toLocalDate().toMonthYearDateString().capitalise())
+                }
 
-            is ExpensesOverviewFilter.StartingFrom -> {
-                " (${selectedFilter.year}/${selectedFilter.month.toString().capitalise()})"
-            }
+                is ExpensesOverviewFilter.StartingFrom -> {
+                    " "
+                        .plus((selectedFilter.year to selectedFilter.month).toLocalDate().toMonthYearDateString().capitalise())
+                }
 
-            is ExpensesOverviewFilter.UpTo -> {
-                " (${selectedFilter.year}/${selectedFilter.month.toString().capitalise()})"
+                is ExpensesOverviewFilter.UpTo -> {
+                    " "
+                        .plus((selectedFilter.year to selectedFilter.month).toLocalDate().toMonthYearDateString().capitalise())
+                }
             }
-        }
-    )
+        )
 }
 
 

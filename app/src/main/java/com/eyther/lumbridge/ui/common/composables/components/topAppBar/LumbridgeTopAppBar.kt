@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,10 +48,16 @@ fun LumbridgeTopAppBar(
             when (topAppBarVariation) {
                 is TopAppBarVariation.Title -> Text(
                     modifier = Modifier.padding(horizontal = DefaultPadding),
-                    text = topAppBarVariation.title
+                    text = topAppBarVariation.title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
-                is TopAppBarVariation.TitleAndIcon -> Text(text = topAppBarVariation.title)
+                is TopAppBarVariation.TitleAndIcon -> Text(
+                    text = topAppBarVariation.title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 is TopAppBarVariation.Icon -> Unit
             }
         },

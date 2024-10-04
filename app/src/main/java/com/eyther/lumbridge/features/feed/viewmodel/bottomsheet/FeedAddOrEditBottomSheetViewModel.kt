@@ -7,7 +7,6 @@ import com.eyther.lumbridge.features.feed.model.bottomsheet.FeedAddOrEditBottomS
 import com.eyther.lumbridge.features.feed.viewmodel.delegate.FeedAddOrEditBottomSheetInputHandler
 import com.eyther.lumbridge.features.feed.viewmodel.delegate.IFeedAddOrEditBottomSheetInputHandler
 import com.eyther.lumbridge.model.news.RssFeedUi
-import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 import com.eyther.lumbridge.usecase.news.DeleteRssFeedUseCase
 import com.eyther.lumbridge.usecase.news.SaveRssFeedUseCase
 import dagger.assisted.Assisted
@@ -29,10 +28,6 @@ class FeedAddOrEditBottomSheetViewModel @AssistedInject constructor(
 ) : ViewModel(),
     IFeedAddOrEditBottomSheetViewModel,
     IFeedAddOrEditBottomSheetInputHandler by feedAddBottomSheetInputHandler {
-
-    companion object {
-        const val TAG = "FeedAddOrEditBottomSheetViewModel"
-    }
 
     override val viewState: MutableStateFlow<FeedAddOrEditBottomSheetViewState> =
         MutableStateFlow(FeedAddOrEditBottomSheetViewState.Loading)
@@ -64,7 +59,7 @@ class FeedAddOrEditBottomSheetViewModel @AssistedInject constructor(
 
     override fun onAddOrUpdateFeed(name: String, url: String) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "💥 Error saving feed: $throwable")
+            Log.e(FeedAddOrEditBottomSheetViewModel::class.java.simpleName, "💥 Error saving feed: $throwable")
         }
 
         viewModelScope.launch(exceptionHandler) {
@@ -78,25 +73,31 @@ class FeedAddOrEditBottomSheetViewModel @AssistedInject constructor(
                 )
             )
 
-            resetInput()
+            // Clear the input fields if we are adding a new feed. This is because Hilt caches the view model based on
+            // the selected feed id, so we need to clear the input fields to ensure that the next time the view model is
+            // created, the input fields are empty.
+            // To have more visibility about this, check the FeedAddOrEditBottomSheet.kt and look for the 'key' parameter
+            // in the hiltViewModel function.
+            if (selectedFeedUi == null) {
+                updateInput {
+                    it.copy(
+                        feedName = it.feedName.copy(text = ""),
+                        feedUrl = it.feedUrl.copy(text = "")
+                    )
+                }
+            }
         }
     }
 
-    override fun onDeleteFeed(name: String) {
+    override fun onDeleteFeed() {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "💥 Error deleting feed: $throwable")
+            Log.e(FeedAddOrEditBottomSheetViewModel::class.java.simpleName, "💥 Error deleting feed: $throwable")
         }
 
         viewModelScope.launch(exceptionHandler) {
             deleteRssFeedUseCase(
                 checkNotNull(selectedFeedUi?.id) { "💥 Cannot delete a feed that does not exist." }
             )
-
-            resetInput()
         }
-    }
-
-    private fun resetInput() = updateInput {
-        it.copy(feedName = TextInputState(), feedUrl = TextInputState())
     }
 }

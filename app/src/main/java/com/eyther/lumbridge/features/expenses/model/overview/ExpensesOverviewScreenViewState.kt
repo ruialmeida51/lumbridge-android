@@ -71,4 +71,7 @@ sealed interface ExpensesOverviewScreenViewState {
 
     fun asContent(): Content = this as Content
     fun isContent(): Boolean = this is Content
+
+    fun hasExpensesOrFilterApplied() = this is Content && (expensesMonthUi.isNotEmpty() || selectedFilter != getDefaultDisplayFilter())
+    fun hasExpenses() = this is Content && expensesMonthUi.isNotEmpty()
 }

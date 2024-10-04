@@ -20,10 +20,8 @@ interface IFeedAddOrEditBottomSheetViewModel : IFeedAddOrEditBottomSheetInputHan
 
     /**
      * Deletes a feed from the list of available feeds.
-     *
-     * @param name The name of the feed to delete, the primary key.
      */
-    fun onDeleteFeed(name: String)
+    fun onDeleteFeed()
 
     @AssistedFactory
     interface Factory {

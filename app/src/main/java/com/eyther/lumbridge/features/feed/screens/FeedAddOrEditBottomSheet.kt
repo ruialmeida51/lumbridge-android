@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -12,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -36,6 +39,7 @@ fun FeedAddOrEditBottomSheet(
     )
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val showDeleteConfirmationDialog = remember { mutableStateOf(false) }
     val inputState = viewModel.inputState.collectAsStateWithLifecycle().value
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
 
@@ -86,11 +90,44 @@ fun FeedAddOrEditBottomSheet(
                 LumbridgeButton(
                     label = stringResource(id = R.string.feed_edit_delete_button),
                     onClick = {
-                        viewModel.onDeleteFeed(inputState.feedName.text.orEmpty())
-                        showBottomSheet.value = false
+                        showDeleteConfirmationDialog.value = true
                     }
                 )
             }
         }
+    }
+
+    if (showDeleteConfirmationDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmationDialog.value = false },
+            confirmButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.yes),
+                    onClick = {
+                        viewModel.onDeleteFeed()
+                        showDeleteConfirmationDialog.value = false
+                        showBottomSheet.value = false
+                    }
+                )
+            },
+            dismissButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.no),
+                    onClick = { showDeleteConfirmationDialog.value = false }
+                )
+            },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.delete),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(id = R.string.feed_edit_delete_confirmation),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        )
     }
 }
