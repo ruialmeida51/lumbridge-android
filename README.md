@@ -38,7 +38,7 @@ _⚠️ - Still trying to get the app accepted, as now one needs 20 active users
 
 | feed | expenses | financial overview | profile |
 | ---- | -------- | ------------------ | ------- |
-| ![image](https://github.com/user-attachments/assets/ba92c36b-66ac-44c3-9ec4-55ee184d5d13) | TBA | ![image](https://github.com/user-attachments/assets/32991430-0801-4214-9627-a0d94327417c) | ![image](https://github.com/user-attachments/assets/a8818432-57be-403f-973b-d74e26129d69) | ![image](https://github.com/user-attachments/assets/ab625fb5-48ae-427e-9e30-5b690ea3ed7c) |
+| ![image](https://github.com/user-attachments/assets/ba92c36b-66ac-44c3-9ec4-55ee184d5d13) | ![image](https://github.com/user-attachments/assets/32991430-0801-4214-9627-a0d94327417c) | ![image](https://github.com/user-attachments/assets/a8818432-57be-403f-973b-d74e26129d69) | ![image](https://github.com/user-attachments/assets/ab625fb5-48ae-427e-9e30-5b690ea3ed7c) |
 
 ---
 
