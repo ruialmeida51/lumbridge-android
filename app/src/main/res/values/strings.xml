@@ -118,6 +118,7 @@
     <string name="tools_currency_converter_to_value">%1$s %2$s is equal to %3$s %4$s</string>
     <string name="tools_exchange_rate_value">1.00 %1$s is equal to %2$s %3$s</string>
     <string name="tools_exchange_error">Something went wrong while performing the currency exchange. Please, try again later.</string>
+    <string name="tools_currency_converter_disclaimer">The currency exchange rates are provided by https://hexarate.paikama.co and are cached for one hour for the specific currency. For example, if you convert from USD to EUR, that exchange rate will be cached for one hour and will be the same for all conversions from USD to EUR during that time. Remember, the rates are indicative and may not be the same as the ones you get in real time from your bank or financial institution.</string>
 
     <string name="tools_net_salary_calculate_button">Calculate Net Salary</string>
     <string name="tools_net_salary_calculate_another_button">Calculate Another</string>
@@ -234,5 +235,6 @@
     <string name="expand">Expand</string>
     <string name="collapse">Collapse</string>
     <string name="url">Url</string>
+    <string name="disclaimer">Disclaimer</string>
     <string name="max_length_reached">Char limit reached: %d</string>
 </resources>

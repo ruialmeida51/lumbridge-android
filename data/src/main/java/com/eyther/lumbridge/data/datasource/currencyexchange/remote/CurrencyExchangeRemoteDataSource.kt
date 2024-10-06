@@ -7,9 +7,19 @@ import javax.inject.Inject
 class CurrencyExchangeRemoteDataSource @Inject constructor(
     private val currencyExchangeClient: CurrencyExchangeClient
 ) {
-    suspend fun getCurrencyRates(baseCurrency: String): CurrencyRatesRemote? {
-        return if (currencyExchangeClient.getExchangeRates(baseCurrency).isSuccessful) {
-            currencyExchangeClient.getExchangeRates(baseCurrency).body()
+    /**
+     * Get exchange rates for a base currency to a target currency.
+     *
+     * Note, both currencies should be in ISO 4217 format.
+     */
+    suspend fun getCurrencyRates(
+        baseCurrency: String,
+        toCurrency: String
+    ): CurrencyRatesRemote? {
+        val request = currencyExchangeClient.getExchangeRates(baseCurrency, toCurrency)
+
+        return if (request.isSuccessful) {
+            request.body()
         } else {
             null
         }

@@ -1,9 +1,9 @@
 package com.eyther.lumbridge.domain.model.currencyexchange
 
-import java.util.Currency
-
 data class CurrencyRates(
     val baseCurrency: String,
-    val rates: Map<Currency, Double>,
+    val toCurrency: String,
+    val rate: Double,
+    val unit: Int,
     val requestedAtInMillis: Long
 )

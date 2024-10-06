@@ -110,6 +110,7 @@
     <string name="tools_currency_converter_to_value">%1$s %2$s é equivalente a %3$s %4$s</string>
     <string name="tools_exchange_rate_value">1.00 %1$s é equivalente a %2$s %3$s</string>
     <string name="tools_exchange_error">Houve um problema durante a conversão da moeda. Por favor, tenta mais tarde.</string>
+    <string name="tools_currency_converter_disclaimer">Os valores de conversão de moeda são fornecidos por https://hexarate.paikama.co e são armazenados em cache durante uma hora para a moeda específica. Por exemplo, se converteres de USD para EUR, essa taxa de conversão será armazenada na cache durante uma hora e será a mesma para todas as conversões de USD para EUR durante esse intervalo de tempo. Uma nota, as taxas são meramente indicativas e podem não ser as mesmas que obténs em tempo real do teu banco ou instituição financeira.</string>
     <string name="tools_net_salary_calculate_button">Calcular Salário Líquido</string>
     <string name="tools_net_salary_calculate_another_button">Calcular Outro</string>
     <string name="tools_net_salary_calculate_error">" Houve um problema a calcular o teu salário. Por favor, tenta novamente."</string>
@@ -203,6 +204,7 @@
     <string name="expand">Expandir</string>
     <string name="collapse">Colapsar</string>
     <string name="url">Url</string>
+    <string name="disclaimer">Informação Extra</string>
     <string name="max_length_reached">Limite de caracteres atingido: %d</string>
     <string name="developer_email">eytherdeveloper@gmail.com</string>
     <string name="source_code_url">https://github.com/ruialmeida51/lumbridge-android</string>

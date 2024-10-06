@@ -1,25 +1,45 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.eyther.lumbridge.features.tools.currencyconverter.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BasicTooltipBox
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -37,6 +57,8 @@ import com.eyther.lumbridge.ui.common.composables.components.topAppBar.Lumbridge
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
+import com.eyther.lumbridge.ui.theme.QuarterPadding
+import kotlinx.coroutines.launch
 
 @Composable
 fun CurrencyConverterScreen(
@@ -94,6 +116,9 @@ private fun ColumnScope.Input(
     state: CurrencyConverterScreenViewState.Content,
     viewModel: CurrencyConverterScreenViewModel
 ) {
+    val tooltipState = rememberTooltipState(isPersistent = true)
+    val scope = rememberCoroutineScope()
+
     Text(
         modifier = Modifier
             .padding(
@@ -108,6 +133,46 @@ private fun ColumnScope.Input(
     )
 
     ColumnCardWrapper {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = QuarterPadding)
+                .clickable {
+                    scope.launch {
+                        tooltipState.show()
+                    }
+                },
+        ) {
+            Text(
+                text = stringResource(id = R.string.disclaimer),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+
+            Spacer(modifier = Modifier.width(HalfPadding))
+
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = {
+                    PlainTooltip {
+                        Text(
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            textAlign = TextAlign.Start,
+                            text = stringResource(R.string.tools_currency_converter_disclaimer),
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+                },
+                state = tooltipState
+            ) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(R.drawable.ic_info),
+                    contentDescription = null
+                )
+            }
+        }
+
         DropdownInput(
             label = stringResource(id = R.string.tools_currency_converter_from_currency),
             selectedOption = state.inputState.fromCurrency.getHumanReadableName(),
@@ -151,6 +216,8 @@ private fun ColumnScope.Input(
             isLoading = state.isCalculating,
             onClick = viewModel::onConvert
         )
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
     }
 }
 

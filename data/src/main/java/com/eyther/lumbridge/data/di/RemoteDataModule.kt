@@ -1,10 +1,12 @@
 package com.eyther.lumbridge.data.di
 
+import com.eyther.lumbridge.data.datasource.currencyexchange.interceptor.CurrencyExchangeCacheInterceptor
 import com.eyther.lumbridge.data.datasource.currencyexchange.service.CurrencyExchangeClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
@@ -25,6 +27,11 @@ object RemoteDataModule {
     fun provideRetrofit(
         @Named("base_url") baseUrl: String
     ): Retrofit = Retrofit.Builder()
+        .client(
+            OkHttpClient
+                .Builder()
+                .build()
+        )
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -33,7 +40,13 @@ object RemoteDataModule {
     @Singleton
     @CurrencyExchangeRetrofitClient
     fun provideCurrencyExchangeRetrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl("https://api.exchangerate-api.com/v4/latest/")
+        .client(
+            OkHttpClient
+                .Builder()
+                .addInterceptor(CurrencyExchangeCacheInterceptor())
+                .build()
+        )
+        .baseUrl("https://hexarate.paikama.co/api/rates/latest/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

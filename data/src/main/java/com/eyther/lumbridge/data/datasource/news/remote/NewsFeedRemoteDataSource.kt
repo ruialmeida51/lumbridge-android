@@ -2,6 +2,7 @@ package com.eyther.lumbridge.data.datasource.news.remote
 
 import android.webkit.URLUtil
 import com.eyther.lumbridge.data.extensions.okhttp.await
+import com.eyther.lumbridge.data.model.http.HeaderTypes
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class NewsFeedRemoteDataSource @Inject constructor() {
      * @see Request.Builder
      */
     private val requestBuilder = Request.Builder()
-        .addHeader("Content-Type", "application/xml")
+        .addHeader(HeaderTypes.ContentType.value, "application/xml")
         .method("GET", null)
 
     suspend fun getRssFeed(url: String): String? {

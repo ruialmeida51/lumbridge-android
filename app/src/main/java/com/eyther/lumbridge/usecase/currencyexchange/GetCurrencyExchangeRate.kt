@@ -19,7 +19,11 @@ class GetCurrencyExchangeRate @Inject constructor(
         fromCurrency: Currency,
         targetCurrency: Currency
     ): Float {
-        val currencyRates = currencyExchangeRepository.getCurrencyRates(fromCurrency.currencyCode)
-        return currencyRates.rates[targetCurrency]?.toFloat() ?: error("💥 Currency rate not found")
+        val currencyRates = currencyExchangeRepository.getCurrencyRates(
+            baseCurrency = fromCurrency.currencyCode,
+            toCurrency = targetCurrency.currencyCode
+        )
+
+        return currencyRates.rate.toFloat()
     }
 }
