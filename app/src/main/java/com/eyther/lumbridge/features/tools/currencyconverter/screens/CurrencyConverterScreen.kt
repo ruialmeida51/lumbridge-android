@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RichTooltip
@@ -117,6 +118,7 @@ private fun ColumnScope.Input(
     viewModel: CurrencyConverterScreenViewModel
 ) {
     val tooltipState = rememberTooltipState(isPersistent = true)
+    val tooltipPosition = TooltipDefaults.rememberPlainTooltipPositionProvider()
     val scope = rememberCoroutineScope()
 
     Text(
@@ -133,45 +135,47 @@ private fun ColumnScope.Input(
     )
 
     ColumnCardWrapper {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = QuarterPadding)
-                .clickable {
-                    scope.launch {
-                        tooltipState.show()
-                    }
-                },
-        ) {
-            Text(
-                text = stringResource(id = R.string.disclaimer),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.tertiary
-            )
+        TooltipBox(
+            positionProvider = tooltipPosition,
+            tooltip = {
+                PlainTooltip {
+                    Text(
+                        textAlign = TextAlign.Start,
+                        text = stringResource(R.string.tools_currency_converter_disclaimer),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
+            },
+            state = tooltipState,
+            content = {
+                Row(
+                    modifier = Modifier
+                        .clickable {
+                            scope.launch {
+                                tooltipState.show()
+                            }
+                        }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.disclaimer),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
 
-            Spacer(modifier = Modifier.width(HalfPadding))
+                    Spacer(modifier = Modifier.width(HalfPadding))
 
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                tooltip = {
-                    PlainTooltip {
-                        Text(
-                            modifier = Modifier.align(Alignment.CenterVertically),
-                            textAlign = TextAlign.Start,
-                            text = stringResource(R.string.tools_currency_converter_disclaimer),
-                            style = MaterialTheme.typography.labelSmall
-                        )
-                    }
-                },
-                state = tooltipState
-            ) {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_info),
-                    contentDescription = null
-                )
+                    Icon(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .align(Alignment.CenterVertically),
+                        painter = painterResource(R.drawable.ic_info),
+                        contentDescription = null
+                    )
+                }
             }
-        }
+        )
+
+        Spacer(modifier = Modifier.height(HalfPadding))
 
         DropdownInput(
             label = stringResource(id = R.string.tools_currency_converter_from_currency),
