@@ -120,8 +120,14 @@ fun FeedEditScreen(
         ) {
             when (state) {
                 is FeedEditScreenViewState.Loading -> LoadingIndicator()
-                is FeedEditScreenViewState.HasFeeds -> HasFeeds(state.currentFeeds, viewModel::onAddFeedClick, viewModel::onEditFeedClick)
-                is FeedEditScreenViewState.NoFeeds -> AddFeeds()
+                is FeedEditScreenViewState.HasFeeds -> HasFeeds(
+                    feeds = state.currentFeeds,
+                    onAddFeedClick = viewModel::onAddFeedClick,
+                    onEditFeedClick = viewModel::onEditFeedClick
+                )
+                is FeedEditScreenViewState.NoFeeds -> AddFeeds(
+                    onAddFeedClick = viewModel::onAddFeedClick
+                )
             }
         }
 
@@ -190,7 +196,9 @@ private fun ColumnScope.HasFeeds(
 }
 
 @Composable
-private fun AddFeeds() {
+private fun AddFeeds(
+    onAddFeedClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -206,7 +214,7 @@ private fun AddFeeds() {
                     contentDescription = stringResource(id = R.string.feed)
                 )
             },
-            onButtonClick = {}
+            onButtonClick = onAddFeedClick
         )
     }
 }

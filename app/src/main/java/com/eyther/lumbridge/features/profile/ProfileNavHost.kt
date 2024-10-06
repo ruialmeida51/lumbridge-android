@@ -14,7 +14,6 @@ import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.screens.ProfileOverviewScreen
 import com.eyther.lumbridge.features.profile.settings.screens.ProfileSettingsScreen
 
-
 @Composable
 fun ProfileNavHost(
     navController: NavHostController

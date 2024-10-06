@@ -7,13 +7,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface IFeedEditScreenViewModel {
-    companion object {
-        data class BottomSheetParams(
-            val feedName: String? = null,
-            val feedUrl: String? = null
-        )
-    }
-
     val viewState: StateFlow<FeedEditScreenViewState>
     val viewEffects: SharedFlow<FeedEditScreenViewEffects>
 

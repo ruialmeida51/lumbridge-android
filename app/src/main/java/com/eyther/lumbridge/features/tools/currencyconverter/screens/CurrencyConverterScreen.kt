@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -128,7 +130,7 @@ private fun ColumnScope.Input(
             }
         )
 
-        Spacer(modifier = Modifier.padding(HalfPadding))
+        Spacer(modifier = Modifier.height(HalfPadding))
 
         NumberInput(
             label = stringResource(id = R.string.tools_currency_converter_from_amount),
@@ -141,7 +143,7 @@ private fun ColumnScope.Input(
             )
         )
 
-        Spacer(modifier = Modifier.padding(HalfPadding))
+        Spacer(modifier = Modifier.height(HalfPadding))
 
         LumbridgeButton(
             label = stringResource(id = R.string.tools_currency_converter_exchange_currency),

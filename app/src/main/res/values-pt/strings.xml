@@ -108,7 +108,7 @@
     <string name="tools_exchange_rate">Taxa de Conversão</string>
     <string name="tools_currency_converter_to">Conversão</string>
     <string name="tools_currency_converter_to_value">%1$s %2$s é equivalente a %3$s %4$s</string>
-    <string name="tools_exchange_rate_value">1.0.0 %1$s é equivalente a %2$s %3$s</string>
+    <string name="tools_exchange_rate_value">1.00 %1$s é equivalente a %2$s %3$s</string>
     <string name="tools_exchange_error">Houve um problema durante a conversão da moeda. Por favor, tenta mais tarde.</string>
     <string name="tools_net_salary_calculate_button">Calcular Salário Líquido</string>
     <string name="tools_net_salary_calculate_another_button">Calcular Outro</string>
