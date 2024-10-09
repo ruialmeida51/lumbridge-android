@@ -15,10 +15,26 @@
         android:supportsRtl="true"
         android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.Lumbridge">
+
+        <!--
+        This service guarantees backwards compatibility with older versions of Android, allowing users with
+        Android versions <12 to work with a language picker.
+        More information here: https://developer.android.com/guide/topics/resources/app-languages#android12-impl
+        -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+        <meta-data
+            android:name="autoStoreLocales"
+            android:value="true" />
+        </service>
+
         <activity
             android:name=".launcher.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Lumbridge">
+            android:theme="@style/Theme.Lumbridge"
+            android:configChanges="locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

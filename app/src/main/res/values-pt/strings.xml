@@ -134,6 +134,9 @@
     <string name="expenses_overview_no_financial_profile">Parece que ainda não tens um perfil financeiro. Carrega no botão em baixo para criar um.</string>
     <string name="expenses_overview_no_expenses">Parece que ainda não tens nenhuma despesa. Carrega no botão para começar a adicionar.</string>
     <string name="app_settings_change_preferences">Mudar as tuas preferências</string>
+    <string name="app_settings_change_language">Muda a linguagem da aplicação</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_english">Inglês</string>
     <string name="filter">Filtrar</string>
     <string name="filter_by">Filtrar por</string>
     <string name="filter_none">Nenhum</string>

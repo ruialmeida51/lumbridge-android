@@ -2,7 +2,6 @@ package com.eyther.lumbridge.features.profile.settings.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -16,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,10 +25,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.domain.model.locale.SupportedLanguages
+import com.eyther.lumbridge.extensions.platform.changeAppLanguage
+import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsScreenViewEffect
 import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsScreenViewState
 import com.eyther.lumbridge.features.profile.settings.viewmodel.IProfileAppSettingsScreenViewModel
 import com.eyther.lumbridge.features.profile.settings.viewmodel.ProfileAppAppSettingsScreenViewModel
 import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModel
+import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.SwitchSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
@@ -37,6 +41,8 @@ import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun ProfileSettingsScreen(
@@ -46,6 +52,18 @@ fun ProfileSettingsScreen(
     parentViewModel: MainActivityViewModel = hiltViewModel()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.viewEffects
+            .onEach { viewEffect ->
+                when (viewEffect) {
+                    is ProfileAppSettingsScreenViewEffect.UpdateAppSettings -> {
+                        parentViewModel.updateSettings(viewEffect.isDarkMode, viewEffect.appLanguageCountryCode)
+                    }
+                }
+            }
+            .collect()
+    }
 
     Scaffold(
         topBar = {
@@ -68,7 +86,8 @@ fun ProfileSettingsScreen(
             when (state) {
                 is ProfileAppSettingsScreenViewState.Content -> Content(
                     state = state,
-                    onDarkModeChange = parentViewModel::toggleDarkMode
+                    onDarkModeChange = viewModel::onDarkModeChanged,
+                    onLanguageChanged = viewModel::onAppLanguageChanged
                 )
 
                 is ProfileAppSettingsScreenViewState.Loading -> LoadingIndicator()
@@ -80,7 +99,8 @@ fun ProfileSettingsScreen(
 @Composable
 private fun ColumnScope.Content(
     state: ProfileAppSettingsScreenViewState.Content,
-    onDarkModeChange: (Boolean) -> Unit
+    onDarkModeChange: (Boolean) -> Unit,
+    onLanguageChanged: (String) -> Unit
 ) {
     Text(
         modifier = Modifier
@@ -103,8 +123,24 @@ private fun ColumnScope.Content(
         SwitchSetting(
             icon = R.drawable.ic_sun,
             label = stringResource(id = R.string.dark_mode),
-            isChecked = state.isDarkModeEnabled ?: isSystemInDarkTheme(),
+            isChecked = state.inputState.isDarkMode,
             onCheckedChange = { onDarkModeChange(it) }
         )
+
+        DropdownInput(
+            label = stringResource(id = R.string.app_settings_change_language),
+            selectedOption = stringResource(state.inputState.appLanguage.getStringResource()),
+            items = state.availableLanguages.map { it.countryCode to stringResource(it.getStringResource()) },
+            onItemClick = { countryCode, _ ->
+                onLanguageChanged(countryCode)
+                changeAppLanguage(countryCode)
+            }
+        )
     }
+}
+
+@StringRes
+private fun SupportedLanguages.getStringResource() = when (this) {
+    SupportedLanguages.PORTUGUESE -> R.string.language_portuguese
+    SupportedLanguages.ENGLISH -> R.string.language_english
 }

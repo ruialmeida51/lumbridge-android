@@ -2,9 +2,9 @@ package com.eyther.lumbridge.launcher
 
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: IMainActivityViewModel by viewModels<MainActivityViewModel>()
 
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        checkThemeSettings()
+        checkAppSettings()
 
         setContent {
             val viewState = viewModel.viewState.collectAsStateWithLifecycle()
@@ -47,13 +47,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun checkThemeSettings() {
+    private fun checkAppSettings() {
         lifecycleScope.launch {
-            if (!viewModel.hasStoredPreferences()) {
-                when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                    Configuration.UI_MODE_NIGHT_YES -> viewModel.toggleDarkMode(isDarkMode = true)
-                    Configuration.UI_MODE_NIGHT_NO -> viewModel.toggleDarkMode(isDarkMode = false)
+            if (viewModel.hasStoredPreferences()) {
+                viewModel.updateSettings()
+            } else {
+                val isDarkMode = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                    Configuration.UI_MODE_NIGHT_YES -> true
+                    else -> false
                 }
+
+                viewModel.updateSettings(isDarkMode)
             }
         }
     }
