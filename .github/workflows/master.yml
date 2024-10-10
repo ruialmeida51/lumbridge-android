@@ -1,8 +1,8 @@
-name: Android CI Develop & Upload Artifact
+name: Build & Upload Beta
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "master" ]
 
 jobs:
   build:

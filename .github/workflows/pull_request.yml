@@ -1,14 +1,7 @@
-name: Android CI Pull Request
+name: Build PR
 
 on:
-  push:
-    branches:
-      - '!master'
-      - '!develop'
   pull_request:
-    branches:
-      - '!master'
-      - '!develop'
     types:
       - opened
       - reopened
