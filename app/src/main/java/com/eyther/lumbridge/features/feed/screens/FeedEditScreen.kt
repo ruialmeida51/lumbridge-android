@@ -29,11 +29,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewEffects
@@ -61,26 +64,28 @@ fun FeedEditScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
-
+    val lifecycleOwner = LocalLifecycleOwner.current
     val showAddOrUpdateFeedBottomSheet = remember { mutableStateOf(false) }
     val selectedFeed = remember { mutableStateOf<RssFeedUi?>(null) }
 
     LaunchedEffect(Unit) {
-        viewModel.viewEffects
-            .onEach { viewEffects ->
-                when (viewEffects) {
-                    is FeedEditScreenViewEffects.AddFeed -> {
-                        selectedFeed.value = null
-                        showAddOrUpdateFeedBottomSheet.value = true
-                    }
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.viewEffects
+                .onEach { viewEffects ->
+                    when (viewEffects) {
+                        is FeedEditScreenViewEffects.AddFeed -> {
+                            selectedFeed.value = null
+                            showAddOrUpdateFeedBottomSheet.value = true
+                        }
 
-                    is FeedEditScreenViewEffects.EditFeed -> {
-                        selectedFeed.value = viewEffects.selectedFeed
-                        showAddOrUpdateFeedBottomSheet.value = true
+                        is FeedEditScreenViewEffects.EditFeed -> {
+                            selectedFeed.value = viewEffects.selectedFeed
+                            showAddOrUpdateFeedBottomSheet.value = true
+                        }
                     }
                 }
-            }
-            .collect()
+                .collect()
+        }
     }
 
     Scaffold(
@@ -125,6 +130,7 @@ fun FeedEditScreen(
                     onAddFeedClick = viewModel::onAddFeedClick,
                     onEditFeedClick = viewModel::onEditFeedClick
                 )
+
                 is FeedEditScreenViewState.NoFeeds -> AddFeeds(
                     onAddFeedClick = viewModel::onAddFeedClick
                 )

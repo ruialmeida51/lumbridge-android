@@ -74,9 +74,11 @@ class ExpensesAddScreenViewModel @Inject constructor(
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             Log.e(ExpensesAddScreenViewModel::class.java.simpleName, "Error saving expense", throwable)
 
-            viewEffects.tryEmit(
-                ExpensesAddScreenViewEffect.ShowError(throwable.message ?: "Error saving expense")
-            )
+            viewModelScope.launch {
+                viewEffects.emit(
+                    ExpensesAddScreenViewEffect.ShowError(throwable.message ?: "Error saving expense")
+                )
+            }
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
