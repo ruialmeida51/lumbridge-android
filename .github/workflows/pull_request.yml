@@ -8,9 +8,6 @@ on:
       - '**'        # matches every branch
       - '!master'   # excludes master
       - '!develop'  # excludes develop
-    types:
-      - opened
-      - reopened
   push:
     branches:
       - '*'         # matches every branch that doesn't contain a '/'
