@@ -7,8 +7,8 @@ on:
       - '!develop'
   pull_request:
     branches:
-      - 'master'
-      - 'develop'
+      - '!master'
+      - '!develop'
     types:
       - opened
       - reopened
