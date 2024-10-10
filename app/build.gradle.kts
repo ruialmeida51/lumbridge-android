@@ -60,6 +60,12 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
 
+            firebaseAppDistribution {
+                artifactType = "APK"
+                groups = "internal-testers"
+                serviceCredentialsFile = "$rootDir/app/lumbridge-firebase-service-account.json"
+            }
+
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks.add("release")
         }

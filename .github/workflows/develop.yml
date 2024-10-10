@@ -2,8 +2,8 @@ name: Build & Upload Debug
 
 on:
   push:
-    branches: [ "develop" ]
-
+    branches:
+      - 'develop'   # includes develop
 jobs:
   build:
 

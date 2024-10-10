@@ -2,7 +2,8 @@ name: Build & Upload Beta
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - 'master' # includes master
 
 jobs:
   build:
