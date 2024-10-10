@@ -1,6 +1,8 @@
 package versions
 
 object AppVersions {
+    const val APP_COMPAT_VERSION = "1.7.0"
+
     const val KTX_VERSION = "1.3.2"
     const val KOTLIN_COROUTINES_VERSION = "1.3.9"
 

@@ -33,13 +33,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
@@ -69,24 +72,26 @@ fun FeedOverviewScreen(
     viewModel: IFeedOverviewScreenViewModel = hiltViewModel<FeedOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
-
+    val lifecycleOwner = LocalLifecycleOwner.current
     val availableFeedsListState = rememberLazyListState()
     val feedPaddingInPx = LocalDensity.current.run { DefaultPadding.toPx() }.toInt()
 
     val showAddFeedBottomSheet = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.viewEffects
-            .onEach { viewEffects ->
-                when (viewEffects) {
-                    is FeedOverviewScreenViewEffects.ScrollToIndex -> scrollToSelectedFeed(
-                        listState = availableFeedsListState,
-                        selectedIndex = viewEffects.index,
-                        defaultPaddingInPx = feedPaddingInPx
-                    )
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.viewEffects
+                .onEach { viewEffects ->
+                    when (viewEffects) {
+                        is FeedOverviewScreenViewEffects.ScrollToIndex -> scrollToSelectedFeed(
+                            listState = availableFeedsListState,
+                            selectedIndex = viewEffects.index,
+                            defaultPaddingInPx = feedPaddingInPx
+                        )
+                    }
                 }
-            }
-            .collect()
+                .collect()
+        }
     }
 
     Scaffold(
