@@ -23,12 +23,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewEffect
@@ -55,26 +58,29 @@ fun ExpensesEditScreen(
     viewModel: IExpensesEditScreenViewModel = hiltViewModel<ExpensesEditScreenViewModel>()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val lifecycleOwner = LocalLifecycleOwner.current
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val shouldShowDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.viewEffects
-            .onEach { viewEffects ->
-                when (viewEffects) {
-                    is ExpensesEditScreenViewEffect.ShowError -> {
-                        snackbarHostState.showSnackbar(
-                            message = viewEffects.message,
-                            duration = SnackbarDuration.Short
-                        )
-                    }
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.viewEffects
+                .onEach { viewEffects ->
+                    when (viewEffects) {
+                        is ExpensesEditScreenViewEffect.ShowError -> {
+                            snackbarHostState.showSnackbar(
+                                message = viewEffects.message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
 
-                    is ExpensesEditScreenViewEffect.Finish -> {
-                        navController.popBackStack()
+                        is ExpensesEditScreenViewEffect.Finish -> {
+                            navController.popBackStack()
+                        }
                     }
                 }
-            }
-            .collect()
+                .collect()
+        }
     }
 
     Scaffold(

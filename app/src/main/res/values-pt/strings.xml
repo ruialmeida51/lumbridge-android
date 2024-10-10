@@ -18,8 +18,8 @@
     <string name="feed_edit_add_button">Adicionar Feed</string>
     <string name="feed_edit_delete_confirmation">Tens a certeza que queres remover este feed?</string>
     <string name="overview">Visão</string>
-    <string name="tools">Ferramentas</string>
-    <string name="tools_personal_tools">Ferramentas Pessoais</string>
+    <string name="tools">Utilidades</string>
+    <string name="tools_personal_tools">Recursos Pessoais</string>
     <string name="edit_financial_profile">Editar o Perfil Financeiro</string>
     <string name="edit_financial_profile_income">Qual é o teu salário atual?</string>
     <string name="edit_financial_profile_choice">Preferes introduzir o teu salário com valor anual ou mensal?</string>
@@ -57,7 +57,7 @@
     <string name="financial_overview_deductions_portugal">Deduções de Portugal</string>
     <string name="financial_overview_allocation">Alocação do Dinheiro</string>
     <string name="financial_overview_allocation_breakdown">Alocações</string>
-    <string name="financial_overview_mortgage_mortgage_amount">Condições de Empréstimo</string>
+    <string name="financial_overview_mortgage_mortgage_amount">Condições do Empréstimo</string>
     <string name="financial_overview_mortgage_next_payment_capital">Capital</string>
     <string name="financial_overview_mortgage_next_payment_interest">Juro</string>
     <string name="financial_overview_mortgage_next_payment">Próximo Pagamento</string>
@@ -82,7 +82,7 @@
     <string name="profile_support_the_app">Apoio &amp; Comunidade</string>
     <string name="profile_support_feedback">Feedback &amp; Reportar Problemas</string>
     <string name="profile_support_source_code">Código Fonte</string>
-    <string name="profile_support_donate">Compra-me um café!</string>
+    <string name="profile_support_donate">Oferece-me um café!</string>
     <string name="profile_support_donate_disclaimer">As doações são uma maneira incrível de apoiar a aplicação, mas são comletamente opcionais!\n\nUma doação não te vai dar nenhuma vantagem ou funcionalidades novas, mas também não doar também não te afeta de forma alguma.\n\nApenas estamos contentes que estejas a usar a app Lumbridge - obrigado por seres parte da comunidade!</string>
     <string name="profile_support_feedback_email_subject">Feedback para Lumbridge de %1$s</string>
     <string name="profile_support_feedback_email_subject_no_name">Feedback para Lumbridge</string>
@@ -133,8 +133,8 @@
     <string name="expenses_add_error">Algo correu mal a adicionar a tua despesa. Por favor, tenta novamente.</string>
     <string name="expenses_overview_no_financial_profile">Parece que ainda não tens um perfil financeiro. Carrega no botão em baixo para criar um.</string>
     <string name="expenses_overview_no_expenses">Parece que ainda não tens nenhuma despesa. Carrega no botão para começar a adicionar.</string>
-    <string name="app_settings_change_preferences">Mudar as tuas preferências</string>
-    <string name="app_settings_change_language">Muda a linguagem da aplicação</string>
+    <string name="app_settings_change_preferences">Muda as tuas preferências</string>
+    <string name="app_settings_change_language">Seleciona a tua linguagem preferida</string>
     <string name="language_portuguese">Português</string>
     <string name="language_english">Inglês</string>
     <string name="filter">Filtrar</string>

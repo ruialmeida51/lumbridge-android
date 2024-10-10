@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +24,8 @@ class MainActivityViewModel @Inject constructor(
     private val getCurrentSystemLanguageOrDefault: GetCurrentSystemLanguageOrDefault
 ) : ViewModel(), IMainActivityViewModel {
 
-    override val viewState = MutableStateFlow(MainScreenViewState())
+    override val viewState: MutableStateFlow<MainScreenViewState> =
+        MutableStateFlow(MainScreenViewState())
 
     init {
         observePreferences()
@@ -35,33 +35,30 @@ class MainActivityViewModel @Inject constructor(
         getPreferencesFlow()
             .filterNotNull()
             .onEach { preferences ->
-                viewState.update {
-                    it.copy(
-                        uiMode = if (preferences.isDarkMode) UiMode.Dark else UiMode.Light
+                viewState.update { oldState ->
+                    oldState.copy(
+                        uiMode = if (preferences.isDarkMode) UiMode.Dark else UiMode.Light,
+                        appLanguageCountryCode = preferences.appLanguage.countryCode
                     )
                 }
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
     }
 
     override suspend fun hasStoredPreferences(): Boolean {
         return getPreferencesFlow().firstOrNull() != null
     }
 
-    override fun updateSettings(
+    override suspend fun updateSettings(
         isDarkMode: Boolean?,
         appLanguageCountryCode: String?
     ) {
-        viewModelScope.launch {
-            savePreferences(
-                isDarkMode = isDarkMode ?: getPreferencesFlow().firstOrNull()?.isDarkMode ?: false,
-                appLanguages = SupportedLanguages.getOrNull(appLanguageCountryCode) ?: getCurrentSystemLanguageOrDefault()
-            )
-        }
-    }
+        val newDarkMode = isDarkMode ?: getPreferencesFlow().firstOrNull()?.isDarkMode ?: false
+        val newAppLanguage = SupportedLanguages.getOrNull(appLanguageCountryCode) ?: getCurrentSystemLanguageOrDefault()
 
-    override fun toggleDarkMode(isDarkMode: Boolean) {
-        viewModelScope.launch {
-            updateSettings(isDarkMode = isDarkMode)
-        }
+        savePreferences(
+            isDarkMode = newDarkMode,
+            appLanguages = newAppLanguage
+        )
     }
 }

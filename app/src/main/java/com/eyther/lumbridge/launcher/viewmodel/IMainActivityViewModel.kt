@@ -27,16 +27,8 @@ interface IMainActivityViewModel {
      * @param appLanguageCountryCode the country code for the language setting. If it is null, the setting will not be updated and instead
      * read from the system defaults or stored preferences.
      */
-    fun updateSettings(
+    suspend fun updateSettings(
         isDarkMode: Boolean? = null,
         appLanguageCountryCode: String? = null
     )
-
-    /**
-     * Toggle the dark mode setting. This will change the theme of the app to dark mode if it is currently in light mode,
-     * and vice versa. If there is no stored preference, the app will create a default preference with the new setting.
-     *
-     * @param isDarkMode true if the dark mode setting is enabled, false otherwise.
-     */
-    fun toggleDarkMode(isDarkMode: Boolean)
 }

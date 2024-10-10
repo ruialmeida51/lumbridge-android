@@ -9,10 +9,8 @@ import com.eyther.lumbridge.features.profile.settings.viewmodel.delegate.Profile
 import com.eyther.lumbridge.usecase.locale.GetSupportedLanguages
 import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,7 +31,7 @@ class ProfileAppAppSettingsScreenViewModel @Inject constructor(
         MutableStateFlow(ProfileAppSettingsScreenViewState.Loading)
 
     override val viewEffects: MutableSharedFlow<ProfileAppSettingsScreenViewEffect> =
-        MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow()
 
     init {
         observeChanges()
@@ -60,19 +58,15 @@ class ProfileAppAppSettingsScreenViewModel @Inject constructor(
                             availableLanguages = getSupportedLanguages()
                         )
                     }
-                }
-                .launchIn(this)
 
-            viewState
-                .filterIsInstance<ProfileAppSettingsScreenViewState.Content>()
-                .onEach { contentState ->
                     viewEffects.emit(
                         ProfileAppSettingsScreenViewEffect.UpdateAppSettings(
-                            isDarkMode = contentState.inputState.isDarkMode,
-                            appLanguageCountryCode = contentState.inputState.appLanguage.countryCode
+                            isDarkMode = inputState.isDarkMode,
+                            appLanguageCountryCode = inputState.appLanguage.countryCode
                         )
                     )
-                }.launchIn(this)
+                }
+                .launchIn(this)
         }
     }
 }
