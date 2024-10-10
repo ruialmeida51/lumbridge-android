@@ -4,6 +4,8 @@ import com.eyther.lumbridge.launcher.model.MainScreenViewState
 import kotlinx.coroutines.flow.StateFlow
 
 interface IMainActivityViewModel {
+    val viewState: StateFlow<MainScreenViewState>
+
     /**
      * Check if the user has stored preferences. If the user has stored preferences,
      * the app will use the stored preferences to set the theme settings. If the user
@@ -14,12 +16,19 @@ interface IMainActivityViewModel {
     suspend fun hasStoredPreferences(): Boolean
 
     /**
-     * Toggle the dark mode setting. This also saves the dark mode setting to
-     * the user's preferences.
+     * This assumes that the user has stored preferences. It will update the user's settings
+     * with the new settings provided.
      *
-     * @param isDarkMode true if the dark mode setting is enabled, false otherwise.
+     * If, for some reason, the user has not stored preferences, the app will create try to create a default
+     * with these settings as a best effort.
+     *
+     * @param isDarkMode true if the dark mode setting is enabled, false otherwise. If it is null, the setting will not be updated and instead
+     * read from the stored preferences.
+     * @param appLanguageCountryCode the country code for the language setting. If it is null, the setting will not be updated and instead
+     * read from the system defaults or stored preferences.
      */
-    fun toggleDarkMode(isDarkMode: Boolean)
-
-    val viewState: StateFlow<MainScreenViewState>
+    suspend fun updateSettings(
+        isDarkMode: Boolean? = null,
+        appLanguageCountryCode: String? = null
+    )
 }

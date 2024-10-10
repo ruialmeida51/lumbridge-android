@@ -14,6 +14,6 @@ enum class SupportedLocales(
 
     companion object {
         fun get(countryCode: String) =
-            SupportedLocales.entries.first { it.countryCode == countryCode }
+            SupportedLocales.entries.first { it.countryCode.equals(countryCode, ignoreCase = true) }
     }
 }

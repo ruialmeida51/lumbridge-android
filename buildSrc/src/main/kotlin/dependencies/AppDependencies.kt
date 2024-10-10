@@ -1,5 +1,6 @@
 package dependencies
 
+import versions.AppVersions.APP_COMPAT_VERSION
 import versions.AppVersions.COIL_VERSION
 import versions.AppVersions.COMPOSE_BOM_VERSION
 import versions.AppVersions.COMPOSE_GOOGLE_FONTS
@@ -16,6 +17,9 @@ import versions.SharedVersions.KOTLIN_VERSION
 
 object AppDependencies {
     fun getImplementation() = listOf(
+        // Android
+        "androidx.appcompat:appcompat:$APP_COMPAT_VERSION",
+
         // Kotlin
         "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION",
         "androidx.core:core-ktx:$KTX_VERSION",

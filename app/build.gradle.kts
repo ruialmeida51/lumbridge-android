@@ -30,6 +30,7 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".debug"
             isDebuggable = true
             isShrinkResources = false
             enableUnitTestCoverage = false
@@ -43,19 +44,38 @@ android {
             matchingFallbacks.addAll(arrayOf("qa", "debug"))
         }
 
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = false
-
-            matchingFallbacks.add("release")
-        }
-
         register("qa") {
             isDebuggable = true
             enableUnitTestCoverage = true
 
             matchingFallbacks.add("qa")
             initWith(getByName("debug"))
+        }
+
+        register("beta") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".beta"
+
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            firebaseAppDistribution {
+                artifactType = "APK"
+                groups = "internal-testers"
+                serviceCredentialsFile = "$rootDir/app/lumbridge-firebase-service-account.json"
+            }
+
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks.add("release")
+        }
+
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            matchingFallbacks.add("release")
         }
     }
 

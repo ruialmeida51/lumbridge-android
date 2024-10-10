@@ -145,6 +145,9 @@
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
 
     <string name="app_settings_change_preferences">Change your preferences</string>
+    <string name="app_settings_change_language">Change the app language</string>
+    <string name="language_portuguese">Portuguese</string>
+    <string name="language_english">English</string>
 
     <string name="filter">Filter</string>
     <string name="filter_by">Filtering by</string>
