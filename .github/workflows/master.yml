@@ -2,7 +2,7 @@ name: Android CI Develop & Upload Artifact
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "master" ]
 
 jobs:
   build:
