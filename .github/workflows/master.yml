@@ -1,9 +1,9 @@
 name: Build & Upload Beta
 
 on:
-  pull_request:
+  push:
     branches:
-      - "master"
+      - 'master' # includes master
 
 jobs:
   build:

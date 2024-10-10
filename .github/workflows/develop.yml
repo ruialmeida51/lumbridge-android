@@ -1,10 +1,9 @@
 name: Build & Upload Debug
 
 on:
-  pull_request:
+  push:
     branches:
-      - "develop"
-
+      - 'develop'   # includes develop
 jobs:
   build:
 
