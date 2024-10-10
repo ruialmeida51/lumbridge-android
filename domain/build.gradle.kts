@@ -26,18 +26,25 @@ android {
             matchingFallbacks.addAll(arrayOf("qa", "debug"))
         }
 
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = false
-
-            matchingFallbacks.add("release")
-        }
-
         register("qa") {
             enableUnitTestCoverage = true
 
             matchingFallbacks.add("qa")
             initWith(getByName("debug"))
+        }
+
+        register("beta") {
+            enableUnitTestCoverage = true
+
+            matchingFallbacks.add("release")
+            initWith(getByName("release"))
+        }
+
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = false
+
+            matchingFallbacks.add("release")
         }
     }
 
