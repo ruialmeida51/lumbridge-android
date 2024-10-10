@@ -30,7 +30,6 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = ".debug"
             isDebuggable = true
             isShrinkResources = false
             enableUnitTestCoverage = false
