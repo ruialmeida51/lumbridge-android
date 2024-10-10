@@ -1,4 +1,4 @@
-name: Android CI Pull Request
+name: Build PR
 
 on:
   push:

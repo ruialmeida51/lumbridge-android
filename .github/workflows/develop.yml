@@ -1,4 +1,4 @@
-name: Android CI Develop & Upload Artifact
+name: Build & Upload Debug
 
 on:
   push:
