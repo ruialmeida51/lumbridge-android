@@ -30,7 +30,7 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew testQaUnitTest
 
       - name: Upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.5.1
