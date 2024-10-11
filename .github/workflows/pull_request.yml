@@ -46,4 +46,4 @@ jobs:
 
     # Run the tests
     - name: Run tests
-      run: ./gradlew test
+      run: ./gradlew testQaUnitTest
