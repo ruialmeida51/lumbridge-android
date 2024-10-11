@@ -26,11 +26,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.model.locale.SupportedLanguages
+import com.eyther.lumbridge.extensions.platform.changeAppLanguage
 import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsScreenViewEffect
 import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsScreenViewState
 import com.eyther.lumbridge.features.profile.settings.viewmodel.IProfileAppSettingsScreenViewModel
 import com.eyther.lumbridge.features.profile.settings.viewmodel.ProfileAppAppSettingsScreenViewModel
-import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModel
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
@@ -46,8 +46,7 @@ import kotlinx.coroutines.flow.onEach
 fun ProfileSettingsScreen(
     @StringRes label: Int,
     navController: NavHostController,
-    viewModel: IProfileAppSettingsScreenViewModel = hiltViewModel<ProfileAppAppSettingsScreenViewModel>(),
-    parentViewModel: MainActivityViewModel = hiltViewModel()
+    viewModel: IProfileAppSettingsScreenViewModel = hiltViewModel<ProfileAppAppSettingsScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -57,9 +56,7 @@ fun ProfileSettingsScreen(
             viewModel.viewEffects
                 .onEach { viewEffect ->
                     when (viewEffect) {
-                        is ProfileAppSettingsScreenViewEffect.UpdateAppSettings -> {
-                            parentViewModel.updateSettings(viewEffect.isDarkMode, viewEffect.appLanguageCountryCode)
-                        }
+                        is ProfileAppSettingsScreenViewEffect.ChangeAppLanguage -> changeAppLanguage(viewEffect.appLanguageCountryCode)
                     }
                 }
                 .collect()
