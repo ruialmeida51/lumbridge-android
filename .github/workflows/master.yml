@@ -27,7 +27,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Assemble Debug
+      - name: Assemble Beta
         run: ./gradlew assembleBeta
 
       - name: Run tests
@@ -39,4 +39,4 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: internal-testers
-          file: app/build/outputs/apk/debug/app-beta.apk
+          file: app/build/outputs/apk/beta/app-beta.apk
