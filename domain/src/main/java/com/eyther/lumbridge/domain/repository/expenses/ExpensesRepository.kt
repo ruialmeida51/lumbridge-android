@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.domain.repository.expenses
 
 import com.eyther.lumbridge.data.datasource.expenses.local.ExpensesLocalDataSource
-import com.eyther.lumbridge.domain.di.model.Schedulers
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.expenses.toCached
 import com.eyther.lumbridge.domain.mapper.expenses.toDomain
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryDomain

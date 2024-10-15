@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.domain.repository.currencyexchange
 
 import com.eyther.lumbridge.data.datasource.currencyexchange.remote.CurrencyExchangeRemoteDataSource
-import com.eyther.lumbridge.domain.di.model.Schedulers
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.currencyexchange.toDomain
 import com.eyther.lumbridge.domain.model.currencyexchange.CurrencyRates
 import kotlinx.coroutines.withContext

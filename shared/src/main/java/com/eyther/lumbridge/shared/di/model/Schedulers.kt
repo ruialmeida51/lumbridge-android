@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.di.model
+package com.eyther.lumbridge.shared.di.model
 
 import kotlinx.coroutines.CoroutineDispatcher
 

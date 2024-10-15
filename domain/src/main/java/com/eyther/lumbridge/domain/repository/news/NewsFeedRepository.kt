@@ -3,7 +3,7 @@ package com.eyther.lumbridge.domain.repository.news
 import android.text.Html
 import com.eyther.lumbridge.data.datasource.news.local.RssFeedLocalDataSource
 import com.eyther.lumbridge.data.datasource.news.remote.NewsFeedRemoteDataSource
-import com.eyther.lumbridge.domain.di.model.Schedulers
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.feed.toCached
 import com.eyther.lumbridge.domain.mapper.feed.toDomain
 import com.eyther.lumbridge.domain.model.news.Feed

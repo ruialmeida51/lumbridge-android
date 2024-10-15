@@ -3,7 +3,7 @@ package com.eyther.lumbridge.domain.repository.user
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource
 import com.eyther.lumbridge.data.datasource.user.local.UserMortgageLocalDataSource
 import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource
-import com.eyther.lumbridge.domain.di.model.Schedulers
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.user.toCached
 import com.eyther.lumbridge.domain.mapper.user.toDomain
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales

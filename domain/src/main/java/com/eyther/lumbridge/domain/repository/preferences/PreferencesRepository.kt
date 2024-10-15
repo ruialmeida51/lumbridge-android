@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.domain.repository.preferences
 
 import com.eyther.lumbridge.data.datasource.appSettings.local.AppSettingsLocalDataSource
-import com.eyther.lumbridge.domain.di.model.Schedulers
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.preferences.toCached
 import com.eyther.lumbridge.domain.mapper.preferences.toDomain
 import com.eyther.lumbridge.domain.model.locale.SupportedLanguages

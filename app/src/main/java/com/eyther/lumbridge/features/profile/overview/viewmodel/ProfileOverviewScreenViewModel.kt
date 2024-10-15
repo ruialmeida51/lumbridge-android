@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.model.user.UserProfileUi
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
@@ -17,7 +18,6 @@ import com.eyther.lumbridge.usecase.user.profile.GetUserProfileStream
 import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
@@ -31,7 +31,8 @@ import javax.inject.Inject
 class ProfileOverviewScreenViewModel @Inject constructor(
     private val getUserProfileStream: GetUserProfileStream,
     private val saveUserProfile: SaveUserProfile,
-    private val getLocaleOrDefault: GetLocaleOrDefault
+    private val getLocaleOrDefault: GetLocaleOrDefault,
+    private val schedulers: Schedulers
 ) : ViewModel(), IProfileOverviewScreenViewModel {
 
     override val viewState = MutableStateFlow<ProfileOverviewScreenViewState>(
@@ -73,7 +74,7 @@ class ProfileOverviewScreenViewModel @Inject constructor(
             Log.e(this::class.simpleName, "💥 Failed to load image", throwable)
         }
 
-        return withContext(Dispatchers.Default + coroutineExceptionHandler) {
+        return withContext(schedulers.cpu + coroutineExceptionHandler) {
             val loader = ImageLoader.Builder(context)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .memoryCachePolicy(CachePolicy.ENABLED)
