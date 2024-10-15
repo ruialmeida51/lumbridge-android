@@ -1,14 +1,15 @@
 package com.eyther.lumbridge.domain.repository.currencyexchange
 
 import com.eyther.lumbridge.data.datasource.currencyexchange.remote.CurrencyExchangeRemoteDataSource
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.currencyexchange.toDomain
 import com.eyther.lumbridge.domain.model.currencyexchange.CurrencyRates
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CurrencyExchangeRepository @Inject constructor(
-    private val currencyExchangeRemoteDataSource: CurrencyExchangeRemoteDataSource
+    private val currencyExchangeRemoteDataSource: CurrencyExchangeRemoteDataSource,
+    private val schedulers: Schedulers
 ) {
     companion object {
         // The database is updated every 24 hours and we have a limit of requests per hour/day,
@@ -29,11 +30,11 @@ class CurrencyExchangeRepository @Inject constructor(
         baseCurrency: String,
         toCurrency: String
     ): CurrencyRates {
-        val remoteCurrencyRates = withContext(Dispatchers.IO) {
+        val remoteCurrencyRates = withContext(schedulers.io) {
             currencyExchangeRemoteDataSource.getCurrencyRates(baseCurrency, toCurrency)
         }
 
-        return withContext(Dispatchers.Default) {
+        return withContext(schedulers.cpu) {
             requireNotNull(remoteCurrencyRates?.toDomain())
         }
     }

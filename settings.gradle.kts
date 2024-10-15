@@ -24,3 +24,4 @@ rootProject.name = "lumbridge"
 include(":app")
 include(":data")
 include(":domain")
+include(":shared")

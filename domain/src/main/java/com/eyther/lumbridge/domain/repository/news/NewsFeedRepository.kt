@@ -3,13 +3,13 @@ package com.eyther.lumbridge.domain.repository.news
 import android.text.Html
 import com.eyther.lumbridge.data.datasource.news.local.RssFeedLocalDataSource
 import com.eyther.lumbridge.data.datasource.news.remote.NewsFeedRemoteDataSource
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.feed.toCached
 import com.eyther.lumbridge.domain.mapper.feed.toDomain
 import com.eyther.lumbridge.domain.model.news.Feed
 import com.eyther.lumbridge.domain.model.news.FeedItem
 import com.eyther.lumbridge.domain.model.news.RssFeed
 import com.prof18.rssparser.RssParserBuilder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 class NewsFeedRepository @Inject constructor(
     private val newsFeedRemoteDataSource: NewsFeedRemoteDataSource,
-    private val rssFeedLocalDataSource: RssFeedLocalDataSource
+    private val rssFeedLocalDataSource: RssFeedLocalDataSource,
+    private val schedulers: Schedulers
 ) {
     fun getAvailableFeedsFlow(): Flow<List<RssFeed>> {
         return rssFeedLocalDataSource
@@ -25,7 +26,7 @@ class NewsFeedRepository @Inject constructor(
             .mapNotNull { it.toDomain() }
     }
 
-    suspend fun saveRssFeed(rssFeed: RssFeed) = withContext(Dispatchers.IO) {
+    suspend fun saveRssFeed(rssFeed: RssFeed) = withContext(schedulers.io) {
         val sanitisedFeedToAdd = rssFeed
             .toCached()
             .copy(name = rssFeed.name.replace("\\s".toRegex(), ""))
@@ -33,11 +34,11 @@ class NewsFeedRepository @Inject constructor(
         rssFeedLocalDataSource.saveRssFeed(sanitisedFeedToAdd)
     }
 
-    suspend fun removeRssFeed(rssFeedId: Long) = withContext(Dispatchers.IO) {
+    suspend fun removeRssFeed(rssFeedId: Long) = withContext(schedulers.io) {
         rssFeedLocalDataSource.deleteRssFeed(rssFeedId)
     }
 
-    suspend fun getNewsFeed(rssFeed: RssFeed): Feed = withContext(Dispatchers.IO) {
+    suspend fun getNewsFeed(rssFeed: RssFeed): Feed = withContext(schedulers.io) {
         val result = newsFeedRemoteDataSource.getRssFeed(rssFeed.url).orEmpty()
 
         val parsedRss = RssParserBuilder(charset = Charsets.UTF_8)

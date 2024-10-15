@@ -5,11 +5,9 @@ import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFil
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy
-import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -100,14 +98,4 @@ interface IExpensesOverviewScreenViewModel {
      * Expands all the views, including months and categories.
      */
     fun expandAll()
-
-    /**
-     * Navigate to the selected expenses screen, based on the selected navigation item.
-     *
-     * @param navigationItem The selected navigation item
-     * @param navController The navigation controller
-     *
-     * @see ExpensesNavigationItem
-     */
-    fun navigate(navigationItem: NavigationItem, navController: NavHostController)
 }

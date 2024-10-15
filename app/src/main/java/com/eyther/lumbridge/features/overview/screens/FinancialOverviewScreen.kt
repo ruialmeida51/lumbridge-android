@@ -26,7 +26,6 @@ import com.eyther.lumbridge.features.overview.viewmodel.IFinancialOverviewScreen
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 
 @Composable
@@ -54,7 +53,6 @@ fun FinancialOverviewScreen(
                 is FinancialOverviewScreenViewState.Content -> Overview(
                     navController = navController,
                     state = state,
-                    navigate = viewModel::navigate,
                     onTabClicked = viewModel::onTabSelected,
                     onPayment = viewModel::onPayment
                 )
@@ -69,7 +67,6 @@ fun FinancialOverviewScreen(
 private fun ColumnScope.Overview(
     navController: NavHostController,
     state: FinancialOverviewScreenViewState.Content,
-    navigate: (NavigationItem, NavHostController) -> Unit,
     onTabClicked: (tabItem: FinancialOverviewTabItem) -> Unit,
     onPayment: () -> Unit
 ) {
@@ -97,14 +94,12 @@ private fun ColumnScope.Overview(
         FinancialOverviewTabItem.PersonalOverview.ordinal -> PersonalOverview(
             navController = navController,
             state = state,
-            navigate = navigate,
             currencySymbol = currencySymbol
         )
 
         FinancialOverviewTabItem.MortgageOverview.ordinal -> MortgageOverview(
             navController = navController,
             state = state,
-            navigate = navigate,
             currencySymbol = currencySymbol,
             onPayment = onPayment
         )

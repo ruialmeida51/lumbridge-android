@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.eyther.lumbridge.extensions.platform.navigate
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
 import com.eyther.lumbridge.features.tools.overview.viewmodel.IToolsScreenViewModel
@@ -30,6 +31,7 @@ import com.eyther.lumbridge.features.tools.overview.viewmodel.ToolsScreenViewMod
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
+import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.HalfPadding
@@ -57,7 +59,7 @@ fun ToolsOverviewScreen(
                 is ToolScreenViewState.Content -> Content(
                     state = currentState,
                     navController = navController,
-                    onItemClick = toolsScreenViewModel::navigate
+                    getRouteToNavigate = toolsScreenViewModel::getRouteToNavigate
                 )
             }
         }
@@ -68,7 +70,7 @@ fun ToolsOverviewScreen(
 private fun Content(
     state: ToolScreenViewState.Content,
     navController: NavController,
-    onItemClick: (toolItem: ToolItem, navController: NavController) -> Unit
+    getRouteToNavigate: (ToolItem) -> NavigationItem
 ) {
     Column(
         modifier = Modifier
@@ -105,7 +107,7 @@ private fun Content(
                         MovementSetting(
                             icon = item.icon,
                             label = stringResource(id = item.text),
-                            onClick = { onItemClick(item, navController) }
+                            onClick = { navController.navigate(getRouteToNavigate(item)) }
                         )
                     }
                 }

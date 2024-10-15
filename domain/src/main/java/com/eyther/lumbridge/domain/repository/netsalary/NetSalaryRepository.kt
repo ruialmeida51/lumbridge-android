@@ -1,15 +1,16 @@
 package com.eyther.lumbridge.domain.repository.netsalary
 
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.model.finance.NetSalary
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.netsalary.portugal.PortugalNetSalaryCalculator
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class NetSalaryRepository @Inject constructor(
-    private val portugalNetSalaryCalculator: PortugalNetSalaryCalculator
+    private val portugalNetSalaryCalculator: PortugalNetSalaryCalculator,
+    private val schedulers: Schedulers
 ) {
     /**
      * Calculates the net salary and saves the deductions made. The calculation is done
@@ -24,7 +25,7 @@ class NetSalaryRepository @Inject constructor(
         userFinancialsDomain: UserFinancialsDomain,
         locale: SupportedLocales
     ): NetSalary =
-        withContext(Dispatchers.Default) {
+        withContext(schedulers.cpu) {
             return@withContext when (locale) {
                 SupportedLocales.PORTUGAL -> portugalNetSalaryCalculator.calculate(
                     userFinancialsDomain = userFinancialsDomain
@@ -44,7 +45,7 @@ class NetSalaryRepository @Inject constructor(
     suspend fun getAnnualSalary(
         monthlySalary: Float,
         locale: SupportedLocales
-    ): Float = withContext(Dispatchers.Default) {
+    ): Float = withContext(schedulers.cpu) {
         return@withContext when (locale) {
             SupportedLocales.PORTUGAL -> portugalNetSalaryCalculator.calculateAnnualSalary(
                 monthlySalary
@@ -64,7 +65,7 @@ class NetSalaryRepository @Inject constructor(
     suspend fun getMonthlySalary(
         annualSalary: Float,
         locale: SupportedLocales
-    ): Float = withContext(Dispatchers.Default) {
+    ): Float = withContext(schedulers.cpu) {
         return@withContext when (locale) {
             SupportedLocales.PORTUGAL -> portugalNetSalaryCalculator.calculateMonthlySalary(
                 annualSalary

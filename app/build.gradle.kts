@@ -119,6 +119,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":shared"))
 
     AppDependencies.getImplementation().map { implementation(it) }
     AppDependencies.debugImplementation().map { debugImplementation(it) }

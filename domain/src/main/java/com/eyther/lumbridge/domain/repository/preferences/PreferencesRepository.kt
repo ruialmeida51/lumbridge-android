@@ -1,11 +1,11 @@
 package com.eyther.lumbridge.domain.repository.preferences
 
 import com.eyther.lumbridge.data.datasource.appSettings.local.AppSettingsLocalDataSource
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.preferences.toCached
 import com.eyther.lumbridge.domain.mapper.preferences.toDomain
 import com.eyther.lumbridge.domain.model.locale.SupportedLanguages
 import com.eyther.lumbridge.domain.model.preferences.Preferences
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -13,7 +13,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PreferencesRepository @Inject constructor(
-    private val appSettingsLocalDataSource: AppSettingsLocalDataSource
+    private val appSettingsLocalDataSource: AppSettingsLocalDataSource,
+    private val schedulers: Schedulers
 ) {
 
     private suspend fun getPreferences(): Preferences? {
@@ -34,7 +35,7 @@ class PreferencesRepository @Inject constructor(
     suspend fun updatePreferences(
         isDarkMode: Boolean,
         appLanguage: SupportedLanguages
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(schedulers.io) {
         val currentPreferences = getPreferences()
 
         val newPreferences = currentPreferences?.copy(

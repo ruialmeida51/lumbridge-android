@@ -1,19 +1,20 @@
 package com.eyther.lumbridge.domain.repository.expenses
 
 import com.eyther.lumbridge.data.datasource.expenses.local.ExpensesLocalDataSource
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.expenses.toCached
 import com.eyther.lumbridge.domain.mapper.expenses.toDomain
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryDomain
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.domain.model.expenses.ExpensesDetailedDomain
 import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthDomain
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ExpensesRepository @Inject constructor(
-    private val expensesLocalDataSource: ExpensesLocalDataSource
+    private val expensesLocalDataSource: ExpensesLocalDataSource,
+    private val schedulers: Schedulers
 ) {
     fun getExpensesFlow() = expensesLocalDataSource.expensesFlow
         .map { expensesList ->
@@ -21,23 +22,23 @@ class ExpensesRepository @Inject constructor(
             expensesList.map { expense -> expense.toDomain() }
         }
 
-    suspend fun getMonthOfExpensesByYearMonth(year: Int, month: Int): ExpensesMonthDomain? = withContext(Dispatchers.IO) {
+    suspend fun getMonthOfExpensesByYearMonth(year: Int, month: Int): ExpensesMonthDomain? = withContext(schedulers.io) {
         expensesLocalDataSource.getMonthOfExpensesByYearMonth(year, month)?.toDomain()
     }
 
-    suspend fun getAllCategoriesOfMonthById(categoryId: Long): List<ExpensesCategoryDomain> = withContext(Dispatchers.IO) {
+    suspend fun getAllCategoriesOfMonthById(categoryId: Long): List<ExpensesCategoryDomain> = withContext(schedulers.io) {
         expensesLocalDataSource.getAllCategoriesOfMonthById(categoryId).map { it.toDomain() }
     }
 
-    suspend fun getCategoryById(categoryId: Long): ExpensesCategoryDomain = withContext(Dispatchers.IO) {
+    suspend fun getCategoryById(categoryId: Long): ExpensesCategoryDomain = withContext(schedulers.io) {
         expensesLocalDataSource.getCategoryById(categoryId).toDomain()
     }
 
-    suspend fun getDetailedExpenseById(detailedExpenseId: Long): ExpensesDetailedDomain = withContext(Dispatchers.IO) {
+    suspend fun getDetailedExpenseById(detailedExpenseId: Long): ExpensesDetailedDomain = withContext(schedulers.io) {
         expensesLocalDataSource.getDetailedExpenseById(detailedExpenseId).toDomain()
     }
 
-    suspend fun saveNewExpense(expenses: ExpensesMonthDomain) = withContext(Dispatchers.IO) {
+    suspend fun saveNewExpense(expenses: ExpensesMonthDomain) = withContext(schedulers.io) {
         expensesLocalDataSource.saveExpense(expenses.toCached())
     }
 
@@ -45,7 +46,7 @@ class ExpensesRepository @Inject constructor(
         expenses: ExpensesMonthDomain,
         expensesCategoryDomain: ExpensesCategoryDomain,
         expensesDetailedDomain: ExpensesDetailedDomain
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(schedulers.io) {
         expensesLocalDataSource.saveNewExpenseOnExistingMonth(
             expensesMonthCached = expenses.toCached(),
             expensesCategoryCached = expensesCategoryDomain.toCached(),
@@ -56,7 +57,7 @@ class ExpensesRepository @Inject constructor(
     suspend fun updateExpensesDetail(
         expensesDetailed: ExpensesDetailedDomain,
         categoryType: ExpensesCategoryTypes
-    ) = withContext(Dispatchers.IO) {
+    ) = withContext(schedulers.io) {
         // Get the old category information
         val cachedCategory = expensesLocalDataSource.getCategoryById(expensesDetailed.parentCategoryId)
 
@@ -89,11 +90,11 @@ class ExpensesRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteExpense(expensesMonthDomain: ExpensesMonthDomain) = withContext(Dispatchers.IO) {
+    suspend fun deleteExpense(expensesMonthDomain: ExpensesMonthDomain) = withContext(schedulers.io) {
         expensesLocalDataSource.deleteExpense(expensesMonthDomain.toCached())
     }
 
-    suspend fun deleteExpenseDetailed(detailedExpenseId: Long) = withContext(Dispatchers.IO) {
+    suspend fun deleteExpenseDetailed(detailedExpenseId: Long) = withContext(schedulers.io) {
         expensesLocalDataSource.deleteExpenseDetailed(detailedExpenseId)
     }
 }

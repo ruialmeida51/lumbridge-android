@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
@@ -20,13 +21,11 @@ import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.usecase.expenses.DeleteMonthExpenseUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -44,7 +43,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     private val getLocaleOrDefaultStream: GetLocaleOrDefaultStream,
     private val deleteMonthExpenseUseCase: DeleteMonthExpenseUseCase,
     private val sortByDelegate: ExpensesOverviewScreenSortByDelegate,
-    private val filterDelegate: ExpensesOverviewScreenFilterDelegate
+    private val filterDelegate: ExpensesOverviewScreenFilterDelegate,
+    private val schedulers: Schedulers
 ) : ViewModel(),
     IExpensesOverviewScreenViewModel,
     IExpensesOverviewScreenSortByDelegate by sortByDelegate,
@@ -98,7 +98,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 filter = filter
             )
         }
-            .flowOn(Dispatchers.IO)
+            .flowOn(schedulers.io)
             .onEach { streamData ->
                 cachedNetSalaryUi = streamData.netSalaryUi
 
@@ -119,7 +119,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                     }
                 }
             }
-            .flowOn(Dispatchers.Default)
+            .flowOn(schedulers.cpu)
             .launchIn(viewModelScope)
     }
 
@@ -175,7 +175,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             }
         }
 
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+        viewModelScope.launch(schedulers.io + exceptionHandler) {
             deleteMonthExpenseUseCase(expensesMonth)
         }
     }
@@ -187,10 +187,6 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         navController.navigate(
             ExpensesNavigationItem.EditExpense.buildRouteWithArgs(expensesDetailed.id)
         )
-    }
-
-    override fun navigate(navigationItem: NavigationItem, navController: NavHostController) {
-        navController.navigate(navigationItem.route)
     }
 
     /**
@@ -327,7 +323,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
     override fun onFilter(filterOrdinal: Int, startYear: Int?, startMonth: Int?, endYear: Int?, endMonth: Int?) {
         viewModelScope.launch {
-            val filterType = withContext(Dispatchers.Default) {
+            val filterType = withContext(schedulers.cpu) {
                 ExpensesOverviewFilter.of(
                     ordinal = filterOrdinal,
                     startYear = startYear,
@@ -337,7 +333,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 )
             }
 
-            withContext(Dispatchers.IO) {
+            withContext(schedulers.io) {
                 filter.value = filterType
             }
         }
@@ -345,11 +341,11 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
     override fun onSortBy(sortByOrdinal: Int) {
         viewModelScope.launch {
-            val sortByType = withContext(Dispatchers.Default) {
+            val sortByType = withContext(schedulers.cpu) {
                 ExpensesOverviewSortBy.of(sortByOrdinal)
             }
 
-            withContext(Dispatchers.IO) {
+            withContext(schedulers.io) {
                 sortBy.value = sortByType
             }
         }
@@ -357,7 +353,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
     override fun onClearFilter() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(schedulers.io) {
                 filter.value = ExpensesOverviewFilter.None
             }
         }
@@ -365,7 +361,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
     override fun onClearSortBy() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(schedulers.io) {
                 sortBy.value = ExpensesOverviewSortBy.DateDescending
             }
         }

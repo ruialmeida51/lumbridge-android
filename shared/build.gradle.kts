@@ -1,4 +1,4 @@
-import dependencies.DomainDependencies
+import dependencies.DIDependencies
 
 plugins {
     id("com.android.library")
@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.eyther.lumbridge.domain"
+    namespace = "com.eyther.lumbridge.shared"
 
     defaultConfig {
         minSdk = Config.MIN_SDK
@@ -65,10 +65,6 @@ android {
 }
 
 dependencies {
-    implementation(kotlin("reflect"))
-    implementation(project(":data"))
-    implementation(project(":shared"))
-
-    DomainDependencies.getImplementation().map { implementation(it) }
-    DomainDependencies.getKapt().map { kapt(it) }
+    DIDependencies.getImplementation().map { implementation(it) }
+    DIDependencies.getKapt().map { kapt(it) }
 }

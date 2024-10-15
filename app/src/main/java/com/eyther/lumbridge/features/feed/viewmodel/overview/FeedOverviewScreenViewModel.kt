@@ -2,7 +2,6 @@ package com.eyther.lumbridge.features.feed.viewmodel.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Content
@@ -10,7 +9,6 @@ import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewS
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Error
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Loading
 import com.eyther.lumbridge.model.news.RssFeedUi
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.usecase.news.GetAvailableFeedsFlowUseCase
 import com.eyther.lumbridge.usecase.news.GetNewsFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,10 +66,6 @@ class FeedOverviewScreenViewModel @Inject constructor(
                 }
 
         }
-    }
-
-    override fun navigate(navigationItem: NavigationItem, navController: NavHostController) {
-        navController.navigate(navigationItem.route)
     }
 
     override fun selectFeed(rssFeedUi: RssFeedUi?, index: Int) {
