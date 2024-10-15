@@ -1,19 +1,18 @@
 package com.eyther.lumbridge.features.tools.overview.viewmodel
 
-import androidx.navigation.NavController
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
+import com.eyther.lumbridge.ui.navigation.NavigationItem
 import kotlinx.coroutines.flow.StateFlow
 
 interface IToolsScreenViewModel {
     val viewState: StateFlow<ToolScreenViewState>
 
     /**
-     * Navigate to the selected tool screen.
+     * Returns the route to navigate to based on the selected tool item.
      *
      * @param toolItem the selected tool item
-     * @param navController the navigation controller
      * @see ToolItem
      */
-    fun navigate(toolItem: ToolItem, navController: NavController)
+    fun getRouteToNavigate(toolItem: ToolItem): NavigationItem
 }

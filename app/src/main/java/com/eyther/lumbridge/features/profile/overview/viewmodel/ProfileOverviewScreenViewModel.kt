@@ -7,13 +7,11 @@ import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.model.user.UserProfileUi
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import com.eyther.lumbridge.usecase.user.profile.GetUserProfileStream
 import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile
@@ -21,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -57,10 +54,6 @@ class ProfileOverviewScreenViewModel @Inject constructor(
             }
         }
             .launchIn(viewModelScope)
-    }
-
-    override fun navigate(navItem: NavigationItem, navController: NavController) {
-        navController.navigate(navItem.route)
     }
 
     override fun saveImage(image: Bitmap) {

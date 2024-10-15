@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
+import com.eyther.lumbridge.extensions.platform.navigate
 import com.eyther.lumbridge.features.overview.components.TabbedDataOverview
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.navigation.FinancialOverviewNavigationItem
@@ -42,7 +43,6 @@ import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeBu
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.card.RowCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
@@ -52,7 +52,6 @@ import com.eyther.lumbridge.ui.theme.SmallButtonHeight
 fun ColumnScope.MortgageOverview(
     navController: NavHostController,
     state: FinancialOverviewScreenViewState.Content,
-    navigate: (NavigationItem, NavHostController) -> Unit,
     onPayment: () -> Unit,
     currencySymbol: String
 ) {
@@ -75,10 +74,7 @@ fun ColumnScope.MortgageOverview(
                 )
             },
             onButtonClick = {
-                navigate(
-                    FinancialOverviewNavigationItem.EditMortgageProfile,
-                    navController
-                )
+                navController.navigate(FinancialOverviewNavigationItem.EditMortgageProfile)
             }
         )
     } else {
@@ -86,7 +82,6 @@ fun ColumnScope.MortgageOverview(
             PaymentOverview(
                 state = state,
                 currencySymbol = currencySymbol,
-                onNavigate = navigate,
                 navController = navController
             )
 
@@ -123,7 +118,6 @@ fun ColumnScope.MortgageOverview(
 private fun ColumnScope.PaymentOverview(
     state: FinancialOverviewScreenViewState.Content,
     currencySymbol: String,
-    onNavigate: (FinancialOverviewNavigationItem, NavHostController) -> Unit,
     navController: NavHostController
 ) {
     // Mortgage cannot be null in the content state.
@@ -155,10 +149,7 @@ private fun ColumnScope.PaymentOverview(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(bounded = false)
                     ) {
-                        onNavigate(
-                            FinancialOverviewNavigationItem.EditMortgageProfile,
-                            navController
-                        )
+                        navController.navigate(FinancialOverviewNavigationItem.EditMortgageProfile)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_financial_profile)

@@ -20,7 +20,6 @@ import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.usecase.expenses.DeleteMonthExpenseUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
@@ -187,10 +186,6 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         navController.navigate(
             ExpensesNavigationItem.EditExpense.buildRouteWithArgs(expensesDetailed.id)
         )
-    }
-
-    override fun navigate(navigationItem: NavigationItem, navController: NavHostController) {
-        navController.navigate(navigationItem.route)
     }
 
     /**

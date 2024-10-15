@@ -30,14 +30,10 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,12 +47,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.extensions.platform.SendEmailStatus
+import com.eyther.lumbridge.extensions.platform.navigate
 import com.eyther.lumbridge.extensions.platform.sendEmail
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
@@ -129,8 +125,7 @@ private fun Content(
             navController = navController,
             state = state,
             constructBitmap = viewModel::constructBitmapFromUri,
-            saveImage = viewModel::saveImage,
-            onNavigate = viewModel::navigate
+            saveImage = viewModel::saveImage
         )
 
         Text(
@@ -139,7 +134,7 @@ private fun Content(
             modifier = Modifier.padding(horizontal = DefaultPadding, vertical = HalfPadding)
         )
 
-        ProfileFinancialSettings(navController, viewModel::navigate)
+        ProfileFinancialSettings(navController)
 
         Text(
             text = stringResource(id = R.string.profile_app_settings),
@@ -147,7 +142,7 @@ private fun Content(
             modifier = Modifier.padding(horizontal = DefaultPadding, vertical = HalfPadding)
         )
 
-        ProfileAppSettings(navController, viewModel::navigate)
+        ProfileAppSettings(navController)
 
         Text(
             text = stringResource(id = R.string.profile_support_the_app),
@@ -169,8 +164,7 @@ private fun ProfileHeader(
     navController: NavHostController,
     state: ProfileOverviewScreenViewState.Content,
     constructBitmap: suspend (Uri, Context) -> Bitmap,
-    saveImage: (Bitmap) -> Unit,
-    onNavigate: (ProfileNavigationItem, NavController) -> Unit
+    saveImage: (Bitmap) -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -220,7 +214,7 @@ private fun ProfileHeader(
                 val usernameText = if (!state.username.isNullOrEmpty()) {
                     stringResource(
                         id = R.string.profile_greeting,
-                        state.username.orEmpty()
+                        state.username
                     )
                 } else {
                     stringResource(
@@ -265,10 +259,7 @@ private fun ProfileHeader(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(bounded = false)
                     ) {
-                        onNavigate(
-                            ProfileNavigationItem.EditProfile,
-                            navController
-                        )
+                        navController.navigate(ProfileNavigationItem.EditProfile)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_profile)
@@ -279,8 +270,7 @@ private fun ProfileHeader(
 
 @Composable
 private fun ProfileFinancialSettings(
-    navController: NavHostController,
-    onNavigate: (ProfileNavigationItem, NavController) -> Unit
+    navController: NavHostController
 ) {
     ColumnCardWrapper(
         verticalArrangement = Arrangement.spacedBy(DefaultPadding)
@@ -288,27 +278,26 @@ private fun ProfileFinancialSettings(
         MovementSetting(
             icon = R.drawable.ic_savings,
             label = stringResource(id = R.string.edit_financial_profile),
-            onClick = { onNavigate(ProfileNavigationItem.EditFinancialProfile, navController) }
+            onClick = { navController.navigate(ProfileNavigationItem.EditFinancialProfile) }
         )
 
         MovementSetting(
             icon = R.drawable.ic_bank,
             label = stringResource(id = R.string.edit_mortgage_profile),
-            onClick = { onNavigate(ProfileNavigationItem.EditMortgageProfile, navController) }
+            onClick = { navController.navigate(ProfileNavigationItem.EditMortgageProfile) }
         )
     }
 }
 
 @Composable
 private fun ProfileAppSettings(
-    navController: NavHostController,
-    onNavigate: (ProfileNavigationItem, NavController) -> Unit
+    navController: NavHostController
 ) {
     ColumnCardWrapper {
         MovementSetting(
             icon = R.drawable.ic_settings,
             label = stringResource(id = R.string.settings),
-            onClick = { onNavigate(ProfileNavigationItem.Settings, navController) }
+            onClick = { navController.navigate(ProfileNavigationItem.Settings) }
         )
     }
 }

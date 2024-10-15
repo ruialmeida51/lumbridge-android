@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
+import com.eyther.lumbridge.extensions.platform.navigate
 import com.eyther.lumbridge.features.overview.components.IncomeOverview
 import com.eyther.lumbridge.features.overview.components.PerCountryBreakdown
 import com.eyther.lumbridge.features.overview.components.TabbedDataOverview
@@ -34,7 +35,6 @@ import com.eyther.lumbridge.features.overview.navigation.FinancialOverviewNaviga
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
@@ -43,7 +43,6 @@ import com.eyther.lumbridge.ui.theme.QuarterPadding
 fun ColumnScope.PersonalOverview(
     navController: NavHostController,
     state: FinancialOverviewScreenViewState.Content,
-    navigate: (NavigationItem, NavHostController) -> Unit,
     currencySymbol: String
 ) {
     if (state.netSalary == null) {
@@ -63,10 +62,7 @@ fun ColumnScope.PersonalOverview(
                 )
             },
             onButtonClick = {
-                navigate(
-                    FinancialOverviewNavigationItem.EditFinancialProfile,
-                    navController
-                )
+                navController.navigate(FinancialOverviewNavigationItem.EditFinancialProfile)
             }
         )
     } else {
@@ -75,10 +71,7 @@ fun ColumnScope.PersonalOverview(
                 netSalaryUi = state.netSalary,
                 currencySymbol = currencySymbol,
                 onEditClick = {
-                    navigate(
-                        FinancialOverviewNavigationItem.EditFinancialProfile,
-                        navController
-                    )
+                    navController.navigate(FinancialOverviewNavigationItem.EditFinancialProfile)
                 }
             )
 
@@ -98,7 +91,6 @@ fun ColumnScope.PersonalOverview(
 
             MoneyAllocationBreakdown(
                 currencySymbol = currencySymbol,
-                onNavigate = navigate,
                 navController = navController,
                 moneyAllocation = state.netSalary.moneyAllocations
             )
@@ -113,7 +105,6 @@ fun ColumnScope.PersonalOverview(
 @Composable
 private fun ColumnScope.MoneyAllocationBreakdown(
     currencySymbol: String,
-    onNavigate: (NavigationItem, NavHostController) -> Unit,
     navController: NavHostController,
     moneyAllocation: List<MoneyAllocationUi>?
 ) {
@@ -143,10 +134,7 @@ private fun ColumnScope.MoneyAllocationBreakdown(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(bounded = false)
                     ) {
-                        onNavigate(
-                            FinancialOverviewNavigationItem.EditFinancialProfile,
-                            navController
-                        )
+                        navController.navigate(FinancialOverviewNavigationItem.EditFinancialProfile)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_financial_profile)

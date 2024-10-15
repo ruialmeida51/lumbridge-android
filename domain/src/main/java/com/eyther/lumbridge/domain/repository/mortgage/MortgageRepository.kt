@@ -1,15 +1,16 @@
 package com.eyther.lumbridge.domain.repository.mortgage
 
+import com.eyther.lumbridge.domain.di.model.Schedulers
 import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageCalculation
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.repository.mortgage.portugal.PortugalMortgageCalculator
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MortgageRepository @Inject constructor(
-    private val portugalMortgageCalculator: PortugalMortgageCalculator
+    private val portugalMortgageCalculator: PortugalMortgageCalculator,
+    private val schedulers: Schedulers
 ) {
     /**
      * Calculates the mortgage.
@@ -23,7 +24,7 @@ class MortgageRepository @Inject constructor(
         userMortgageDomain: UserMortgageDomain,
         locale: SupportedLocales
     ): MortgageCalculation =
-        withContext(Dispatchers.Default) {
+        withContext(schedulers.cpu) {
             return@withContext when (locale) {
                 SupportedLocales.PORTUGAL -> portugalMortgageCalculator.calculate(
                     mortgageDomain = userMortgageDomain

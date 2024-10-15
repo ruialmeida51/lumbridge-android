@@ -2,10 +2,8 @@ package com.eyther.lumbridge.features.overview.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewTabItem
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.usecase.finance.AddMonthlyPayment
 import com.eyther.lumbridge.usecase.finance.GetMortgageCalculation
 import com.eyther.lumbridge.usecase.finance.GetNetSalary
@@ -74,10 +72,6 @@ class FinancialOverviewScreenViewModel @Inject constructor(
         viewState.update {
             it.asContent().copy(selectedTabItem = tabItem)
         }
-    }
-
-    override fun navigate(navItem: NavigationItem, navController: NavHostController) {
-        navController.navigate(navItem.route)
     }
 
     override fun onPayment() {

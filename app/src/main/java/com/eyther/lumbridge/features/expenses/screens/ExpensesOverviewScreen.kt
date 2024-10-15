@@ -62,6 +62,7 @@ import com.eyther.lumbridge.domain.time.toLocalDate
 import com.eyther.lumbridge.domain.time.toMonthYearDateString
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
+import com.eyther.lumbridge.extensions.platform.navigate
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter.Companion.DisplayFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter.Companion.FILTER_DATE_RANGE_ORDINAL
@@ -95,7 +96,6 @@ import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndi
 import com.eyther.lumbridge.ui.common.composables.components.setting.SimpleSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
-import com.eyther.lumbridge.ui.navigation.NavigationItem
 import com.eyther.lumbridge.ui.theme.DefaultAndAHalfPadding
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
@@ -146,7 +146,7 @@ fun ExpensesOverviewScreen(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(bounded = false),
-                            onClick = { viewModel.navigate(ExpensesNavigationItem.AddExpense, navController) }
+                            onClick = { navController.navigate(ExpensesNavigationItem.AddExpense) }
                         ),
                         painter = painterResource(R.drawable.ic_add),
                         contentDescription = stringResource(
@@ -232,8 +232,7 @@ fun ExpensesOverviewScreen(
                         onSortBySelected = viewModel::onSortBy,
                         onFilterSelected = viewModel::onFilter,
                         onClearFilter = viewModel::onClearFilter,
-                        onClearSortBy = viewModel::onClearSortBy,
-                        navigate = viewModel::navigate
+                        onClearSortBy = viewModel::onClearSortBy
                     )
                 }
 
@@ -241,7 +240,6 @@ fun ExpensesOverviewScreen(
                     Empty(
                         state = state,
                         navController = navController,
-                        navigate = viewModel::navigate,
                         onClearFilter = viewModel::onClearFilter,
                         onClearSortBy = viewModel::onClearSortBy,
                     )
@@ -265,13 +263,11 @@ private fun Content(
     onSortBySelected: (Int) -> Unit,
     onFilterSelected: (ordinal: Int, startYear: Int?, startMonth: Int?, endYear: Int?, endMonth: Int?) -> Unit,
     onClearFilter: () -> Unit,
-    onClearSortBy: () -> Unit,
-    navigate: (NavigationItem, NavHostController) -> Unit
+    onClearSortBy: () -> Unit
 ) {
     if (!state.hasExpenses()) {
         FinancialProfile(
             state = state,
-            navigate = navigate,
             onClearFilter = onClearFilter,
             onClearSortBy = onClearSortBy,
             navController = navController
@@ -284,7 +280,7 @@ private fun Content(
             label = stringResource(id = R.string.expenses_overview_add_expense),
             minHeight = SmallButtonHeight
         ) {
-            navigate(ExpensesNavigationItem.AddExpense, navController)
+            navController.navigate(ExpensesNavigationItem.AddExpense)
         }
 
         Spacer(modifier = Modifier.height(HalfPadding))
@@ -299,7 +295,6 @@ private fun Content(
             if (index == 0) {
                 FinancialProfile(
                     state = state,
-                    navigate = navigate,
                     onClearFilter = onClearFilter,
                     onClearSortBy = onClearSortBy,
                     navController = navController
@@ -312,7 +307,7 @@ private fun Content(
                     label = stringResource(id = R.string.expenses_overview_add_expense),
                     minHeight = SmallButtonHeight
                 ) {
-                    navigate(ExpensesNavigationItem.AddExpense, navController)
+                    navController.navigate(ExpensesNavigationItem.AddExpense)
                 }
 
                 Spacer(modifier = Modifier.height(HalfPadding))
@@ -361,12 +356,10 @@ private fun Empty(
     state: Empty,
     navController: NavHostController,
     onClearFilter: () -> Unit,
-    onClearSortBy: () -> Unit,
-    navigate: (NavigationItem, NavHostController) -> Unit
+    onClearSortBy: () -> Unit
 ) {
     FinancialProfile(
         state = state,
-        navigate = navigate,
         onClearFilter = onClearFilter,
         onClearSortBy = onClearSortBy,
         navController = navController
@@ -375,7 +368,6 @@ private fun Empty(
     Spacer(modifier = Modifier.height(HalfPadding))
 
     NoExpenses(
-        navigate = navigate,
         navController = navController
     )
 }
@@ -385,14 +377,12 @@ private fun FinancialProfile(
     state: ExpensesOverviewScreenViewState,
     navController: NavHostController,
     onClearFilter: () -> Unit,
-    onClearSortBy: () -> Unit,
-    navigate: (NavigationItem, NavHostController) -> Unit
+    onClearSortBy: () -> Unit
 ) {
     when (state) {
         is Empty.NoFinancialProfile -> {
             EmptyAndNoFinancialProfile(
-                navController = navController,
-                navigate = navigate
+                navController = navController
             )
         }
 
@@ -408,7 +398,6 @@ private fun FinancialProfile(
                 navController = navController,
                 onClearFilter = onClearFilter,
                 onClearSortBy = onClearSortBy,
-                navigate = navigate,
                 currencySymbol = state.locale.getCurrencySymbol()
             )
         }
@@ -424,7 +413,6 @@ private fun FinancialProfile(
                 navController = navController,
                 onClearFilter = onClearFilter,
                 onClearSortBy = onClearSortBy,
-                navigate = navigate,
                 currencySymbol = state.locale.getCurrencySymbol()
 
             )
@@ -442,7 +430,6 @@ private fun FinancialProfile(
                 navController = navController,
                 onClearFilter = onClearFilter,
                 onClearSortBy = onClearSortBy,
-                navigate = navigate,
                 currencySymbol = state.locale.getCurrencySymbol()
             )
         }
@@ -463,8 +450,7 @@ private fun HasFinancialProfile(
     showFilterAndSort: Boolean,
     navController: NavHostController,
     onClearFilter: () -> Unit,
-    onClearSortBy: () -> Unit,
-    navigate: (NavigationItem, NavHostController) -> Unit
+    onClearSortBy: () -> Unit
 ) {
     ColumnCardWrapper(
         modifier = Modifier.animateContentSize(),
@@ -489,7 +475,7 @@ private fun HasFinancialProfile(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(bounded = false)
-                    ) { navigate(ExpensesNavigationItem.EditFinancialProfile, navController) },
+                    ) { navController.navigate(ExpensesNavigationItem.EditFinancialProfile) },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit)
             )
@@ -785,8 +771,7 @@ private fun NoFinancialProfile(
     currencySymbol: String,
     showFilterAndSort: Boolean,
     onClearFilter: () -> Unit,
-    onClearSortBy: () -> Unit,
-    navigate: (NavigationItem, NavHostController) -> Unit
+    onClearSortBy: () -> Unit
 ) {
     ColumnCardWrapper {
         AnimatedVisibility(totalSpent != null) {
@@ -878,10 +863,7 @@ private fun NoFinancialProfile(
             text = stringResource(id = R.string.expenses_overview_no_financial_profile),
             buttonText = stringResource(id = R.string.financial_overview_create_profile),
             onButtonClick = {
-                navigate(
-                    ExpensesNavigationItem.EditFinancialProfile,
-                    navController
-                )
+                navController.navigate(ExpensesNavigationItem.EditFinancialProfile)
             }
         )
     }
@@ -889,34 +871,27 @@ private fun NoFinancialProfile(
 
 @Composable
 private fun EmptyAndNoFinancialProfile(
-    navController: NavHostController,
-    navigate: (NavigationItem, NavHostController) -> Unit
+    navController: NavHostController
 ) {
     ColumnCardWrapper {
         EmptyComponentWithButton(
             text = stringResource(id = R.string.expenses_overview_no_financial_profile),
             buttonText = stringResource(id = R.string.financial_overview_create_profile),
             onButtonClick = {
-                navigate(
-                    ExpensesNavigationItem.EditFinancialProfile,
-                    navController
-                )
+                navController.navigate(ExpensesNavigationItem.EditFinancialProfile)
             }
         )
     }
 }
 
 @Composable
-private fun NoExpenses(navController: NavHostController, navigate: (NavigationItem, NavHostController) -> Unit) {
+private fun NoExpenses(navController: NavHostController) {
     ColumnCardWrapper {
         EmptyComponentWithButton(
             text = stringResource(id = R.string.expenses_overview_no_expenses),
             buttonText = stringResource(id = R.string.expenses_overview_add_expense),
             onButtonClick = {
-                navigate(
-                    ExpensesNavigationItem.AddExpense,
-                    navController
-                )
+                navController.navigate(ExpensesNavigationItem.AddExpense)
             }
         )
     }
