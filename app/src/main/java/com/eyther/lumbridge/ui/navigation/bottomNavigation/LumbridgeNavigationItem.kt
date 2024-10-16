@@ -19,7 +19,7 @@ sealed class LumbridgeNavigationItem(
     )
 
     data object Tools : LumbridgeNavigationItem(
-        route = "tools", icon = R.drawable.ic_calculator, label = R.string.tools
+        route = "tools", icon = R.drawable.ic_widgets, label = R.string.tools
     )
 
     data object Expenses : LumbridgeNavigationItem(

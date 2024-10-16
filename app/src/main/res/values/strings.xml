@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">Lumbridge</string>
+    <string name="app_name_release">Lumbridge</string>
+    <string name="app_name_debug">Lumbridge Debug</string>
+    <string name="app_name_beta">Lumbridge Beta</string>
 
     <string name="feed">Feed</string>
     <string name="feed_edit">Edit Feed</string>
@@ -167,6 +169,11 @@
     <string name="sort_by_spent_ascending">Spent: Ascending</string>
     <string name="sort_by_spent_descending">Spent: Descending</string>
 
+    <string name="permission_dialog_open_settings">Open Settings</string>
+    <string name="permission_dialog_notification_title">Notification Permission</string>
+    <string name="permission_dialog_notification_message">Would you like to receive notifications? If so, please grant the permission to receive updates on the latest news and features.</string>
+    <string name="permission_dialog_notification_permanently_denied">You have permanently denied the notification permission. If you want to receive notifications, please go the app settings to enable them!</string>
+
     <string-array name="loading_messages" translatable="true">
         <item>Hold on tight, we\'re catching data waves!</item>
         <item>Just brewing up some digital magic…</item>
@@ -187,6 +194,7 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="notifications">Notifications</string>
     <string name="irs">IRS</string>
     <string name="social_security">Social Security</string>
     <string name="refresh">Refresh</string>
@@ -239,5 +247,6 @@
     <string name="collapse">Collapse</string>
     <string name="url">Url</string>
     <string name="disclaimer">Disclaimer</string>
+    <string name="allow">Allow</string>
     <string name="max_length_reached">Char limit reached: %d</string>
 </resources>

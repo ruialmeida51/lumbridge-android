@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lumbridge</string>
+    <string name="app_name_release">Lumbridge</string>
+    <string name="app_name_debug">Lumbridge Debug</string>
+    <string name="app_name_beta">Lumbridge Beta</string>
+
     <string name="feed">Feed</string>
     <string name="feed_edit">Editar Feed</string>
     <string name="feed_error_message">Houve um problema durante o pedido deste feed de notícias.\nPor favor, verifica o URL e tenta novamente.</string>
@@ -153,9 +156,14 @@
     <string name="sort_by_date_descending">Data: Descendente</string>
     <string name="sort_by_spent_ascending">Despesas: Ascendente</string>
     <string name="sort_by_spent_descending">Despesas: Descendente</string>
+    <string name="permission_dialog_open_settings">Abrir Definições</string>
+    <string name="permission_dialog_notification_title">Notificações</string>
+    <string name="permission_dialog_notification_message">Para receber notificações sobre atualizações, features e as últimas notícias, permite que a aplicação te envie notificações.</string>
+    <string name="permission_dialog_notification_permanently_denied">Parece que negaste permanentemente as notificações. Se mudares de ideias, podes ativar as notificações nas definições da aplicação.</string>
     <string name="save">Guardar</string>
     <string name="cancel">Cancelar</string>
     <string name="dark_mode">Modo Escuro</string>
+    <string name="notifications">Notificações</string>
     <string name="irs">IRS</string>
     <string name="social_security">Segurança Social</string>
     <string name="refresh">Atualizar</string>
@@ -208,6 +216,7 @@
     <string name="collapse">Colapsar</string>
     <string name="url">Url</string>
     <string name="disclaimer">Informação Extra</string>
+    <string name="allow">Permitir</string>
     <string name="max_length_reached">Limite de caracteres atingido: %d</string>
     <string name="developer_email">eytherdeveloper@gmail.com</string>
     <string name="source_code_url">https://github.com/ruialmeida51/lumbridge-android</string>
