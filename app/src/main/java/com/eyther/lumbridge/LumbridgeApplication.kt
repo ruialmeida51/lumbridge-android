@@ -18,7 +18,7 @@ class LumbridgeApplication : Application() {
     lateinit var debugToolsDelegate: DebugToolsDelegate
 
     override fun onCreate() {
-        setupStrictMode()
+        tryStartStrictMode()
         super.onCreate()
         tryStartDebugTools()
     }
@@ -40,7 +40,7 @@ class LumbridgeApplication : Application() {
      *
      * This is only enabled in debug builds.
      */
-    private fun setupStrictMode() {
+    private fun tryStartStrictMode() {
         if (applicationContext.isDebuggable()) {
             StrictMode.setThreadPolicy(
                 ThreadPolicy.Builder()

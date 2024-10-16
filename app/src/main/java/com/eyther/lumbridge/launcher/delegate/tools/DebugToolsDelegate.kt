@@ -6,6 +6,7 @@ import com.eyther.lumbridge.extensions.platform.isDebuggable
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
@@ -66,12 +67,14 @@ class DebugToolsDelegate @Inject constructor(
      */
     private suspend fun initTool(
         coroutineContext: CoroutineContext = schedulers.io,
-        setupTool: suspend (coroutineContext: CoroutineContext) -> Unit
+        setupTool: suspend () -> Unit
     ) {
         if (coroutineContext == schedulers.main) {
             throw IllegalStateException("⚠️ You should not initialize debug tools in the main thread.")
         }
 
-        setupTool(coroutineContext)
+        withContext(coroutineContext) {
+            setupTool()
+        }
     }
 }

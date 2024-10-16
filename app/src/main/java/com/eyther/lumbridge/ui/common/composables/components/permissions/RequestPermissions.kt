@@ -4,8 +4,6 @@ package com.eyther.lumbridge.ui.common.composables.components.permissions
 
 import android.app.Activity
 import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -25,16 +23,10 @@ import com.google.accompanist.permissions.shouldShowRationale
 fun TryRequestPermission(
     neededPermission: NeededPermission,
     permissionState: PermissionState,
-    askForNotificationsPermission: MutableState<Boolean>,
-    onGranted: (Boolean) -> Unit
+    askForNotificationsPermission: MutableState<Boolean>
 ) {
     val activity = LocalContext.current as Activity
     val shouldShowPermissionDialog = remember { mutableStateOf(false) }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted -> onGranted(isGranted) }
-    )
 
     if (permissionState.status.isGranted) {
         activity.openAppSettings()
@@ -49,12 +41,11 @@ fun TryRequestPermission(
             onDenyPermission = {
                 shouldShowPermissionDialog.value = false
                 askForNotificationsPermission.value = false
-                onGranted(false)
             },
             onGrantPermission = {
                 shouldShowPermissionDialog.value = false
                 askForNotificationsPermission.value = false
-                permissionLauncher.launch(neededPermission.permission)
+                permissionState.launchPermissionRequest()
             },
             onGoToAppSettings = {
                 shouldShowPermissionDialog.value = false

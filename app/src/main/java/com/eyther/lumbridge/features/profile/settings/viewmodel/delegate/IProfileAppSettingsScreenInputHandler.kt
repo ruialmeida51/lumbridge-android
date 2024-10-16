@@ -11,7 +11,6 @@ interface IProfileAppSettingsScreenInputHandler {
      * the new value and performs any necessary validation.
      */
     fun onDarkModeChanged(isDarkMode: Boolean)
-    fun onNotificationsEnabledChanged(areNotificationsEnabled: Boolean)
     fun onAppLanguageChanged(countryCode: String)
 
     /**

@@ -18,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -64,7 +63,6 @@ fun ProfileSettingsScreen(
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val lifecycleOwner = LocalLifecycleOwner.current
-    val lifecycleState = lifecycleOwner.lifecycle.currentStateFlow.collectAsState().value
 
     val neededPermission = remember { NeededPermission.Notifications }
     val notificationsPermissionState = rememberPermissionState(neededPermission.permission)
@@ -78,17 +76,6 @@ fun ProfileSettingsScreen(
                     }
                 }
                 .collect()
-        }
-    }
-
-    LaunchedEffect(lifecycleState) {
-        if (lifecycleState == Lifecycle.State.RESUMED) {
-            // Check if the notifications permission is granted on onResume, and update the view model
-            // with the current state. This is apart from the state because it's a platform specific permission,
-            // and we need to handle it differently.
-            viewModel.onNotificationsEnabledChanged(
-                areNotificationsEnabled = notificationsPermissionState.status.isGranted
-            )
         }
     }
 
@@ -114,7 +101,6 @@ fun ProfileSettingsScreen(
                     state = state,
                     onDarkModeChange = viewModel::onDarkModeChanged,
                     onLanguageChanged = viewModel::onAppLanguageChanged,
-                    onNotificationsPermissionChanged = viewModel::onNotificationsEnabledChanged,
                     neededPermission = neededPermission,
                     notificationsPermissionState = notificationsPermissionState
                 )
@@ -130,7 +116,6 @@ private fun ColumnScope.Content(
     state: ProfileAppSettingsScreenViewState.Content,
     neededPermission: NeededPermission,
     notificationsPermissionState: PermissionState,
-    onNotificationsPermissionChanged: (Boolean) -> Unit,
     onDarkModeChange: (Boolean) -> Unit,
     onLanguageChanged: (String) -> Unit
 ) {
@@ -158,7 +143,7 @@ private fun ColumnScope.Content(
         SwitchSetting(
             icon = R.drawable.ic_notifications,
             label = stringResource(id = R.string.notifications),
-            isChecked = state.inputState.areNotificationsEnabled,
+            isChecked = notificationsPermissionState.status.isGranted,
             onCheckedChange = {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                     context.openAppSettings()
@@ -189,8 +174,7 @@ private fun ColumnScope.Content(
         TryRequestPermission(
             neededPermission = neededPermission,
             permissionState = notificationsPermissionState,
-            askForNotificationsPermission = askForNotificationsPermission,
-            onGranted = onNotificationsPermissionChanged
+            askForNotificationsPermission = askForNotificationsPermission
         )
     }
 }
