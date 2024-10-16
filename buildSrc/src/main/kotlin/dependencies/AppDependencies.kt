@@ -3,15 +3,13 @@ package dependencies
 import versions.AppVersions.APP_COMPAT_VERSION
 import versions.AppVersions.COIL_VERSION
 import versions.AppVersions.COMPOSE_BOM_VERSION
-import versions.AppVersions.COMPOSE_GOOGLE_FONTS
-import versions.AppVersions.COMPOSE_LIFECYCLE_VERSION
-import versions.AppVersions.COMPOSE_MATERIAL_3_CORE_VERSION
 import versions.AppVersions.COMPOSE_TOOLING_VERSION
 import versions.AppVersions.FIREBASE_BOM_VERSION
 import versions.AppVersions.HILT_NAVIGATION_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
 import versions.AppVersions.KTX_VERSION
 import versions.AppVersions.NAVIGATION_VERSION
+import versions.AppVersions.ACCOMPANIST_VERSION
 import versions.SharedVersions.HILT_VERSION
 import versions.SharedVersions.KOTLIN_VERSION
 
@@ -28,11 +26,10 @@ object AppDependencies {
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KOTLIN_COROUTINES_VERSION",
 
         // Compose
-        "androidx.compose:compose-bom:$COMPOSE_BOM_VERSION",
-        "androidx.compose.material3:material3:$COMPOSE_MATERIAL_3_CORE_VERSION",
-        "androidx.compose.ui:ui-tooling-preview:$COMPOSE_TOOLING_VERSION",
-        "androidx.lifecycle:lifecycle-runtime-compose:$COMPOSE_LIFECYCLE_VERSION",
-        "androidx.compose.ui:ui-text-google-fonts:$COMPOSE_GOOGLE_FONTS",
+        "androidx.compose.material3:material3",
+        "androidx.compose.ui:ui-tooling-preview",
+        "androidx.lifecycle:lifecycle-runtime-compose",
+        "androidx.compose.ui:ui-text-google-fonts",
 
         // Coil
         "io.coil-kt:coil:$COIL_VERSION",
@@ -47,7 +44,20 @@ object AppDependencies {
         "com.google.dagger:hilt-android:$HILT_VERSION",
 
         // Firebase
-        "com.google.firebase:firebase-bom:$FIREBASE_BOM_VERSION"
+        "com.google.firebase:firebase-inappmessaging-display",
+        "com.google.firebase:firebase-messaging",
+        "com.google.firebase:firebase-analytics",
+
+        // Accompanist
+        "com.google.accompanist:accompanist-permissions:$ACCOMPANIST_VERSION"
+    )
+
+    fun getPlatformImplementation() = listOf(
+        // Firebase
+        "com.google.firebase:firebase-bom:$FIREBASE_BOM_VERSION",
+
+        // Compose
+        "androidx.compose:compose-bom:$COMPOSE_BOM_VERSION",
     )
 
     fun debugImplementation() = listOf(

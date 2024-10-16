@@ -2,7 +2,7 @@ package dependencies
 
 import versions.SharedVersions.HILT_VERSION
 
-object DIDependencies {
+object SharedDependencies {
     fun getImplementation() = listOf(
         // Hilt
         "com.google.dagger:hilt-android:$HILT_VERSION"

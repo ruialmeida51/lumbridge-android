@@ -31,6 +31,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            resValue ("string", "app_name", "@string/app_name_debug")
+
             isDebuggable = true
             isShrinkResources = false
             enableUnitTestCoverage = false
@@ -54,7 +57,10 @@ android {
 
         register("beta") {
             initWith(getByName("release"))
+
             applicationIdSuffix = ".beta"
+            versionNameSuffix = "-beta"
+            resValue ("string", "app_name", "@string/app_name_beta")
 
             isDebuggable = false
             isMinifyEnabled = true
@@ -71,6 +77,8 @@ android {
         }
 
         release {
+            resValue ("string", "app_name", "@string/app_name_release")
+
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
@@ -121,6 +129,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":shared"))
 
+    AppDependencies.getPlatformImplementation().map { implementation(platform(it)) }
     AppDependencies.getImplementation().map { implementation(it) }
     AppDependencies.debugImplementation().map { debugImplementation(it) }
     AppDependencies.getKapt().map { kapt(it) }

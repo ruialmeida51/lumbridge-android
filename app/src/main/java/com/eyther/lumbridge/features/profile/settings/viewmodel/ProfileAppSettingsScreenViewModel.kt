@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileAppAppSettingsScreenViewModel @Inject constructor(
+class ProfileAppSettingsScreenViewModel @Inject constructor(
     private val getPreferencesFlow: GetPreferencesFlow,
     private val getSupportedLanguages: GetSupportedLanguages,
     private val savePreferences: SavePreferences,

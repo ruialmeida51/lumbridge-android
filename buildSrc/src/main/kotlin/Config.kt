@@ -5,8 +5,9 @@ object Config {
 
     const val MIN_SDK = 29
     const val TARGET_SDK = 34
-    const val VERSION = 27
-    const val VERSION_NAME = "1.7.10"
+
+    const val VERSION = 28
+    const val VERSION_NAME = "1.7.11"
 
     const val JAVA_VERSION = "17"
     val JAVA_TARGET = JavaVersion.VERSION_17

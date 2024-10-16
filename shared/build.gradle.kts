@@ -1,4 +1,4 @@
-import dependencies.DIDependencies
+import dependencies.SharedDependencies
 
 plugins {
     id("com.android.library")
@@ -65,6 +65,6 @@ android {
 }
 
 dependencies {
-    DIDependencies.getImplementation().map { implementation(it) }
-    DIDependencies.getKapt().map { kapt(it) }
+    SharedDependencies.getImplementation().map { implementation(it) }
+    SharedDependencies.getKapt().map { kapt(it) }
 }

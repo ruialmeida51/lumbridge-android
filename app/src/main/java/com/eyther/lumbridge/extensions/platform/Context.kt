@@ -3,6 +3,7 @@ package com.eyther.lumbridge.extensions.platform
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings
 
 /**
  * The MIME type for sending an email.
@@ -63,4 +64,13 @@ fun Context.sendEmail(
         // An unexpected error occurred while sending the email
         SendEmailStatus.UnexpectedError
     }
+}
+
+/**
+ * Opens the app settings for the current application.
+ */
+fun Context.openAppSettings() {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    intent.data = android.net.Uri.parse("package:$packageName")
+    startActivity(intent)
 }

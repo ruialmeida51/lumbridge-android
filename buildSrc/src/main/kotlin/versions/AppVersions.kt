@@ -7,10 +7,7 @@ object AppVersions {
     const val KOTLIN_COROUTINES_VERSION = "1.3.9"
 
     const val COMPOSE_BOM_VERSION = "2024.04.00"
-    const val COMPOSE_MATERIAL_3_CORE_VERSION = "1.2.1"
     const val COMPOSE_TOOLING_VERSION = "1.6.1"
-    const val COMPOSE_LIFECYCLE_VERSION = "2.7.0"
-    const val COMPOSE_GOOGLE_FONTS = "1.6.7"
 
     const val NAVIGATION_VERSION = "2.7.7"
 
@@ -19,4 +16,6 @@ object AppVersions {
     const val HILT_NAVIGATION_VERSION = "1.2.0"
 
     const val FIREBASE_BOM_VERSION = "32.8.1"
+
+    const val ACCOMPANIST_VERSION = "0.36.0"
 }

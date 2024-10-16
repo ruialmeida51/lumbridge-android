@@ -17,6 +17,12 @@ class ProfileAppSettingsScreenInputHandler @Inject constructor(): IProfileAppSet
         }
     }
 
+    override fun onNotificationsEnabledChanged(areNotificationsEnabled: Boolean) {
+        updateInput { state ->
+            state.copy(areNotificationsEnabled = areNotificationsEnabled)
+        }
+    }
+
     override fun onAppLanguageChanged(countryCode: String) {
         updateInput { state ->
             state.copy(appLanguage = SupportedLanguages.get(countryCode))
