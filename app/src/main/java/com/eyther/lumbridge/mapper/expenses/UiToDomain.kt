@@ -12,6 +12,8 @@ fun ExpensesMonthUi.toDomain(): ExpensesMonthDomain {
         id = id,
         month = month,
         year = year,
+        day = day,
+        snapshotMonthlyNetSalary = snapshotMonthlyNetSalary,
         categoryExpenses = categoryExpenses.map { it.toDomain() }
     )
 }

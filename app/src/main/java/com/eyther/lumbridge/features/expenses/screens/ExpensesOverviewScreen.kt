@@ -48,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -111,7 +110,7 @@ fun ExpensesOverviewScreen(
     viewModel: IExpensesOverviewScreenViewModel = hiltViewModel<ExpensesOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val snackbarHostState = remember { SnackbarHostState() }
     val selectedMonth = remember { mutableLongStateOf(-1L) }
     val openSortByDialog = remember { mutableStateOf(false) }

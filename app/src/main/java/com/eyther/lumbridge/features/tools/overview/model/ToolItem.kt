@@ -10,10 +10,32 @@ sealed class ToolItem(
 ) {
     companion object {
         fun getItems() = mapOf(
-            R.string.tools_personal_tools to listOf(
+            R.string.tools_lifestyle_tools to listOf(
+                Lifestyle.GroceriesList,
+                Lifestyle.Notes,
+                Lifestyle.TasksAndReminders
+            ),
+            R.string.tools_finance_resources_tools to listOf(
                 Personal.NetSalaryCalculator,
                 Personal.CurrencyConverter
             )
+        )
+    }
+
+    sealed interface Lifestyle {
+        data object GroceriesList : ToolItem(
+            text = R.string.tools_groceries_list,
+            icon = R.drawable.ic_basket
+        )
+
+        data object Notes : ToolItem(
+            text = R.string.tools_notes,
+            icon = R.drawable.ic_sticky_note
+        )
+
+        data object TasksAndReminders : ToolItem(
+            text = R.string.tools_tasks_and_reminders,
+            icon = R.drawable.ic_task
         )
     }
 

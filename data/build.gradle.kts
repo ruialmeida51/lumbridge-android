@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("androidx.room")
     kotlin("kapt")
 }
 
@@ -55,6 +56,10 @@ android {
 
     kotlinOptions {
         jvmTarget = Config.JAVA_VERSION
+    }
+
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 
     sourceSets {

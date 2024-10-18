@@ -21,8 +21,9 @@
     <string name="feed_edit_add_button">Adicionar Feed</string>
     <string name="feed_edit_delete_confirmation">Tens a certeza que queres remover este feed?</string>
     <string name="overview">Visão</string>
-    <string name="tools">Utilidades</string>
-    <string name="tools_personal_tools">Recursos Pessoais</string>
+    <string name="tools">Rotina</string>
+    <string name="tools_lifestyle_tools">Quotidiano</string>
+    <string name="tools_finance_resources_tools">Recursos</string>
     <string name="edit_financial_profile">Editar o Perfil Financeiro</string>
     <string name="edit_financial_profile_income">Qual é o teu salário atual?</string>
     <string name="edit_financial_profile_choice">Preferes introduzir o teu salário com valor anual ou mensal?</string>
@@ -119,6 +120,11 @@
     <string name="tools_net_salary_calculate_error">" Houve um problema a calcular o teu salário. Por favor, tenta novamente."</string>
     <string name="tools_net_salary_calculator">Cálculo Salário Líquido</string>
     <string name="tools_net_salary_result">Salário Líquido Resultante</string>
+    <string name="tools_groceries_list">🚧 Lista de Compras</string>
+    <string name="tools_groceries_list_details">🚧 Detalhe Lista de Compras</string>
+    <string name="tools_notes">🚧 Notas</string>
+    <string name="tools_tasks_and_reminders">🚧 Tarefas &amp; Lembretes</string>
+
     <string name="expenses">Despesas</string>
     <string name="expenses_overview">Despesas</string>
     <string name="expenses_overview_title">Visão</string>

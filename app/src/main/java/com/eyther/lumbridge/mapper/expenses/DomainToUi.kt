@@ -22,6 +22,7 @@ fun ExpensesMonthDomain.toUi(
         id = id,
         month = month,
         year = year,
+        day = day,
         spent = totalSpent,
         remainder = if (netSalaryUi == null) 0f else netSalaryUi.monthlyNetSalary - totalSpent,
         categoryExpenses = categoryExpenses.map { it.toUi() }.sortedBy { it.categoryType.ordinal }

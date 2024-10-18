@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.data.database.room
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.eyther.lumbridge.data.datasource.expenses.dao.ExpensesDao
@@ -16,8 +17,11 @@ import com.eyther.lumbridge.data.model.news.entity.RssFeedEntity
         ExpensesDetailedEntity::class,
         RssFeedEntity::class
     ],
-    version = 2,
-    exportSchema = false
+    version = 3,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 2, to = 3)
+    ]
 )
 abstract class LumbridgeRoomDatabase : RoomDatabase() {
     abstract fun expensesDao(): ExpensesDao

@@ -22,8 +22,9 @@
 
     <string name="overview">Overview</string>
 
-    <string name="tools">Tools</string>
-    <string name="tools_personal_tools">Personal Tools</string>
+    <string name="tools">Everyday</string>
+    <string name="tools_lifestyle_tools">Day to Day</string>
+    <string name="tools_finance_resources_tools">Resources</string>
 
     <string name="edit_financial_profile">Edit Financial Profile</string>
     <string name="edit_financial_profile_income">What\'s your current income?</string>
@@ -126,6 +127,10 @@
     <string name="tools_net_salary_calculate_another_button">Calculate Another</string>
     <string name="tools_net_salary_calculate_error">Something went wrong while calculating your salary. Please, try again.</string>
     <string name="tools_net_salary_calculator">Net Salary Calculator</string>
+    <string name="tools_groceries_list">🚧 Groceries List</string>
+    <string name="tools_groceries_list_details">🚧 Groceries List Details</string>
+    <string name="tools_notes">🚧 Notes</string>
+    <string name="tools_tasks_and_reminders">🚧 Tasks &amp; Reminders</string>
     <string name="tools_net_salary_result">Net Salary Result</string>
 
     <string name="expenses">Expenses</string>

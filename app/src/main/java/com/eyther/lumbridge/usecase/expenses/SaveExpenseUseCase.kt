@@ -6,12 +6,16 @@ import com.eyther.lumbridge.mapper.expenses.toDomain
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.usecase.finance.GetNetSalary
+import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import java.time.Month
 import java.time.Year
 import javax.inject.Inject
 
 class SaveExpenseUseCase @Inject constructor(
-    private val expensesRepository: ExpensesRepository
+    private val expensesRepository: ExpensesRepository,
+    private val getNetSalary: GetNetSalary,
+    private val userFinancials: GetUserFinancials
 ) {
     /**
      * TODO Improvements: Maybe some of this logic belongs in the repository.
@@ -20,6 +24,7 @@ class SaveExpenseUseCase @Inject constructor(
     suspend operator fun invoke(
         month: Month,
         year: Year,
+        day: Int,
         name: String,
         amount: Float,
         type: ExpensesCategoryTypes
@@ -80,9 +85,14 @@ class SaveExpenseUseCase @Inject constructor(
         } else {
             // If it doesn't, create a new month
 
+            val userFinancials = userFinancials()
+            val snapshotMonthlySalary = userFinancials?.let { getNetSalary(it).monthlyNetSalary } ?: 0f
+
             val newMonth = ExpensesMonthUi(
                 month = month,
                 year = year,
+                day = day,
+                snapshotMonthlyNetSalary = snapshotMonthlySalary,
                 categoryExpenses = listOf(
                     ExpensesCategoryUi(
                         categoryType = type,

@@ -7,5 +7,7 @@ data class ExpensesMonthDomain(
     val id: Long = -1,
     val month: Month,
     val year: Year,
+    val day: Int,
+    val snapshotMonthlyNetSalary: Float,
     val categoryExpenses: List<ExpensesCategoryDomain>
 )

@@ -62,7 +62,6 @@ fun LumbridgeTopAppBar(
             }
         },
         actions = {
-
             AnimatedVisibility(showIcons) {
                 Row(
                     modifier = Modifier.padding(horizontal = DefaultPadding),

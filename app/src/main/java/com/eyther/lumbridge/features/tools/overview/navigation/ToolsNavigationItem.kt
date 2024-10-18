@@ -30,6 +30,32 @@ sealed class ToolsNavigationItem(
         )
     }
 
+    sealed interface Groceries {
+        companion object {
+            const val HOST_ROUTE = "groceries"
+        }
+
+        data object GroceriesList : ToolsNavigationItem(
+            route = "groceries_list",
+            label = R.string.tools_groceries_list
+        )
+
+        data object GroceriesListDetails : ToolsNavigationItem(
+            route = "groceries_list_details",
+            label = R.string.tools_groceries_list_details
+        )
+    }
+
+    data object Notes : ToolsNavigationItem(
+        route = "notes",
+        label = R.string.tools_notes
+    )
+
+    data object TasksAndReminders : ToolsNavigationItem(
+        route = "tasks_and_reminders",
+        label = R.string.tools_tasks_and_reminders
+    )
+
     data object CurrencyConverter : ToolsNavigationItem(
         route = "currency_converter",
         label = R.string.tools_currency_converter

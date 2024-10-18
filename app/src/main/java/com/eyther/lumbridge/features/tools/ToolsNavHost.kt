@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.eyther.lumbridge.extensions.platform.sharedViewModel
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
+import com.eyther.lumbridge.features.tools.grocerieslist.screens.GroceriesDetailsScreen
+import com.eyther.lumbridge.features.tools.grocerieslist.screens.GroceriesListScreen
 import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryResultScreen
@@ -102,5 +104,106 @@ fun ToolsNavHost(
                 label = ToolsNavigationItem.CurrencyConverter.label
             )
         }
+
+        navigation(
+            startDestination = ToolsNavigationItem.NetSalary.Input.route,
+            route = ToolsNavigationItem.NetSalary.HOST_ROUTE
+        ) {
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                route = ToolsNavigationItem.NetSalary.Input.route
+            ) { backstackEntry ->
+                val argumentsCache =
+                    backstackEntry.sharedViewModel<NetSalaryScreenArgumentsCacheViewModel>(navController)
+
+                NetSalaryInputScreen(
+                    navController = navController,
+                    argumentsCache = argumentsCache,
+                    label = ToolsNavigationItem.NetSalary.Input.label
+                )
+            }
+
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                route = ToolsNavigationItem.NetSalary.Result.route
+            ) { backstackEntry ->
+                val argumentsCache =
+                    backstackEntry.sharedViewModel<NetSalaryScreenArgumentsCacheViewModel>(navController)
+
+                NetSalaryResultScreen(
+                    navController = navController,
+                    argumentsCache = argumentsCache,
+                    label = ToolsNavigationItem.NetSalary.Result.label
+                )
+            }
+        }
+
+
+        navigation(
+            startDestination = ToolsNavigationItem.Groceries.GroceriesList.route,
+            route = ToolsNavigationItem.Groceries.HOST_ROUTE
+        ) {
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                route = ToolsNavigationItem.Groceries.GroceriesList.route
+            ) {
+                GroceriesListScreen(
+                    navController = navController,
+                    label = ToolsNavigationItem.Groceries.GroceriesList.label
+                )
+            }
+
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                route = ToolsNavigationItem.Groceries.GroceriesListDetails.route
+            ) {
+                GroceriesDetailsScreen()
+            }
+        }
+        // TODO add groceries list, notes, and tasks and reminders composable
     }
 }
