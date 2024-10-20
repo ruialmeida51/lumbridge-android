@@ -11,8 +11,8 @@ import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.Edi
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.IEditFinancialProfileInputHandler
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
-import com.eyther.lumbridge.usecase.finance.GetAnnualSalary
-import com.eyther.lumbridge.usecase.finance.GetMonthlySalary
+import com.eyther.lumbridge.usecase.finance.GetAnnualSalaryUseCase
+import com.eyther.lumbridge.usecase.finance.GetMonthlySalaryUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
@@ -32,8 +32,8 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
     private val getUserFinancials: GetUserFinancials,
     private val saveUserFinancials: SaveUserFinancials,
     private val editFinancialProfileInputHandler: EditFinancialProfileInputHandler,
-    private val getAnnualSalary: GetAnnualSalary,
-    private val getMonthlySalary: GetMonthlySalary
+    private val getAnnualSalaryUseCase: GetAnnualSalaryUseCase,
+    private val getMonthlySalaryUseCase: GetMonthlySalaryUseCase
 ) : ViewModel(),
     IEditFinancialProfileScreenViewModel,
     IEditFinancialProfileInputHandler by editFinancialProfileInputHandler {
@@ -54,7 +54,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
             val initialUserFinancials = getUserFinancials()
             val locale = getLocaleOrDefault()
             val annualGrossSalary = initialUserFinancials?.annualGrossSalary
-            val monthlyGrossSalary = annualGrossSalary?.let { getMonthlySalary(it) }
+            val monthlyGrossSalary = annualGrossSalary?.let { getMonthlySalaryUseCase(it) }
             val currencySymbol = locale.getCurrencySymbol()
 
             updateInput { state ->
@@ -127,7 +127,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
             val annualGrossSalary = if (salaryType == SalaryInputTypeUi.Annually) {
                 inputState.annualGrossSalary.text?.toFloatOrNull()
             } else {
-                getAnnualSalary(inputState.monthlyGrossSalary.text?.toFloatOrNull())
+                getAnnualSalaryUseCase(inputState.monthlyGrossSalary.text?.toFloatOrNull())
             }
 
             val userFinancials = UserFinancialsUi(

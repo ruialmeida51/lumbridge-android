@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.eyther.lumbridge.features.expenses.screens
 
@@ -207,7 +207,7 @@ fun ExpensesOverviewScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(vertical = DefaultPadding)
+                .padding(top = DefaultPadding)
                 .then(
                     if (selectedMonth.longValue >= 0L) Modifier.blur(5.dp) else Modifier
                 )

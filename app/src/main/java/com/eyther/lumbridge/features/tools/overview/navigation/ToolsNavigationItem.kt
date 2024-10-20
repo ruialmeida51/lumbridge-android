@@ -33,6 +33,7 @@ sealed class ToolsNavigationItem(
     sealed interface Groceries {
         companion object {
             const val HOST_ROUTE = "groceries"
+            const val ARG_GROCERIES_LIST_ID = "groceryListId"
         }
 
         data object GroceriesList : ToolsNavigationItem(
@@ -41,7 +42,7 @@ sealed class ToolsNavigationItem(
         )
 
         data object GroceriesListDetails : ToolsNavigationItem(
-            route = "groceries_list_details",
+            route = "groceries_list_details/{$ARG_GROCERIES_LIST_ID}",
             label = R.string.tools_groceries_list_details
         )
     }

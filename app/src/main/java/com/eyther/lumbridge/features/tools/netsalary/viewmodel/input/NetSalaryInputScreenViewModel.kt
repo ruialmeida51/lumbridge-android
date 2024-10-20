@@ -12,9 +12,9 @@ import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationIt
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
-import com.eyther.lumbridge.usecase.finance.GetAnnualSalary
-import com.eyther.lumbridge.usecase.finance.GetMonthlySalary
-import com.eyther.lumbridge.usecase.finance.GetNetSalary
+import com.eyther.lumbridge.usecase.finance.GetAnnualSalaryUseCase
+import com.eyther.lumbridge.usecase.finance.GetMonthlySalaryUseCase
+import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,9 +31,9 @@ class NetSalaryInputScreenViewModel @Inject constructor(
     private val getUserFinancials: GetUserFinancials,
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val netSalaryScreenInputHandler: NetSalaryInputScreenInputHandler,
-    private val getNetSalary: GetNetSalary,
-    private val getAnnualSalary: GetAnnualSalary,
-    private val getMonthlySalary: GetMonthlySalary
+    private val getNetSalaryUseCase: GetNetSalaryUseCase,
+    private val getAnnualSalaryUseCase: GetAnnualSalaryUseCase,
+    private val getMonthlySalaryUseCase: GetMonthlySalaryUseCase
 ) : ViewModel(),
     INetSalaryInputScreenViewModel,
     INetSalaryInputScreenInputHandler by netSalaryScreenInputHandler {
@@ -71,7 +71,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
         val initialLocale = getLocaleOrDefault()
         val initialUserFinancials = cachedUserFinancials ?: getUserFinancials()
         val initialAnnualGrossSalary = initialUserFinancials?.annualGrossSalary
-        val initialMonthlyGrossSalary = initialAnnualGrossSalary?.let { getMonthlySalary(it) }
+        val initialMonthlyGrossSalary = initialAnnualGrossSalary?.let { getMonthlySalaryUseCase(it) }
         val currencySymbol = initialLocale.getCurrencySymbol()
 
         updateInput { state ->
@@ -132,7 +132,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
             val annualGrossSalary = if (salaryType == SalaryInputTypeUi.Annually) {
                 inputState.annualGrossSalary.text?.toFloatOrNull()
             } else {
-                getAnnualSalary(inputState.monthlyGrossSalary.text?.toFloatOrNull())
+                getAnnualSalaryUseCase(inputState.monthlyGrossSalary.text?.toFloatOrNull())
             }
 
             val userFinancials = UserFinancialsUi(
@@ -147,7 +147,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
 
             cachedUserFinancials = userFinancials
 
-            val netSalary = getNetSalary(userFinancials)
+            val netSalary = getNetSalaryUseCase(userFinancials)
 
             // Cache arguments for the result screen
             cacheArguments(netSalary, inputState.locale)

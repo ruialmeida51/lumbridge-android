@@ -7,17 +7,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.eyther.lumbridge.extensions.platform.sharedViewModel
+import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_EXPENSE_ID
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
-import com.eyther.lumbridge.features.tools.grocerieslist.screens.GroceriesDetailsScreen
-import com.eyther.lumbridge.features.tools.grocerieslist.screens.GroceriesListScreen
+import com.eyther.lumbridge.features.tools.groceries.screens.GroceriesListDetailsScreen
+import com.eyther.lumbridge.features.tools.groceries.screens.GroceriesListsScreen
 import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryResultScreen
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
+import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Groceries.Companion.ARG_GROCERIES_LIST_ID
 import com.eyther.lumbridge.features.tools.overview.screens.ToolsOverviewScreen
 
 @Composable
@@ -180,7 +184,7 @@ fun ToolsNavHost(
                 },
                 route = ToolsNavigationItem.Groceries.GroceriesList.route
             ) {
-                GroceriesListScreen(
+                GroceriesListsScreen(
                     navController = navController,
                     label = ToolsNavigationItem.Groceries.GroceriesList.label
                 )
@@ -199,11 +203,20 @@ fun ToolsNavHost(
                 popEnterTransition = {
                     slideInHorizontally { -it }
                 },
-                route = ToolsNavigationItem.Groceries.GroceriesListDetails.route
+                route = ToolsNavigationItem.Groceries.GroceriesListDetails.route,
+                arguments = listOf(
+                    navArgument(ARG_GROCERIES_LIST_ID) {
+                        type = NavType.LongType
+                        nullable = false
+                        defaultValue = 0L
+                    }
+                )
             ) {
-                GroceriesDetailsScreen()
+                GroceriesListDetailsScreen(
+                    navController = navController,
+                    label = ToolsNavigationItem.Groceries.GroceriesListDetails.label
+                )
             }
         }
-        // TODO add groceries list, notes, and tasks and reminders composable
     }
 }

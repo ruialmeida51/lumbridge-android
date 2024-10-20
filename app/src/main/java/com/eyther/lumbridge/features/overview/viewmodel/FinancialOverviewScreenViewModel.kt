@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewScreenViewState
 import com.eyther.lumbridge.features.overview.model.FinancialOverviewTabItem
-import com.eyther.lumbridge.usecase.finance.AddMonthlyPayment
-import com.eyther.lumbridge.usecase.finance.GetMortgageCalculation
-import com.eyther.lumbridge.usecase.finance.GetNetSalary
+import com.eyther.lumbridge.usecase.finance.AddMonthlyPaymentUseCase
+import com.eyther.lumbridge.usecase.finance.GetMortgageCalculationUseCase
+import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsStream
 import com.eyther.lumbridge.usecase.user.mortgage.GetUserMortgageStream
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
@@ -24,9 +24,9 @@ class FinancialOverviewScreenViewModel @Inject constructor(
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val getUserFinancialsStream: GetUserFinancialsStream,
     private val getUserMortgageStream: GetUserMortgageStream,
-    private val getNetSalary: GetNetSalary,
-    private val getMortgageCalculation: GetMortgageCalculation,
-    private val addMonthlyPayment: AddMonthlyPayment
+    private val getNetSalaryUseCase: GetNetSalaryUseCase,
+    private val getMortgageCalculationUseCase: GetMortgageCalculationUseCase,
+    private val addMonthlyPaymentUseCase: AddMonthlyPaymentUseCase
 ) : ViewModel(),
     IFinancialOverviewScreenViewModel {
 
@@ -56,10 +56,10 @@ class FinancialOverviewScreenViewModel @Inject constructor(
                             FinancialOverviewTabItem.PersonalOverview
                         },
                         netSalary = userFinancials?.let {
-                            getNetSalary(userFinancials)
+                            getNetSalaryUseCase(userFinancials)
                         },
                         mortgage = userMortgage?.let {
-                            getMortgageCalculation(userMortgage)
+                            getMortgageCalculationUseCase(userMortgage)
                         },
                         enablePaymentButton = userMortgage != null
                     )
@@ -77,7 +77,7 @@ class FinancialOverviewScreenViewModel @Inject constructor(
     override fun onPayment() {
         viewModelScope.launch {
             viewState.value.asContent().mortgage?.let {
-                addMonthlyPayment(it)
+                addMonthlyPaymentUseCase(it)
             }
         }
     }

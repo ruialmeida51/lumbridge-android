@@ -62,14 +62,12 @@ private object TabbedTextAndIcon {
 @Composable
 fun TabbedTextAndIcon(
     modifier: Modifier = Modifier,
-    text: TextResource,
+    text: String,
     startPadding: Dp = 0.dp,
     icons: @Composable (RowScope.() -> Unit)? = null,
     textColour: Color = MaterialTheme.colorScheme.onSurface,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
-    val context = LocalContext.current
-
     SubcomposeLayout(
         modifier = modifier
     ) { constraints ->
@@ -91,7 +89,7 @@ fun TabbedTextAndIcon(
         val textComposable = @Composable {
             Text(
                 modifier = Modifier.padding(start = startPadding),
-                text = text.getString(context),
+                text = text,
                 style = textStyle,
                 color = textColour,
                 maxLines = 1,

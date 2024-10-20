@@ -8,7 +8,7 @@ import com.eyther.lumbridge.model.user.UserMortgageUi
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import javax.inject.Inject
 
-class GetMortgageCalculation @Inject constructor(
+class GetMortgageCalculationUseCase @Inject constructor(
     private val mortgageRepository: MortgageRepository,
     private val getLocaleOrDefault: GetLocaleOrDefault
 ) {

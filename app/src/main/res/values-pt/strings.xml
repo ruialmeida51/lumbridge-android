@@ -120,8 +120,15 @@
     <string name="tools_net_salary_calculate_error">" Houve um problema a calcular o teu salário. Por favor, tenta novamente."</string>
     <string name="tools_net_salary_calculator">Cálculo Salário Líquido</string>
     <string name="tools_net_salary_result">Salário Líquido Resultante</string>
-    <string name="tools_groceries_list">🚧 Lista de Compras</string>
-    <string name="tools_groceries_list_details">🚧 Detalhe Lista de Compras</string>
+
+    <string name="tools_groceries_list">Lista de Compras</string>
+    <string name="tools_groceries_list_delete_confirmation">Tens a certeza que queres remover a lista de compras com o nome %1$s?</string>
+    <string name="tools_groceries_no_list_message">Parece que ainda não tens nenhuma lista de compras. Carrega no botão em baixo para começar a criar uma!</string>
+    <string name="tools_groceries_no_list_create">Criar Lista de Compras</string>
+    <string name="tools_groceries_list_show_ticked_items">Mostrar itens marcados</string>
+
+    <string name="tools_groceries_list_details">Lista</string>
+
     <string name="tools_notes">🚧 Notas</string>
     <string name="tools_tasks_and_reminders">🚧 Tarefas &amp; Lembretes</string>
 
@@ -224,6 +231,8 @@
     <string name="disclaimer">Informação Extra</string>
     <string name="allow">Permitir</string>
     <string name="max_length_reached">Limite de caracteres atingido: %d</string>
+    <string name="and_more">… mais %d itens</string>
+    <string name="add_item">Adicionar Item</string>
     <string name="developer_email">eytherdeveloper@gmail.com</string>
     <string name="source_code_url">https://github.com/ruialmeida51/lumbridge-android</string>
     <string name="buy_me_a_coffee_url">https://buymeacoffee.com/ruialmeida51</string>

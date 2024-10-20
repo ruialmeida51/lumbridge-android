@@ -1,0 +1,249 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "177a7cff48d206f33661d9d028ff55f6",
+    "entities": [
+      {
+        "tableName": "expenses_month",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`monthId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `month` INTEGER NOT NULL, `year` INTEGER NOT NULL, `day` INTEGER NOT NULL DEFAULT 1, `snapshotMonthlyNetSalary` REAL NOT NULL DEFAULT 0)",
+        "fields": [
+          {
+            "fieldPath": "monthId",
+            "columnName": "monthId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "month",
+            "columnName": "month",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "day",
+            "columnName": "day",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "snapshotMonthlyNetSalary",
+            "columnName": "snapshotMonthlyNetSalary",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "monthId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_expenses_month_month_year",
+            "unique": true,
+            "columnNames": [
+              "month",
+              "year"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_expenses_month_month_year` ON `${TABLE_NAME}` (`month`, `year`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "expenses_category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `parentMonthId` INTEGER NOT NULL, `categoryTypeOrdinal` INTEGER NOT NULL, FOREIGN KEY(`parentMonthId`) REFERENCES `expenses_month`(`monthId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentMonthId",
+            "columnName": "parentMonthId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryTypeOrdinal",
+            "columnName": "categoryTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "categoryId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_expenses_category_parentMonthId",
+            "unique": false,
+            "columnNames": [
+              "parentMonthId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_expenses_category_parentMonthId` ON `${TABLE_NAME}` (`parentMonthId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "expenses_month",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "parentMonthId"
+            ],
+            "referencedColumns": [
+              "monthId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "expenses_detailed",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`detailId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `parentCategoryId` INTEGER NOT NULL, `expenseName` TEXT NOT NULL, `expenseAmount` REAL NOT NULL, FOREIGN KEY(`parentCategoryId`) REFERENCES `expenses_category`(`categoryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "detailId",
+            "columnName": "detailId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentCategoryId",
+            "columnName": "parentCategoryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expenseName",
+            "columnName": "expenseName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expenseAmount",
+            "columnName": "expenseAmount",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "detailId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_expenses_detailed_parentCategoryId",
+            "unique": false,
+            "columnNames": [
+              "parentCategoryId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_expenses_detailed_parentCategoryId` ON `${TABLE_NAME}` (`parentCategoryId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "expenses_category",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "parentCategoryId"
+            ],
+            "referencedColumns": [
+              "categoryId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "rss_feed",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rssId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "rssId",
+            "columnName": "rssId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "rssId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "groceries_list",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`groceriesListId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `groceriesListItems` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "groceriesListId",
+            "columnName": "groceriesListId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "groceriesListItems",
+            "columnName": "groceriesListItems",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "groceriesListId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '177a7cff48d206f33661d9d028ff55f6')"
+    ]
+  }
+}

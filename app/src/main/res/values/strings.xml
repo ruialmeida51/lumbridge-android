@@ -127,8 +127,15 @@
     <string name="tools_net_salary_calculate_another_button">Calculate Another</string>
     <string name="tools_net_salary_calculate_error">Something went wrong while calculating your salary. Please, try again.</string>
     <string name="tools_net_salary_calculator">Net Salary Calculator</string>
-    <string name="tools_groceries_list">🚧 Groceries List</string>
-    <string name="tools_groceries_list_details">🚧 Groceries List Details</string>
+
+    <string name="tools_groceries_list">Groceries Lists</string>
+    <string name="tools_groceries_list_delete_confirmation">Are you sure you want to delete %1$s?</string>
+    <string name="tools_groceries_no_list_message">You don\'t seem to have any groceries list yet.\nTap the button below to create one!</string>
+    <string name="tools_groceries_no_list_create">Create Groceries List</string>
+    <string name="tools_groceries_list_show_ticked_items">Show Ticked Items</string>
+
+    <string name="tools_groceries_list_details">List</string>
+
     <string name="tools_notes">🚧 Notes</string>
     <string name="tools_tasks_and_reminders">🚧 Tasks &amp; Reminders</string>
     <string name="tools_net_salary_result">Net Salary Result</string>
@@ -254,4 +261,6 @@
     <string name="disclaimer">Disclaimer</string>
     <string name="allow">Allow</string>
     <string name="max_length_reached">Char limit reached: %d</string>
+    <string name="and_more">… %d more items</string>
+    <string name="add_item">Add Item</string>
 </resources>
