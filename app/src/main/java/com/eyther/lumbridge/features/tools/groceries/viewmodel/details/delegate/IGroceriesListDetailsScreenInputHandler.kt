@@ -17,7 +17,6 @@ interface IGroceriesListDetailsScreenInputHandler {
     fun onClearItem(index: Int)
     fun onKeyboardDelete(index: Int): Boolean
     fun onKeyboardNext(index: Int)
-    fun updateIndex(oldIndex: Int, newIndex: Int)
 
     /**
      * Helper function to update the input state.

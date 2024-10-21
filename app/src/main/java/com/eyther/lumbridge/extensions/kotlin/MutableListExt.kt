@@ -9,7 +9,7 @@ package com.eyther.lumbridge.extensions.kotlin
  * @return The mutable list with the elements swapped.
  */
 fun <T> MutableList<T>.swapElements(firstIndex: Int, secondIndex: Int): MutableList<T> = apply {
-    val temp = this[firstIndex]
-    this[firstIndex] = this[secondIndex]
-    this[secondIndex] = temp
+    if (firstIndex == secondIndex) return@apply
+    val element = this.removeAt(firstIndex)
+    this.add(secondIndex, element)
 }

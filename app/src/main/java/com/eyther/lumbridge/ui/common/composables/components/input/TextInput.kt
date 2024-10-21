@@ -2,6 +2,7 @@
 
 package com.eyther.lumbridge.ui.common.composables.components.input
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -19,11 +20,15 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -136,13 +141,13 @@ fun BasicTextInput(
     onInputChanged: ((String) -> Unit) = {},
     onFocusChanged: ((String) -> Unit) = {}
 ) {
-    val text = remember {
-        mutableStateOf(
-            TextFieldValue(
-                text = if (defaultInitialValue != null) state.text.orEmpty().ifEmpty { defaultInitialValue } else state.text.orEmpty(),
-                selection = TextRange(state.text?.length ?: 0)
-            )
-        )
+    val initialText = state.text?.takeIf { it.isNotEmpty() } ?: defaultInitialValue.orEmpty()
+    val text = remember { mutableStateOf(TextFieldValue(text = initialText, selection = TextRange(initialText.length))) }
+
+    LaunchedEffect(state.text) {
+        if (state.text != text.value.text) {
+            text.value = TextFieldValue(text = state.text.orEmpty())
+        }
     }
 
     BasicTextField(
@@ -159,6 +164,7 @@ fun BasicTextInput(
             color = MaterialTheme.colorScheme.onSurface
         ),
         onValueChange = {
+            Log.d("BasicTextInput", "onValueChange: ${it.text}")
             if (it.text.filter { char -> char.isLetterOrDigit() }.length > maxLength) return@BasicTextField
             text.value = it.copy(text = it.text)
             onInputChanged(text.value.text)

@@ -128,7 +128,7 @@
     <string name="tools_net_salary_calculate_error">Something went wrong while calculating your salary. Please, try again.</string>
     <string name="tools_net_salary_calculator">Net Salary Calculator</string>
 
-    <string name="tools_groceries_list">Groceries Lists</string>
+    <string name="tools_groceries_list">Groceries List</string>
     <string name="tools_groceries_list_delete_confirmation">Are you sure you want to delete %1$s?</string>
     <string name="tools_groceries_no_list_message">You don\'t seem to have any groceries list yet.\nTap the button below to create one!</string>
     <string name="tools_groceries_no_list_create">Create Groceries List</string>

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "177a7cff48d206f33661d9d028ff55f6",
+    "identityHash": "35044f4ea335590aa53edd50871f96ab",
     "entities": [
       {
         "tableName": "expenses_month",
@@ -209,11 +209,17 @@
       },
       {
         "tableName": "groceries_list",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`groceriesListId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `groceriesListItems` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`groceriesListId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `showTickedItems` INTEGER NOT NULL, `title` TEXT NOT NULL, `groceriesListItems` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "groceriesListId",
             "columnName": "groceriesListId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showTickedItems",
+            "columnName": "showTickedItems",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -243,7 +249,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '177a7cff48d206f33661d9d028ff55f6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '35044f4ea335590aa53edd50871f96ab')"
     ]
   }
 }

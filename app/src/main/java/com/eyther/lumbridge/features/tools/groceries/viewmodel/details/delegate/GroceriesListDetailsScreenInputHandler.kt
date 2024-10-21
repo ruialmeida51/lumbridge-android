@@ -114,10 +114,6 @@ class GroceriesListDetailsScreenInputHandler @Inject constructor() : IGroceriesL
         }
     }
 
-    override fun updateIndex(oldIndex: Int, newIndex: Int) {
-
-    }
-
     override fun updateInput(update: (GroceriesListDetailsScreenInputState) -> GroceriesListDetailsScreenInputState) {
         inputState.update { currentState ->
             update(currentState)

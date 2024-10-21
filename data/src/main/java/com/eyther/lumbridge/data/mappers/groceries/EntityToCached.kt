@@ -7,6 +7,7 @@ import com.eyther.lumbridge.data.model.groceries.local.GroceriesListEntryCached
 
 fun GroceriesListEntity.toCached() = GroceriesListCached(
     id = groceriesListId,
+    showTickedItems = showTickedItems,
     title = title,
     entries = groceriesListItems.map { it.toCached() }
 )

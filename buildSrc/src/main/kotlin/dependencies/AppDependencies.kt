@@ -1,5 +1,6 @@
 package dependencies
 
+import versions.AppVersions.ACCOMPANIST_VERSION
 import versions.AppVersions.APP_COMPAT_VERSION
 import versions.AppVersions.COIL_VERSION
 import versions.AppVersions.COMPOSE_BOM_VERSION
@@ -8,9 +9,7 @@ import versions.AppVersions.FIREBASE_BOM_VERSION
 import versions.AppVersions.HILT_NAVIGATION_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
 import versions.AppVersions.KTX_VERSION
-import versions.AppVersions.KTX_IMMUTABLE_COLLECTIONS_VERSION
 import versions.AppVersions.NAVIGATION_VERSION
-import versions.AppVersions.ACCOMPANIST_VERSION
 import versions.SharedVersions.HILT_VERSION
 import versions.SharedVersions.KOTLIN_VERSION
 
@@ -22,7 +21,6 @@ object AppDependencies {
         // Kotlin
         "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION",
         "androidx.core:core-ktx:$KTX_VERSION",
-        "org.jetbrains.kotlinx:kotlinx-collections-immutable:$KTX_IMMUTABLE_COLLECTIONS_VERSION",
 
         //Coroutines
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KOTLIN_COROUTINES_VERSION",

@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.data.database.converters
 
+import android.util.Log
 import androidx.room.TypeConverter
 import com.eyther.lumbridge.data.model.groceries.entity.GroceriesListEntryEntity
 import com.google.gson.Gson
@@ -16,7 +17,8 @@ class RoomConverters {
 
     @TypeConverter
     fun fromStringToGroceriesListEntry(value: String?): ArrayList<GroceriesListEntryEntity> {
-        val listType: Type = object : TypeToken<ArrayList<String?>?>() {}.type
+        val listType: Type = object : TypeToken<ArrayList<GroceriesListEntryEntity?>?>() {}.type
+        Log.d("RoomConverters", "fromStringToGroceriesListEntry: $value")
         return gson.fromJson(value, listType)
     }
 

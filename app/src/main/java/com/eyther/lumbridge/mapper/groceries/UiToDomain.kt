@@ -7,6 +7,7 @@ import com.eyther.lumbridge.model.groceries.GroceriesListUi
 
 fun GroceriesListUi.toDomain() = GroceriesList(
     id = id,
+    showTickedItems = showTickedItems,
     title = title,
     entries = entries.map { it.toDomain() }
 )

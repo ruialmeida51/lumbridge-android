@@ -8,6 +8,7 @@ import com.eyther.lumbridge.domain.model.groceries.GroceriesListEntry
 fun GroceriesList.toCached() = GroceriesListCached(
     id = id,
     title = title,
+    showTickedItems = showTickedItems,
     entries = entries.map { it.toCached() }
 )
 

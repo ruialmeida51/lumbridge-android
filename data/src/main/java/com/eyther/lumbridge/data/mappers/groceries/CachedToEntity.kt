@@ -8,6 +8,7 @@ import java.util.ArrayList
 
 fun GroceriesListCached.toEntity() = GroceriesListEntity(
     title = title,
+    showTickedItems = showTickedItems,
     groceriesListItems = ArrayList(entries.map { it.toEntity() })
 )
 
