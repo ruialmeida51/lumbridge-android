@@ -17,7 +17,8 @@ fun OverviewNavHost(
     navController: NavHostController
 ) {
     NavHost(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize(),
         navController = navController,
         startDestination = FinancialOverviewNavigationItem.FinancialOverview.route
     ) {

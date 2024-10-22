@@ -11,6 +11,8 @@ fun ExpensesMonthDomain.toCached() = ExpensesMonthCached(
     id = id,
     month = month.value,
     year = year.value,
+    day = day,
+    snapshotMonthlyNetSalary = snapshotMonthlyNetSalary,
     categories = categoryExpenses.map { it.toCached() }
 )
 

@@ -1,10 +1,10 @@
 package com.eyther.lumbridge.domain.repository.mortgage
 
-import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageCalculation
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.repository.mortgage.portugal.PortugalMortgageCalculator
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

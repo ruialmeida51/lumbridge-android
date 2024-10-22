@@ -12,6 +12,8 @@ fun ExpensesForMonthWithCategoryAndDetails.toCached(): ExpensesMonthCached {
         id = expensesMonthEntity.monthId,
         month = expensesMonthEntity.month,
         year = expensesMonthEntity.year,
+        day = expensesMonthEntity.day,
+        snapshotMonthlyNetSalary = expensesMonthEntity.snapshotMonthlyNetSalary,
         categories = categories.map { it.expensesCategoryEntity.toCached(it.detailedExpenses) }
     )
 }

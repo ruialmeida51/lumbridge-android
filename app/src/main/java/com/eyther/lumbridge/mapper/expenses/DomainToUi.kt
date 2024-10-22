@@ -18,12 +18,17 @@ fun ExpensesMonthDomain.toUi(
         .sumOf { it.expenseAmount.toDouble() }
         .toFloat()
 
+    val netSalary = snapshotMonthlyNetSalary
+        .takeIf { it > 0 }
+        ?: netSalaryUi?.monthlyNetSalary
+
     return ExpensesMonthUi(
         id = id,
         month = month,
         year = year,
+        day = day,
         spent = totalSpent,
-        remainder = if (netSalaryUi == null) 0f else netSalaryUi.monthlyNetSalary - totalSpent,
+        remainder = if (netSalary == null) 0f else netSalary - totalSpent,
         categoryExpenses = categoryExpenses.map { it.toUi() }.sortedBy { it.categoryType.ordinal }
     )
 }

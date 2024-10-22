@@ -9,7 +9,9 @@ import com.eyther.lumbridge.data.model.expenses.local.ExpensesMonthCached
 
 fun ExpensesMonthCached.toEntity() = ExpensesMonthEntity(
     month = month,
-    year = year
+    year = year,
+    day = day,
+    snapshotMonthlyNetSalary = snapshotMonthlyNetSalary
 )
 
 fun ExpensesCategoryCached.toEntity(parentMonthId: Long) = ExpensesCategoryEntity(

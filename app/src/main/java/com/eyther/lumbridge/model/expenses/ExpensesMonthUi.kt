@@ -10,6 +10,8 @@ data class ExpensesMonthUi(
     val id: Long = 0,
     val month: Month,
     val year: Year,
+    val day: Int,
+    val snapshotMonthlyNetSalary: Float = 0f,
     val spent: Float = -1f,
     val remainder: Float = -1f,
     val expanded: Boolean = false,

@@ -8,7 +8,7 @@ import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import javax.inject.Inject
 
-class GetNetSalary @Inject constructor(
+class GetNetSalaryUseCase @Inject constructor(
     private val netSalaryRepository: NetSalaryRepository,
     private val getLocaleOrDefault: GetLocaleOrDefault
 ) {

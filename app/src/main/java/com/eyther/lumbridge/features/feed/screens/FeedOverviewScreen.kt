@@ -33,7 +33,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,7 +72,7 @@ fun FeedOverviewScreen(
     viewModel: IFeedOverviewScreenViewModel = hiltViewModel<FeedOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val availableFeedsListState = rememberLazyListState()
     val feedPaddingInPx = LocalDensity.current.run { DefaultPadding.toPx() }.toInt()
 

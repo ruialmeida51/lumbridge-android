@@ -4,7 +4,7 @@ import com.eyther.lumbridge.domain.repository.user.UserRepository
 import com.eyther.lumbridge.model.mortgage.MortgageUi
 import javax.inject.Inject
 
-class AddMonthlyPayment @Inject constructor(
+class AddMonthlyPaymentUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     /**

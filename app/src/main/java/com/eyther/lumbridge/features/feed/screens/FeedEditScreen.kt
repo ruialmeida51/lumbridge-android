@@ -6,17 +6,17 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,12 +29,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
@@ -45,7 +45,6 @@ import com.eyther.lumbridge.features.feed.viewmodel.edit.FeedEditScreenViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.edit.IFeedEditScreenViewModel
 import com.eyther.lumbridge.features.overview.components.TabbedDataOverview
 import com.eyther.lumbridge.model.news.RssFeedUi
-import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
@@ -94,21 +93,7 @@ fun FeedEditScreen(
                 TopAppBarVariation.TitleAndIcon(
                     title = stringResource(id = label),
                     onIconClick = { navController.popBackStack() }
-                ),
-                showIcons = state.shouldShowToolbarIcons(),
-                actions = {
-                    Icon(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
-                            onClick = viewModel::onAddFeedClick
-                        ),
-                        painter = painterResource(R.drawable.ic_add),
-                        contentDescription = stringResource(
-                            id = R.string.expenses_overview_add_expense
-                        )
-                    )
-                }
+                )
             )
         },
         snackbarHost = {
@@ -121,15 +106,25 @@ fun FeedEditScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(vertical = DefaultPadding)
+                .padding(top = DefaultPadding)
         ) {
             when (state) {
                 is FeedEditScreenViewState.Loading -> LoadingIndicator()
-                is FeedEditScreenViewState.HasFeeds -> HasFeeds(
-                    feeds = state.currentFeeds,
-                    onAddFeedClick = viewModel::onAddFeedClick,
-                    onEditFeedClick = viewModel::onEditFeedClick
-                )
+                is FeedEditScreenViewState.HasFeeds -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        HasFeeds(
+                            feeds = state.currentFeeds,
+                            onEditFeedClick = viewModel::onEditFeedClick
+                        )
+
+                        AddFab(
+                            modifier = Modifier.align(Alignment.BottomEnd),
+                            onAddFeedClick = viewModel::onAddFeedClick
+                        )
+                    }
+                }
 
                 is FeedEditScreenViewState.NoFeeds -> AddFeeds(
                     onAddFeedClick = viewModel::onAddFeedClick
@@ -147,15 +142,14 @@ fun FeedEditScreen(
 }
 
 @Composable
-private fun ColumnScope.HasFeeds(
+private fun BoxScope.HasFeeds(
     feeds: List<RssFeedUi>,
-    onAddFeedClick: () -> Unit,
     onEditFeedClick: (selectedFeed: RssFeedUi) -> Unit
 ) {
     Text(
         modifier = Modifier
             .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
-            .align(Alignment.Start),
+            .align(Alignment.TopStart),
         text = stringResource(id = R.string.feed_edit_feeds_list),
         style = MaterialTheme.typography.bodyLarge
     )
@@ -186,16 +180,8 @@ private fun ColumnScope.HasFeeds(
                 )
             }
 
-            if (feeds.lastIndex == index) {
-                Spacer(modifier = Modifier.size(HalfPadding))
-
-                LumbridgeButton(
-                    modifier = Modifier
-                        .padding(DefaultPadding)
-                        .align(Alignment.End),
-                    label = stringResource(id = R.string.feed_edit_add_button),
-                    onClick = onAddFeedClick
-                )
+            if (index == feeds.lastIndex) {
+                Spacer(modifier = Modifier.size(DefaultPadding * 2 + 56.dp)) // 56dp is the height of the FAB
             }
         }
     }
@@ -221,6 +207,26 @@ private fun AddFeeds(
                 )
             },
             onButtonClick = onAddFeedClick
+        )
+    }
+}
+
+@Composable
+private fun AddFab(
+    modifier: Modifier,
+    onAddFeedClick: () -> Unit
+) {
+    FloatingActionButton(
+        modifier = modifier.then(
+            Modifier.padding(DefaultPadding)
+        ),
+        onClick = onAddFeedClick
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_add),
+            contentDescription = stringResource(
+                id = R.string.feed_add_feeds_button
+            )
         )
     }
 }

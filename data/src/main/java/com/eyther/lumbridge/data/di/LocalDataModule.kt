@@ -47,6 +47,18 @@ object LocalDataModule {
 
     @Provides
     @Singleton
+    fun provideGroceriesDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.groceriesDao()
+
+    @Provides
+    @Singleton
+    fun provideNotesDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.notesDao()
+
+    @Provides
+    @Singleton
     @UserProfileDataSource
     fun provideUserProfileDataStore(
         @ApplicationContext context: Context

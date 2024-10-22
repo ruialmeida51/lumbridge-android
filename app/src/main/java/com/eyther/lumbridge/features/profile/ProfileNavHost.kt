@@ -19,7 +19,8 @@ fun ProfileNavHost(
     navController: NavHostController
 ) {
     NavHost(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize(),
         navController = navController,
         startDestination = ProfileNavigationItem.ProfileOverview.route
     ) {

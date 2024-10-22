@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.Dp
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.DefaultRoundedCorner
 import com.eyther.lumbridge.ui.theme.QuarterPadding
@@ -20,6 +21,7 @@ import com.eyther.lumbridge.ui.theme.QuarterPadding
 @Composable
 fun ColumnCardWrapper(
     modifier: Modifier = Modifier,
+    horizontalPadding: Dp = DefaultPadding,
     verticalArrangement: Arrangement.Vertical? = null,
     onClick: (() -> Unit)? = null,
     composable: @Composable ColumnScope.() -> Unit
@@ -27,7 +29,7 @@ fun ColumnCardWrapper(
     Column(
         modifier = modifier.then(
             Modifier
-                .padding(horizontal = DefaultPadding)
+                .padding(horizontal = horizontalPadding)
                 .clip(RoundedCornerShape(DefaultRoundedCorner))
                 .shadow(elevation = QuarterPadding)
                 .then(

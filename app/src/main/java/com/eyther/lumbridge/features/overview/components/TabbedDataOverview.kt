@@ -100,7 +100,7 @@ fun TabbedDataOverview(
                 style = labelStyle,
                 color = labelColour,
                 maxLines = 1,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 overflow = TextOverflow.Ellipsis
             )
         }

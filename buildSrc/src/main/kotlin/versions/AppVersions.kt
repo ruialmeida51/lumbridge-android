@@ -5,6 +5,7 @@ object AppVersions {
 
     const val KTX_VERSION = "1.3.2"
     const val KOTLIN_COROUTINES_VERSION = "1.3.9"
+    const val KTX_IMMUTABLE_COLLECTIONS_VERSION = "0.3.8"
 
     const val COMPOSE_BOM_VERSION = "2024.04.00"
     const val COMPOSE_TOOLING_VERSION = "1.6.1"

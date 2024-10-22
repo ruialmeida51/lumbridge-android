@@ -87,6 +87,7 @@ class ExpensesAddScreenViewModel @Inject constructor(
             saveExpenseUseCase(
                 month = inputState.dateInput.date?.month!!,
                 year = Year.of(inputState.dateInput.date.year),
+                day = inputState.dateInput.date.dayOfMonth,
                 name = inputState.nameInput.text.orEmpty(),
                 amount = inputState.amountInput.text?.toFloat() ?: 0f,
                 type = inputState.categoryType

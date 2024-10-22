@@ -9,6 +9,4 @@ sealed interface FeedEditScreenViewState {
     data class HasFeeds(
         val currentFeeds: List<RssFeedUi>
     ) : FeedEditScreenViewState
-
-    fun shouldShowToolbarIcons() = this is HasFeeds
 }

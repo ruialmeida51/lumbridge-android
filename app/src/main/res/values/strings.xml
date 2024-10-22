@@ -22,8 +22,9 @@
 
     <string name="overview">Overview</string>
 
-    <string name="tools">Tools</string>
-    <string name="tools_personal_tools">Personal Tools</string>
+    <string name="tools">Everyday</string>
+    <string name="tools_lifestyle_tools">Day to Day</string>
+    <string name="tools_finance_resources_tools">Resources</string>
 
     <string name="edit_financial_profile">Edit Financial Profile</string>
     <string name="edit_financial_profile_income">What\'s your current income?</string>
@@ -126,6 +127,22 @@
     <string name="tools_net_salary_calculate_another_button">Calculate Another</string>
     <string name="tools_net_salary_calculate_error">Something went wrong while calculating your salary. Please, try again.</string>
     <string name="tools_net_salary_calculator">Net Salary Calculator</string>
+
+    <string name="tools_groceries_list">Groceries List</string>
+    <string name="tools_groceries_list_delete_confirmation">Are you sure you want to delete %1$s?</string>
+    <string name="tools_groceries_no_list_message">You don\'t seem to have any groceries list yet.\nTap the button below to create one!</string>
+    <string name="tools_groceries_no_list_create">Create Groceries List</string>
+    <string name="tools_groceries_list_show_ticked_items">Show Ticked Items</string>
+
+    <string name="tools_groceries_list_details">Detail</string>
+
+    <string name="tools_notes_list">Notes</string>
+    <string name="tools_notes_add_note">Add Note</string>
+    <string name="tools_notes_list_delete_confirmation">Are you sure you want to delete the note %1$s?</string>
+    <string name="tools_notes_no_list_message">You don\'t seem to have any notes yet.\nTap the button below to create one!</string>
+    <string name="tools_notes_no_list_create">Create Note</string>
+    <string name="tools_notes_details">Note</string>
+
     <string name="tools_net_salary_result">Net Salary Result</string>
 
     <string name="expenses">Expenses</string>
@@ -249,4 +266,6 @@
     <string name="disclaimer">Disclaimer</string>
     <string name="allow">Allow</string>
     <string name="max_length_reached">Char limit reached: %d</string>
+    <string name="and_more">… %d more items</string>
+    <string name="add_item">Add Item</string>
 </resources>

@@ -1,11 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.eyther.lumbridge.features.expenses.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +26,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -48,7 +48,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -100,7 +99,6 @@ import com.eyther.lumbridge.ui.theme.DefaultAndAHalfPadding
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
-import com.eyther.lumbridge.ui.theme.SmallButtonHeight
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
@@ -111,7 +109,7 @@ fun ExpensesOverviewScreen(
     viewModel: IExpensesOverviewScreenViewModel = hiltViewModel<ExpensesOverviewScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val snackbarHostState = remember { SnackbarHostState() }
     val selectedMonth = remember { mutableLongStateOf(-1L) }
     val openSortByDialog = remember { mutableStateOf(false) }
@@ -142,18 +140,6 @@ fun ExpensesOverviewScreen(
                 ),
                 showIcons = state.hasExpensesOrFilterApplied(),
                 actions = {
-                    Icon(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
-                            onClick = { navController.navigate(ExpensesNavigationItem.AddExpense) }
-                        ),
-                        painter = painterResource(R.drawable.ic_add),
-                        contentDescription = stringResource(
-                            id = R.string.expenses_overview_add_expense
-                        )
-                    )
-
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
@@ -208,7 +194,7 @@ fun ExpensesOverviewScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(vertical = DefaultPadding)
+                .padding(top = DefaultPadding)
                 .then(
                     if (selectedMonth.longValue >= 0L) Modifier.blur(5.dp) else Modifier
                 )
@@ -219,21 +205,30 @@ fun ExpensesOverviewScreen(
                 }
 
                 is Content -> {
-                    Content(
-                        state = state,
-                        navController = navController,
-                        selectedMonth = selectedMonth,
-                        openSortByDialog = openSortByDialog,
-                        openFilterDialog = openFilterDialog,
-                        onSelectMonth = viewModel::expandMonth,
-                        onSelectCategory = viewModel::expandCategory,
-                        onEditExpense = { viewModel.onEditExpense(navController, it) },
-                        onDeleteExpense = viewModel::onDeleteExpense,
-                        onSortBySelected = viewModel::onSortBy,
-                        onFilterSelected = viewModel::onFilter,
-                        onClearFilter = viewModel::onClearFilter,
-                        onClearSortBy = viewModel::onClearSortBy
-                    )
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Content(
+                            state = state,
+                            navController = navController,
+                            selectedMonth = selectedMonth,
+                            openSortByDialog = openSortByDialog,
+                            openFilterDialog = openFilterDialog,
+                            onSelectMonth = viewModel::expandMonth,
+                            onSelectCategory = viewModel::expandCategory,
+                            onEditExpense = { viewModel.onEditExpense(navController, it) },
+                            onDeleteExpense = viewModel::onDeleteExpense,
+                            onSortBySelected = viewModel::onSortBy,
+                            onFilterSelected = viewModel::onFilter,
+                            onClearFilter = viewModel::onClearFilter,
+                            onClearSortBy = viewModel::onClearSortBy
+                        )
+
+                        AddFab(
+                            modifier = Modifier.align(Alignment.BottomEnd),
+                            navController = navController
+                        )
+                    }
                 }
 
                 is Empty -> {
@@ -275,16 +270,6 @@ private fun Content(
 
         Spacer(modifier = Modifier.height(HalfPadding))
 
-        LumbridgeButton(
-            modifier = Modifier.padding(horizontal = DefaultPadding),
-            label = stringResource(id = R.string.expenses_overview_add_expense),
-            minHeight = SmallButtonHeight
-        ) {
-            navController.navigate(ExpensesNavigationItem.AddExpense)
-        }
-
-        Spacer(modifier = Modifier.height(HalfPadding))
-
         return
     }
 
@@ -301,16 +286,6 @@ private fun Content(
                 )
 
                 Spacer(modifier = Modifier.height(HalfPadding))
-
-                LumbridgeButton(
-                    modifier = Modifier.padding(horizontal = DefaultPadding),
-                    label = stringResource(id = R.string.expenses_overview_add_expense),
-                    minHeight = SmallButtonHeight
-                ) {
-                    navController.navigate(ExpensesNavigationItem.AddExpense)
-                }
-
-                Spacer(modifier = Modifier.height(HalfPadding))
             }
 
             Spacer(modifier = Modifier.height(HalfPadding))
@@ -325,7 +300,7 @@ private fun Content(
             )
 
             if (index == state.expensesMonthUi.lastIndex) {
-                Spacer(modifier = Modifier.height(DefaultPadding))
+                Spacer(modifier = Modifier.height(DefaultPadding * 2 + 56.0.dp)) // 56dp is the height of the FAB
             }
         }
     }
@@ -1113,15 +1088,24 @@ private fun getFilterText(selectedFilter: ExpensesOverviewFilter): String {
         )
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+@Composable
+private fun AddFab(
+    modifier: Modifier,
+    navController: NavHostController
+) {
+    FloatingActionButton(
+        modifier = modifier.then(
+            Modifier.padding(DefaultPadding)
+        ),
+        onClick = {
+            navController.navigate(ExpensesNavigationItem.AddExpense)
+        }
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_add),
+            contentDescription = stringResource(
+                id = R.string.expenses_overview_add_expense
+            )
+        )
+    }
+}

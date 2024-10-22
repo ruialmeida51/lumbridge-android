@@ -37,8 +37,14 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val viewState = viewModel.viewState.collectAsStateWithLifecycle()
 
-            Box(Modifier.padding(WindowInsets.systemBars.asPaddingValues())) {
-                Box(Modifier.consumeWindowInsets(WindowInsets.systemBars)) {
+            Box(
+                Modifier
+                    .padding(WindowInsets.systemBars.asPaddingValues())
+            ) {
+                Box(
+                    Modifier
+                        .consumeWindowInsets(WindowInsets.systemBars)
+                ) {
                     LumbridgeTheme(darkTheme = viewState.value.uiMode.isDarkTheme()) {
                         MainScreen()
                     }
