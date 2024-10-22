@@ -12,8 +12,7 @@ sealed class ToolItem(
         fun getItems() = mapOf(
             R.string.tools_lifestyle_tools to listOf(
                 Lifestyle.GroceriesList,
-                Lifestyle.Notes,
-                Lifestyle.TasksAndReminders
+                Lifestyle.Notes
             ),
             R.string.tools_finance_resources_tools to listOf(
                 Personal.NetSalaryCalculator,
@@ -29,13 +28,8 @@ sealed class ToolItem(
         )
 
         data object Notes : ToolItem(
-            text = R.string.tools_notes,
+            text = R.string.tools_notes_list,
             icon = R.drawable.ic_sticky_note
-        )
-
-        data object TasksAndReminders : ToolItem(
-            text = R.string.tools_tasks_and_reminders,
-            icon = R.drawable.ic_task
         )
     }
 

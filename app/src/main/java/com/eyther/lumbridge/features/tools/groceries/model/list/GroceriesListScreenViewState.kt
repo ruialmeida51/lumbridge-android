@@ -2,11 +2,11 @@ package com.eyther.lumbridge.features.tools.groceries.model.list
 
 import com.eyther.lumbridge.model.groceries.GroceriesListUi
 
-sealed interface GroceriesListsScreenViewState {
-    data object Loading: GroceriesListsScreenViewState
-    data object Empty: GroceriesListsScreenViewState
+sealed interface GroceriesListScreenViewState {
+    data object Loading: GroceriesListScreenViewState
+    data object Empty: GroceriesListScreenViewState
 
     data class Content(
         val groceriesList: List<GroceriesListUi>
-    ): GroceriesListsScreenViewState
+    ): GroceriesListScreenViewState
 }

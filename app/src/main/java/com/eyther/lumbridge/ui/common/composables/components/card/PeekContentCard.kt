@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -60,11 +59,6 @@ fun PeekContentCard(
         modifier = modifier.then(
             Modifier
                 .onGloballyPositioned { contentSize.value = it.size }
-                .drawWithCache {
-                    onDrawWithContent {
-                        drawContent()
-                    }
-                }
         ),
         onClick = onClick
     ) {

@@ -126,11 +126,14 @@
     <string name="tools_groceries_no_list_message">Parece que ainda não tens nenhuma lista de compras. Carrega no botão em baixo para começar a criar uma!</string>
     <string name="tools_groceries_no_list_create">Criar Lista de Compras</string>
     <string name="tools_groceries_list_show_ticked_items">Mostrar itens marcados</string>
+    <string name="tools_groceries_list_details">Detalhes</string>
 
-    <string name="tools_groceries_list_details">Lista</string>
-
-    <string name="tools_notes">🚧 Notas</string>
-    <string name="tools_tasks_and_reminders">🚧 Tarefas &amp; Lembretes</string>
+    <string name="tools_notes_list">Notas</string>
+    <string name="tools_notes_add_note">Adicionar Nota</string>
+    <string name="tools_notes_list_delete_confirmation">Tens a certeza que queres remover a nota %1$s?</string>
+    <string name="tools_notes_no_list_message">Parece que ainda não tens nenhuma nota. Carrega no botão em baixo para começar a criar uma!</string>
+    <string name="tools_notes_no_list_create">Criar Nota</string>
+    <string name="tools_notes_details">Nota</string>
 
     <string name="expenses">Despesas</string>
     <string name="expenses_overview">Despesas</string>

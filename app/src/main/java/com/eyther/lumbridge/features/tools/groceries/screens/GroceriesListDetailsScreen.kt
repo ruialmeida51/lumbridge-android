@@ -23,7 +23,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,7 +54,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewEffect
 import com.eyther.lumbridge.features.tools.groceries.model.details.GroceriesListDetailsScreenViewEffect
 import com.eyther.lumbridge.features.tools.groceries.model.details.GroceriesListDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.groceries.viewmodel.details.GroceriesListDetailsScreenViewModel
@@ -148,7 +146,7 @@ fun GroceriesListDetailsScreen(
                         ShowDeleteConfirmationDialog(
                             shouldShowDeleteGroceriesListDialog = shouldShowDeleteGroceriesListDialog,
                             listTitle = state.inputState.title.text.orEmpty().ifEmpty { defaultTitle },
-                            onDeleteExpense = viewModel::onDeleteGroceriesList
+                            onDeleteGroceriesList = viewModel::onDeleteGroceriesList
                         )
                     }
                 }
@@ -186,7 +184,7 @@ private fun GroceriesList(
         BasicTextInput(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(DefaultPadding),
+                .padding(vertical = DefaultPadding),
             state = state.inputState.title,
             defaultInitialValue = defaultTitle,
             onInputChanged = { title -> onTitleChanged(title) },
@@ -194,110 +192,116 @@ private fun GroceriesList(
             singleLine = true
         )
 
-        LazyColumn(state = listState) {
-            items(
-                count = state.inputState.items.size,
-                key = { index -> state.inputState.items.getOrNull(index)?.id ?: index }
-            ) { listIndex ->
-                val item = state.inputState.items.getOrNull(listIndex) ?: return@items
-                val (_, checkedState, textState) = item
+        if (state.inputState.items.isEmpty()) {
+            AddItemText(
+                state = state,
+                onNextKeyboardAction = onNextKeyboardAction,
+                focusedIndex = focusedIndex
+            )
+        } else {
+            LazyColumn(state = listState) {
+                items(
+                    count = state.inputState.items.size,
+                    key = { index -> state.inputState.items.getOrNull(index)?.id ?: index }
+                ) { listIndex ->
+                    val item = state.inputState.items[listIndex]
+                    val (_, checkedState, textState) = item
 
-                // Create a FocusRequester for each item.
-                val focusRequester = remember { FocusRequester() }
+                    // Create a FocusRequester for each item.
+                    val focusRequester = remember { FocusRequester() }
 
-                if (!state.inputState.showTickedItems && checkedState.checked) {
-                    return@items
-                }
+                    if ((!state.inputState.showTickedItems && !checkedState.checked) || state.inputState.showTickedItems) {
+                        Row {
+                            Checkbox(
+                                checked = checkedState.checked,
+                                onCheckedChange = { onItemSelected(listIndex, it) }
+                            )
 
-                Row {
-                    Checkbox(
-                        checked = checkedState.checked,
-                        onCheckedChange = { onItemSelected(listIndex, it) }
-                    )
+                            Spacer(modifier = Modifier.width(DefaultPadding))
 
-                    Spacer(modifier = Modifier.width(DefaultPadding))
-
-                    BasicTextInput(
-                        modifier = Modifier
-                            .weight(1f)
-                            .align(Alignment.CenterVertically)
-                            .focusRequester(focusRequester)
-                            .onFocusChanged { focusState ->
-                                if (focusState.isFocused) {
-                                    // If this item is focused, update the focused index.
-                                    focusedIndex.intValue = listIndex
-                                }
-                            }
-                            .onKeyEvent { keyEvent ->
-                                if (keyEvent.key == Key.Backspace) {
-                                    onDeleteKeyboardAction(listIndex)
-
-                                    // If we're at the last index and there are items, focus the previous item.
-                                    if (listIndex == state.inputState.items.lastIndex && state.inputState.items.isNotEmpty()) {
-                                        focusedIndex.intValue = listIndex - 1
-                                    }
-                                }
-
-                                false
-                            },
-                        state = textState,
-                        onInputChanged = {
-                            onTextUpdated(listIndex, it)
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onNext = {
-                                onNextKeyboardAction(listIndex)
-                                // Move focus to the next item
-                                focusedIndex.intValue = listIndex + 1
-
-                                // Scroll to the next item
-                                coroutineScope.launch {
-                                    listState.scrollToItem(listIndex + 1)
-                                }
-                            },
-                        ),
-                        strikethrough = checkedState.checked
-                    )
-
-                    Spacer(modifier = Modifier.width(QuarterPadding))
-
-                    // If the item is focused, show a clear icon and request focus.
-                    if (focusedIndex.intValue == listIndex) {
-                        LaunchedEffect(Unit) {
-                            focusRequester.requestFocus()
-                        }
-
-                        Icon(
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .size(16.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberRipple(bounded = false),
-                                    onClick = {
-                                        onClearItem(listIndex)
-
-                                        // Focus the previous item if the deleted item is not the first one
-                                        if (listIndex > 0) {
-                                            focusedIndex.intValue = listIndex - 1
+                            BasicTextInput(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .align(Alignment.CenterVertically)
+                                    .focusRequester(focusRequester)
+                                    .onFocusChanged { focusState ->
+                                        if (focusState.isFocused) {
+                                            // If this item is focused, update the focused index.
+                                            focusedIndex.intValue = listIndex
                                         }
                                     }
+                                    .onKeyEvent { keyEvent ->
+                                        if (keyEvent.key == Key.Backspace) {
+                                            onDeleteKeyboardAction(listIndex)
+
+                                            // If we're at the last index and there are items, focus the previous item.
+                                            if (listIndex == state.inputState.items.lastIndex && state.inputState.items.isNotEmpty()) {
+                                                focusedIndex.intValue = listIndex - 1
+                                            }
+                                        }
+
+                                        false
+                                    },
+                                state = textState,
+                                onInputChanged = {
+                                    onTextUpdated(listIndex, it)
+                                },
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Next
                                 ),
-                            painter = painterResource(R.drawable.ic_clear),
-                            contentDescription = stringResource(R.string.delete)
+                                keyboardActions = KeyboardActions(
+                                    onNext = {
+                                        onNextKeyboardAction(listIndex)
+                                        // Move focus to the next item
+                                        focusedIndex.intValue = listIndex + 1
+
+                                        // Scroll to the next item
+                                        coroutineScope.launch {
+                                            listState.scrollToItem(listIndex + 1)
+                                        }
+                                    },
+                                ),
+                                strikethrough = checkedState.checked
+                            )
+
+                            Spacer(modifier = Modifier.width(QuarterPadding))
+
+                            // If the item is focused, show a clear icon and request focus.
+                            if (focusedIndex.intValue == listIndex) {
+                                LaunchedEffect(Unit) {
+                                    focusRequester.requestFocus()
+                                }
+
+                                Icon(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterVertically)
+                                        .size(16.dp)
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = rememberRipple(bounded = false),
+                                            onClick = {
+                                                onClearItem(listIndex)
+
+                                                // Focus the previous item if the deleted item is not the first one
+                                                if (listIndex > 0) {
+                                                    focusedIndex.intValue = listIndex - 1
+                                                }
+                                            }
+                                        ),
+                                    painter = painterResource(R.drawable.ic_clear),
+                                    contentDescription = stringResource(R.string.delete)
+                                )
+                            }
+                        }
+                    }
+
+                    if (listIndex == state.inputState.items.lastIndex) {
+                        AddItemText(
+                            state = state,
+                            onNextKeyboardAction = onNextKeyboardAction,
+                            focusedIndex = focusedIndex
                         )
                     }
-                }
-
-                if (listIndex == state.inputState.items.lastIndex) {
-                    AddItemText(
-                        state = state,
-                        onNextKeyboardAction = onNextKeyboardAction,
-                        focusedIndex = focusedIndex
-                    )
                 }
             }
         }
@@ -321,8 +325,9 @@ private fun AddItemText(
             .padding(DefaultPadding),
         text = "+ ${stringResource(id = R.string.add_item)}",
         style = MaterialTheme.typography.bodyMedium.copy(
-            color = MaterialTheme.typography.bodyMedium.color.copy(alpha = 0.7f)
-        )
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+        ),
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
 
@@ -330,7 +335,7 @@ private fun AddItemText(
 private fun ShowDeleteConfirmationDialog(
     shouldShowDeleteGroceriesListDialog: MutableState<Boolean>,
     listTitle: String,
-    onDeleteExpense: () -> Unit
+    onDeleteGroceriesList: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = { shouldShowDeleteGroceriesListDialog.value = false },
@@ -338,7 +343,7 @@ private fun ShowDeleteConfirmationDialog(
             LumbridgeButton(
                 label = stringResource(id = R.string.yes),
                 onClick = {
-                    onDeleteExpense()
+                    onDeleteGroceriesList()
                     shouldShowDeleteGroceriesListDialog.value = false
                 }
             )

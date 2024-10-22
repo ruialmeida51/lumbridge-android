@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
-import com.eyther.lumbridge.data.database.converters.RoomConverters
 import com.eyther.lumbridge.data.database.room.LumbridgeRoomDatabase
 import dagger.Module
 import dagger.Provides
@@ -51,6 +50,12 @@ object LocalDataModule {
     fun provideGroceriesDao(
         lumbridgeRoomDatabase: LumbridgeRoomDatabase
     ) = lumbridgeRoomDatabase.groceriesDao()
+
+    @Provides
+    @Singleton
+    fun provideNotesDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.notesDao()
 
     @Provides
     @Singleton

@@ -22,8 +22,7 @@ class ToolsScreenViewModel @Inject constructor() : ViewModel(), IToolsScreenView
             ToolItem.Personal.NetSalaryCalculator -> ToolsNavigationItem.NetSalary.Input
             ToolItem.Personal.CurrencyConverter -> ToolsNavigationItem.CurrencyConverter
             ToolItem.Lifestyle.GroceriesList -> ToolsNavigationItem.Groceries.GroceriesList
-            ToolItem.Lifestyle.Notes -> ToolsNavigationItem.CurrencyConverter //ToolsNavigationItem.Notes
-            ToolItem.Lifestyle.TasksAndReminders -> ToolsNavigationItem.CurrencyConverter //ToolsNavigationItem.TasksAndReminders
+            ToolItem.Lifestyle.Notes -> ToolsNavigationItem.Notes.NotesList
         }
     }
 }

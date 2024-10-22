@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.features.tools.groceries.model.details.GroceriesListDetailsScreenInputState
 import com.eyther.lumbridge.features.tools.groceries.model.details.GroceriesListDetailsScreenViewEffect
 import com.eyther.lumbridge.features.tools.groceries.model.details.GroceriesListDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.groceries.model.details.StableGroceriesListItem
@@ -22,7 +21,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -131,7 +129,7 @@ class GroceriesListDetailsScreenViewModel @Inject constructor(
 
     override fun onDeleteGroceriesList() {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "Error deleting groceries list", throwable)
+            Log.e(TAG, "Error deleting groceries list $groceriesListId", throwable)
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {

@@ -2,10 +2,7 @@
 
 package com.eyther.lumbridge.ui.common.composables.components.input
 
-import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,20 +12,17 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -39,7 +33,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
-import kotlin.math.sin
 
 @Composable
 fun TextInput(
@@ -141,13 +134,12 @@ fun BasicTextInput(
     onInputChanged: ((String) -> Unit) = {},
     onFocusChanged: ((String) -> Unit) = {}
 ) {
-    val initialText = state.text?.takeIf { it.isNotEmpty() } ?: defaultInitialValue.orEmpty()
+    val initialText = state.text.takeIf { !it.isNullOrEmpty() } ?: defaultInitialValue.orEmpty()
+
     val text = remember { mutableStateOf(TextFieldValue(text = initialText, selection = TextRange(initialText.length))) }
 
-    LaunchedEffect(state.text) {
-        if (state.text != text.value.text) {
-            text.value = TextFieldValue(text = state.text.orEmpty())
-        }
+    if (state.text != text.value.text) {
+        text.value = text.value.copy(text = state.text ?: defaultInitialValue.orEmpty())
     }
 
     BasicTextField(
@@ -164,8 +156,57 @@ fun BasicTextInput(
             color = MaterialTheme.colorScheme.onSurface
         ),
         onValueChange = {
-            Log.d("BasicTextInput", "onValueChange: ${it.text}")
             if (it.text.filter { char -> char.isLetterOrDigit() }.length > maxLength) return@BasicTextField
+            text.value = it.copy(text = it.text)
+            onInputChanged(text.value.text)
+        },
+        value = text.value,
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun BasicOutlinedTextInput(
+    modifier: Modifier = Modifier,
+    state: TextInputState,
+    maxLength: Int = 128,
+    strikethrough: Boolean = false,
+    underline: Boolean = false,
+    singleLine: Boolean = false,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    defaultInitialValue: String? = null,
+    onInputChanged: ((String) -> Unit) = {},
+    onFocusChanged: ((String) -> Unit) = {}
+) {
+    val initialText = state.text.takeIf { !it.isNullOrEmpty() } ?: defaultInitialValue.orEmpty()
+
+    val text = remember { mutableStateOf(TextFieldValue(text = initialText, selection = TextRange(initialText.length))) }
+
+    if (state.text != text.value.text) {
+        text.value = text.value.copy(text = state.text ?: defaultInitialValue.orEmpty())
+    }
+
+    OutlinedTextField(
+        modifier = modifier
+            .onFocusChanged {
+                onFocusChanged(text.value.text)
+            },
+        textStyle = textStyle.copy(
+            textDecoration = when {
+                strikethrough -> TextDecoration.LineThrough
+                underline -> TextDecoration.Underline
+                else -> TextDecoration.None
+            },
+            color = MaterialTheme.colorScheme.onSurface
+        ),
+        onValueChange = {
+            if (it.text.filter { char -> char.isLetterOrDigit() }.length > maxLength) return@OutlinedTextField
             text.value = it.copy(text = it.text)
             onInputChanged(text.value.text)
         },

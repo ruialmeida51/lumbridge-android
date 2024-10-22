@@ -22,4 +22,3 @@ data class GroceriesListEntity(
     val title: String,
     val groceriesListItems: ArrayList<GroceriesListEntryEntity>
 )
-

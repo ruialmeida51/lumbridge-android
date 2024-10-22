@@ -134,10 +134,15 @@
     <string name="tools_groceries_no_list_create">Create Groceries List</string>
     <string name="tools_groceries_list_show_ticked_items">Show Ticked Items</string>
 
-    <string name="tools_groceries_list_details">List</string>
+    <string name="tools_groceries_list_details">Detail</string>
 
-    <string name="tools_notes">🚧 Notes</string>
-    <string name="tools_tasks_and_reminders">🚧 Tasks &amp; Reminders</string>
+    <string name="tools_notes_list">Notes</string>
+    <string name="tools_notes_add_note">Add Note</string>
+    <string name="tools_notes_list_delete_confirmation">Are you sure you want to delete the note %1$s?</string>
+    <string name="tools_notes_no_list_message">You don\'t seem to have any notes yet.\nTap the button below to create one!</string>
+    <string name="tools_notes_no_list_create">Create Note</string>
+    <string name="tools_notes_details">Note</string>
+
     <string name="tools_net_salary_result">Net Salary Result</string>
 
     <string name="expenses">Expenses</string>

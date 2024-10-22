@@ -66,7 +66,6 @@ fun NetSalaryResultScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(DefaultPadding)
                 .verticalScroll(rememberScrollState())
         ) {
             when (val currentState = state.value) {
@@ -143,6 +142,7 @@ private fun ColumnScope.Content(
     )
 
     LumbridgeButton(
+        modifier = Modifier.padding(horizontal = DefaultPadding),
         label = stringResource(id = R.string.tools_net_salary_calculate_another_button),
         onClick = { navController.popBackStack() }
     )
