@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "e02d993e706dcc2397653c5b08a45042",
+    "identityHash": "bc3878bdf5d3b552405ec728c28e3da1",
     "entities": [
       {
         "tableName": "expenses_month",
@@ -206,12 +206,82 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "groceries_list",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`groceriesListId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `showTickedItems` INTEGER NOT NULL, `title` TEXT NOT NULL, `groceriesListItems` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "groceriesListId",
+            "columnName": "groceriesListId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showTickedItems",
+            "columnName": "showTickedItems",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "groceriesListItems",
+            "columnName": "groceriesListItems",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "groceriesListId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "notes_list",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`noteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `text` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "noteId",
+            "columnName": "noteId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "noteId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e02d993e706dcc2397653c5b08a45042')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bc3878bdf5d3b552405ec728c28e3da1')"
     ]
   }
 }

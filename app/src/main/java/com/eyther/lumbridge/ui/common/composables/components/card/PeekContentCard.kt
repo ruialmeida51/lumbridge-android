@@ -79,7 +79,7 @@ fun PeekContentCard(
 
         if (content.size > maxItemsToTake) {
             Text(
-                text = stringResource(R.string.and_more, content.size),
+                text = stringResource(R.string.and_more, content.size - maxItemsToTake),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
