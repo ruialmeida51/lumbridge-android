@@ -8,7 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.eyther.lumbridge.features.editfinancialprofile.screens.EditFinancialProfileScreen
-import com.eyther.lumbridge.features.editmortgageprofile.screens.EditMortgageProfileScreen
+import com.eyther.lumbridge.features.profile.editloans.screens.EditLoansListScreen
 import com.eyther.lumbridge.features.profile.editprofile.screens.EditProfileScreen
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.screens.ProfileOverviewScreen
@@ -70,11 +70,11 @@ fun ProfileNavHost(
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
             },
-            route = ProfileNavigationItem.EditMortgageProfile.route
+            route = ProfileNavigationItem.EditLoans.route
         ) {
-            EditMortgageProfileScreen(
+            EditLoansListScreen(
                 navController = navController,
-                label = ProfileNavigationItem.EditMortgageProfile.label
+                label = ProfileNavigationItem.EditLoans.label
             )
         }
 

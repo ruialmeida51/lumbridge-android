@@ -21,12 +21,12 @@ import androidx.compose.ui.Modifier
 fun MovementSetting(
     modifier: Modifier = Modifier,
     label: String,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
     @DrawableRes icon: Int? = null
 ) {
     Settings(
         icon = icon,
-        modifier = modifier.clickable { onClick() },
+        modifier = if (onClick != null) modifier.clickable { onClick() } else modifier,
         label = label
     ) {
         Icon(

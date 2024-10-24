@@ -6,18 +6,10 @@ import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocation
 import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocationType
 import com.eyther.lumbridge.domain.model.finance.deduction.Deduction
 import com.eyther.lumbridge.domain.model.finance.deduction.DeductionType
-import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageAmortization
-import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageCalculation
-import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType.FIXED
-import com.eyther.lumbridge.domain.model.finance.mortgage.MortgageType.VARIABLE
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.model.mortgage.MortgageAmortizationUi
-import com.eyther.lumbridge.model.mortgage.MortgageTypeUi.Fixed
-import com.eyther.lumbridge.model.mortgage.MortgageTypeUi.Variable
-import com.eyther.lumbridge.model.mortgage.MortgageUi
 
 fun NetSalary.toUi(): NetSalaryUi {
     return NetSalaryUi(
@@ -69,25 +61,3 @@ private fun getLabelForMoneyAllocationType(type: MoneyAllocationType): Int {
         MoneyAllocationType.Savings -> R.string.savings
     }
 }
-
-fun MortgageCalculation.toUi() = MortgageUi(
-    monthlyPayment = monthlyPayment,
-    loanAmount = loanAmount,
-    monthlyPaymentCapital = monthlyPaymentCapital,
-    monthsLeft = monthsLeft,
-    euribor = euribor,
-    spread = spread,
-    fixedInterestRate = fixedInterestRate,
-    mortgageTypeUi = when (mortgageType) {
-        FIXED -> Fixed
-        VARIABLE -> Variable
-    },
-    monthlyPaymentInterest = monthlyPaymentInterest,
-    amortizations = amortizations.map { it.toUi() }
-)
-
-fun MortgageAmortization.toUi() = MortgageAmortizationUi(
-    amortization = amortization,
-    remainder = remainder,
-    nextPayment = nextPayment
-)

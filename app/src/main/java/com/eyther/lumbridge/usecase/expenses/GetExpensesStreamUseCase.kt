@@ -6,7 +6,7 @@ import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsStream
+import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class GetExpensesStreamUseCase @Inject constructor(
     private val expensesRepository: ExpensesRepository,
     private val getNetSalaryUseCase: GetNetSalaryUseCase,
-    private val getUserFinancialsStream: GetUserFinancialsStream
+    private val getUserFinancialsStream: GetUserFinancialsFlow
 ) {
     private var cachedFinancials: UserFinancialsUi? = null
     private var cachedNetSalary: NetSalaryUi? = null

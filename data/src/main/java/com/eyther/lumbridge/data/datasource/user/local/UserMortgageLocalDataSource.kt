@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
 
+@Deprecated("This class is deprecated and will be removed in the future, please use [LoanLocalDataSource] instead as we're migrating this" +
+    " information to a Room Database.")
 class UserMortgageLocalDataSource @Inject constructor(
     @UserMortgageDataStore private val userMortgageDataStore: DataStore<Preferences>
 ) {
@@ -50,7 +52,7 @@ class UserMortgageLocalDataSource @Inject constructor(
                 spread = spread,
                 loanAmount = loanAmount,
                 fixedInterestRate = fixedInterestRate,
-                mortgageType = mortgageType,
+                loanType = mortgageType,
                 startDate = startDate,
                 endDate = endDate
             )
@@ -58,7 +60,7 @@ class UserMortgageLocalDataSource @Inject constructor(
 
     suspend fun saveUserMortgage(userMortgageCached: UserMortgageCached) {
         userMortgageDataStore.edit { preferences ->
-            preferences[PreferencesKeys.MORTGAGE_TYPE] = userMortgageCached.mortgageType
+            preferences[PreferencesKeys.MORTGAGE_TYPE] = userMortgageCached.loanType
             preferences[PreferencesKeys.LOAN_AMOUNT] = userMortgageCached.loanAmount
             preferences[PreferencesKeys.STARTING_DATE] = userMortgageCached.startDate
             preferences[PreferencesKeys.END_DATE] = userMortgageCached.endDate

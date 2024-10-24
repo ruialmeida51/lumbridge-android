@@ -5,16 +5,19 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.eyther.lumbridge.data.database.converters.RoomConverters
+import com.eyther.lumbridge.data.database.migration.V3ToV4Migration
 import com.eyther.lumbridge.data.datasource.expenses.dao.ExpensesDao
-import com.eyther.lumbridge.data.datasource.groceries.dao.GroceriesDao
+import com.eyther.lumbridge.data.datasource.loan.dao.LoanDao
 import com.eyther.lumbridge.data.datasource.news.dao.RssFeedDao
 import com.eyther.lumbridge.data.datasource.notes.dao.NotesDao
+import com.eyther.lumbridge.data.datasource.shopping.dao.ShoppingDao
 import com.eyther.lumbridge.data.model.expenses.entity.ExpensesCategoryEntity
 import com.eyther.lumbridge.data.model.expenses.entity.ExpensesDetailedEntity
 import com.eyther.lumbridge.data.model.expenses.entity.ExpensesMonthEntity
-import com.eyther.lumbridge.data.model.groceries.entity.GroceriesListEntity
+import com.eyther.lumbridge.data.model.loan.entity.LoanEntity
 import com.eyther.lumbridge.data.model.news.entity.RssFeedEntity
 import com.eyther.lumbridge.data.model.notes.entity.NoteEntity
+import com.eyther.lumbridge.data.model.shopping.entity.ShoppingListEntity
 
 @Database(
     entities = [
@@ -22,19 +25,22 @@ import com.eyther.lumbridge.data.model.notes.entity.NoteEntity
         ExpensesCategoryEntity::class,
         ExpensesDetailedEntity::class,
         RssFeedEntity::class,
-        GroceriesListEntity::class,
-        NoteEntity::class
+        ShoppingListEntity::class,
+        NoteEntity::class,
+        LoanEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration(from = 2, to = 3)
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4, spec = V3ToV4Migration::class)
     ]
 )
 @TypeConverters(RoomConverters::class)
 abstract class LumbridgeRoomDatabase : RoomDatabase() {
     abstract fun expensesDao(): ExpensesDao
     abstract fun rssFeedDao(): RssFeedDao
-    abstract fun groceriesDao(): GroceriesDao
+    abstract fun shoppingDao(): ShoppingDao
     abstract fun notesDao(): NotesDao
+    abstract fun loanDao(): LoanDao
 }

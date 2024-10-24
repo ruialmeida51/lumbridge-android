@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.data.model.user.local
 
 data class UserMortgageCached(
-    val mortgageType: String,
+    val loanType: String,
     val loanAmount: Float,
     val euribor: Float?,
     val spread: Float?,

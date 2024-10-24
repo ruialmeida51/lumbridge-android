@@ -36,23 +36,29 @@
     <string name="edit_financial_profile_invalid_income">Por favor, introduz um salário válido</string>
     <string name="edit_financial_profile_invalid_food_card">Por favor, introduz um valor de cartão de refeição válido</string>
     <string name="edit_financial_profile_invalid_allocation">A soma das percentagens deve ser menos ou igual a %1$s</string>
-    <string name="edit_mortgage_profile">Editar Perfil de Empréstimo</string>
+    <string name="edit_loan">Editar Perfil de Empréstimo</string>
+    <string name="edit_mortgage_profile_loan_type">Qual é o tipo de empréstimo?</string>
     <string name="edit_mortgage_profile_loan">Quais são as condições do teu empréstimo?</string>
     <string name="edit_mortgage_profile_owe">Quanto te falta pagar?</string>
     <string name="edit_mortgage_profile_save">Guardar Perfil de Empréstimo</string>
-    <string name="edit_mortgage_profile_loan_type">Tens taxa de juro variável ou fixa?</string>
+    <string name="edit_mortgage_profile_loan_interest_rate">Tens taxa de juro variável ou fixa?</string>
+    <string name="edit_mortgage_profile_loan_fixed_interest_rate">O cálculo do teu empréstimo é feito com base em TAN ou TAEG?</string>
     <string name="edit_mortgage_profile_invalid_interest_rate">Por favor, introduz uma taxa de juro válida</string>
     <string name="edit_mortgage_profile_invalid_euribor">Por favor, introduz uma taxa de Euribor válida</string>
     <string name="edit_mortgage_profile_invalid_spread">Por favor, introduz uma taxa de spread válida</string>
     <string name="edit_mortgage_profile_invalid_loan_amount">Por favor, introduz um valor de empréstimo válido</string>
+    <string name="edit_mortgage_profile_invalid_loan_name">Por favor, introduz um nome de empréstimo válido</string>
     <string name="edit_mortgage_profile_invalid_months_left">Por favor, introduz um número de meses válido</string>
     <string name="edit_mortgage_profile_invalid_start_date">Por favor, introduz uma data de início válida</string>
     <string name="edit_mortgage_profile_invalid_end_date">Por favor, introduz uma data de fim válida</string>
-    <string name="financial_overview">Visão Financeira</string>
+    <string name="edit_mortgage_profile_loan_category">Categoria de Empréstimo</string>
+
+    <string name="financial_overview">Visão</string>
     <string name="financial_overview_personal">Pessoal</string>
-    <string name="financial_overview_mortgage">Empréstimo</string>
+    <string name="financial_overview_loans">Empréstimos</string>
     <string name="financial_overview_mortgage_amortization_simulator">Simulador de Amortização</string>
-    <string name="financial_overview_salary">Visão do teu Salário</string>
+    <string name="financial_overview_salary">Visão do Salário</string>
+    <string name="financial_overview_income">Rendimentos</string>
     <string name="financial_overview_annual_income">Salário Anual</string>
     <string name="financial_overview_monthly_income">Salário Mensal</string>
     <string name="financial_overview_food_card_monthly">Cartão Mensal</string>
@@ -61,20 +67,46 @@
     <string name="financial_overview_deductions_portugal">Deduções de Portugal</string>
     <string name="financial_overview_allocation">Alocação do Dinheiro</string>
     <string name="financial_overview_allocation_breakdown">Alocações</string>
-    <string name="financial_overview_mortgage_mortgage_amount">Condições do Empréstimo</string>
-    <string name="financial_overview_mortgage_next_payment_capital">Capital</string>
-    <string name="financial_overview_mortgage_next_payment_interest">Juro</string>
-    <string name="financial_overview_mortgage_next_payment">Próximo Pagamento</string>
-    <string name="financial_overview_mortgage_monthly_payment">Pagamento Mensal</string>
-    <string name="financial_overview_mortgage_payment_almost_complete">Parabéns! O teu empréstimo está quase pago. Não há mais nada a fazer aqui!</string>
-    <string name="financial_overview_mortgage_payment_dialog_confirmation_title">Registar Pagamento</string>
-    <string name="financial_overview_mortgage_payment_dialog_confirmation_message">"Tens a certeza que queres registar um novo pagamento?\n\nIsto irá deduzir ao teu empréstimo o capital pago e atualizar o tempo restante. "</string>
+    <string name="financial_overview_remaining_loan_amount">Valor Restante</string>
+    <string name="financial_overview_loan_next_payment_capital">Capital</string>
+    <string name="financial_overview_loan_next_payment_interest">Juro</string>
+    <string name="financial_overview_loan_next_payment">Próximo Pagamento</string>
+    <string name="financial_overview_loan_monthly_payment">Pagamento Mensal</string>
+    <string name="financial_overview_loan_payment_almost_complete">Parabéns! O teu empréstimo está quase pago. Não há mais nada a fazer aqui!</string>
+    <string name="financial_overview_loan_payment_dialog_confirmation_title">Registar Pagamento</string>
+    <string name="financial_overview_loan_payment_dialog_confirmation_message">Tens a certeza que queres registar um novo pagamento?\nIsto irá deduzir ao teu empréstimo o capital pago e atualizar o tempo restante.</string>
     <string name="financial_overview_no_allocation_strategy">Ainda não criaste uma estratégia de alocação de dinheiro. Edita o teu perfil financeiro para criar uma.</string>
     <string name="financial_overview_no_profile">Ainda não criaste o teu perfil financeiro. Carrega no botão em baixo para começar.</string>
-    <string name="financial_overview_no_mortgage_profile">Ainda não criaste um perfil de empréstimo. Carrega no botão em baixo para criar um.</string>
+    <string name="financial_overview_no_loan">Ainda não criaste um perfil de empréstimo. Carrega no botão em baixo para criar um.</string>
     <string name="financial_overview_create_profile">Criar Perfil Financeiro</string>
     <string name="financial_overview_create_mortgage_profile">Criar Perfil de Empréstimo</string>
     <string name="financial_overview_mortgage_pay_a_month">Registar Pagamento Mensal</string>
+
+    <string name="breakdown_salary_title">Perfil Financeiro</string>
+    <string name="breakdown_salary_card_income">Rendimentos</string>
+    <string name="breakdown_salary_card_allocations">Alocação</string>
+    <string name="breakdown_salary_annual_income">Salário Anual</string>
+    <string name="breakdown_salary_net_annual">Líquido Anual</string>
+    <string name="breakdown_salary_gross_annual">Bruto Anual</string>
+    <string name="breakdown_salary_monthly_income">Salário Mensal</string>
+    <string name="breakdown_salary_net_monthly">Líquido Mensal</string>
+    <string name="breakdown_salary_gross_monthly">Bruto Mensal</string>
+    <string name="breakdown_salary_food_card">Cartão de Refeição</string>
+    <string name="breakdown_salary_food_card_daily">Cartão Diário</string>
+    <string name="breakdown_salary_food_card_monthly">Cartão Mensal</string>
+    <string name="breakdown_salary_no_financial_profile">Parece que ainda não tens um perfil financeiro! Carrega no botão em baixo para criar um.</string>
+    <string name="breakdown_salary_no_financial_profile_create">Criar Perfil Financeiro</string>
+
+    <string name="breakdown_loans_title">Empréstimos</string>
+    <string name="breakdown_loans_next_payment">Próximo Pagamento</string>
+    <string name="breakdown_loans_remaining_amount">Valor Restante</string>
+    <string name="breakdown_loans_interest_rate">Taxa de Juro</string>
+    <string name="breakdown_loans_months_left">Meses Restantes</string>
+    <string name="breakdown_loans_no_loans">Parece que ainda não tens nenhum empréstimo. Carrega no botão em baixo para começar a criar um!</string>
+    <string name="breakdown_loans_no_loans_create">Criar Empréstimo</string>
+    <string name="breakdown_tap_to_view_more">Ver detalhes</string>
+    <string name="breakdown_delete_loan_confirmation_message">Tens a certeza que queres remover o empréstimo %1$s?</string>
+
     <string name="profile">Perfil</string>
     <string name="profile_greeting">Olá, %1$s</string>
     <string name="profile_greeting_no_name">Olá, Convidado</string>
@@ -121,12 +153,12 @@
     <string name="tools_net_salary_calculator">Cálculo Salário Líquido</string>
     <string name="tools_net_salary_result">Salário Líquido Resultante</string>
 
-    <string name="tools_groceries_list">Lista de Compras</string>
-    <string name="tools_groceries_list_delete_confirmation">Tens a certeza que queres remover a lista de compras com o nome %1$s?</string>
-    <string name="tools_groceries_no_list_message">Parece que ainda não tens nenhuma lista de compras. Carrega no botão em baixo para começar a criar uma!</string>
-    <string name="tools_groceries_no_list_create">Criar Lista de Compras</string>
-    <string name="tools_groceries_list_show_ticked_items">Mostrar itens marcados</string>
-    <string name="tools_groceries_list_details">Detalhes</string>
+    <string name="tools_shopping_list">Lista de Compras</string>
+    <string name="tools_shopping_list_delete_confirmation">Tens a certeza que queres remover a lista de compras com o nome %1$s?</string>
+    <string name="tools_shopping_no_list_message">Parece que ainda não tens nenhuma lista de compras. Carrega no botão em baixo para começar a criar uma!</string>
+    <string name="tools_shopping_no_list_create">Criar Lista de Compras</string>
+    <string name="tools_shopping_list_show_ticked_items">Mostrar itens marcados</string>
+    <string name="tools_shopping_list_details">Detalhes</string>
 
     <string name="tools_notes_list">Notas</string>
     <string name="tools_notes_add_note">Adicionar Nota</string>
@@ -239,6 +271,14 @@
     <string name="developer_email">eytherdeveloper@gmail.com</string>
     <string name="source_code_url">https://github.com/ruialmeida51/lumbridge-android</string>
     <string name="buy_me_a_coffee_url">https://buymeacoffee.com/ruialmeida51</string>
+    <string name="tan">TAN</string>
+    <string name="taeg">TAEG</string>
+    <string name="variable">Juro Variável</string>
+    <string name="more">Mais</string>
+    <string name="house">Casa</string>
+    <string name="car">Carro</string>
+    <string name="personal">Pessoal</string>
+    <string name="other">Outro</string>
 
     <string-array name="loading_messages">
         <item>A preparar um pouco de magia digital…</item>

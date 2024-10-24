@@ -47,15 +47,21 @@ object LocalDataModule {
 
     @Provides
     @Singleton
-    fun provideGroceriesDao(
+    fun provideShoppingDao(
         lumbridgeRoomDatabase: LumbridgeRoomDatabase
-    ) = lumbridgeRoomDatabase.groceriesDao()
+    ) = lumbridgeRoomDatabase.shoppingDao()
 
     @Provides
     @Singleton
     fun provideNotesDao(
         lumbridgeRoomDatabase: LumbridgeRoomDatabase
     ) = lumbridgeRoomDatabase.notesDao()
+
+    @Provides
+    @Singleton
+    fun provideLoanDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.loanDao()
 
     @Provides
     @Singleton

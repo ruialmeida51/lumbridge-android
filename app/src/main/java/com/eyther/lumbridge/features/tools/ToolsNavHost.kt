@@ -14,17 +14,17 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.eyther.lumbridge.extensions.platform.sharedViewModel
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
-import com.eyther.lumbridge.features.tools.groceries.screens.GroceriesListDetailsScreen
-import com.eyther.lumbridge.features.tools.groceries.screens.GroceriesListsScreen
 import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryResultScreen
 import com.eyther.lumbridge.features.tools.notes.screens.NoteDetailsScreen
 import com.eyther.lumbridge.features.tools.notes.screens.NotesListScreen
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Groceries.Companion.ARG_GROCERIES_LIST_ID
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Notes.Companion.ARG_NOTE_ID
+import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
 import com.eyther.lumbridge.features.tools.overview.screens.ToolsOverviewScreen
+import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListDetailsScreen
+import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListsScreen
 
 @Composable
 fun ToolsNavHost(
@@ -168,8 +168,8 @@ fun ToolsNavHost(
         }
 
         navigation(
-            startDestination = ToolsNavigationItem.Groceries.GroceriesList.route,
-            route = ToolsNavigationItem.Groceries.HOST_ROUTE
+            startDestination = ToolsNavigationItem.Shopping.ShoppingList.route,
+            route = ToolsNavigationItem.Shopping.HOST_ROUTE
         ) {
             composable(
                 enterTransition = {
@@ -184,11 +184,11 @@ fun ToolsNavHost(
                 popExitTransition = {
                     slideOutHorizontally { it }
                 },
-                route = ToolsNavigationItem.Groceries.GroceriesList.route
+                route = ToolsNavigationItem.Shopping.ShoppingList.route
             ) {
-                GroceriesListsScreen(
+                ShoppingListsScreen(
                     navController = navController,
-                    label = ToolsNavigationItem.Groceries.GroceriesList.label
+                    label = ToolsNavigationItem.Shopping.ShoppingList.label
                 )
             }
 
@@ -205,18 +205,18 @@ fun ToolsNavHost(
                 popEnterTransition = {
                     slideInHorizontally { -it }
                 },
-                route = ToolsNavigationItem.Groceries.GroceriesListDetails.route,
+                route = ToolsNavigationItem.Shopping.ShoppingListDetails.route,
                 arguments = listOf(
-                    navArgument(ARG_GROCERIES_LIST_ID) {
+                    navArgument(ARG_SHOPPING_LIST_ID) {
                         type = NavType.LongType
                         nullable = false
-                        defaultValue = 0L
+                        defaultValue = -1L
                     }
                 )
             ) {
-                GroceriesListDetailsScreen(
+                ShoppingListDetailsScreen(
                     navController = navController,
-                    label = ToolsNavigationItem.Groceries.GroceriesListDetails.label
+                    label = ToolsNavigationItem.Shopping.ShoppingListDetails.label
                 )
             }
         }

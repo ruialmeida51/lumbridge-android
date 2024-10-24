@@ -28,8 +28,8 @@ sealed class ProfileNavigationItem(
         label = R.string.edit_financial_profile
     )
 
-    data object EditMortgageProfile : ProfileNavigationItem(
-        route = "edit_mortgage_profile",
-        label = R.string.edit_mortgage_profile
+    data object EditLoans : ProfileNavigationItem(
+        route = "edit_loans",
+        label = R.string.edit_loan
     )
 }
