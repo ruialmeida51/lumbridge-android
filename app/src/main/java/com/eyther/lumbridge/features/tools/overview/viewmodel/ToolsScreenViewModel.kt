@@ -21,7 +21,7 @@ class ToolsScreenViewModel @Inject constructor() : ViewModel(), IToolsScreenView
         return when (toolItem) {
             ToolItem.Personal.NetSalaryCalculator -> ToolsNavigationItem.NetSalary.Input
             ToolItem.Personal.CurrencyConverter -> ToolsNavigationItem.CurrencyConverter
-            ToolItem.Lifestyle.GroceriesList -> ToolsNavigationItem.Groceries.GroceriesList
+            ToolItem.Lifestyle.ShoppingList -> ToolsNavigationItem.Shopping.ShoppingList
             ToolItem.Lifestyle.Notes -> ToolsNavigationItem.Notes.NotesList
         }
     }

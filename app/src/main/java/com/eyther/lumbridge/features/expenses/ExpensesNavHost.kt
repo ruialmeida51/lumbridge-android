@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.eyther.lumbridge.features.editfinancialprofile.screens.EditFinancialProfileScreen
-import com.eyther.lumbridge.features.editmortgageprofile.screens.EditMortgageProfileScreen
+import com.eyther.lumbridge.features.editloan.screens.EditLoanScreen
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_EXPENSE_ID
 import com.eyther.lumbridge.features.expenses.screens.ExpensesAddScreen
@@ -60,7 +60,7 @@ fun ExpensesNavHost(
             },
             route = ExpensesNavigationItem.AddExpense.route
         ) {
-            EditMortgageProfileScreen(
+            EditLoanScreen(
                 navController = navController,
                 label = ExpensesNavigationItem.AddExpense.label
             )

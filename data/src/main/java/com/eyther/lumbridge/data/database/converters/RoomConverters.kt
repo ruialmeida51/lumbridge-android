@@ -1,8 +1,7 @@
 package com.eyther.lumbridge.data.database.converters
 
-import android.util.Log
 import androidx.room.TypeConverter
-import com.eyther.lumbridge.data.model.groceries.entity.GroceriesListEntryEntity
+import com.eyther.lumbridge.data.model.shopping.entity.ShoppingListEntryEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
@@ -16,14 +15,13 @@ class RoomConverters {
     private val gson: Gson = Gson()
 
     @TypeConverter
-    fun fromStringToGroceriesListEntry(value: String?): ArrayList<GroceriesListEntryEntity> {
-        val listType: Type = object : TypeToken<ArrayList<GroceriesListEntryEntity?>?>() {}.type
-        Log.d("RoomConverters", "fromStringToGroceriesListEntry: $value")
+    fun fromStringToShoppingListEntry(value: String?): ArrayList<ShoppingListEntryEntity> {
+        val listType: Type = object : TypeToken<ArrayList<ShoppingListEntryEntity?>?>() {}.type
         return gson.fromJson(value, listType)
     }
 
     @TypeConverter
-    fun fromGroceriesListEntryToString(list: ArrayList<GroceriesListEntryEntity?>?): String {
+    fun fromShoppingListEntryToString(list: ArrayList<ShoppingListEntryEntity?>?): String {
         return gson.toJson(list)
     }
 }

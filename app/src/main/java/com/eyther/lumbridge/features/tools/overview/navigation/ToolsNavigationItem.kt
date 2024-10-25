@@ -30,20 +30,20 @@ sealed class ToolsNavigationItem(
         )
     }
 
-    sealed interface Groceries {
+    sealed interface Shopping {
         companion object {
-            const val HOST_ROUTE = "groceries"
-            const val ARG_GROCERIES_LIST_ID = "groceryListId"
+            const val HOST_ROUTE = "shopping"
+            const val ARG_SHOPPING_LIST_ID = "shoppingListId"
         }
 
-        data object GroceriesList : ToolsNavigationItem(
-            route = "groceries_list",
-            label = R.string.tools_groceries_list
+        data object ShoppingList : ToolsNavigationItem(
+            route = "shopping_list",
+            label = R.string.tools_shopping_list
         )
 
-        data object GroceriesListDetails : ToolsNavigationItem(
-            route = "groceries_list_details/{$ARG_GROCERIES_LIST_ID}",
-            label = R.string.tools_groceries_list_details
+        data object ShoppingListDetails : ToolsNavigationItem(
+            route = "shopping_list_details/{$ARG_SHOPPING_LIST_ID}",
+            label = R.string.tools_shopping_list_details
         )
     }
 

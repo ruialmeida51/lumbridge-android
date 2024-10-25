@@ -1,7 +1,6 @@
 package com.eyther.lumbridge.usecase.finance
 
 import com.eyther.lumbridge.domain.repository.user.UserRepository
-import com.eyther.lumbridge.model.mortgage.MortgageUi
 import javax.inject.Inject
 
 class AddMonthlyPaymentUseCase @Inject constructor(
@@ -14,15 +13,15 @@ class AddMonthlyPaymentUseCase @Inject constructor(
      * 
      * @param mortgageUi The mortgage UI to add the amortization to.
      */
-    suspend operator fun invoke(mortgageUi: MortgageUi) {
-        val currentUser = userRepository.getUserMortgage() ?: return
-        val newAmount = mortgageUi.loanAmount - mortgageUi.monthlyPaymentCapital
-
-        userRepository.saveUserMortgage(
-            currentUser.copy(
-                loanAmount = newAmount,
-                startDate = currentUser.startDate.plusMonths(1)
-            )
-        )
+    suspend operator fun invoke() {
+//        val currentUser = userRepository.getUserMortgage() ?: return
+//        val newAmount = mortgageUi.loanAmount - mortgageUi.monthlyPaymentCapital
+//
+//        userRepository.saveUserMortgage(
+//            currentUser.copy(
+//                loanAmount = newAmount,
+//                startDate = currentUser.startDate.plusMonths(1)
+//            )
+//        )
     }
 }

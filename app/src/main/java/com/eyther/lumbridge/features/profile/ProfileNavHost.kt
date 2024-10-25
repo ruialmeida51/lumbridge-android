@@ -1,14 +1,21 @@
 package com.eyther.lumbridge.features.profile
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import com.eyther.lumbridge.features.editfinancialprofile.screens.EditFinancialProfileScreen
-import com.eyther.lumbridge.features.editmortgageprofile.screens.EditMortgageProfileScreen
+import com.eyther.lumbridge.features.editloan.screens.EditLoanScreen
+import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.Loan
+import com.eyther.lumbridge.features.profile.editloans.screens.EditLoansListScreen
 import com.eyther.lumbridge.features.profile.editprofile.screens.EditProfileScreen
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.screens.ProfileOverviewScreen
@@ -63,19 +70,58 @@ fun ProfileNavHost(
             )
         }
 
-        composable(
-            enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-            },
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
-            },
-            route = ProfileNavigationItem.EditMortgageProfile.route
+        navigation(
+            startDestination = ProfileNavigationItem.Loans.List.route,
+            route = ProfileNavigationItem.Loans.HOST_ROUTE
         ) {
-            EditMortgageProfileScreen(
-                navController = navController,
-                label = ProfileNavigationItem.EditMortgageProfile.label
-            )
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                route = ProfileNavigationItem.Loans.List.route
+            ) {
+                EditLoansListScreen(
+                    navController = navController,
+                    label =  ProfileNavigationItem.Loans.List.label
+                )
+            }
+
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                route = ProfileNavigationItem.Loans.Edit.route,
+                arguments = listOf(
+                    navArgument(Loan.ARG_LOAN_ID) {
+                        type = NavType.LongType
+                        nullable = false
+                        defaultValue = -1L
+                    }
+                )
+            ) {
+                EditLoanScreen(
+                    navController = navController,
+                    label = ProfileNavigationItem.Loans.Edit.label
+                )
+            }
         }
 
         composable(

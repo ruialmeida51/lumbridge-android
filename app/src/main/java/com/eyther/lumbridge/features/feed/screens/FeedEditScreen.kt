@@ -43,7 +43,7 @@ import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewState
 import com.eyther.lumbridge.features.feed.viewmodel.edit.FeedEditScreenViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.edit.IFeedEditScreenViewModel
-import com.eyther.lumbridge.features.overview.components.TabbedDataOverview
+import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton

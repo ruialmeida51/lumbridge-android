@@ -283,8 +283,8 @@ private fun ProfileFinancialSettings(
 
         MovementSetting(
             icon = R.drawable.ic_bank,
-            label = stringResource(id = R.string.edit_mortgage_profile),
-            onClick = { navController.navigate(ProfileNavigationItem.EditMortgageProfile) }
+            label = stringResource(id = R.string.profile_edit_loans),
+            onClick = { navController.navigate(ProfileNavigationItem.Loans.List) }
         )
     }
 }

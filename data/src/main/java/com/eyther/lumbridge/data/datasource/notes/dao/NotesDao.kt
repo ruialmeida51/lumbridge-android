@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NotesDao {
+
     @Transaction
     @Query("SELECT * FROM $NOTES_LIST_TABLE_NAME")
     fun getAllNotes(): Flow<List<NoteEntity>?>

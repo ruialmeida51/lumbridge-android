@@ -80,8 +80,8 @@ import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSor
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.ExpensesOverviewScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.IExpensesOverviewScreenViewModel
-import com.eyther.lumbridge.features.overview.components.DataOverview
-import com.eyther.lumbridge.features.overview.components.TabbedDataOverview
+import com.eyther.lumbridge.ui.common.composables.components.text.DataOverview
+import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi

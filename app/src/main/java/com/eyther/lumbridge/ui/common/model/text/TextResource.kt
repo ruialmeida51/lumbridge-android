@@ -13,4 +13,8 @@ sealed interface TextResource {
     data class Resource(@StringRes val resId: Int) : TextResource {
         override fun getString(context: Context): String = context.getString(resId)
     }
+
+    data class ResourceWithArgs(@StringRes val resId: Int, val args: List<Any>) : TextResource {
+        override fun getString(context: Context): String = context.getString(resId, *args.toTypedArray())
+    }
 }

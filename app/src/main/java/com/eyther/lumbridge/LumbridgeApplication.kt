@@ -5,6 +5,7 @@ import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 import com.eyther.lumbridge.extensions.platform.isDebuggable
+import com.eyther.lumbridge.launcher.delegate.tools.DataStoreMigrationHelper
 import com.eyther.lumbridge.launcher.delegate.tools.DebugToolsDelegate
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.MainScope
@@ -17,10 +18,14 @@ class LumbridgeApplication : Application() {
     @Inject
     lateinit var debugToolsDelegate: DebugToolsDelegate
 
+    @Inject
+    lateinit var dataStoreMigrationHelper: DataStoreMigrationHelper
+
     override fun onCreate() {
         tryStartStrictMode()
         super.onCreate()
         tryStartDebugTools()
+        tryMakeDataStoreMigrations()
     }
 
     /**
@@ -56,6 +61,17 @@ class LumbridgeApplication : Application() {
                     .penaltyLog()
                     .build()
             )
+        }
+    }
+
+    /**
+     * Initially, we stored some data in DataStore which now needs to be migrated to Room due to
+     * changing requirements. This method is used to check if there are any migrations to be made
+     * and if so, to make them.
+     */
+    private fun tryMakeDataStoreMigrations() {
+        MainScope().launch {
+            dataStoreMigrationHelper.tryMigrateMortgage()
         }
     }
 }

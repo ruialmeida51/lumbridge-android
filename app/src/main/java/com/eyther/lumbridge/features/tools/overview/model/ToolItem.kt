@@ -11,7 +11,7 @@ sealed class ToolItem(
     companion object {
         fun getItems() = mapOf(
             R.string.tools_lifestyle_tools to listOf(
-                Lifestyle.GroceriesList,
+                Lifestyle.ShoppingList,
                 Lifestyle.Notes
             ),
             R.string.tools_finance_resources_tools to listOf(
@@ -22,8 +22,8 @@ sealed class ToolItem(
     }
 
     sealed interface Lifestyle {
-        data object GroceriesList : ToolItem(
-            text = R.string.tools_groceries_list,
+        data object ShoppingList : ToolItem(
+            text = R.string.tools_shopping_list,
             icon = R.drawable.ic_basket
         )
 

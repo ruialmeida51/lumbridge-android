@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.features.overview.components.TabbedTextAndIcon
+import com.eyther.lumbridge.ui.common.composables.components.text.TabbedTextAndIcon
 import com.eyther.lumbridge.ui.common.composables.model.card.PeekContentCardType
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
@@ -97,7 +97,7 @@ private fun DrawItem(
     val textSize = remember { mutableStateOf(IntSize.Zero) }
 
     when (peekContentCardType) {
-        PeekContentCardType.Checkbox -> {
+        is PeekContentCardType.Checkbox -> {
             val rectangleColour = MaterialTheme.colorScheme.onSurface
 
             Row(
@@ -133,7 +133,7 @@ private fun DrawItem(
             }
         }
 
-        PeekContentCardType.PlainText -> Text(
+        is PeekContentCardType.PlainText -> Text(
             text = item,
             style = MaterialTheme.typography.bodySmall,
             maxLines = 1,
