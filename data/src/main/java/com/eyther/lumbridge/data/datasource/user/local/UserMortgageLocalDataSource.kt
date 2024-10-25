@@ -23,7 +23,6 @@ class UserMortgageLocalDataSource @Inject constructor(
         val EURIBOR = floatPreferencesKey("euribor")
         val SPREAD = floatPreferencesKey("spread")
         val FIXED_INTEREST_RATE = floatPreferencesKey("fixed_interest_rate")
-        val MORTGAGE_TYPE = stringPreferencesKey("mortgage_type")
         val LOAN_AMOUNT = floatPreferencesKey("loan_amount")
         val STARTING_DATE = stringPreferencesKey("starting_date")
         val END_DATE = stringPreferencesKey("end_date")
@@ -39,7 +38,6 @@ class UserMortgageLocalDataSource @Inject constructor(
             }
         }
         .map { preferences ->
-            val mortgageType = preferences[PreferencesKeys.MORTGAGE_TYPE] ?: return@map null
             val loanAmount = preferences[PreferencesKeys.LOAN_AMOUNT] ?: return@map null
             val startDate = preferences[PreferencesKeys.STARTING_DATE] ?: return@map null
             val endDate = preferences[PreferencesKeys.END_DATE] ?: return@map null
@@ -52,7 +50,6 @@ class UserMortgageLocalDataSource @Inject constructor(
                 spread = spread,
                 loanAmount = loanAmount,
                 fixedInterestRate = fixedInterestRate,
-                loanType = mortgageType,
                 startDate = startDate,
                 endDate = endDate
             )
@@ -60,7 +57,6 @@ class UserMortgageLocalDataSource @Inject constructor(
 
     suspend fun saveUserMortgage(userMortgageCached: UserMortgageCached) {
         userMortgageDataStore.edit { preferences ->
-            preferences[PreferencesKeys.MORTGAGE_TYPE] = userMortgageCached.loanType
             preferences[PreferencesKeys.LOAN_AMOUNT] = userMortgageCached.loanAmount
             preferences[PreferencesKeys.STARTING_DATE] = userMortgageCached.startDate
             preferences[PreferencesKeys.END_DATE] = userMortgageCached.endDate

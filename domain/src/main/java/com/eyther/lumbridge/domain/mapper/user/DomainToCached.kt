@@ -29,7 +29,6 @@ fun UserFinancialsDomain.toCached() = UserFinancialsCached(
 )
 
 fun UserMortgageDomain.toCached() = UserMortgageCached(
-    loanType = loanType.name,
     loanAmount = loanAmount,
     euribor = euribor,
     spread = spread,
