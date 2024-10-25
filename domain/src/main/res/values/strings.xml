@@ -6,4 +6,5 @@
     <string name="entertainment">Entertainment</string>
     <string name="housing">Housing</string>
     <string name="education">Education</string>
+    <string name="other">Other</string>
 </resources>
