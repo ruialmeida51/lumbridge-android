@@ -12,6 +12,7 @@ import com.eyther.lumbridge.data.di.LocalDataModule.AppSettingsDataStore
 import com.eyther.lumbridge.data.model.appSettings.AppSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
@@ -22,6 +23,8 @@ class AppSettingsLocalDataSource @Inject constructor(
     private object PreferencesKeys {
         val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
         val APP_LANGUAGE_COUNTRY_CODE = stringPreferencesKey("app_language_country_code")
+        val COMPLETED_MORTGAGE_MIGRATION = booleanPreferencesKey("completed_mortgage_migration")
+        val PROMPTED_ALLOW_NOTIFICATIONS = booleanPreferencesKey("prompted_allow_notifications")
     }
 
     val appSettingsFlow: Flow<AppSettings?> = appSettingsDataStore.data
@@ -36,17 +39,37 @@ class AppSettingsLocalDataSource @Inject constructor(
         .map { preferences ->
             val isDarkMode = preferences[IS_DARK_MODE] ?: return@map null
             val appLanguageCountryCode = preferences[APP_LANGUAGE_COUNTRY_CODE] ?: return@map null
+            val completedMortgageMigration = preferences[PreferencesKeys.COMPLETED_MORTGAGE_MIGRATION] ?: false
+            val promptedAllowNotifications = preferences[PreferencesKeys.PROMPTED_ALLOW_NOTIFICATIONS] ?: false
 
             AppSettings(
                 isDarkMode = isDarkMode,
-                appLanguageCountryCode = appLanguageCountryCode
+                appLanguageCountryCode = appLanguageCountryCode,
+                completedMortgageMigration = completedMortgageMigration,
+                promptedAllowNotifications = promptedAllowNotifications
             )
         }
+
+    suspend fun getCompletedMortgageMigration(): Boolean {
+        return appSettingsFlow.map { it?.completedMortgageMigration ?: false }.first()
+    }
 
     suspend fun saveAppSettings(appSettings: AppSettings) {
         appSettingsDataStore.edit { preferences ->
             preferences[IS_DARK_MODE] = appSettings.isDarkMode
             preferences[APP_LANGUAGE_COUNTRY_CODE] = appSettings.appLanguageCountryCode
+        }
+    }
+
+    suspend fun saveCompletedMortgageMigration(completed: Boolean) {
+        appSettingsDataStore.edit { preferences ->
+            preferences[PreferencesKeys.COMPLETED_MORTGAGE_MIGRATION] = completed
+        }
+    }
+
+    suspend fun savePromptedAllowNotifications(prompted: Boolean) {
+        appSettingsDataStore.edit { preferences ->
+            preferences[PreferencesKeys.PROMPTED_ALLOW_NOTIFICATIONS] = prompted
         }
     }
 }

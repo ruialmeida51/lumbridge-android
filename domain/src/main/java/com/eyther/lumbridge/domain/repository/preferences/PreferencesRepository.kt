@@ -48,4 +48,16 @@ class PreferencesRepository @Inject constructor(
 
         appSettingsLocalDataSource.saveAppSettings(appSettings = newPreferences.toCached())
     }
+
+    suspend fun getCompletedMortgageMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.getCompletedMortgageMigration()
+    }
+
+    suspend fun savePromptedAllowNotifications() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.savePromptedAllowNotifications(true)
+    }
+
+    suspend fun saveCompletedMortgageMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.saveCompletedMortgageMigration(true)
+    }
 }

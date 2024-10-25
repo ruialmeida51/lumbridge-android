@@ -161,7 +161,7 @@ private fun ColumnScope.Content(
             modifier = Modifier.fillMaxWidth(),
             state = state.inputState.dateInput,
             label = stringResource(id = R.string.date),
-            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_start_date),
+            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
             onClick = { showDateDialog.value = true }
         )
 

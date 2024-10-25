@@ -47,15 +47,21 @@ object LocalDataModule {
 
     @Provides
     @Singleton
-    fun provideGroceriesDao(
+    fun provideShoppingDao(
         lumbridgeRoomDatabase: LumbridgeRoomDatabase
-    ) = lumbridgeRoomDatabase.groceriesDao()
+    ) = lumbridgeRoomDatabase.shoppingDao()
 
     @Provides
     @Singleton
     fun provideNotesDao(
         lumbridgeRoomDatabase: LumbridgeRoomDatabase
     ) = lumbridgeRoomDatabase.notesDao()
+
+    @Provides
+    @Singleton
+    fun provideLoanDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.loanDao()
 
     @Provides
     @Singleton
@@ -132,6 +138,7 @@ object LocalDataModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
+    @Deprecated("Use Room instead. This will be removed in the future, for now it is only maintained for migration purposes.")
     annotation class UserMortgageDataStore
 
     @Qualifier

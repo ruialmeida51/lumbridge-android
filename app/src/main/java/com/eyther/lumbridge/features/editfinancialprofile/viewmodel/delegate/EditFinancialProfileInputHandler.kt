@@ -148,7 +148,7 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
         )
 
         if (percentages.mapNotNull { it }.sum() > MAX_PERCENTAGE) {
-            return TextResource.Resource(R.string.edit_financial_profile_invalid_allocation)
+            return TextResource.ResourceWithArgs(R.string.edit_financial_profile_invalid_allocation, listOf(MAX_PERCENTAGE))
         }
 
         return null

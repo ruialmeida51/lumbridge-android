@@ -22,8 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.features.overview.components.IncomeOverview
-import com.eyther.lumbridge.features.overview.components.PerCountryBreakdown
+import com.eyther.lumbridge.features.overview.shared.components.IncomeOverview
+import com.eyther.lumbridge.features.overview.shared.components.PerCountryBreakdown
 import com.eyther.lumbridge.features.tools.netsalary.arguments.INetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.model.result.NetSalaryResultScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.result.INetSalaryResultScreenViewModel
