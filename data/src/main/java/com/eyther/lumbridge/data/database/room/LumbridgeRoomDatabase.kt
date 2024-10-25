@@ -29,11 +29,12 @@ import com.eyther.lumbridge.data.model.shopping.entity.ShoppingListEntity
         NoteEntity::class,
         LoanEntity::class
     ],
-    version = 4,
+    version = 5,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 2, to = 3),
-        AutoMigration(from = 3, to = 4, spec = V3ToV4Migration::class)
+        AutoMigration(from = 3, to = 4, spec = V3ToV4Migration::class),
+        AutoMigration(from = 4, to = 5)
     ]
 )
 @TypeConverters(RoomConverters::class)
