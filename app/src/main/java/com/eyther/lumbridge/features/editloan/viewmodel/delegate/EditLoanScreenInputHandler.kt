@@ -21,7 +21,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 name = state.name.copy(
                     text = name,
                     error = name.getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_loan_name
+                        R.string.edit_loan_profile_invalid_loan_name
                     )
                 )
             )
@@ -36,7 +36,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 loanAmount = state.loanAmount.copy(
                     text = loanAmount,
                     error = loanAmount.getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_loan_amount
+                        R.string.edit_loan_profile_invalid_loan_amount
                     )
                 )
             )
@@ -51,7 +51,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 euribor = state.euribor.copy(
                     text = euriborRateText,
                     error = euriborRateText.getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_euribor
+                        R.string.edit_loan_profile_invalid_euribor
                     )
                 )
             )
@@ -66,7 +66,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 spread = state.spread.copy(
                     text = spreadText,
                     error = spreadText.getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_spread
+                        R.string.edit_loan_profile_invalid_spread
                     )
                 )
             )
@@ -81,7 +81,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 tanInterestRate = state.tanInterestRate.copy(
                     text = tanInterestRateString,
                     error = tanInterestRateString.getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_interest_rate
+                        R.string.edit_loan_profile_invalid_interest_rate
                     )
                 )
             )
@@ -96,7 +96,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 taegInterestRate = state.taegInterestRate.copy(
                     text = taegInterestRateString,
                     error = taegInterestRateString.getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_interest_rate
+                        R.string.edit_loan_profile_invalid_interest_rate
                     )
                 )
             )
@@ -129,7 +129,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 startDate = state.startDate.copy(
                     date = startDate?.toLocalDate(),
                     error = startDate?.toString().getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_start_date
+                        R.string.edit_loan_profile_invalid_start_date
                     )
                 )
             )
@@ -142,7 +142,7 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
                 endDate = state.endDate.copy(
                     date = endDate?.toLocalDate(),
                     error = endDate?.toString().getErrorOrNull(
-                        R.string.edit_mortgage_profile_invalid_end_date
+                        R.string.edit_loan_profile_invalid_end_date
                     )
                 )
             )

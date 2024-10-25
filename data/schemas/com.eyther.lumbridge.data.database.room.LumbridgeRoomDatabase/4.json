@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "c2de9b0822782a67b4964fb8b33a7ea6",
+    "identityHash": "6b1a2436fbff5a566b93249ee24c4a2a",
     "entities": [
       {
         "tableName": "expenses_month",
@@ -279,7 +279,7 @@
       },
       {
         "tableName": "loan",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`loanId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `amount` REAL NOT NULL, `fixedTaegInterestRate` REAL, `variableEuribor` REAL, `variableSpread` REAL, `fixedTanInterestRate` REAL, `loanTypeOrdinal` INTEGER NOT NULL, `loanCategoryOrdinal` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`loanId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `currentAmount` REAL NOT NULL, `initialAmount` REAL NOT NULL, `fixedTaegInterestRate` REAL, `variableEuribor` REAL, `variableSpread` REAL, `fixedTanInterestRate` REAL, `loanTypeOrdinal` INTEGER NOT NULL, `loanCategoryOrdinal` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "loanId",
@@ -306,8 +306,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "amount",
-            "columnName": "amount",
+            "fieldPath": "currentAmount",
+            "columnName": "currentAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "initialAmount",
+            "columnName": "initialAmount",
             "affinity": "REAL",
             "notNull": true
           },
@@ -361,7 +367,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c2de9b0822782a67b4964fb8b33a7ea6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b1a2436fbff5a566b93249ee24c4a2a')"
     ]
   }
 }

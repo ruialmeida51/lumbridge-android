@@ -16,7 +16,8 @@ fun LoanCached.toDomain(): Loan {
         name = name,
         startDate = startDate.toLocalDate(),
         endDate = endDate.toLocalDate(),
-        amount = amount,
+        currentAmount = currentAmount,
+        initialAmount = initialAmount,
         loanInterestRate = LoanInterestRate.fromLoanType(
             loanType = LoanType.entries[loanTypeOrdinal],
             variableEuribor = variableEuribor,
@@ -25,7 +26,7 @@ fun LoanCached.toDomain(): Loan {
             fixedTaegInterestRate = fixedTaegInterestRate
         ),
         loanType = loanType,
-        loanCategory = loanCategory
+        loanCategory = loanCategory,
     )
 }
 

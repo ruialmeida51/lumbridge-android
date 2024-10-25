@@ -13,6 +13,8 @@ class PortugalLoanCalculator @Inject constructor() : LoanCalculator {
 
     companion object {
         private const val PERCENTAGE = 100.0f
+        private const val DEFAULT_AMORTIZATION = 5000f
+        private const val MAX_ITERATIONS = 20
     }
 
     /**
@@ -50,24 +52,24 @@ class PortugalLoanCalculator @Inject constructor() : LoanCalculator {
     override suspend fun calculate(loan: Loan): LoanCalculation {
         val nextPayment = calculateMonthlyPayment(
             interestRate = loan.loanInterestRate,
-            loanAmount = loan.amount,
+            loanAmount = loan.currentAmount,
             remainingMonths = loan.remainingMonths
         )
 
         val (nextPaymentCapital, nextPaymentInterest) = calculateMonthlyPaymentCapitalAndInterestPortions(
             totalMonthlyPayment = nextPayment,
-            remainingLoanAmount = loan.amount,
+            remainingLoanAmount = loan.currentAmount,
             interestRate = loan.loanInterestRate
         )
 
         val amortizations = calculateAmortization(
             interestRate = loan.loanInterestRate,
-            loanAmount = loan.amount,
+            loanAmount = loan.currentAmount,
             remainingMonths = loan.remainingMonths
         )
 
         return LoanCalculation(
-            loanAmount = loan.amount,
+            loanAmount = loan.currentAmount,
             monthlyPayment = nextPayment,
             monthlyPaymentCapital = nextPaymentCapital,
             remainingMonths = loan.remainingMonths,
@@ -127,7 +129,7 @@ class PortugalLoanCalculator @Inject constructor() : LoanCalculator {
      *
      * @return The denominator of the formula
      */
-    private suspend fun calculateDenominator(
+    private fun calculateDenominator(
         remainingMonths: Int,
         monthlyInterestRate: Float
     ) = 1 - (1 + monthlyInterestRate).pow(-remainingMonths)
@@ -141,7 +143,7 @@ class PortugalLoanCalculator @Inject constructor() : LoanCalculator {
      *
      * @see calculate
      */
-    private suspend fun calculateMonthlyPayment(
+    private fun calculateMonthlyPayment(
         interestRate: LoanInterestRate,
         loanAmount: Float,
         remainingMonths: Int
@@ -198,25 +200,19 @@ class PortugalLoanCalculator @Inject constructor() : LoanCalculator {
      * @param remainingMonths The remaining months to pay the loan.
      *
      */
-    private suspend fun calculateAmortization(
+    private fun calculateAmortization(
         interestRate: LoanInterestRate,
         loanAmount: Float,
         remainingMonths: Int
     ): List<LoanAmortization> {
         val amortizations = mutableListOf<LoanAmortization>()
 
-        // 5% of the loan amount
-        val defaultAmortization = loanAmount * 0.05f
-
-        // Maximum number of iterations, 5% * 20 = 100%
-        val maxIterations = 20
-
         // Starting amount is the loan amount, we will subtract the default amortization from it
         var startingAmount = loanAmount
         var iterations = 0
 
-        while (iterations < maxIterations) {
-            startingAmount -= defaultAmortization
+        while (iterations < MAX_ITERATIONS && DEFAULT_AMORTIZATION < startingAmount) {
+            startingAmount -= DEFAULT_AMORTIZATION
             iterations++
 
             val nextPayment = calculateMonthlyPayment(
@@ -227,7 +223,7 @@ class PortugalLoanCalculator @Inject constructor() : LoanCalculator {
 
             amortizations.add(
                 LoanAmortization(
-                    amortization = defaultAmortization * iterations,
+                    amortization = DEFAULT_AMORTIZATION * iterations,
                     remainder = startingAmount,
                     nextPayment = nextPayment
                 )

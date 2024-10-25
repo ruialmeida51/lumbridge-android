@@ -31,7 +31,6 @@
     <string name="edit_financial_profile_choice">Do you prefer to input a monthly or annual salary?</string>
     <string name="edit_financial_profile_household">How does your household look like?</string>
     <string name="edit_financial_profile_allocate_earnings">How do you plan to allocate your earnings?</string>
-    <string name="edit_financial_profile_annual_gross_salary">Annual Gross Salary</string>
     <string name="edit_financial_profile_per_diem_food_card">Per Diem for Food Card</string>
     <string name="edit_financial_profile_save">Save Financial Profile</string>
     <string name="edit_financial_profile_suggested">Suggested: %1$s</string>
@@ -40,38 +39,32 @@
     <string name="edit_financial_profile_invalid_allocation">Total percentage must be less than or equal to %1$s</string>
 
     <string name="edit_loan">Edit Loan</string>
-    <string name="edit_mortgage_profile_loan_type">What type of loan is this?</string>
-    <string name="edit_mortgage_profile_loan">What are the conditions of your loan?</string>
-    <string name="edit_mortgage_profile_owe">How much do you still owe?</string>
-    <string name="edit_mortgage_profile_save">Save Mortgage Profile</string>
-    <string name="edit_mortgage_profile_loan_interest_rate">Do you have a variable or fixed rate?</string>
-    <string name="edit_mortgage_profile_loan_fixed_interest_rate">Is your loan calculated using TAN or TAEG?</string>
-    <string name="edit_mortgage_profile_invalid_interest_rate">Please enter a valid interest rate</string>
-    <string name="edit_mortgage_profile_invalid_euribor">Please enter a valid Euribor rate</string>
-    <string name="edit_mortgage_profile_invalid_spread">Please enter a valid spread rate</string>
-    <string name="edit_mortgage_profile_invalid_loan_amount">Please enter a valid loan amount</string>
-    <string name="edit_mortgage_profile_invalid_loan_name">Please enter a valid loan name</string>
-    <string name="edit_mortgage_profile_invalid_months_left">Please enter a valid number of months</string>
-    <string name="edit_mortgage_profile_invalid_start_date">Please enter a valid start date</string>
-    <string name="edit_mortgage_profile_invalid_end_date">Please enter a valid end date</string>
-    <string name="edit_mortgage_profile_loan_category">Loan Category</string>
+    <string name="edit_loan_profile_loan_type">What type of loan is this?</string>
+    <string name="edit_loan_profile_loan">What are the conditions of your loan?</string>
+    <string name="edit_loan_profile_owe">How much do you still owe?</string>
+    <string name="edit_loan_profile_save">Save Mortgage Profile</string>
+    <string name="edit_loan_profile_loan_interest_rate">Do you have a variable or fixed rate?</string>
+    <string name="edit_loan_profile_loan_fixed_interest_rate">Is your loan calculated using TAN or TAEG?</string>
+    <string name="edit_loan_profile_invalid_interest_rate">Please enter a valid interest rate</string>
+    <string name="edit_loan_profile_invalid_euribor">Please enter a valid Euribor rate</string>
+    <string name="edit_loan_profile_invalid_spread">Please enter a valid spread rate</string>
+    <string name="edit_loan_profile_invalid_loan_amount">Please enter a valid loan amount</string>
+    <string name="edit_loan_profile_invalid_loan_name">Please enter a valid loan name</string>
+    <string name="edit_loan_profile_invalid_start_date">Please enter a valid start date</string>
+    <string name="edit_loan_profile_invalid_end_date">Please enter a valid end date</string>
+    <string name="edit_loan_profile_loan_category">Loan Category</string>
+
     <string name="breakdown_salary_title">Financial Profile</string>
     <string name="breakdown_salary_card_income">Income</string>
     <string name="breakdown_salary_card_allocations">Allocation</string>
-    <string name="breakdown_salary_annual_income">Annual Income</string>
-    <string name="breakdown_salary_net_annual">Net Annual</string>
-    <string name="breakdown_salary_gross_annual">Gross Annual</string>
-    <string name="breakdown_salary_monthly_income">Monthly Income</string>
     <string name="breakdown_salary_net_monthly">Net Monthly</string>
-    <string name="breakdown_salary_gross_monthly">Gross Monthly</string>
-    <string name="breakdown_salary_food_card">Food Card</string>
-    <string name="breakdown_salary_food_card_daily">Card Daily</string>
     <string name="breakdown_salary_food_card_monthly">Card Monthly</string>
     <string name="breakdown_salary_no_financial_profile">Looks like you don\'t have a financial profile yet.\nTap the button below to create one!</string>
     <string name="breakdown_salary_no_financial_profile_create">Create Financial Profile</string>
     <string name="breakdown_loans_title">Loans</string>
     <string name="breakdown_loans_next_payment">Next Payment</string>
     <string name="breakdown_loans_remaining_amount">Remaining Amount</string>
+    <string name="breakdown_loans_paid_amount">Paid %1$s of %2$s</string>
     <string name="breakdown_loans_interest_rate">Interest Rate</string>
     <string name="breakdown_loans_months_left">Months Left</string>
     <string name="breakdown_loans_no_loans">You don\'t seem to have any loans yet.\nTap the button below to create one!</string>
@@ -80,11 +73,9 @@
     <string name="breakdown_delete_loan_confirmation_message">Are you sure you want to delete the loan %1$s?</string>
 
     <string name="financial_overview">Overview</string>
-    <string name="financial_overview_personal">Personal</string>
     <string name="financial_overview_loans">Loans</string>
     <string name="financial_overview_mortgage_amortization_simulator">Amortization Simulator</string>
     <string name="financial_overview_salary">Salary Overview</string>
-    <string name="financial_overview_income">Income</string>
     <string name="financial_overview_annual_income">Annual Income</string>
     <string name="financial_overview_monthly_income">Monthly Income</string>
     <string name="financial_overview_food_card_monthly">Card Monthly</string>
@@ -93,11 +84,9 @@
     <string name="financial_overview_deductions_portugal">Portugal Deductions</string>
     <string name="financial_overview_allocation">Money Allocation</string>
     <string name="financial_overview_allocation_breakdown">Breakdown</string>
-    <string name="financial_overview_remaining_loan_amount">Remaining Amount</string>
     <string name="financial_overview_loan_next_payment_capital">Capital</string>
     <string name="financial_overview_loan_next_payment_interest">Interest</string>
     <string name="financial_overview_loan_next_payment">Next Payment</string>
-    <string name="financial_overview_loan_monthly_payment">Monthly Payment</string>
     <string name="financial_overview_loan_payment_almost_complete">Congratulations! You have almost paid your entire loan! There is nothing else to show here.</string>
     <string name="financial_overview_loan_payment_dialog_confirmation_title">Register Payment</string>
     <string name="financial_overview_loan_payment_dialog_confirmation_message">Are you sure you want to register a new monthly payment?\n\nThis will subtract your loan by the capital amount and update your remaining time.</string>
@@ -105,7 +94,8 @@
     <string name="financial_overview_no_profile">You don\'t seem have a financial profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_no_loan">You don\'t seem have a mortgage profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_create_profile">Create Financial Profile</string>
-    <string name="financial_overview_create_mortgage_profile">Create Mortgage Profile</string>
+    <string name="financial_overview_create_loan">Create a Loan</string>
+    <string name="financial_overview_loan_details">Loan Details</string>
     <string name="financial_overview_mortgage_pay_a_month">Register Monthly Payment</string>
 
     <string name="profile">Profile</string>
@@ -114,6 +104,7 @@
     <string name="profile_greeting_locale">From %1$s</string>
     <string name="profile_greeting_no_locale">From Unknown</string>
     <string name="profile_app_settings">App Settings</string>
+    <string name="profile_edit_loans">Edit Loans</string>
     <string name="profile_financial_settings">Financial Settings</string>
     <string name="profile_avatar_content_description">Profile Avatar</string>
     <string name="profile_support_the_app">Support &amp; Community Hub</string>
@@ -125,7 +116,6 @@
     <string name="profile_support_feedback_email_subject_no_name">Feedback on Lumbridge</string>
     <string name="profile_support_feedback_email_selector">Select an email client to send your feedback</string>
     <string name="profile_support_feedback_email_body">Hi,\n\nI have some feedback on Lumbridge that I would like to share with you:\n\n</string>
-    <string name="profile_support_feedback_email_sent">Your feedback has been sent. Thank you for helping us improve Lumbridge!</string>
     <string name="profile_support_feedback_email_error_no_clients">There are no email clients installed on your device. Please, install one and try again.</string>
     <string name="profile_support_feedback_email_error_sending">There was an error sending your feedback. Please, try again later.</string>
 
@@ -182,12 +172,9 @@
     <string name="expenses_invalid_amount">Please, enter a valid amount</string>
     <string name="expenses_invalid_name">Please, enter a valid name</string>
     <string name="expenses_invalid_date">Please, enter a valid date</string>
-    <string name="expenses_date_range">Tap to filter by date range</string>
-    <string name="expenses_filter_by_date">Filter by Date</string>
     <string name="expenses_edit_hint">Edit the details of your expense</string>
     <string name="expenses_add_hint">Please, fill out the expense information</string>
     <string name="expenses_add_type">Expense Type</string>
-    <string name="expenses_add_error">Something went wrong while adding your expense. Please, try again.</string>
     <string name="expenses_overview_no_financial_profile">You don\'t seem to have a financial profile.\nTap the button below to create one.</string>
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
 
@@ -251,7 +238,6 @@
     <string name="gross_annual">Gross Annual</string>
     <string name="gross_monthly">Gross Monthly</string>
     <string name="food_card">Food Card</string>
-    <string name="percentage">Percentage</string>
     <string name="savings">Savings</string>
     <string name="savings_percentage">Savings Percentage</string>
     <string name="necessities">Necessities</string>
@@ -269,8 +255,8 @@
     <string name="interest_rate">Interest Rate</string>
     <string name="loan_type_variable">Variable</string>
     <string name="loan_type_fixed">Fixed</string>
-    <string name="months_left">Months Left</string>
-    <string name="loan_amount">Loan Amount</string>
+    <string name="current_loan_amount">Current Loan Amount</string>
+    <string name="initial_loan_amount">Initial Loan Amount</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
     <string name="date">Date</string>
@@ -290,7 +276,6 @@
     <string name="apply">Apply</string>
     <string name="expand">Expand</string>
     <string name="collapse">Collapse</string>
-    <string name="url">Url</string>
     <string name="disclaimer">Disclaimer</string>
     <string name="allow">Allow</string>
     <string name="max_length_reached">Char limit reached: %d</string>
@@ -299,9 +284,9 @@
     <string name="tan">TAN</string>
     <string name="taeg">TAEG</string>
     <string name="variable">Variable Interest Rate</string>
-    <string name="more">More</string>
     <string name="house">House</string>
     <string name="car">Car</string>
     <string name="personal">Personal</string>
     <string name="other">Other</string>
+    <string name="mortgage">Mortgage</string>
 </resources>

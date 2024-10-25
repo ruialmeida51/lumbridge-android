@@ -15,7 +15,7 @@ const val LOAN_TABLE_NAME = "loan"
  * @property name The name of the loan.
  * @property startDate The date the loan was taken out.
  * @property endDate The date the loan will be paid off.
- * @property amount The amount of the loan.
+ * @property currentAmount The amount of the loan.
  * @property fixedTaegInterestRate The fixed interest rate for the loan when using the TAEG formula.
  * @property variableEuribor The variable interest rate for the loan when using the EURIBOR formula.
  * @property variableSpread The variable spread for the loan when using the EURIBOR formula.
@@ -31,7 +31,8 @@ data class LoanEntity(
     val name: String,
     val startDate: String,
     val endDate: String,
-    val amount: Float,
+    val currentAmount: Float,
+    val initialAmount: Float,
     val fixedTaegInterestRate: Float?,
     val variableEuribor: Float?,
     val variableSpread: Float?,

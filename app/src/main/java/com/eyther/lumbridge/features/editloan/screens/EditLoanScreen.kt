@@ -42,8 +42,8 @@ import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeUi
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState
 import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedUi
-import com.eyther.lumbridge.features.editloan.viewmodel.EditLoanScreenScreenViewModel
-import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenScreenViewModel
+import com.eyther.lumbridge.features.editloan.viewmodel.EditLoanScreenViewModel
+import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
@@ -65,7 +65,7 @@ import java.time.LocalDate
 fun EditLoanScreen(
     navController: NavHostController,
     @StringRes label: Int,
-    viewModel: IEditLoanScreenScreenViewModel = hiltViewModel<EditLoanScreenScreenViewModel>()
+    viewModel: IEditLoanScreenViewModel = hiltViewModel<EditLoanScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val snackbarHostState = remember { SnackbarHostState() }
@@ -113,7 +113,6 @@ fun EditLoanScreen(
         ) {
             when (state) {
                 is EditLoanScreenViewState.Content -> Content(
-                    navController = navController,
                     state = state,
                     viewModel = viewModel
                 )
@@ -126,9 +125,8 @@ fun EditLoanScreen(
 
 @Composable
 fun Content(
-    navController: NavHostController,
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenScreenViewModel
+    viewModel: IEditLoanScreenViewModel
 ) {
     Column {
         LoanType(
@@ -152,7 +150,7 @@ fun Content(
 
         LumbridgeButton(
             modifier = Modifier.padding(DefaultPadding),
-            label = stringResource(id = R.string.edit_mortgage_profile_save),
+            label = stringResource(id = R.string.edit_loan_profile_save),
             enableButton = state.shouldEnableSaveButton,
             onClick = { viewModel.saveLoan() }
         )
@@ -162,13 +160,13 @@ fun Content(
 @Composable
 private fun ColumnScope.LoanType(
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenScreenViewModel
+    viewModel: IEditLoanScreenViewModel
 ) {
     Text(
         modifier = Modifier
             .padding(top = DefaultPadding, start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
-        text = stringResource(id = R.string.edit_mortgage_profile_loan_type),
+        text = stringResource(id = R.string.edit_loan_profile_loan_type),
         style = MaterialTheme.typography.bodyLarge
     )
 
@@ -181,7 +179,7 @@ private fun ColumnScope.LoanType(
         )
 
         DropdownInputWithIcon(
-            label = stringResource(id = R.string.edit_mortgage_profile_loan_category),
+            label = stringResource(id = R.string.edit_loan_profile_loan_category),
             selectedOption = stringResource(state.inputState.categoryUi.label),
             selectedIcon = state.inputState.categoryUi.icon,
             items = state.availableLoanCategories.map { Triple(it.icon, it.ordinal.toString(), stringResource(it.label)) },
@@ -193,7 +191,7 @@ private fun ColumnScope.LoanType(
 @Composable
 private fun ColumnScope.RemainingAmount(
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenScreenViewModel
+    viewModel: IEditLoanScreenViewModel
 ) {
     val selectableYears = LocalDate.now().year..viewModel.getMaxSelectableYear()
     val isSelectableYear = { year: Int -> year >= LocalDate.now().year }
@@ -230,7 +228,7 @@ private fun ColumnScope.RemainingAmount(
         modifier = Modifier
             .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
-        text = stringResource(id = R.string.edit_mortgage_profile_owe),
+        text = stringResource(id = R.string.edit_loan_profile_owe),
         style = MaterialTheme.typography.bodyLarge
     )
 
@@ -241,7 +239,7 @@ private fun ColumnScope.RemainingAmount(
                 .padding(bottom = DefaultPadding),
             state = state.inputState.startDate,
             label = stringResource(id = R.string.start_date),
-            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_start_date),
+            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
             onClick = { showStartDateDialog.value = true }
         )
 
@@ -257,7 +255,7 @@ private fun ColumnScope.RemainingAmount(
                 .padding(bottom = DefaultPadding),
             state = state.inputState.endDate,
             label = stringResource(id = R.string.end_date),
-            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_end_date),
+            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_end_date),
             onClick = { showEndDateDialog.value = true }
         )
 
@@ -270,7 +268,7 @@ private fun ColumnScope.RemainingAmount(
         NumberInput(
             modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.loanAmount,
-            label = stringResource(id = R.string.loan_amount),
+            label = stringResource(id =  if (state.isCreateLoan) R.string.initial_loan_amount else R.string.current_loan_amount),
             onInputChanged = { viewModel.onMortgageAmountChanged(it.toFloatOrNull()) }
         )
     }
@@ -279,19 +277,19 @@ private fun ColumnScope.RemainingAmount(
 @Composable
 private fun ColumnScope.MortgageType(
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenScreenViewModel
+    viewModel: IEditLoanScreenViewModel
 ) {
     Text(
         modifier = Modifier
             .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
-        text = stringResource(id = R.string.edit_mortgage_profile_loan),
+        text = stringResource(id = R.string.edit_loan_profile_loan),
         style = MaterialTheme.typography.bodyLarge
     )
 
     ColumnCardWrapper {
         ChoiceTab(
-            title = stringResource(id = R.string.edit_mortgage_profile_loan_interest_rate),
+            title = stringResource(id = R.string.edit_loan_profile_loan_interest_rate),
             choiceTabState = state.inputState.fixedOrVariableLoanChoiceState,
             onOptionClicked = { viewModel.onFixedOrVariableLoanChanged(it) }
         )
@@ -308,7 +306,7 @@ private fun ColumnScope.MortgageType(
 @Composable
 private fun VariableMortgageInput(
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenScreenViewModel
+    viewModel: IEditLoanScreenViewModel
 ) {
     NumberInput(
         modifier = Modifier.padding(bottom = DefaultPadding),
@@ -332,10 +330,10 @@ private fun VariableMortgageInput(
 @Composable
 private fun FixedMortgageInput(
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenScreenViewModel
+    viewModel: IEditLoanScreenViewModel
 ) {
     ChoiceTab(
-        title = stringResource(id = R.string.edit_mortgage_profile_loan_fixed_interest_rate),
+        title = stringResource(id = R.string.edit_loan_profile_loan_fixed_interest_rate),
         choiceTabState = state.inputState.tanOrTaegLoanChoiceState,
         onOptionClicked = { viewModel.onTanOrTaegLoanChanged(it) }
     )

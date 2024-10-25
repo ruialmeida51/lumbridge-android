@@ -6,7 +6,7 @@ import com.eyther.lumbridge.features.editloan.viewmodel.delegate.IEditLoanScreen
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
-interface IEditLoanScreenScreenViewModel : IEditLoanScreenInputHandler {
+interface IEditLoanScreenViewModel : IEditLoanScreenInputHandler {
     companion object {
         const val MORTGAGE_MAX_DURATION = 40
         const val PADDING_YEARS = 5

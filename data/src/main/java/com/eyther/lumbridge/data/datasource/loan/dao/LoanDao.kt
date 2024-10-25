@@ -19,6 +19,10 @@ interface LoanDao {
 
     @Transaction
     @Query("SELECT * FROM $LOAN_TABLE_NAME WHERE loanId = :loanId")
+    fun getLoanByIdStream(loanId: Long): Flow<LoanEntity?>
+
+    @Transaction
+    @Query("SELECT * FROM $LOAN_TABLE_NAME WHERE loanId = :loanId")
     suspend fun getLoanById(loanId: Long): LoanEntity?
 
     @Transaction

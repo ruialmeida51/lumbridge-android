@@ -10,7 +10,7 @@ class GetLoansFlowUseCase @Inject constructor(
     private val loanRepository: LoanRepository
 ) {
     operator fun invoke(locale: SupportedLocales) = loanRepository
-        .getLoansFlow(locale)
+        .getLoansAndCalculationsFlow(locale)
         .map { loans ->
             loans.map { (loan, loanCalculation) -> loan.toUi() to loanCalculation.toUi() }
         }

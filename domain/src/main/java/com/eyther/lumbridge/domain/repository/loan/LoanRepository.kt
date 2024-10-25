@@ -3,9 +3,11 @@ package com.eyther.lumbridge.domain.repository.loan
 import com.eyther.lumbridge.data.datasource.loan.local.LoanLocalDataSource
 import com.eyther.lumbridge.domain.mapper.loan.toCached
 import com.eyther.lumbridge.domain.mapper.loan.toDomain
+import com.eyther.lumbridge.domain.mapper.user.toDomain
 import com.eyther.lumbridge.domain.model.loan.Loan
 import com.eyther.lumbridge.domain.model.loan.LoanCalculation
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.repository.loan.portugal.PortugalLoanCalculator
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import kotlinx.coroutines.flow.Flow
@@ -18,13 +20,25 @@ class LoanRepository @Inject constructor(
     private val loanLocalDataSource: LoanLocalDataSource,
     private val schedulers: Schedulers
 ) {
-    fun getLoansFlow(locale: SupportedLocales): Flow<List<Pair<Loan, LoanCalculation>>> =
+    fun getLoansAndCalculationsFlow(locale: SupportedLocales): Flow<List<Pair<Loan, LoanCalculation>>> =
         loanLocalDataSource
             .loansFlow
             .mapNotNull { cachedLoans ->
                 cachedLoans
                     ?.toDomain()
                     ?.map { it to calculate(it, locale) }
+            }
+
+    fun getLoanAndCalculationByIdStream(
+        loanId: Long,
+        locale: SupportedLocales
+    ): Flow<Pair<Loan, LoanCalculation>> =
+        loanLocalDataSource
+            .getLoanByIdStream(loanId)
+            .mapNotNull { cachedLoan ->
+                cachedLoan
+                    ?.toDomain()
+                    ?.let { it to calculate(it, locale) }
             }
 
     suspend fun saveLoan(loan: Loan) = withContext(schedulers.io) {
@@ -56,4 +70,9 @@ class LoanRepository @Inject constructor(
                 SupportedLocales.PORTUGAL -> portugalLoanCalculator.calculate(loan)
             }
         }
+
+    @Deprecated("Use Room instead. This will be removed in the future, for now it is only maintained for migration purposes.")
+    suspend fun getMortgageLoan(): UserMortgageDomain? {
+        return loanLocalDataSource.getMortgageLoan()?.toDomain()
+    }
 }

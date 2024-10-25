@@ -2,6 +2,7 @@ package com.eyther.lumbridge.features.profile.navigation
 
 import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.Loan.Companion.ARG_LOAN_ID
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 
 sealed class ProfileNavigationItem(
@@ -28,8 +29,19 @@ sealed class ProfileNavigationItem(
         label = R.string.edit_financial_profile
     )
 
-    data object EditLoans : ProfileNavigationItem(
-        route = "edit_loans",
-        label = R.string.edit_loan
-    )
+    sealed interface Loans {
+        companion object {
+            const val HOST_ROUTE = "loans"
+        }
+
+        data object List : ProfileNavigationItem(
+            route = "loans_list",
+            label = R.string.profile_edit_loans
+        )
+
+        data object Edit : ProfileNavigationItem(
+            route = "loans_edit/{$ARG_LOAN_ID}",
+            label = R.string.edit_loan
+        )
+    }
 }

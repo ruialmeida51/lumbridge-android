@@ -14,7 +14,8 @@ import com.eyther.lumbridge.model.loan.LoanUi
 fun Loan.toUi() = LoanUi(
     id = id,
     name = name,
-    loanAmount = amount,
+    currentLoanAmount = currentAmount,
+    initialLoanAmount = initialAmount,
     startDate = startDate,
     endDate = endDate,
     loanCategoryUi = loanCategory.toUi(),

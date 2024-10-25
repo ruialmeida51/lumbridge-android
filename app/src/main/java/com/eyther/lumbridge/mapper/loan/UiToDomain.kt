@@ -11,7 +11,8 @@ import com.eyther.lumbridge.model.loan.LoanUi
 fun LoanUi.toDomain() = Loan(
     id = id,
     name = name,
-    amount = loanAmount,
+    currentAmount = currentLoanAmount,
+    initialAmount = initialLoanAmount,
     startDate = startDate,
     endDate = endDate,
     loanInterestRate = loanInterestRateUi.toDomain(),

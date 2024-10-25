@@ -1,24 +1,14 @@
 package com.eyther.lumbridge.features.overview.breakdown.screens
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -46,16 +36,14 @@ import com.eyther.lumbridge.features.overview.breakdown.viewmodel.BreakdownScree
 import com.eyther.lumbridge.features.overview.breakdown.viewmodel.IBreakdownScreenViewModel
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
-import com.eyther.lumbridge.model.loan.LoanInterestRateUi
 import com.eyther.lumbridge.model.loan.LoanUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyComponentWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
+import com.eyther.lumbridge.ui.common.composables.components.loan.PeekLoanCard
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
-import com.eyther.lumbridge.ui.common.composables.components.text.TabbedTextAndIcon
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -88,77 +76,43 @@ fun BreakdownScreen(
         ) {
             when (state) {
                 is BreakdownScreenViewState.Loading -> LoadingIndicator()
-                is BreakdownScreenViewState.Content ->
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(top = DefaultPadding)
-                                .verticalScroll(rememberScrollState())
-                        ) {
-                            Content(
-                                state = state,
-                                navController = navController,
-                                loanToDelete = loanToDelete,
-                                onDeleteLoan = viewModel::onDeleteLoan
-                            )
+                is BreakdownScreenViewState.Content -> Content(
+                    state = state,
+                    navController = navController,
+                    loanToDelete = loanToDelete,
+                    onDeleteLoan = viewModel::onDeleteLoan
+                )
 
-                            if (state.loans.isNotEmpty()) {
-                                Spacer(modifier = Modifier.height(DefaultPadding * 2 + 56.dp)) // 56dp is the height of the FAB
-                            }
-                        }
-
-                        if (state.loans.isNotEmpty()) {
-                            AddFab(
-                                modifier = Modifier.align(Alignment.BottomEnd),
-                                navController = navController
-                            )
-                        }
-                    }
             }
         }
     }
 }
 
 @Composable
-private fun ColumnScope.Content(
+private fun Content(
     state: BreakdownScreenViewState.Content,
     navController: NavHostController,
     loanToDelete: MutableLongState,
     onDeleteLoan: (LoanUi) -> Unit
 ) {
-    if (state.netSalary == null) {
-        ColumnCardWrapper {
-            EmptyComponentWithButton(
-                text = stringResource(id = R.string.breakdown_salary_no_financial_profile),
-                buttonText = stringResource(id = R.string.breakdown_salary_no_financial_profile_create),
-                onButtonClick = { navController.navigate(OverviewNavigationItem.FinancialProfile.Edit.route) }
-            )
-        }
-    } else {
-        SalaryOverview(
-            netSalaryUi = state.netSalary,
-            currencySymbol = state.currencySymbol,
-            onCardClick = { navController.navigate(OverviewNavigationItem.FinancialProfile.Details.route) }
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Overview(
+            state = state,
+            navController = navController,
+            loanToDelete = loanToDelete
         )
-    }
 
-    Spacer(modifier = Modifier.height(DefaultPadding))
-
-    if (state.loans.isEmpty()) {
-        ColumnCardWrapper {
-            EmptyComponentWithButton(
-                text = stringResource(id = R.string.breakdown_loans_no_loans),
-                buttonText = stringResource(id = R.string.breakdown_loans_no_loans_create),
-                onButtonClick = { navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, -1L) }
+        if (state.loans.isNotEmpty()) {
+            AddFab(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                navController = navController
             )
         }
-    } else {
-        LoansOverview(
-            loansUi = state.loans,
-            currencySymbol = state.currencySymbol,
-            onCardClick = { loanId -> navController.navigateWithArgs(OverviewNavigationItem.Loan.Details, loanId) },
+
+        ShowDeleteConfirmationDialog(
+            loanUi = state.loans.find { it.first.id == loanToDelete.longValue }?.first,
             loanToDelete = loanToDelete,
             onDeleteLoan = onDeleteLoan
         )
@@ -166,172 +120,135 @@ private fun ColumnScope.Content(
 }
 
 @Composable
-private fun SalaryOverview(
-    netSalaryUi: NetSalaryUi,
-    currencySymbol: String,
-    onCardClick: () -> Unit
+private fun Overview(
+    state: BreakdownScreenViewState.Content,
+    navController: NavHostController,
+    loanToDelete: MutableLongState
 ) {
-    ColumnCardWrapper(
-        onClick = onCardClick
+    LazyColumn(
+        modifier = Modifier
+            .padding(top = DefaultPadding)
     ) {
-        Text(
-            modifier = Modifier.padding(bottom = QuarterPadding),
-            text = stringResource(id = R.string.breakdown_salary_card_income),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.tertiary
-        )
-
-        TabbedDataOverview(
-            label = stringResource(id = R.string.gross_annual),
-            text = "${netSalaryUi.annualGrossSalary.forceTwoDecimalsPlaces()}$currencySymbol"
-        )
-
-        TabbedDataOverview(
-            label = stringResource(id = R.string.breakdown_salary_net_monthly),
-            text = "${netSalaryUi.monthlyNetSalary.forceTwoDecimalsPlaces()}$currencySymbol"
-        )
-
-        TabbedDataOverview(
-            label = stringResource(id = R.string.breakdown_salary_food_card_monthly),
-            text = "${netSalaryUi.monthlyFoodCard.forceTwoDecimalsPlaces()}$currencySymbol"
-        )
-
-        if (!netSalaryUi.moneyAllocations.isNullOrEmpty()) {
-            Text(
-                modifier = Modifier.padding(top = DefaultPadding, bottom = QuarterPadding),
-                text = stringResource(id = R.string.breakdown_salary_card_allocations),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.tertiary
+        item {
+            SalaryOverview(
+                netSalaryUi = state.netSalary,
+                currencySymbol = state.currencySymbol,
+                onCardClick = { navController.navigate(OverviewNavigationItem.FinancialProfile.Details.route) },
+                onCreateFinancialProfile = { navController.navigate(OverviewNavigationItem.FinancialProfile.Edit.route) }
             )
 
-            netSalaryUi.moneyAllocations.forEach { moneyAllocationUi ->
-                TabbedDataOverview(
-                    label = stringResource(id = moneyAllocationUi.label),
-                    text = "${moneyAllocationUi.amount.forceTwoDecimalsPlaces()}$currencySymbol"
-                )
-            }
+            Spacer(modifier = Modifier.height(DefaultPadding))
         }
 
-        MovementSetting(
-            modifier = Modifier.padding(top = DefaultPadding),
-            label = stringResource(id = R.string.breakdown_tap_to_view_more)
-        )
+        if (state.loans.isEmpty()) {
+            item {
+                ColumnCardWrapper {
+                    EmptyComponentWithButton(
+                        text = stringResource(id = R.string.breakdown_loans_no_loans),
+                        buttonText = stringResource(id = R.string.breakdown_loans_no_loans_create),
+                        onButtonClick = { navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, -1L) }
+                    )
+                }
+            }
+        } else {
+            item {
+                Text(
+                    modifier = Modifier
+                        .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding),
+                    text = stringResource(id = R.string.breakdown_loans_title),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
+            items(state.loans) { (loanUi, loanCalculationUi) ->
+                PeekLoanCard(
+                    loanUi = loanUi,
+                    loanCalculationUi = loanCalculationUi,
+                    currencySymbol = state.currencySymbol,
+                    onDelete = { loanToDelete.longValue = it },
+                    onCardClick = { navController.navigateWithArgs(OverviewNavigationItem.Loan.Details, loanUi.id) }
+                )
+
+                Spacer(modifier = Modifier.height(DefaultPadding))
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(DefaultPadding + 56.dp)) // 56dp is the height of the FAB
+            }
+        }
     }
 }
 
 @Composable
-private fun ColumnScope.LoansOverview(
-    loansUi: List<Pair<LoanUi, LoanCalculationUi>>,
-    loanToDelete: MutableLongState,
+private fun SalaryOverview(
+    netSalaryUi: NetSalaryUi?,
     currencySymbol: String,
-    onCardClick: (loanId: Long) -> Unit,
-    onDeleteLoan: (LoanUi) -> Unit
+    onCardClick: () -> Unit,
+    onCreateFinancialProfile: () -> Unit
 ) {
-    Text(
-        modifier = Modifier
-            .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
-            .align(Alignment.Start),
-        text = stringResource(id = R.string.breakdown_loans_title),
-        style = MaterialTheme.typography.bodyLarge
-    )
+    if (netSalaryUi == null) {
+        ColumnCardWrapper {
+            EmptyComponentWithButton(
+                text = stringResource(id = R.string.breakdown_salary_no_financial_profile),
+                buttonText = stringResource(id = R.string.breakdown_salary_no_financial_profile_create),
+                onButtonClick = onCreateFinancialProfile
+            )
+        }
+    } else {
+        Text(
+            modifier = Modifier
+                .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding),
+            text = stringResource(id = R.string.breakdown_salary_title),
+            style = MaterialTheme.typography.bodyLarge
+        )
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(DefaultPadding)
-    ) {
-        loansUi.forEach { (loanUi, loanCalculationUi) ->
-            ColumnCardWrapper(
-                onClick = { onCardClick(loanUi.id) }
-            ) {
-                Row(
-                    modifier = Modifier.padding(bottom = HalfPadding)
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .size(20.dp)
-                            .align(Alignment.CenterVertically),
-                        painter = painterResource(id = loanUi.loanCategoryUi.icon),
-                        contentDescription = null
-                    )
+        ColumnCardWrapper(
+            onClick = onCardClick
+        ) {
+            Text(
+                modifier = Modifier.padding(bottom = QuarterPadding),
+                text = stringResource(id = R.string.breakdown_salary_card_income),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
 
-                    Spacer(modifier = Modifier.width(QuarterPadding))
+            TabbedDataOverview(
+                label = stringResource(id = R.string.gross_annual),
+                text = "${netSalaryUi.annualGrossSalary.forceTwoDecimalsPlaces()}$currencySymbol"
+            )
 
-                    TabbedTextAndIcon(
-                        modifier = Modifier.padding(end = QuarterPadding),
-                        text = loanUi.name,
-                        textStyle = MaterialTheme.typography.bodyLarge,
-                        textColour = MaterialTheme.colorScheme.tertiary,
-                        icons = {
-                            Icon(
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = rememberRipple(bounded = false),
-                                        onClick = { loanToDelete.longValue = loanUi.id }
-                                    ),
-                                imageVector = Icons.Outlined.Delete,
-                                contentDescription = stringResource(id = R.string.delete)
-                            )
-                        }
-                    )
-                }
+            TabbedDataOverview(
+                label = stringResource(id = R.string.breakdown_salary_net_monthly),
+                text = "${netSalaryUi.monthlyNetSalary.forceTwoDecimalsPlaces()}$currencySymbol"
+            )
 
-                TabbedDataOverview(
-                    label = stringResource(id = R.string.breakdown_loans_next_payment),
-                    text = "${loanCalculationUi.monthlyPayment.forceTwoDecimalsPlaces()}$currencySymbol",
-                )
+            TabbedDataOverview(
+                label = stringResource(id = R.string.breakdown_salary_food_card_monthly),
+                text = "${netSalaryUi.monthlyFoodCard.forceTwoDecimalsPlaces()}$currencySymbol"
+            )
 
-                TabbedDataOverview(
-                    label = stringResource(id = R.string.breakdown_loans_remaining_amount),
-                    text = "${loanUi.loanAmount.forceTwoDecimalsPlaces()}$currencySymbol",
-                )
-
-                TabbedDataOverview(
-                    label = stringResource(id = R.string.breakdown_loans_months_left),
-                    text = loanCalculationUi.remainingMonths.toString(),
-                )
-
+            if (!netSalaryUi.moneyAllocations.isNullOrEmpty()) {
                 Text(
                     modifier = Modifier.padding(top = DefaultPadding, bottom = QuarterPadding),
-                    text = stringResource(id = R.string.breakdown_loans_interest_rate),
+                    text = stringResource(id = R.string.breakdown_salary_card_allocations),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.tertiary
                 )
 
-                when (val loanInterestRateUi = loanUi.loanInterestRateUi) {
-                    is LoanInterestRateUi.Fixed -> {
-                        TabbedDataOverview(
-                            label = stringResource(id = loanInterestRateUi.label),
-                            text = "${loanInterestRateUi.interestRate}%"
-                        )
-                    }
-
-                    is LoanInterestRateUi.Variable -> {
-                        TabbedDataOverview(
-                            label = stringResource(id = R.string.euribor),
-                            text = "${loanInterestRateUi.euribor}%"
-                        )
-
-                        TabbedDataOverview(
-                            label = stringResource(id = R.string.spread),
-                            text = "${loanInterestRateUi.spread}%"
-                        )
-                    }
+                netSalaryUi.moneyAllocations.forEach { moneyAllocationUi ->
+                    TabbedDataOverview(
+                        label = stringResource(id = moneyAllocationUi.label),
+                        text = "${moneyAllocationUi.amount.forceTwoDecimalsPlaces()}$currencySymbol"
+                    )
                 }
-
-                MovementSetting(
-                    modifier = Modifier.padding(top = DefaultPadding),
-                    label = stringResource(id = R.string.breakdown_tap_to_view_more)
-                )
             }
+
+            MovementSetting(
+                modifier = Modifier.padding(top = DefaultPadding),
+                label = stringResource(id = R.string.breakdown_tap_to_view_more)
+            )
         }
     }
-
-   ShowDeleteConfirmationDialog(
-        loanUi = loansUi.find { it.first.id == loanToDelete.longValue }?.first,
-        loanToDelete = loanToDelete,
-        onDeleteLoan = onDeleteLoan
-    )
 }
 
 @Composable

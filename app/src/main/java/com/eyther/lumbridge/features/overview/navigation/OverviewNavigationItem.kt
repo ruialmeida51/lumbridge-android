@@ -38,7 +38,7 @@ sealed class OverviewNavigationItem(
 
         data object Details : OverviewNavigationItem(
             route = "loan_details/{$ARG_LOAN_ID}",
-            label = R.string.edit_loan
+            label = R.string.financial_overview_loan_details
         )
 
         data object Edit : OverviewNavigationItem(

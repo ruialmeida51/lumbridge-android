@@ -135,7 +135,7 @@ fun LumbridgeYearMonthPicker(
                                 .padding(bottom = DefaultPadding),
                             state = dateInputState.value,
                             label = stringResource(id = R.string.start_date),
-                            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_start_date),
+                            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
                             onClick = { showDatePickerDialog.value = true }
                         )
 
@@ -228,7 +228,7 @@ fun LumbridgeYearMonthRangePicker(
                                 .padding(bottom = DefaultPadding),
                             state = startDateInputState.value,
                             label = stringResource(id = R.string.start_date),
-                            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_start_date),
+                            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
                             onClick = { showStartDatePickerDialog.value = true }
                         )
 
@@ -238,7 +238,7 @@ fun LumbridgeYearMonthRangePicker(
                                 .padding(bottom = DefaultPadding),
                             state = endDateInputState.value,
                             label = stringResource(id = R.string.end_date),
-                            placeholder = stringResource(id = R.string.edit_mortgage_profile_invalid_start_date),
+                            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
                             onClick = { showEndDatePickerDialog.value = true }
                         )
 

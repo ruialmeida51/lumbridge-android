@@ -8,7 +8,8 @@ data class Loan(
     val name: String,
     val startDate: LocalDate,
     val endDate: LocalDate,
-    val amount: Float,
+    val initialAmount: Float,
+    val currentAmount: Float,
     val loanInterestRate: LoanInterestRate,
     val loanType: LoanType,
     val loanCategory: LoanCategory

@@ -7,7 +7,11 @@ data class LoanUi(
     val name: String,
     val startDate: LocalDate,
     val endDate: LocalDate,
-    val loanAmount: Float,
+    val initialLoanAmount: Float,
+    val currentLoanAmount: Float,
     val loanCategoryUi: LoanCategoryUi,
     val loanInterestRateUi: LoanInterestRateUi
-)
+) {
+    val paidLoanAmount: Float
+        get() = initialLoanAmount - currentLoanAmount
+}

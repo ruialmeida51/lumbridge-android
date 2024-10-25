@@ -10,6 +10,7 @@ sealed interface EditLoanScreenViewState {
         val locale: SupportedLocales,
         val inputState: EditLoanScreenInputState,
         val availableLoanCategories: List<LoanCategoryUi>,
-        val shouldEnableSaveButton: Boolean = false
+        val shouldEnableSaveButton: Boolean = false,
+        val isCreateLoan: Boolean = false
     ) : EditLoanScreenViewState
 }

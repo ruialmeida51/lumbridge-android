@@ -11,8 +11,8 @@ import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState.Loading
 import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedUi
-import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenScreenViewModel.Companion.MORTGAGE_MAX_DURATION
-import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenScreenViewModel.Companion.PADDING_YEARS
+import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel.Companion.MORTGAGE_MAX_DURATION
+import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel.Companion.PADDING_YEARS
 import com.eyther.lumbridge.features.editloan.viewmodel.delegate.EditLoanScreenInputHandler
 import com.eyther.lumbridge.features.editloan.viewmodel.delegate.IEditLoanScreenInputHandler
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.Loan.Companion.ARG_LOAN_ID
@@ -34,14 +34,14 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class EditLoanScreenScreenViewModel @Inject constructor(
+class EditLoanScreenViewModel @Inject constructor(
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val getLoanAndCalculationsUseCase: GetLoanAndCalculationsUseCase,
     private val saveLoanUseCase: SaveLoanUseCase,
     private val editLoanInputHandler: EditLoanScreenInputHandler,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
-    IEditLoanScreenScreenViewModel,
+    IEditLoanScreenViewModel,
     IEditLoanScreenInputHandler by editLoanInputHandler {
 
     override val viewState = MutableStateFlow<EditLoanScreenViewState>(Loading)
@@ -51,6 +51,8 @@ class EditLoanScreenScreenViewModel @Inject constructor(
         "Loan ID must be provided or defaulted to -1"
     }
 
+    private var cachedLoanUi: LoanUi? = null
+
     init {
         fetchMortgageProfile()
     }
@@ -59,11 +61,15 @@ class EditLoanScreenScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val (initialLoanUi, _) = getLoanAndCalculationsUseCase(loanId)
             val locale = getLocaleOrDefault()
+            cachedLoanUi = initialLoanUi
 
             updateInput { state ->
                 state.copy(
+                    name = state.name.copy(
+                        text = initialLoanUi?.name
+                    ),
                     loanAmount = state.loanAmount.copy(
-                        text = initialLoanUi?.loanAmount?.toString()
+                        text = initialLoanUi?.currentLoanAmount?.toString()
                     ),
                     euribor = state.euribor.copy(
                         text = initialLoanUi?.loanInterestRateUi?.tryGetEuribor()?.toString()
@@ -102,7 +108,8 @@ class EditLoanScreenScreenViewModel @Inject constructor(
                             locale = locale,
                             shouldEnableSaveButton = shouldEnableSaveButton(inputState),
                             inputState = inputState,
-                            availableLoanCategories = LoanCategoryUi.entries()
+                            availableLoanCategories = LoanCategoryUi.entries(),
+                            isCreateLoan = cachedLoanUi == null
                         )
                     }
                 }.launchIn(this)
@@ -122,12 +129,14 @@ class EditLoanScreenScreenViewModel @Inject constructor(
             val inputState = inputState.value
 
             val loanUi = LoanUi(
+                id = loanId,
                 name = checkNotNull(inputState.name.text),
-                loanAmount = checkNotNull(inputState.loanAmount.text?.toFloatOrNull()),
+                currentLoanAmount = checkNotNull(inputState.loanAmount.text?.toFloatOrNull()),
                 startDate = checkNotNull(inputState.startDate.date),
                 endDate = checkNotNull(inputState.endDate.date),
                 loanCategoryUi = LoanCategoryUi.fromOrdinal(inputState.categoryUi.ordinal),
-                loanInterestRateUi = getLoanInterestRateUiFromInputState(inputState)
+                loanInterestRateUi = getLoanInterestRateUiFromInputState(inputState),
+                initialLoanAmount = cachedLoanUi?.initialLoanAmount ?: checkNotNull(inputState.loanAmount.text?.toFloatOrNull())
             )
 
             saveLoanUseCase(loanUi)
