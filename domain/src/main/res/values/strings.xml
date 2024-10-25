@@ -6,10 +6,4 @@
     <string name="entertainment">Entertainment</string>
     <string name="housing">Housing</string>
     <string name="education">Education</string>
-
-    <string name="house">House</string>
-    <string name="car">Car</string>
-    <string name="personal">Personal</string>
-
-    <string name="other">Other</string>
 </resources>
