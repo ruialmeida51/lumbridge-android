@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.eyther.lumbridge.data.database.migration.V5ToV6Migration
 import com.eyther.lumbridge.data.database.room.LumbridgeRoomDatabase
 import dagger.Module
 import dagger.Provides
@@ -22,13 +23,15 @@ object LocalDataModule {
     @Provides
     @Singleton
     fun provideLumbridgeRoomDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        v5ToV6Migration: V5ToV6Migration
     ): LumbridgeRoomDatabase {
         return Room.databaseBuilder(
             context,
             LumbridgeRoomDatabase::class.java,
             "lumbridge_room_database"
         )
+            .addMigrations(v5ToV6Migration)
             .fallbackToDestructiveMigration()
             .build()
     }

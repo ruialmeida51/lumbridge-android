@@ -235,7 +235,7 @@ private fun ColumnScope.PaymentOverview(
                 .padding(top = DefaultPadding, bottom = QuarterPadding),
             text = stringResource(
                 id = R.string.breakdown_loans_paid_amount,
-                "${state.loanUi.currentLoanAmount.forceTwoDecimalsPlaces()}$currencySymbol",
+                "${state.loanUi.paidLoanAmount.forceTwoDecimalsPlaces()}$currencySymbol",
                 "${state.loanUi.initialLoanAmount.forceTwoDecimalsPlaces()}$currencySymbol"
             ),
             style = MaterialTheme.typography.labelMedium,

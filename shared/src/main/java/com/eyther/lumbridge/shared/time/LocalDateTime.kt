@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.time
+package com.eyther.lumbridge.shared.time
 
 import java.time.Instant
 import java.time.LocalDateTime

@@ -11,9 +11,7 @@ import com.eyther.lumbridge.data.datasource.loan.dao.LoanDao
 import com.eyther.lumbridge.data.datasource.news.dao.RssFeedDao
 import com.eyther.lumbridge.data.datasource.notes.dao.NotesDao
 import com.eyther.lumbridge.data.datasource.shopping.dao.ShoppingDao
-import com.eyther.lumbridge.data.model.expenses.entity.ExpensesCategoryEntity
-import com.eyther.lumbridge.data.model.expenses.entity.ExpensesDetailedEntity
-import com.eyther.lumbridge.data.model.expenses.entity.ExpensesMonthEntity
+import com.eyther.lumbridge.data.model.expenses.entity.ExpenseEntity
 import com.eyther.lumbridge.data.model.loan.entity.LoanEntity
 import com.eyther.lumbridge.data.model.news.entity.RssFeedEntity
 import com.eyther.lumbridge.data.model.notes.entity.NoteEntity
@@ -21,15 +19,13 @@ import com.eyther.lumbridge.data.model.shopping.entity.ShoppingListEntity
 
 @Database(
     entities = [
-        ExpensesMonthEntity::class,
-        ExpensesCategoryEntity::class,
-        ExpensesDetailedEntity::class,
+        ExpenseEntity::class,
         RssFeedEntity::class,
         ShoppingListEntity::class,
         NoteEntity::class,
         LoanEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 2, to = 3),

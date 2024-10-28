@@ -2,7 +2,7 @@ package com.eyther.lumbridge.domain.mapper.loan
 
 import com.eyther.lumbridge.data.model.loan.local.LoanCached
 import com.eyther.lumbridge.domain.model.loan.Loan
-import com.eyther.lumbridge.domain.time.toIsoLocalDateString
+import com.eyther.lumbridge.shared.time.toIsoLocalDateString
 
 fun Loan.toCached() = LoanCached(
     id = id,

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.eyther.lumbridge.features.expenses.screens
 
 import androidx.annotation.StringRes
@@ -5,16 +7,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -39,6 +45,8 @@ import com.eyther.lumbridge.features.expenses.viewmodel.edit.ExpensesEditScreenV
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.IExpensesEditScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
+import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
+import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
@@ -129,6 +137,22 @@ private fun ColumnScope.Content(
     viewModel: IExpensesEditScreenViewModel,
     shouldShowDialog: MutableState<Boolean>
 ) {
+    val selectableYears = viewModel.getMinSelectableYear()..viewModel.getMaxSelectableYear()
+    val isSelectableYear = { year: Int -> year in selectableYears }
+
+    val showDateDialog = remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState(
+        yearRange = selectableYears,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return true
+            }
+
+            override fun isSelectableYear(year: Int): Boolean {
+                return isSelectableYear(year)
+            }
+        }
+    )
 
     Text(
         modifier = Modifier
@@ -139,6 +163,20 @@ private fun ColumnScope.Content(
     )
 
     ColumnCardWrapper {
+        DateInput(
+            modifier = Modifier.fillMaxWidth(),
+            state = state.inputState.dateInput,
+            label = stringResource(id = R.string.date),
+            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
+            onClick = { showDateDialog.value = true }
+        )
+
+        LumbridgeDatePickerDialog(
+            showDialog = showDateDialog,
+            datePickerState = datePickerState,
+            onSaveDate = { viewModel.onDateChanged(it) }
+        )
+
         DropdownInput(
             label = stringResource(id = R.string.expenses_add_type),
             selectedOption = stringResource(state.inputState.categoryType.categoryRes),

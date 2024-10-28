@@ -4,6 +4,8 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenInputState
+import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.shared.time.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -50,7 +52,20 @@ class ExpensesEditScreenInputHandler @Inject constructor() : IExpensesEditScreen
     override fun onTypeChanged(typeOrdinal: Int?) {
         updateInput { state ->
             state.copy(
-                categoryType = ExpensesCategoryTypes.of(typeOrdinal ?: 0)
+                categoryType = ExpensesCategoryTypesUi.of(typeOrdinal ?: 0)
+            )
+        }
+    }
+
+    override fun onDateChanged(expenseDate: Long?) {
+        updateInput { state ->
+            state.copy(
+                dateInput = state.dateInput.copy(
+                    date = expenseDate?.toLocalDate(),
+                    error = expenseDate?.toString().getErrorOrNull(
+                        R.string.expenses_invalid_date
+                    )
+                )
             )
         }
     }

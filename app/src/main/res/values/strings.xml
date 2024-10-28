@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name_release">Lumbridge</string>
-    <string name="app_name_debug">Lumbridge Debug</string>
-    <string name="app_name_beta">Lumbridge Beta</string>
+    <string name="app_name_release">Loom</string>
+    <string name="app_name_debug">Loom Debug</string>
+    <string name="app_name_beta">Loom Beta</string>
 
     <string name="feed">Feed</string>
     <string name="feed_edit">Edit Feed</string>
@@ -111,11 +111,11 @@
     <string name="profile_support_feedback">Feedback &amp; Bug Report</string>
     <string name="profile_support_source_code">Source Code</string>
     <string name="profile_support_donate">Buy me a coffee!</string>
-    <string name="profile_support_donate_disclaimer">Donations are a great way to support Lumbridge, but they’re completely optional!\n\nDonating won’t unlock any special features or give you an edge, and not donating won’t hold you back either.\n\nWe’re just happy to have you using Lumbridge – thanks for being part of the community!</string>
-    <string name="profile_support_feedback_email_subject">Feedback on Lumbridge from %1$s</string>
-    <string name="profile_support_feedback_email_subject_no_name">Feedback on Lumbridge</string>
+    <string name="profile_support_donate_disclaimer">Donations are a great way to support Loom, but they’re completely optional!\n\nDonating won’t unlock any special features or give you an edge, and not donating won’t hold you back either.\n\nWe’re just happy to have you using Loom – thanks for being part of the community!</string>
+    <string name="profile_support_feedback_email_subject">Feedback on Loom from %1$s</string>
+    <string name="profile_support_feedback_email_subject_no_name">Feedback on Loom</string>
     <string name="profile_support_feedback_email_selector">Select an email client to send your feedback</string>
-    <string name="profile_support_feedback_email_body">Hi,\n\nI have some feedback on Lumbridge that I would like to share with you:\n\n</string>
+    <string name="profile_support_feedback_email_body">Hi,\n\nI have some feedback on Loom that I would like to share with you:\n\n</string>
     <string name="profile_support_feedback_email_error_no_clients">There are no email clients installed on your device. Please, install one and try again.</string>
     <string name="profile_support_feedback_email_error_sending">There was an error sending your feedback. Please, try again later.</string>
 
@@ -287,6 +287,16 @@
     <string name="house">House</string>
     <string name="car">Car</string>
     <string name="personal">Personal</string>
-    <string name="other">Other</string>
     <string name="mortgage">Mortgage</string>
+    <string name="food">Food</string>
+    <string name="transportation">Transportation</string>
+    <string name="healthcare">Healthcare</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="housing">Housing</string>
+    <string name="education">Education</string>
+    <string name="pets">Pets</string>
+    <string name="sports">Sports</string>
+    <string name="vacations">Vacations</string>
+    <string name="surplus">Surplus</string>
+    <string name="other">Other</string>
 </resources>

@@ -2,9 +2,10 @@ package com.eyther.lumbridge.features.expenses.viewmodel.add.delegate
 
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
-import com.eyther.lumbridge.domain.time.toLocalDate
+import com.eyther.lumbridge.shared.time.toLocalDate
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenInputState
+import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -65,7 +66,7 @@ class ExpensesAddScreenInputHandler @Inject constructor() : IExpensesAddScreenIn
     override fun onTypeChanged(typeOrdinal: Int?) {
         updateInput { state ->
             state.copy(
-                categoryType = ExpensesCategoryTypes.of(typeOrdinal ?: 0)
+                categoryType = ExpensesCategoryTypesUi.of(typeOrdinal ?: 0)
             )
         }
     }

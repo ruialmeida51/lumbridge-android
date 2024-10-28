@@ -1,23 +1,9 @@
 package com.eyther.lumbridge.domain.model.expenses
 
-import androidx.annotation.StringRes
-import com.eyther.lumbridge.domain.R
-
 sealed class ExpensesCategoryTypes(
-    @StringRes val categoryRes: Int,
     val ordinal: Int
 ) {
     companion object {
-        fun get() = listOf(
-            Food,
-            Transportation,
-            HealthCare,
-            Entertainment,
-            Housing,
-            Education,
-            Other
-        )
-
         fun of(ordinal: Int): ExpensesCategoryTypes {
             return when (ordinal) {
                 Food.ordinal -> Food
@@ -27,16 +13,24 @@ sealed class ExpensesCategoryTypes(
                 Housing.ordinal -> Housing
                 Education.ordinal -> Education
                 Other.ordinal -> Other
+                Pets.ordinal -> Pets
+                Sports.ordinal -> Sports
+                Vacations.ordinal -> Vacations
+                Surplus.ordinal -> Surplus
                 else -> throw IllegalArgumentException("💥 Unknown ordinal: $ordinal")
             }
         }
     }
 
-    data object Food : ExpensesCategoryTypes(R.string.food, 0)
-    data object Transportation : ExpensesCategoryTypes(R.string.transportation, 1)
-    data object HealthCare : ExpensesCategoryTypes(R.string.healthcare, 2)
-    data object Entertainment : ExpensesCategoryTypes(R.string.entertainment, 3)
-    data object Housing : ExpensesCategoryTypes(R.string.housing, 4)
-    data object Education : ExpensesCategoryTypes(R.string.education, 5)
-    data object Other : ExpensesCategoryTypes(R.string.other, 6)
+    data object Food : ExpensesCategoryTypes(0)
+    data object Transportation : ExpensesCategoryTypes(1)
+    data object HealthCare : ExpensesCategoryTypes(2)
+    data object Entertainment : ExpensesCategoryTypes(3)
+    data object Housing : ExpensesCategoryTypes(4)
+    data object Education : ExpensesCategoryTypes(5)
+    data object Other : ExpensesCategoryTypes(6)
+    data object Pets : ExpensesCategoryTypes(7)
+    data object Sports : ExpensesCategoryTypes(8)
+    data object Vacations : ExpensesCategoryTypes(9)
+    data object Surplus : ExpensesCategoryTypes(10)
 }

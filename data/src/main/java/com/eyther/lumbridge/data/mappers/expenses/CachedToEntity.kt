@@ -1,26 +1,11 @@
 package com.eyther.lumbridge.data.mappers.expenses
 
-import com.eyther.lumbridge.data.model.expenses.entity.ExpensesCategoryEntity
-import com.eyther.lumbridge.data.model.expenses.entity.ExpensesDetailedEntity
-import com.eyther.lumbridge.data.model.expenses.entity.ExpensesMonthEntity
-import com.eyther.lumbridge.data.model.expenses.local.ExpensesCategoryCached
-import com.eyther.lumbridge.data.model.expenses.local.ExpensesDetailedCached
-import com.eyther.lumbridge.data.model.expenses.local.ExpensesMonthCached
+import com.eyther.lumbridge.data.model.expenses.entity.ExpenseEntity
+import com.eyther.lumbridge.data.model.expenses.local.ExpenseCached
 
-fun ExpensesMonthCached.toEntity() = ExpensesMonthEntity(
-    month = month,
-    year = year,
-    day = day,
-    snapshotMonthlyNetSalary = snapshotMonthlyNetSalary
-)
-
-fun ExpensesCategoryCached.toEntity(parentMonthId: Long) = ExpensesCategoryEntity(
-    parentMonthId = parentMonthId,
-    categoryTypeOrdinal = categoryTypeOrdinal
-)
-
-fun ExpensesDetailedCached.toEntity(parentCategoryId: Long) = ExpensesDetailedEntity(
-    parentCategoryId = parentCategoryId,
-    expenseName = expenseName,
-    expenseAmount = expenseAmount
+fun ExpenseCached.toEntity() = ExpenseEntity(
+    categoryTypeOrdinal = categoryTypeOrdinal,
+    date = date,
+    amount = amount,
+    name = name
 )
