@@ -4,6 +4,7 @@ import com.eyther.lumbridge.data.model.snapshotsalary.local.SnapshotNetSalaryCac
 import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
 
 fun SnapshotNetSalaryDomain.toCached() = SnapshotNetSalaryCached(
+    snapshotId = snapshotId,
     year = year,
     month = month,
     amount = netSalary

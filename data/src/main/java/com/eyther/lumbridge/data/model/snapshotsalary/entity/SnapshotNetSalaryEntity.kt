@@ -13,7 +13,7 @@ const val SNAPSHOT_NET_SALARY_TABLE_NAME = "snapshot_net_salary"
     ]
 )
 data class SnapshotNetSalaryEntity(
-    @PrimaryKey(autoGenerate = true) val snapshotId: Long = -1,
+    @PrimaryKey(autoGenerate = true) val snapshotId: Long = 0,
     val amount: Float,
     val year: Int,
     val month: Int

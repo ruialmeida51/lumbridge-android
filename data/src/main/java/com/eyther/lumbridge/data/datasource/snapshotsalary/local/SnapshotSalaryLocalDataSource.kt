@@ -10,12 +10,11 @@ class SnapshotSalaryLocalDataSource @Inject constructor(
     private val snapshotSalaryDao: SnapshotSalaryDao
 ) {
     suspend fun saveSnapshotNetSalary(snapshotNetSalaryCached: SnapshotNetSalaryCached) {
-        val cachedSnapshotSalaryByYearMonth =
-            snapshotSalaryDao.getSnapshotNetSalaryByYearMonth(snapshotNetSalaryCached.year, snapshotNetSalaryCached.month)
-
-        if (cachedSnapshotSalaryByYearMonth != null) {
-            snapshotSalaryDao.updateSnapshotNetSalary(snapshotNetSalaryCached.toEntity()
-                .copy(snapshotId = cachedSnapshotSalaryByYearMonth.snapshotId))
+        if (snapshotNetSalaryCached.snapshotId != -1L) {
+            snapshotSalaryDao.updateSnapshotNetSalary(
+                snapshotNetSalaryCached.toEntity()
+                .copy(snapshotId = snapshotNetSalaryCached.snapshotId)
+            )
         } else {
             snapshotSalaryDao.insertSnapshotNetSalary(snapshotNetSalaryCached.toEntity())
         }

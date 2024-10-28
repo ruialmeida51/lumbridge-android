@@ -10,13 +10,10 @@ import com.eyther.lumbridge.domain.model.loan.LoanType
 import com.eyther.lumbridge.domain.repository.loan.LoanRepository
 import com.eyther.lumbridge.domain.repository.preferences.PreferencesRepository
 import com.eyther.lumbridge.domain.repository.snapshotsalary.SnapshotSalaryRepository
-import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalaryForDateUseCase
 import com.eyther.lumbridge.usecase.snapshotsalary.SaveSnapshotNetSalaryUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.time.LocalDate
 import javax.inject.Inject
 
 class DataStoreMigrationHelper @Inject constructor(
@@ -104,15 +101,10 @@ class DataStoreMigrationHelper @Inject constructor(
         if (snapshotSalaryRepository.getAllSnapshotNetSalaries().isEmpty()) {
             Log.d(TAG, "⏩ User financials found, but no snapshot salary found, adding first snapshot salary as current salary.")
 
-            val now = LocalDate.now()
             val netSalary = getNetSalaryUseCase(userFinancials)
 
             saveSnapshotNetSalaryUseCase(
-                SnapshotNetSalaryUi(
-                    year = now.year,
-                    month = now.monthValue,
-                    netSalary = netSalary.monthlyNetSalary
-                )
+                netSalary.monthlyNetSalary
             )
 
             Log.d(TAG, "✅ First snapshot salary migration completed successfully")
