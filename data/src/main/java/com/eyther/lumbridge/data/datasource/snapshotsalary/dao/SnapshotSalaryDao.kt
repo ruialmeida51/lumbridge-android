@@ -7,9 +7,14 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.eyther.lumbridge.data.model.snapshotsalary.entity.SNAPSHOT_NET_SALARY_TABLE_NAME
 import com.eyther.lumbridge.data.model.snapshotsalary.entity.SnapshotNetSalaryEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SnapshotSalaryDao {
+    @Transaction
+    @Query("SELECT * FROM $SNAPSHOT_NET_SALARY_TABLE_NAME")
+    fun getSnapshotNetSalariesFlow(): Flow<List<SnapshotNetSalaryEntity>>
+
     @Transaction
     @Insert
     suspend fun insertSnapshotNetSalary(snapshotNetSalaryEntity: SnapshotNetSalaryEntity): Long
