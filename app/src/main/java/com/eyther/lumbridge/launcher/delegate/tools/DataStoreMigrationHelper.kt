@@ -9,13 +9,24 @@ import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
 import com.eyther.lumbridge.domain.model.loan.LoanType
 import com.eyther.lumbridge.domain.repository.loan.LoanRepository
 import com.eyther.lumbridge.domain.repository.preferences.PreferencesRepository
+import com.eyther.lumbridge.domain.repository.snapshotsalary.SnapshotSalaryRepository
+import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
+import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalaryForDateUseCase
+import com.eyther.lumbridge.usecase.snapshotsalary.SaveSnapshotNetSalaryUseCase
+import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.LocalDate
 import javax.inject.Inject
 
 class DataStoreMigrationHelper @Inject constructor(
     @ApplicationContext private val context: Context,
     private val loanRepository: LoanRepository,
-    private val appSettingsRepository: PreferencesRepository
+    private val getUserFinancials: GetUserFinancials,
+    private val getNetSalaryUseCase: GetNetSalaryUseCase,
+    private val saveSnapshotNetSalaryUseCase: SaveSnapshotNetSalaryUseCase,
+    private val appSettingsRepository: PreferencesRepository,
+    private val snapshotSalaryRepository: SnapshotSalaryRepository
 ) {
 
     companion object {
@@ -31,11 +42,11 @@ class DataStoreMigrationHelper @Inject constructor(
      * We only allow one mortgage at a time, and it was always a house mortgage. There was also no option to choose
      * TAEG for fixed mortgages, so we can safely assume that all fixed mortgages were TAN.
      */
-    suspend fun tryMigrateMortgage() {
+    suspend fun tryMigrateMortgage() = kotlin.runCatching {
         // If the migration has already been completed, we can skip this step
         if (appSettingsRepository.getCompletedMortgageMigration()) {
             Log.d(TAG, "⏩ Mortgage migration has already been completed")
-            return
+            return@runCatching
         }
 
         val currentMortgage = loanRepository.getMortgageLoan()
@@ -45,7 +56,7 @@ class DataStoreMigrationHelper @Inject constructor(
         if (currentMortgage == null) {
             Log.d(TAG, "⏩ No mortgage found, skipping migration")
             appSettingsRepository.saveCompletedMortgageMigration()
-            return
+            return@runCatching
         }
 
         val loanType = if (currentMortgage.euribor != null && currentMortgage.spread != null) {
@@ -75,5 +86,40 @@ class DataStoreMigrationHelper @Inject constructor(
         appSettingsRepository.saveCompletedMortgageMigration()
 
         Log.d(TAG, "✅ Mortgage migration completed successfully")
+    }
+
+    suspend fun tryMigrateFirstSnapshotSalary() = kotlin.runCatching {
+        if (appSettingsRepository.getCompletedNetSalarySnapshotMigration()) {
+            Log.d(TAG, "⏩ First snapshot salary migration has already been completed")
+            return@runCatching
+        }
+
+        val userFinancials = getUserFinancials()
+
+        if (userFinancials == null) {
+            Log.d(TAG, "⏩ No user financials found, skipping migration. These will be created when the user fills this data.")
+            return@runCatching
+        }
+
+        if (snapshotSalaryRepository.getAllSnapshotNetSalaries().isEmpty()) {
+            Log.d(TAG, "⏩ User financials found, but no snapshot salary found, adding first snapshot salary as current salary.")
+
+            val now = LocalDate.now()
+            val netSalary = getNetSalaryUseCase(userFinancials)
+
+            saveSnapshotNetSalaryUseCase(
+                SnapshotNetSalaryUi(
+                    year = now.year,
+                    month = now.monthValue,
+                    netSalary = netSalary.monthlyNetSalary
+                )
+            )
+
+            Log.d(TAG, "✅ First snapshot salary migration completed successfully")
+        } else {
+            Log.d(TAG, "⏩ User financials found, but snapshot salary already exists, skipping migration.")
+        }
+
+        appSettingsRepository.saveCompletedNetSalarySnapshotMigration()
     }
 }

@@ -68,6 +68,12 @@ object LocalDataModule {
 
     @Provides
     @Singleton
+    fun provideSnapshotSalaryDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.snapshotSalaryDao()
+
+    @Provides
+    @Singleton
     @UserProfileDataSource
     fun provideUserProfileDataStore(
         @ApplicationContext context: Context

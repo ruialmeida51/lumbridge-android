@@ -651,6 +651,11 @@ private fun CategoriesCard(
 ) {
     Column {
         expensesCategories.forEach { category ->
+            val mathOperatorString = when (category.categoryType.operator) {
+                MathOperator.ADDITION -> "+"
+                MathOperator.SUBTRACTION -> ""
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -677,7 +682,7 @@ private fun CategoriesCard(
                         )
                     },
                     label = stringResource(category.categoryType.categoryRes),
-                    text = "${category.spent.forceTwoDecimalsPlaces()}$currencySymbol"
+                    text = "$mathOperatorString${category.spent.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
 
             }
@@ -687,7 +692,7 @@ private fun CategoriesCard(
             ) {
                 DetailsCard(
                     expensesDetailed = category.expensesDetailedUi,
-                    mathOperator = category.categoryType.operator,
+                    mathOperatorString = mathOperatorString,
                     currencySymbol = currencySymbol,
                     onEditExpense = onEditExpense
                 )
@@ -699,15 +704,10 @@ private fun CategoriesCard(
 @Composable
 private fun DetailsCard(
     expensesDetailed: List<ExpensesDetailedUi>,
-    mathOperator: MathOperator,
+    mathOperatorString: String,
     currencySymbol: String,
     onEditExpense: (ExpensesDetailedUi) -> Unit
 ) {
-    val getMathOperatorString = when (mathOperator) {
-        MathOperator.ADDITION -> "+"
-        MathOperator.SUBTRACTION -> ""
-    }
-
     Column {
         expensesDetailed.forEach { detail ->
             Row(
@@ -734,7 +734,7 @@ private fun DetailsCard(
                             contentDescription = stringResource(id = R.string.edit)
                         )
                     },
-                    text = "$getMathOperatorString${detail.expenseAmount.forceTwoDecimalsPlaces()}$currencySymbol"
+                    text = "$mathOperatorString${detail.expenseAmount.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
 
                 Spacer(modifier = Modifier.width(HalfPadding))

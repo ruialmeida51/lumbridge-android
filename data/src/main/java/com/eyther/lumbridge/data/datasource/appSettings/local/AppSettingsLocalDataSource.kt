@@ -24,6 +24,7 @@ class AppSettingsLocalDataSource @Inject constructor(
         val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
         val APP_LANGUAGE_COUNTRY_CODE = stringPreferencesKey("app_language_country_code")
         val COMPLETED_MORTGAGE_MIGRATION = booleanPreferencesKey("completed_mortgage_migration")
+        val COMPLETED_NET_SALARY_SNAPSHOT_MIGRATION = booleanPreferencesKey("completed_net_salary_snapshot_migration")
         val PROMPTED_ALLOW_NOTIFICATIONS = booleanPreferencesKey("prompted_allow_notifications")
     }
 
@@ -40,18 +41,24 @@ class AppSettingsLocalDataSource @Inject constructor(
             val isDarkMode = preferences[IS_DARK_MODE] ?: return@map null
             val appLanguageCountryCode = preferences[APP_LANGUAGE_COUNTRY_CODE] ?: return@map null
             val completedMortgageMigration = preferences[PreferencesKeys.COMPLETED_MORTGAGE_MIGRATION] ?: false
+            val completedNetSalarySnapshotMigration = preferences[PreferencesKeys.COMPLETED_NET_SALARY_SNAPSHOT_MIGRATION] ?: false
             val promptedAllowNotifications = preferences[PreferencesKeys.PROMPTED_ALLOW_NOTIFICATIONS] ?: false
 
             AppSettings(
                 isDarkMode = isDarkMode,
                 appLanguageCountryCode = appLanguageCountryCode,
                 completedMortgageMigration = completedMortgageMigration,
+                completedNetSalarySnapshotMigration = completedNetSalarySnapshotMigration,
                 promptedAllowNotifications = promptedAllowNotifications
             )
         }
 
     suspend fun getCompletedMortgageMigration(): Boolean {
         return appSettingsFlow.map { it?.completedMortgageMigration ?: false }.first()
+    }
+
+    suspend fun getCompletedNetSalarySnapshotMigration(): Boolean {
+        return appSettingsFlow.map { it?.completedNetSalarySnapshotMigration ?: false }.first()
     }
 
     suspend fun saveAppSettings(appSettings: AppSettings) {
@@ -70,6 +77,12 @@ class AppSettingsLocalDataSource @Inject constructor(
     suspend fun savePromptedAllowNotifications(prompted: Boolean) {
         appSettingsDataStore.edit { preferences ->
             preferences[PreferencesKeys.PROMPTED_ALLOW_NOTIFICATIONS] = prompted
+        }
+    }
+
+    suspend fun saveCompletedNetSalarySnapshotMigration(completed: Boolean) {
+        appSettingsDataStore.edit { preferences ->
+            preferences[PreferencesKeys.COMPLETED_NET_SALARY_SNAPSHOT_MIGRATION] = completed
         }
     }
 }

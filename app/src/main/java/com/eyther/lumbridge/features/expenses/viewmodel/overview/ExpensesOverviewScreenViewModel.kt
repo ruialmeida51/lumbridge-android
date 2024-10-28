@@ -18,7 +18,6 @@ import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.Expens
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenFilterDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenSortByDelegate
 import com.eyther.lumbridge.model.expenses.ExpenseUi
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
@@ -28,7 +27,7 @@ import com.eyther.lumbridge.ui.common.model.math.MathOperator
 import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.finance.GetSnapshotSalaryUseCase
+import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalaryForDateUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,7 +51,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     private val deleteExpensesListUseCase: DeleteExpensesListUseCase,
     private val getNetSalaryUseCase: GetNetSalaryUseCase,
     private val getUserFinancialsStreamUseCase: GetUserFinancialsFlow,
-    private val getSnapshotSalaryUseCase: GetSnapshotSalaryUseCase,
+    private val getSnapshotNetSalaryForDateUseCase: GetSnapshotNetSalaryForDateUseCase,
     private val sortByDelegate: ExpensesOverviewScreenSortByDelegate,
     private val filterDelegate: ExpensesOverviewScreenFilterDelegate,
     private val schedulers: Schedulers
@@ -441,9 +440,9 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                     .filter { it.categoryType.operator == MathOperator.ADDITION }
                     .sumOf { it.expenseAmount.toDouble() }.toFloat()
 
-                val snapshotSalary = getSnapshotSalaryUseCase(
-                    year = Year.of(yearMonth.first),
-                    month = yearMonth.second
+                val snapshotSalary = getSnapshotNetSalaryForDateUseCase(
+                    year = yearMonth.first,
+                    month = yearMonth.second.value
                 )
 
                 ExpensesMonthUi(
