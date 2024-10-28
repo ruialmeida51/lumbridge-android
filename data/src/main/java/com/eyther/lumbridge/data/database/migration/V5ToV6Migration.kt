@@ -27,6 +27,13 @@ class V5ToV6Migration @Inject constructor() : Migration(5, 6) {
 
         db.execSQL(
             """
+            CREATE UNIQUE INDEX IF NOT EXISTS index_snapshot_net_salary_month_year ON snapshot_net_salary (month ASC, year ASC)
+            """
+        );
+
+
+        db.execSQL(
+            """
         CREATE TABLE IF NOT EXISTS $EXPENSES_TABLE_NAME (
             expenseId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             categoryTypeOrdinal INTEGER NOT NULL,
