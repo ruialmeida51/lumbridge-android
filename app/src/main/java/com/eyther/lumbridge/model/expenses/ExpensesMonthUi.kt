@@ -1,21 +1,19 @@
 package com.eyther.lumbridge.model.expenses
 
-import com.eyther.lumbridge.domain.time.toLocalDate
-import com.eyther.lumbridge.domain.time.toMonthYearDateString
 import com.eyther.lumbridge.extensions.kotlin.capitalise
+import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.toMonthYearDateString
 import java.time.Month
 import java.time.Year
 
 data class ExpensesMonthUi(
-    val id: Long = 0,
+    val categoryExpenses: List<ExpensesCategoryUi>,
+    val snapshotMonthlyNetSalary: Float = 0f,
     val month: Month,
     val year: Year,
-    val day: Int,
-    val snapshotMonthlyNetSalary: Float = 0f,
     val spent: Float = -1f,
     val remainder: Float = -1f,
-    val expanded: Boolean = false,
-    val categoryExpenses: List<ExpensesCategoryUi>
+    val expanded: Boolean = false
 ) {
 
     fun getDateWithLocale(): String {

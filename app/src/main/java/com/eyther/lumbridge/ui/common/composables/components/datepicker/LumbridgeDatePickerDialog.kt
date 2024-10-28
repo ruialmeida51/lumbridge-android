@@ -25,7 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.domain.time.toLocalDate
+import com.eyther.lumbridge.shared.time.toLocalDate
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState

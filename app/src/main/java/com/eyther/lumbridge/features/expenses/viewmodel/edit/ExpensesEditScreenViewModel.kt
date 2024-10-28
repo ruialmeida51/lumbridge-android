@@ -4,18 +4,17 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewState
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_EXPENSE_ID
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.ExpensesEditScreenInputHandler
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.IExpensesEditScreenInputHandler
-import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
-import com.eyther.lumbridge.usecase.expenses.DeleteDetailedExpenseUseCase
-import com.eyther.lumbridge.usecase.expenses.GetDetailedExpenseUseCase
-import com.eyther.lumbridge.usecase.expenses.GetExpenseCategoryTypeUseCase
-import com.eyther.lumbridge.usecase.expenses.UpdateDetailedExpenseUseCase
+import com.eyther.lumbridge.model.expenses.ExpenseUi
+import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.usecase.expenses.DeleteExpenseUseCase
+import com.eyther.lumbridge.usecase.expenses.GetExpenseByIdUseCase
+import com.eyther.lumbridge.usecase.expenses.UpdateExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,25 +23,30 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Year
 import javax.inject.Inject
 
 @HiltViewModel
 class ExpensesEditScreenViewModel @Inject constructor(
-    private val deleteDetailedExpenseUseCase: DeleteDetailedExpenseUseCase,
-    private val getDetailedExpenseUseCase: GetDetailedExpenseUseCase,
-    private val getExpenseCategoryTypeUseCase: GetExpenseCategoryTypeUseCase,
-    private val updateDetailedExpenseUseCase: UpdateDetailedExpenseUseCase,
+    private val deleteExpenseUseCase: DeleteExpenseUseCase,
+    private val getExpenseByIdUseCase: GetExpenseByIdUseCase,
+    private val updateExpenseUseCase: UpdateExpenseUseCase,
     private val expensesEditScreenInputHandler: ExpensesEditScreenInputHandler,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
     IExpensesEditScreenViewModel,
     IExpensesEditScreenInputHandler by expensesEditScreenInputHandler {
 
-    private val detailedExpenseId = checkNotNull(savedStateHandle.get<Long>(ARG_EXPENSE_ID)) {
-        "Detailed expense ID is null"
+    companion object {
+        private const val MAX_YEARS_AHEAD = 5
+        private const val MAX_YEARS_BEFORE = 5
     }
 
-    private var cachedExpense: ExpensesDetailedUi? = null
+    private val expenseId = checkNotNull(savedStateHandle.get<Long>(ARG_EXPENSE_ID)) {
+        "Expense ID is null"
+    }
+
+    private var cachedExpense: ExpenseUi? = null
 
     override val viewState: MutableStateFlow<ExpensesEditScreenViewState> =
         MutableStateFlow(ExpensesEditScreenViewState.Loading)
@@ -56,19 +60,23 @@ class ExpensesEditScreenViewModel @Inject constructor(
 
     private fun fetchExpensesDetailData() {
         viewModelScope.launch {
-            cachedExpense = getDetailedExpenseUseCase(detailedExpenseId)
-            val cachedCategory = getExpenseCategoryTypeUseCase(cachedExpense!!.parentCategoryId)
+            val expense = getExpenseByIdUseCase(expenseId).also {
+                cachedExpense = it
+            }
 
             updateInput { state ->
                 state.copy(
                     expenseName = state.expenseName.copy(
-                        text = cachedExpense?.expenseName
+                        text = expense?.expenseName
                     ),
                     expenseAmount = state.expenseAmount.copy(
-                        text = cachedExpense?.expenseAmount?.twoDecimalPlaces()
+                        text = expense?.expenseAmount?.twoDecimalPlaces()
                     ),
-                    categoryType = ExpensesCategoryTypes.of(
-                        ordinal = cachedCategory.ordinal
+                    categoryType = ExpensesCategoryTypesUi.of(
+                        ordinal = expense?.categoryType?.ordinal ?: 0
+                    ),
+                    dateInput = state.dateInput.copy(
+                        date = expense?.date
                     )
                 )
             }
@@ -79,7 +87,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
                         ExpensesEditScreenViewState.Content(
                             shouldEnableSaveButton = shouldEnableSaveButton(inputState),
                             inputState = inputState,
-                            availableCategories = ExpensesCategoryTypes.get()
+                            availableCategories = ExpensesCategoryTypesUi.get()
                         )
                     }
                 }.launchIn(this)
@@ -96,7 +104,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            deleteDetailedExpenseUseCase(detailedExpenseId)
+            deleteExpenseUseCase(expenseId)
             viewEffects.emit(ExpensesEditScreenViewEffect.Finish)
         }
     }
@@ -111,15 +119,25 @@ class ExpensesEditScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            updateDetailedExpenseUseCase(
-                expensesDetailedUi = cachedExpense!!.copy(
-                    expenseName = inputState.value.expenseName.text.orEmpty(),
-                    expenseAmount = inputState.value.expenseAmount.text?.toFloat() ?: 0f
-                ),
-                categoryType = inputState.value.categoryType
+            updateExpenseUseCase(
+                ExpenseUi(
+                    id = expenseId,
+                    categoryType = inputState.value.categoryType,
+                    expenseAmount = checkNotNull(inputState.value.expenseAmount.text?.toFloat()),
+                    expenseName = checkNotNull(inputState.value.expenseName.text),
+                    date = checkNotNull(inputState.value.dateInput.date)
+                )
             )
 
             viewEffects.emit(ExpensesEditScreenViewEffect.Finish)
         }
+    }
+
+    override fun getMaxSelectableYear(): Int {
+        return Year.now().plusYears(MAX_YEARS_AHEAD.toLong()).value
+    }
+
+    override fun getMinSelectableYear(): Int {
+        return Year.now().minusYears(MAX_YEARS_BEFORE.toLong()).value
     }
 }

@@ -2,9 +2,13 @@ package com.eyther.lumbridge.data.database.converters
 
 import androidx.room.TypeConverter
 import com.eyther.lumbridge.data.model.shopping.entity.ShoppingListEntryEntity
+import com.eyther.lumbridge.shared.time.parseToISOZonedLocalDateTime
+import com.eyther.lumbridge.shared.time.toIsoLocalDateString
+import com.eyther.lumbridge.shared.time.toLocalDate
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
+import java.time.LocalDate
 
 class RoomConverters {
     /**
@@ -23,5 +27,15 @@ class RoomConverters {
     @TypeConverter
     fun fromShoppingListEntryToString(list: ArrayList<ShoppingListEntryEntity?>?): String {
         return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun fromStringToLocalDate(value: String): LocalDate {
+        return value.toLocalDate()
+    }
+
+    @TypeConverter
+    fun fromLocalDateToString(date: LocalDate): String {
+        return date.toIsoLocalDateString()
     }
 }

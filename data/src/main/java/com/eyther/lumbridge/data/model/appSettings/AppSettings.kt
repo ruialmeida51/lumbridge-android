@@ -4,5 +4,6 @@ data class AppSettings(
     val isDarkMode: Boolean,
     val appLanguageCountryCode: String,
     val completedMortgageMigration: Boolean = false,
+    val completedNetSalarySnapshotMigration: Boolean = false,
     val promptedAllowNotifications: Boolean = false,
 )

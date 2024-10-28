@@ -53,11 +53,19 @@ class PreferencesRepository @Inject constructor(
         appSettingsLocalDataSource.getCompletedMortgageMigration()
     }
 
+    suspend fun getCompletedNetSalarySnapshotMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.getCompletedNetSalarySnapshotMigration()
+    }
+
     suspend fun savePromptedAllowNotifications() = withContext(schedulers.io) {
         appSettingsLocalDataSource.savePromptedAllowNotifications(true)
     }
 
     suspend fun saveCompletedMortgageMigration() = withContext(schedulers.io) {
         appSettingsLocalDataSource.saveCompletedMortgageMigration(true)
+    }
+
+    suspend fun saveCompletedNetSalarySnapshotMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.saveCompletedNetSalarySnapshotMigration(true)
     }
 }

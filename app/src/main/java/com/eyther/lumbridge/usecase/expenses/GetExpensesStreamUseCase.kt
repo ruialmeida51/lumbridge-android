@@ -2,39 +2,19 @@ package com.eyther.lumbridge.usecase.expenses
 
 import com.eyther.lumbridge.domain.repository.expenses.ExpensesRepository
 import com.eyther.lumbridge.mapper.expenses.toUi
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
-import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.model.user.UserFinancialsUi
-import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
+import com.eyther.lumbridge.model.expenses.ExpenseUi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetExpensesStreamUseCase @Inject constructor(
-    private val expensesRepository: ExpensesRepository,
-    private val getNetSalaryUseCase: GetNetSalaryUseCase,
-    private val getUserFinancialsStream: GetUserFinancialsFlow
+    private val expensesRepository: ExpensesRepository
 ) {
-    private var cachedFinancials: UserFinancialsUi? = null
-    private var cachedNetSalary: NetSalaryUi? = null
-
-    suspend operator fun invoke(): Flow<Pair<NetSalaryUi?, List<ExpensesMonthUi>>> {
-        return combine(
-            expensesRepository.getExpensesFlow(),
-            getUserFinancialsStream()
-        ) { expensesList, userFinancials ->
-            expensesList to userFinancials
-        }
-            .map { (expensesList, userFinancials) ->
-                if (userFinancials != null && userFinancials != cachedFinancials) {
-                    cachedFinancials = userFinancials
-                    cachedNetSalary = getNetSalaryUseCase(userFinancials)
-                }
-
-                cachedNetSalary to expensesList
-                    .map { expense -> expense.toUi(cachedNetSalary) }
+    operator fun invoke(): Flow<List<ExpenseUi>> {
+        return expensesRepository.expensesFlow
+            .map { expensesList ->
+                expensesList
+                    .map { expense -> expense.toUi() }
             }
     }
 }

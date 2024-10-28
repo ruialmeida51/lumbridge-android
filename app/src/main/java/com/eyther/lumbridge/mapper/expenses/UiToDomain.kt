@@ -1,33 +1,28 @@
 package com.eyther.lumbridge.mapper.expenses
 
-import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryDomain
-import com.eyther.lumbridge.domain.model.expenses.ExpensesDetailedDomain
-import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthDomain
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
-import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
+import com.eyther.lumbridge.model.expenses.ExpenseUi
+import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 
-fun ExpensesMonthUi.toDomain(): ExpensesMonthDomain {
-    return ExpensesMonthDomain(
-        id = id,
-        month = month,
-        year = year,
-        day = day,
-        snapshotMonthlyNetSalary = snapshotMonthlyNetSalary,
-        categoryExpenses = categoryExpenses.map { it.toDomain() }
-    )
-}
-
-fun ExpensesCategoryUi.toDomain() = ExpensesCategoryDomain(
+fun ExpenseUi.toDomain() = ExpenseDomain(
     id = id,
-    parentMonthId = parentMonthId,
-    categoryType = categoryType,
-    detailedExpenses = expensesDetailedUi.map { it.toDomain() }
-)
-
-fun ExpensesDetailedUi.toDomain() = ExpensesDetailedDomain(
-    id = id,
-    parentCategoryId = parentCategoryId,
+    categoryType = categoryType.toDomain(),
     expenseName = expenseName,
-    expenseAmount = expenseAmount
+    expenseAmount = expenseAmount,
+    date = date
 )
+
+fun ExpensesCategoryTypesUi.toDomain() = when (this) {
+    ExpensesCategoryTypesUi.Food -> ExpensesCategoryTypes.Food
+    ExpensesCategoryTypesUi.Transportation -> ExpensesCategoryTypes.Transportation
+    ExpensesCategoryTypesUi.HealthCare -> ExpensesCategoryTypes.HealthCare
+    ExpensesCategoryTypesUi.Entertainment -> ExpensesCategoryTypes.Entertainment
+    ExpensesCategoryTypesUi.Housing -> ExpensesCategoryTypes.Housing
+    ExpensesCategoryTypesUi.Education -> ExpensesCategoryTypes.Education
+    ExpensesCategoryTypesUi.Other -> ExpensesCategoryTypes.Other
+    ExpensesCategoryTypesUi.Pets -> ExpensesCategoryTypes.Pets
+    ExpensesCategoryTypesUi.Sports -> ExpensesCategoryTypes.Sports
+    ExpensesCategoryTypesUi.Vacations -> ExpensesCategoryTypes.Vacations
+    ExpensesCategoryTypesUi.Surplus -> ExpensesCategoryTypes.Surplus
+}

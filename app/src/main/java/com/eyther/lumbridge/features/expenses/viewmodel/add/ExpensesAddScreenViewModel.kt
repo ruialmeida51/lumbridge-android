@@ -8,6 +8,8 @@ import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewEff
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewState
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.ExpensesAddScreenInputHandler
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.IExpensesAddScreenInputHandler
+import com.eyther.lumbridge.model.expenses.ExpenseUi
+import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -44,7 +46,7 @@ class ExpensesAddScreenViewModel @Inject constructor(
             viewState.update {
                 ExpensesAddScreenViewState.Content(
                     inputState = expensesAddScreenInputHandler.inputState.value,
-                    availableCategories = ExpensesCategoryTypes.get(),
+                    availableCategories = ExpensesCategoryTypesUi.get(),
                     shouldEnableSaveButton = false
                 )
             }
@@ -85,12 +87,13 @@ class ExpensesAddScreenViewModel @Inject constructor(
             val inputState = viewState.value.asContent().inputState
 
             saveExpenseUseCase(
-                month = inputState.dateInput.date?.month!!,
-                year = Year.of(inputState.dateInput.date.year),
-                day = inputState.dateInput.date.dayOfMonth,
-                name = inputState.nameInput.text.orEmpty(),
-                amount = inputState.amountInput.text?.toFloat() ?: 0f,
-                type = inputState.categoryType
+                ExpenseUi(
+                    categoryType = inputState.categoryType,
+                    expenseAmount = checkNotNull(inputState.amountInput.text?.toFloat()),
+                    expenseName = checkNotNull(inputState.nameInput.text),
+                    date = checkNotNull(inputState.dateInput.date)
+
+                )
             )
 
             viewEffects.emit(ExpensesAddScreenViewEffect.Finish)

@@ -5,7 +5,7 @@ import com.eyther.lumbridge.domain.model.loan.LoanAmortization
 import com.eyther.lumbridge.domain.model.loan.LoanCalculation
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
 import com.eyther.lumbridge.domain.repository.loan.LoanCalculator
-import com.eyther.lumbridge.domain.time.MONTHS_IN_YEAR
+import com.eyther.lumbridge.shared.time.MONTHS_IN_YEAR
 import javax.inject.Inject
 import kotlin.math.pow
 

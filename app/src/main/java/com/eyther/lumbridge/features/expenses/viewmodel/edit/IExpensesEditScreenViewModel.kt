@@ -19,4 +19,14 @@ interface IExpensesEditScreenViewModel : IExpensesEditScreenInputHandler {
      * Save the expense with the given name and amount.
      */
     fun save()
+
+    /**
+     * @return the max selectable year that an expense can be added for.
+     */
+    fun getMaxSelectableYear(): Int
+
+    /**
+     * @return the min selectable year that an expense can be added for.
+     */
+    fun getMinSelectableYear(): Int
 }

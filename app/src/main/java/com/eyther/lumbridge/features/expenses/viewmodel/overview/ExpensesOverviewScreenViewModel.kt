@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.extensions.platform.navigateWithArgs
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
@@ -17,12 +17,18 @@ import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.Expens
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.ExpensesOverviewScreenSortByDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenFilterDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenSortByDelegate
+import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.usecase.expenses.DeleteMonthExpenseUseCase
+import com.eyther.lumbridge.shared.di.model.Schedulers
+import com.eyther.lumbridge.ui.common.model.math.MathOperator
+import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
+import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalaryForDateUseCase
+import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -35,13 +41,17 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Year
 import javax.inject.Inject
 
 @HiltViewModel
 class ExpensesOverviewScreenViewModel @Inject constructor(
     private val getExpensesStreamUseCase: GetExpensesStreamUseCase,
     private val getLocaleOrDefaultStream: GetLocaleOrDefaultStream,
-    private val deleteMonthExpenseUseCase: DeleteMonthExpenseUseCase,
+    private val deleteExpensesListUseCase: DeleteExpensesListUseCase,
+    private val getNetSalaryUseCase: GetNetSalaryUseCase,
+    private val getUserFinancialsStreamUseCase: GetUserFinancialsFlow,
+    private val getSnapshotNetSalaryForDateUseCase: GetSnapshotNetSalaryForDateUseCase,
     private val sortByDelegate: ExpensesOverviewScreenSortByDelegate,
     private val filterDelegate: ExpensesOverviewScreenFilterDelegate,
     private val schedulers: Schedulers
@@ -56,7 +66,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
          */
         private data class ExpensesStreamData(
             val netSalaryUi: NetSalaryUi?,
-            val expenses: List<ExpensesMonthUi>,
+            val expenses: List<ExpenseUi>,
             val locale: SupportedLocales,
             val sortBy: ExpensesOverviewSortBy,
             val filter: ExpensesOverviewFilter
@@ -83,15 +93,16 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         }
     }
 
-    private suspend fun observeExpenses() {
+    private fun observeExpenses() {
         combine(
             getExpensesStreamUseCase(),
             getLocaleOrDefaultStream(),
+            getUserFinancialsStreamUseCase(),
             sortBy,
             filter
-        ) { (netSalaryUi, expenses), locale, sortBy, filter ->
+        ) { expenses, locale, userFinancials, sortBy, filter ->
             ExpensesStreamData(
-                netSalaryUi = netSalaryUi,
+                netSalaryUi = userFinancials?.let { getNetSalaryUseCase(it) },
                 expenses = expenses,
                 locale = locale,
                 sortBy = sortBy,
@@ -110,7 +121,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                         )
                     } else {
                         getContentState(
-                            monthlyExpenses = streamData.expenses,
+                            monthlyExpenses = streamData.expenses.createExpensesPerMonth(),
                             netSalaryUi = streamData.netSalaryUi,
                             locale = streamData.locale,
                             sortBy = streamData.sortBy,
@@ -168,7 +179,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
     override fun onDeleteExpense(expensesMonth: ExpensesMonthUi) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesOverviewScreenViewModel::class.java.simpleName, "💥 Error deleting expense", throwable)
+            Log.e(ExpensesOverviewScreenViewModel::class.java.simpleName, "💥 Error deleting expenses", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(ExpensesOverviewScreenViewEffect.ShowError(throwable.message.orEmpty()))
@@ -176,7 +187,12 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(schedulers.io + exceptionHandler) {
-            deleteMonthExpenseUseCase(expensesMonth)
+            val expensesIdToDelete = expensesMonth.categoryExpenses
+                .flatMap { category ->
+                    category.expensesDetailedUi.map { detail -> detail.id }
+                }
+
+            deleteExpensesListUseCase(expensesIdToDelete)
         }
     }
 
@@ -184,9 +200,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         navController: NavHostController,
         expensesDetailed: ExpensesDetailedUi
     ) {
-        navController.navigate(
-            ExpensesNavigationItem.EditExpense.buildRouteWithArgs(expensesDetailed.id)
-        )
+        navController.navigateWithArgs(ExpensesNavigationItem.EditExpense, expensesDetailed.id)
     }
 
     /**
@@ -414,4 +428,54 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             )
         }
     }
+
+    private suspend fun List<ExpenseUi>.createExpensesPerMonth(): List<ExpensesMonthUi> {
+        return groupBy { it.date.year to it.date.month }
+            .map { (yearMonth, expenses) ->
+                val spent = expenses
+                    .filter { it.categoryType.operator == MathOperator.SUBTRACTION }
+                    .sumOf { it.expenseAmount.toDouble() }.toFloat()
+
+                val gained = expenses
+                    .filter { it.categoryType.operator == MathOperator.ADDITION }
+                    .sumOf { it.expenseAmount.toDouble() }.toFloat()
+
+                val snapshotSalary = getSnapshotNetSalaryForDateUseCase(
+                    year = yearMonth.first,
+                    month = yearMonth.second.value
+                )
+
+                ExpensesMonthUi(
+                    month = yearMonth.second,
+                    year = Year.of(yearMonth.first),
+                    spent = spent,
+                    expanded = false,
+                    remainder = snapshotSalary - spent + gained,
+                    snapshotMonthlyNetSalary = snapshotSalary,
+                    categoryExpenses = expenses.toCategoryExpenses()
+                )
+            }
+    }
+
+    private fun List<ExpenseUi>.toCategoryExpenses() =
+        groupBy { it.categoryType }
+            .map { (type, expenses) ->
+                val categoryExpenseSpent = expenses.sumOf { it.expenseAmount.toDouble() }.toFloat()
+
+                ExpensesCategoryUi(
+                    categoryType = type,
+                    spent = categoryExpenseSpent,
+                    expensesDetailedUi = expenses.toDetailedExpense()
+                )
+            }
+
+    private fun List<ExpenseUi>.toDetailedExpense() = map {
+        ExpensesDetailedUi(
+            id = it.id,
+            date = it.date,
+            expenseAmount = it.expenseAmount,
+            expenseName = it.expenseName
+        )
+    }
+
 }

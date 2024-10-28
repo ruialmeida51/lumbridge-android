@@ -1,31 +1,12 @@
 package com.eyther.lumbridge.domain.mapper.expenses
 
-import com.eyther.lumbridge.data.model.expenses.local.ExpensesCategoryCached
-import com.eyther.lumbridge.data.model.expenses.local.ExpensesDetailedCached
-import com.eyther.lumbridge.data.model.expenses.local.ExpensesMonthCached
-import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryDomain
-import com.eyther.lumbridge.domain.model.expenses.ExpensesDetailedDomain
-import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthDomain
+import com.eyther.lumbridge.data.model.expenses.local.ExpenseCached
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
 
-fun ExpensesMonthDomain.toCached() = ExpensesMonthCached(
-    id = id,
-    month = month.value,
-    year = year.value,
-    day = day,
-    snapshotMonthlyNetSalary = snapshotMonthlyNetSalary,
-    categories = categoryExpenses.map { it.toCached() }
-)
-
-fun ExpensesCategoryDomain.toCached() = ExpensesCategoryCached(
-    id = id,
-    parentMonthId = parentMonthId,
+fun ExpenseDomain.toCached() = ExpenseCached(
+    expenseId = id,
     categoryTypeOrdinal = categoryType.ordinal,
-    details = detailedExpenses.map { it.toCached() }
-)
-
-fun ExpensesDetailedDomain.toCached() = ExpensesDetailedCached(
-    id = id,
-    parentCategoryId = parentCategoryId,
-    expenseName = expenseName,
-    expenseAmount = expenseAmount
+    name = expenseName,
+    amount = expenseAmount,
+    date = date
 )

@@ -72,6 +72,7 @@ class LumbridgeApplication : Application() {
     private fun tryMakeDataStoreMigrations() {
         MainScope().launch {
             dataStoreMigrationHelper.tryMigrateMortgage()
+            dataStoreMigrationHelper.tryMigrateFirstSnapshotSalary()
         }
     }
 }

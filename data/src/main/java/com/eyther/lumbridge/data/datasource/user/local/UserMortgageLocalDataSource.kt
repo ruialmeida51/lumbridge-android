@@ -54,24 +54,4 @@ class UserMortgageLocalDataSource @Inject constructor(
                 endDate = endDate
             )
         }
-
-    suspend fun saveUserMortgage(userMortgageCached: UserMortgageCached) {
-        userMortgageDataStore.edit { preferences ->
-            preferences[PreferencesKeys.LOAN_AMOUNT] = userMortgageCached.loanAmount
-            preferences[PreferencesKeys.STARTING_DATE] = userMortgageCached.startDate
-            preferences[PreferencesKeys.END_DATE] = userMortgageCached.endDate
-
-            userMortgageCached.euribor?.let {
-                preferences[PreferencesKeys.EURIBOR] = it
-            } ?: preferences.remove(PreferencesKeys.EURIBOR)
-
-            userMortgageCached.spread?.let {
-                preferences[PreferencesKeys.SPREAD] = it
-            } ?: preferences.remove(PreferencesKeys.SPREAD)
-
-            userMortgageCached.fixedInterestRate?.let {
-                preferences[PreferencesKeys.FIXED_INTEREST_RATE] = it
-            } ?: preferences.remove(PreferencesKeys.FIXED_INTEREST_RATE)
-        }
-    }
 }

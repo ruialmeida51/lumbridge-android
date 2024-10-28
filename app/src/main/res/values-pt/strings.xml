@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name_release">Lumbridge</string>
-    <string name="app_name_debug">Lumbridge Debug</string>
-    <string name="app_name_beta">Lumbridge Beta</string>
+    <string name="app_name_release">Loom</string>
+    <string name="app_name_debug">Loom Debug</string>
+    <string name="app_name_beta">Loom Beta</string>
 
     <string name="feed">Feed</string>
     <string name="feed_edit">Editar Feed</string>
@@ -109,11 +109,11 @@
     <string name="profile_support_feedback">Feedback &amp; Reportar Problemas</string>
     <string name="profile_support_source_code">Código Fonte</string>
     <string name="profile_support_donate">Oferece-me um café!</string>
-    <string name="profile_support_donate_disclaimer">As doações são uma maneira incrível de apoiar a aplicação, mas são comletamente opcionais!\n\nUma doação não te vai dar nenhuma vantagem ou funcionalidades novas, mas também não doar também não te afeta de forma alguma.\n\nApenas estamos contentes que estejas a usar a app Lumbridge - obrigado por seres parte da comunidade!</string>
-    <string name="profile_support_feedback_email_subject">Feedback para Lumbridge de %1$s</string>
-    <string name="profile_support_feedback_email_subject_no_name">Feedback para Lumbridge</string>
+    <string name="profile_support_donate_disclaimer">As doações são uma maneira incrível de apoiar a aplicação, mas são comletamente opcionais!\n\nUma doação não te vai dar nenhuma vantagem ou funcionalidades novas, mas também não doar também não te afeta de forma alguma.\n\nApenas estamos contentes que estejas a usar a app Loom - obrigado por seres parte da comunidade!</string>
+    <string name="profile_support_feedback_email_subject">Feedback para Loom de %1$s</string>
+    <string name="profile_support_feedback_email_subject_no_name">Feedback para Loom</string>
     <string name="profile_support_feedback_email_selector">Seleciona um client ede email para enviar o teu feedback</string>
-    <string name="profile_support_feedback_email_body">OIá\n\nTenho feedback relacionado com a aplicação Lumbridge que quero partilhar:\n\n</string>
+    <string name="profile_support_feedback_email_body">OIá\n\nTenho feedback relacionado com a aplicação Loom que quero partilhar:\n\n</string>
     <string name="profile_support_feedback_email_error_no_clients">Parece que não há clientes de email instalados no teu dispositivo. Por favor, instala um e tenta novamente.</string>
     <string name="profile_support_feedback_email_error_sending">Parece que houve um problema ao enviar este feedback. Por favor, tenta mais tarde.</string>
     <string name="edit_profile">Editar Perfil</string>
@@ -263,6 +263,16 @@
     <string name="personal">Pessoal</string>
     <string name="mortgage">Empréstimo Habitação</string>
     <string name="other">Outro</string>
+    <string name="food">Restauração</string>
+    <string name="transportation">Transporte</string>
+    <string name="healthcare">Saúde</string>
+    <string name="entertainment">Entretenimento</string>
+    <string name="housing">Casa</string>
+    <string name="education">Educação</string>
+    <string name="pets">Animais</string>
+    <string name="sports">Desporto</string>
+    <string name="vacations">Férias</string>
+    <string name="surplus">Excedente</string>
 
     <string-array name="loading_messages">
         <item>A preparar um pouco de magia digital…</item>
