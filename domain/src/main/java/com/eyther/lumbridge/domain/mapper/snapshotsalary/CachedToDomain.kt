@@ -9,3 +9,5 @@ fun SnapshotNetSalaryCached.toDomain() = SnapshotNetSalaryDomain(
     month = month,
     netSalary = amount
 )
+
+fun List<SnapshotNetSalaryCached>.toDomain() = map { it.toDomain() }

@@ -22,12 +22,14 @@ import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.ui.common.model.math.MathOperator
 import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalaryForDateUseCase
+import com.eyther.lumbridge.usecase.snapshotsalary.GetMostRecentSnapshotSalaryForDateUseCase
+import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,7 +53,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     private val deleteExpensesListUseCase: DeleteExpensesListUseCase,
     private val getNetSalaryUseCase: GetNetSalaryUseCase,
     private val getUserFinancialsStreamUseCase: GetUserFinancialsFlow,
-    private val getSnapshotNetSalaryForDateUseCase: GetSnapshotNetSalaryForDateUseCase,
+    private val getMostRecentSnapshotSalaryForDateUseCase: GetMostRecentSnapshotSalaryForDateUseCase,
+    private val getSnapshotNetSalariesFlowUseCase: GetSnapshotNetSalariesFlowUseCase,
     private val sortByDelegate: ExpensesOverviewScreenSortByDelegate,
     private val filterDelegate: ExpensesOverviewScreenFilterDelegate,
     private val schedulers: Schedulers
@@ -65,11 +68,16 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
          * A helper class to hold the data emitted by the expenses stream, to be used in the combine operator.
          */
         private data class ExpensesStreamData(
-            val netSalaryUi: NetSalaryUi?,
-            val expenses: List<ExpenseUi>,
-            val locale: SupportedLocales,
+            val expensesData: ExpensesData,
             val sortBy: ExpensesOverviewSortBy,
             val filter: ExpensesOverviewFilter
+        )
+
+        private data class ExpensesData(
+            val expenses: List<ExpenseUi>,
+            val locale: SupportedLocales,
+            val netSalaryUi: NetSalaryUi?,
+            val snapshotNetSalaries: List<SnapshotNetSalaryUi>
         )
     }
 
@@ -86,6 +94,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         MutableStateFlow(viewState.value.getDefaultDisplayFilter())
 
     private var cachedNetSalaryUi: NetSalaryUi? = null
+    private var cachedSnapshotNetSalaries: List<SnapshotNetSalaryUi> = emptyList()
 
     init {
         viewModelScope.launch {
@@ -94,36 +103,48 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     }
 
     private fun observeExpenses() {
-        combine(
+        val dataFlow = combine(
             getExpensesStreamUseCase(),
             getLocaleOrDefaultStream(),
             getUserFinancialsStreamUseCase(),
-            sortBy,
-            filter
-        ) { expenses, locale, userFinancials, sortBy, filter ->
-            ExpensesStreamData(
-                netSalaryUi = userFinancials?.let { getNetSalaryUseCase(it) },
+            getSnapshotNetSalariesFlowUseCase()
+        ) { expenses, locale, userFinancials, snapshotNetSalaries ->
+            ExpensesData(
                 expenses = expenses,
                 locale = locale,
+                netSalaryUi = userFinancials?.let { getNetSalaryUseCase(it) },
+                snapshotNetSalaries = snapshotNetSalaries
+            )
+        }
+
+        combine(
+            dataFlow,
+            sortBy,
+            filter
+        ) { expensesData, sortBy, filter ->
+            ExpensesStreamData(
+                expensesData = expensesData,
                 sortBy = sortBy,
                 filter = filter
             )
         }
             .flowOn(schedulers.io)
             .onEach { streamData ->
-                cachedNetSalaryUi = streamData.netSalaryUi
+                cachedNetSalaryUi = streamData.expensesData.netSalaryUi
+                cachedSnapshotNetSalaries = streamData.expensesData.snapshotNetSalaries
 
                 viewState.update {
-                    if (streamData.expenses.isEmpty()) {
+                    if (streamData.expensesData.expenses.isEmpty()) {
                         getEmptyState(
-                            netSalaryUi = streamData.netSalaryUi,
-                            locale = streamData.locale
+                            netSalaryUi = streamData.expensesData.netSalaryUi,
+                            locale = streamData.expensesData.locale
                         )
                     } else {
                         getContentState(
-                            monthlyExpenses = streamData.expenses.createExpensesPerMonth(),
-                            netSalaryUi = streamData.netSalaryUi,
-                            locale = streamData.locale,
+                            monthlyExpenses = streamData.expensesData.expenses.createExpensesPerMonth(),
+                            snapshotNetSalaries = streamData.expensesData.snapshotNetSalaries,
+                            netSalaryUi = streamData.expensesData.netSalaryUi,
+                            locale = streamData.expensesData.locale,
                             sortBy = streamData.sortBy,
                             filter = streamData.filter
                         )
@@ -145,6 +166,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             // Update the state with the new list of month expenses.
             getContentState(
                 monthlyExpenses = monthExpensesUiList,
+                snapshotNetSalaries = cachedSnapshotNetSalaries,
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
@@ -169,6 +191,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             // Update the state with the new list of month expenses.
             getContentState(
                 monthlyExpenses = monthExpensesUiList,
+                snapshotNetSalaries = cachedSnapshotNetSalaries,
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
@@ -277,10 +300,15 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
      * - [IExpensesOverviewScreenSortByDelegate] to apply the sort by
      *
      * @param monthlyExpenses The list of month expenses with the selected month expanded.
+     * @param snapshotNetSalaries The list of snapshot net salaries, used to get the most recent snapshot salary.
      * @param netSalaryUi The net salary UI to set in the new state.
+     * @param locale The locale to set in the new state.
+     * @param sortBy The sort by to apply to the list of month expenses.
+     * @param filter The filter to apply to the list of month expenses.
      */
     private fun getContentState(
         monthlyExpenses: List<ExpensesMonthUi>,
+        snapshotNetSalaries: List<SnapshotNetSalaryUi>,
         netSalaryUi: NetSalaryUi?,
         locale: SupportedLocales,
         sortBy: ExpensesOverviewSortBy,
@@ -397,6 +425,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
             getContentState(
                 monthlyExpenses = monthlyExpenses,
+                snapshotNetSalaries = cachedSnapshotNetSalaries,
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
@@ -421,6 +450,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
 
             getContentState(
                 monthlyExpenses = monthlyExpenses,
+                snapshotNetSalaries = cachedSnapshotNetSalaries,
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
@@ -440,7 +470,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                     .filter { it.categoryType.operator == MathOperator.ADDITION }
                     .sumOf { it.expenseAmount.toDouble() }.toFloat()
 
-                val snapshotSalary = getSnapshotNetSalaryForDateUseCase(
+                val snapshotSalary = getMostRecentSnapshotSalaryForDateUseCase(
+                    snapshotNetSalaries = cachedSnapshotNetSalaries,
                     year = yearMonth.first,
                     month = yearMonth.second.value
                 )
