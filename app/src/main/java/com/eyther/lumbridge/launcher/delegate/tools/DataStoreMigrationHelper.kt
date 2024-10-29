@@ -85,6 +85,13 @@ class DataStoreMigrationHelper @Inject constructor(
         Log.d(TAG, "✅ Mortgage migration completed successfully")
     }
 
+    /**
+     * Attempts to migrate the existing user financials net salary into the snap shot net salary database.
+     * * If the operation fails, the migration will be cancelled.
+     * * If the user financials are not found, the migration will be skipped.
+     * * The first snapshot salary will be created with the current net salary.
+     * * If the snapshot salary already exists, the migration will be skipped.
+     */
     suspend fun tryMigrateFirstSnapshotSalary() = kotlin.runCatching {
         if (appSettingsRepository.getCompletedNetSalarySnapshotMigration()) {
             Log.d(TAG, "⏩ First snapshot salary migration has already been completed")
