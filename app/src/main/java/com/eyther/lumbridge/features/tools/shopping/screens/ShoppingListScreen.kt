@@ -38,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.platform.navigateWithArgs
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.shopping.model.list.ShoppingListScreenViewState
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.list.IShoppingListScreenViewModel
@@ -87,7 +87,7 @@ fun ShoppingListsScreen(
 
                 is ShoppingListScreenViewState.Empty -> {
                     EmptyScreen {
-                        navController.navigateWithArgs(ToolsNavigationItem.Shopping.ShoppingListDetails, -1L)
+                        navController.navigateToWithArgs(ToolsNavigationItem.Shopping.ShoppingListDetails, -1L)
                     }
                 }
 
@@ -153,7 +153,7 @@ private fun Content(
                         )
                     },
                     peekContentCardType = PeekContentCardType.Checkbox,
-                    onClick = { navController.navigateWithArgs(ToolsNavigationItem.Shopping.ShoppingListDetails, shoppingListItem.id) }
+                    onClick = { navController.navigateToWithArgs(ToolsNavigationItem.Shopping.ShoppingListDetails, shoppingListItem.id) }
                 )
             }
 
@@ -244,7 +244,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateWithArgs(ToolsNavigationItem.Shopping.ShoppingListDetails, -1L)
+            navController.navigateToWithArgs(ToolsNavigationItem.Shopping.ShoppingListDetails, -1L)
         }
     ) {
         Icon(

@@ -38,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.platform.navigateWithArgs
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.tools.notes.model.list.NotesListScreenViewState
 import com.eyther.lumbridge.features.tools.notes.viewmodel.list.INotesListScreenViewModel
 import com.eyther.lumbridge.features.tools.notes.viewmodel.list.NotesListScreenViewModel
@@ -87,7 +87,7 @@ fun NotesListScreen(
 
                 is NotesListScreenViewState.Empty -> {
                     EmptyScreen {
-                        navController.navigateWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
+                        navController.navigateToWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
                     }
                 }
 
@@ -153,7 +153,7 @@ private fun Content(
                         )
                     },
                     peekContentCardType = PeekContentCardType.PlainText,
-                    onClick = { navController.navigateWithArgs(ToolsNavigationItem.Notes.NotesDetails, notesListItem.id) }
+                    onClick = { navController.navigateToWithArgs(ToolsNavigationItem.Notes.NotesDetails, notesListItem.id) }
                 )
             }
 
@@ -244,7 +244,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
+            navController.navigateToWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
         }
     ) {
         Icon(

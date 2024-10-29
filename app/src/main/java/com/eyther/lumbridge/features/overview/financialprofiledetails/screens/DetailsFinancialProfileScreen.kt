@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigate
+import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.overview.financialprofiledetails.model.DetailsFinancialProfileScreenViewState
 import com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel.DetailsFinancialProfileScreenViewModel
 import com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel.IDetailsFinancialProfileScreenViewModel
@@ -81,7 +81,7 @@ fun DetailsFinancialProfileScreen(
                 }
 
                 is DetailsFinancialProfileScreenViewState.Empty -> EmptyScreen(
-                    onCtaClick = { navController.navigate(OverviewNavigationItem.FinancialProfile.Edit) }
+                    onCtaClick = { navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit) }
                 )
 
                 is DetailsFinancialProfileScreenViewState.Content -> Content(
@@ -104,7 +104,7 @@ private fun ColumnScope.Content(
         netSalaryUi = state.salaryDetails,
         currencySymbol = currencySymbol,
         onEditClick = {
-            navController.navigate(OverviewNavigationItem.FinancialProfile.Edit)
+            navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit)
         }
     )
 
@@ -165,7 +165,7 @@ private fun ColumnScope.MoneyAllocationBreakdown(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(bounded = false)
                     ) {
-                        navController.navigate(OverviewNavigationItem.FinancialProfile.Edit)
+                        navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_financial_profile)

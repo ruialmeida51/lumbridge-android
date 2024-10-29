@@ -45,7 +45,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.platform.navigate
+import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState
 import com.eyther.lumbridge.features.feed.navigation.FeedNavigationItem
@@ -104,7 +104,7 @@ fun FeedOverviewScreen(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = ripple(bounded = false),
-                            onClick = { navController.navigate(FeedNavigationItem.FeedEdit) }
+                            onClick = { navController.navigateTo(FeedNavigationItem.FeedEdit) }
                         ),
                         painter = painterResource(R.drawable.ic_edit),
                         contentDescription = stringResource(id = R.string.edit)

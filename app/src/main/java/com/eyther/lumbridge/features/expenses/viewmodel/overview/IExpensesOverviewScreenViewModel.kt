@@ -41,17 +41,6 @@ interface IExpensesOverviewScreenViewModel {
     fun onDeleteExpense(expensesMonth: ExpensesMonthUi)
 
     /**
-     * Edit the given expense.
-     *
-     * @param navController The navigation controller
-     * @param expensesDetailed The expense to edit
-     */
-    fun onEditExpense(
-        navController: NavHostController,
-        expensesDetailed: ExpensesDetailedUi
-    )
-
-    /**
      * Applies the given sort by to the expenses overview.
      *
      * @param sortByOrdinal The sort by to apply

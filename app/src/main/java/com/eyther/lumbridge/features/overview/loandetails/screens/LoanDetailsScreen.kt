@@ -45,7 +45,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigateWithArgs
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewEffect
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewState
 import com.eyther.lumbridge.features.overview.loandetails.viewmodel.ILoanDetailsScreenViewModel
@@ -110,7 +110,7 @@ fun LoanDetailsScreen(
                 is LoanDetailsScreenViewState.Loading -> LoadingIndicator()
                 is LoanDetailsScreenViewState.Empty -> EmptyScreen(
                     onCreateLoan = {
-                        navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, -1L)
+                        navController.navigateToWithArgs(OverviewNavigationItem.Loan.Edit, -1L)
                     }
                 )
                 is LoanDetailsScreenViewState.Content -> Content(
@@ -200,7 +200,7 @@ private fun ColumnScope.PaymentOverview(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(bounded = false)
                     ) {
-                        navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, state.loanUi.id)
+                        navController.navigateToWithArgs(OverviewNavigationItem.Loan.Edit, state.loanUi.id)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_financial_profile)

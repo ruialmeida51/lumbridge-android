@@ -52,7 +52,7 @@ import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.extensions.platform.SendEmailStatus
-import com.eyther.lumbridge.extensions.platform.navigate
+import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.extensions.platform.sendEmail
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
@@ -259,7 +259,7 @@ private fun ProfileHeader(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(bounded = false)
                     ) {
-                        navController.navigate(ProfileNavigationItem.EditProfile)
+                        navController.navigateTo(ProfileNavigationItem.EditProfile)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_profile)
@@ -278,13 +278,13 @@ private fun ProfileFinancialSettings(
         MovementSetting(
             icon = R.drawable.ic_savings,
             label = stringResource(id = R.string.edit_financial_profile),
-            onClick = { navController.navigate(ProfileNavigationItem.EditFinancialProfile) }
+            onClick = { navController.navigateTo(ProfileNavigationItem.EditFinancialProfile) }
         )
 
         MovementSetting(
             icon = R.drawable.ic_bank,
             label = stringResource(id = R.string.profile_edit_loans),
-            onClick = { navController.navigate(ProfileNavigationItem.Loans.List) }
+            onClick = { navController.navigateTo(ProfileNavigationItem.Loans.List) }
         )
     }
 }
@@ -297,7 +297,7 @@ private fun ProfileAppSettings(
         MovementSetting(
             icon = R.drawable.ic_settings,
             label = stringResource(id = R.string.settings),
-            onClick = { navController.navigate(ProfileNavigationItem.Settings) }
+            onClick = { navController.navigateTo(ProfileNavigationItem.Settings) }
         )
     }
 }

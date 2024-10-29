@@ -2,7 +2,6 @@
 
 package com.eyther.lumbridge.ui.common.composables.components.input
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -136,7 +135,14 @@ fun BasicTextInput(
 ) {
     val initialText = state.text.takeIf { !it.isNullOrEmpty() } ?: defaultInitialValue.orEmpty()
 
-    val text = remember { mutableStateOf(TextFieldValue(text = initialText, selection = TextRange(initialText.length))) }
+    val text = remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = initialText,
+                selection = TextRange(initialText.length)
+            )
+        )
+    }
 
     if (state.text != text.value.text) {
         text.value = text.value.copy(text = state.text ?: defaultInitialValue.orEmpty())
@@ -168,7 +174,6 @@ fun BasicTextInput(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BasicOutlinedTextInput(
     modifier: Modifier = Modifier,

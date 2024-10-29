@@ -30,7 +30,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigateWithArgs
+import com.eyther.lumbridge.extensions.platform.navigateTo
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenViewState
 import com.eyther.lumbridge.features.overview.breakdown.viewmodel.BreakdownScreenViewModel
 import com.eyther.lumbridge.features.overview.breakdown.viewmodel.IBreakdownScreenViewModel
@@ -133,8 +134,8 @@ private fun Overview(
             SalaryOverview(
                 netSalaryUi = state.netSalary,
                 currencySymbol = state.currencySymbol,
-                onCardClick = { navController.navigate(OverviewNavigationItem.FinancialProfile.Details.route) },
-                onCreateFinancialProfile = { navController.navigate(OverviewNavigationItem.FinancialProfile.Edit.route) }
+                onCardClick = { navController.navigateTo(OverviewNavigationItem.FinancialProfile.Details) },
+                onCreateFinancialProfile = { navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit) }
             )
 
             Spacer(modifier = Modifier.height(DefaultPadding))
@@ -146,7 +147,7 @@ private fun Overview(
                     EmptyComponentWithButton(
                         text = stringResource(id = R.string.breakdown_loans_no_loans),
                         buttonText = stringResource(id = R.string.breakdown_loans_no_loans_create),
-                        onButtonClick = { navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, -1L) }
+                        onButtonClick = { navController.navigateToWithArgs(OverviewNavigationItem.Loan.Edit, -1L) }
                     )
                 }
             }
@@ -166,7 +167,7 @@ private fun Overview(
                     loanCalculationUi = loanCalculationUi,
                     currencySymbol = state.currencySymbol,
                     onDelete = { loanToDelete.longValue = it },
-                    onCardClick = { navController.navigateWithArgs(OverviewNavigationItem.Loan.Details, loanUi.id) }
+                    onCardClick = { navController.navigateToWithArgs(OverviewNavigationItem.Loan.Details, loanUi.id) }
                 )
 
                 Spacer(modifier = Modifier.height(DefaultPadding))
@@ -261,7 +262,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, -1L)
+            navController.navigateToWithArgs(OverviewNavigationItem.Loan.Edit, -1L)
         }
     ) {
         Icon(

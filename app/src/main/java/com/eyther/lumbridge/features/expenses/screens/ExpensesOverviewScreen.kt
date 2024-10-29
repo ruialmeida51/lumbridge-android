@@ -58,7 +58,8 @@ import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigate
+import com.eyther.lumbridge.extensions.platform.navigateTo
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter.Companion.DisplayFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter.Companion.FILTER_DATE_RANGE_ORDINAL
@@ -216,7 +217,7 @@ fun ExpensesOverviewScreen(
                             openFilterDialog = openFilterDialog,
                             onSelectMonth = viewModel::expandMonth,
                             onSelectCategory = viewModel::expandCategory,
-                            onEditExpense = { viewModel.onEditExpense(navController, it) },
+                            onEditExpense = { navController.navigateToWithArgs(ExpensesNavigationItem.EditExpense, it.id) },
                             onDeleteExpense = viewModel::onDeleteExpense,
                             onSortBySelected = viewModel::onSortBy,
                             onFilterSelected = viewModel::onFilter,
@@ -450,7 +451,7 @@ private fun HasFinancialProfile(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(bounded = false)
-                    ) { navController.navigate(ExpensesNavigationItem.EditFinancialProfile) },
+                    ) { navController.navigateTo(ExpensesNavigationItem.EditFinancialProfile) },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit)
             )
@@ -845,7 +846,7 @@ private fun NoFinancialProfile(
             text = stringResource(id = R.string.expenses_overview_no_financial_profile),
             buttonText = stringResource(id = R.string.financial_overview_create_profile),
             onButtonClick = {
-                navController.navigate(ExpensesNavigationItem.EditFinancialProfile)
+                navController.navigateTo(ExpensesNavigationItem.EditFinancialProfile)
             }
         )
     }
@@ -860,7 +861,7 @@ private fun EmptyAndNoFinancialProfile(
             text = stringResource(id = R.string.expenses_overview_no_financial_profile),
             buttonText = stringResource(id = R.string.financial_overview_create_profile),
             onButtonClick = {
-                navController.navigate(ExpensesNavigationItem.EditFinancialProfile)
+                navController.navigateTo(ExpensesNavigationItem.EditFinancialProfile)
             }
         )
     }
@@ -873,7 +874,7 @@ private fun NoExpenses(navController: NavHostController) {
             text = stringResource(id = R.string.expenses_overview_no_expenses),
             buttonText = stringResource(id = R.string.expenses_overview_add_expense),
             onButtonClick = {
-                navController.navigate(ExpensesNavigationItem.AddExpense)
+                navController.navigateTo(ExpensesNavigationItem.AddExpense)
             }
         )
     }
@@ -1105,7 +1106,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigate(ExpensesNavigationItem.AddExpense)
+            navController.navigateTo(ExpensesNavigationItem.AddExpense)
         }
     ) {
         Icon(

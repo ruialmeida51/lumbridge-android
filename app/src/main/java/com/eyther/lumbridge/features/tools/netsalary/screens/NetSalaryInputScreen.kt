@@ -13,21 +13,28 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
+import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.editfinancialprofile.components.DemographicInformationInput
 import com.eyther.lumbridge.features.editfinancialprofile.components.SalaryBreakdownInput
 import com.eyther.lumbridge.features.tools.netsalary.arguments.INetSalaryScreenArgumentsCacheViewModel
+import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewEffects
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.INetSalaryInputScreenViewModel
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.NetSalaryInputScreenViewModel
+import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
@@ -36,6 +43,8 @@ import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndi
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun NetSalaryInputScreen(
@@ -45,6 +54,20 @@ fun NetSalaryInputScreen(
     viewModel: INetSalaryInputScreenViewModel = hiltViewModel<NetSalaryInputScreenViewModel>()
 ) {
     val state = viewModel.viewState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(Unit) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.viewEffects
+                .onEach { viewEffects ->
+                    when (viewEffects) {
+                        NetSalaryInputScreenViewEffects.NavigateToNetSalaryResults ->
+                            navController.navigateTo(ToolsNavigationItem.NetSalary.Result)
+                    }
+                }
+                .collect()
+        }
+    }
 
     Scaffold(
         topBar = {

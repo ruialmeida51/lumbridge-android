@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.platform.navigateWithArgs
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.profile.editloans.model.EditLoansViewState
 import com.eyther.lumbridge.features.profile.editloans.viewmodel.EditLoansViewModel
 import com.eyther.lumbridge.features.profile.editloans.viewmodel.IEditLoansViewModel
@@ -83,7 +83,7 @@ fun EditLoansListScreen(
                 )
 
                 is EditLoansViewState.Empty -> EmptyScreen(
-                    onCreateLoan = { navController.navigateWithArgs(ProfileNavigationItem.Loans.Edit, -1L) }
+                    onCreateLoan = { navController.navigateToWithArgs(ProfileNavigationItem.Loans.Edit, -1L) }
                 )
 
                 is EditLoansViewState.Loading -> LoadingIndicator()
@@ -121,7 +121,7 @@ private fun Content(
                     loanCalculationUi = loanCalculationUi,
                     currencySymbol = currencySymbol,
                     onDelete = { loanToDelete.longValue = it },
-                    onCardClick = { navController.navigateWithArgs(ProfileNavigationItem.Loans.Edit, loanUi.id) }
+                    onCardClick = { navController.navigateToWithArgs(ProfileNavigationItem.Loans.Edit, loanUi.id) }
                 )
 
                 Spacer(modifier = Modifier.height(DefaultPadding))
@@ -181,7 +181,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateWithArgs(ProfileNavigationItem.Loans.Edit, -1L)
+            navController.navigateToWithArgs(ProfileNavigationItem.Loans.Edit, -1L)
         }
     ) {
         Icon(
