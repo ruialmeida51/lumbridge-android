@@ -61,6 +61,9 @@ fun EditFinancialProfileScreen(
                                 duration = SnackbarDuration.Short
                             )
                         }
+                        is EditFinancialProfileScreenViewEffect.CloseScreen -> {
+                            navController.navigateUp()
+                        }
                     }
                 }
                 .collect()

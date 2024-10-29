@@ -17,13 +17,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
@@ -109,7 +109,7 @@ fun ShoppingListDetailsScreen(
                         modifier = Modifier
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = rememberRipple(bounded = false),
+                                indication = ripple(bounded = false),
                                 onClick = { shouldShowDeleteShoppingListDialog.value = true }
                             ),
                         imageVector = Icons.Outlined.Delete,
@@ -278,7 +278,7 @@ private fun ShoppingList(
                                         .size(16.dp)
                                         .clickable(
                                             interactionSource = remember { MutableInteractionSource() },
-                                            indication = rememberRipple(bounded = false),
+                                            indication = ripple(bounded = false),
                                             onClick = {
                                                 onClearItem(listIndex)
 

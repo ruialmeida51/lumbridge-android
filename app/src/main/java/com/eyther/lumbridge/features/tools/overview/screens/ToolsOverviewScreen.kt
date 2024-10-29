@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.extensions.platform.navigate
+import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
 import com.eyther.lumbridge.features.tools.overview.viewmodel.IToolsScreenViewModel
@@ -107,7 +107,7 @@ private fun Content(
                         MovementSetting(
                             icon = item.icon,
                             label = stringResource(id = item.text),
-                            onClick = { navController.navigate(getRouteToNavigate(item)) }
+                            onClick = { navController.navigateTo(getRouteToNavigate(item)) }
                         )
                     }
                 }

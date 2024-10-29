@@ -2,13 +2,16 @@ package com.eyther.lumbridge.features.tools.netsalary.viewmodel.input
 
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewEffects
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.INetSalaryInputScreenInputHandler
 import com.eyther.lumbridge.model.finance.NetSalaryUi
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface INetSalaryInputScreenViewModel : INetSalaryInputScreenInputHandler {
     val viewState: StateFlow<NetSalaryInputScreenViewState>
+    val viewEffects: SharedFlow<NetSalaryInputScreenViewEffects>
 
     /**
      * Calculate the net salary based on the user's input. This function will only store

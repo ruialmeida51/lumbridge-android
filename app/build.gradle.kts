@@ -1,15 +1,16 @@
 import dependencies.AppDependencies
-import versions.SharedVersions
 
 plugins {
     id("com.android.application")
     id("kotlin-parcelize")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.appdistribution")
     id("com.google.firebase.crashlytics")
     kotlin("kapt")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -106,10 +107,6 @@ android {
 
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = SharedVersions.KOTLIN_COMPILER_VERSION
     }
 
     sourceSets {

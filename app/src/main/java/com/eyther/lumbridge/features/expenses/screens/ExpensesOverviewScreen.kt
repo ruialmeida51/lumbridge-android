@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -38,10 +37,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,11 +56,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.toLocalDate
-import com.eyther.lumbridge.shared.time.toMonthYearDateString
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigate
+import com.eyther.lumbridge.extensions.platform.navigateTo
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter.Companion.DisplayFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter.Companion.FILTER_DATE_RANGE_ORDINAL
@@ -80,12 +78,12 @@ import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSor
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.ExpensesOverviewScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.IExpensesOverviewScreenViewModel
-import com.eyther.lumbridge.ui.common.composables.components.text.DataOverview
-import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.toMonthYearDateString
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeYearMonthPicker
@@ -93,6 +91,8 @@ import com.eyther.lumbridge.ui.common.composables.components.datepicker.Lumbridg
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyComponentWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.SimpleSetting
+import com.eyther.lumbridge.ui.common.composables.components.text.DataOverview
+import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.common.model.math.MathOperator
@@ -144,7 +144,7 @@ fun ExpensesOverviewScreen(
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
+                            indication = ripple(bounded = false),
                             onClick = viewModel::collapseAll
                         ),
                         painter = painterResource(R.drawable.ic_unfold_less),
@@ -154,7 +154,7 @@ fun ExpensesOverviewScreen(
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
+                            indication = ripple(bounded = false),
                             onClick = viewModel::expandAll
                         ),
                         painter = painterResource(R.drawable.ic_unfold_more),
@@ -164,7 +164,7 @@ fun ExpensesOverviewScreen(
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false)
+                            indication = ripple(bounded = false)
                         ) {
                             openSortByDialog.value = true
                         },
@@ -175,7 +175,7 @@ fun ExpensesOverviewScreen(
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false)
+                            indication = ripple(bounded = false)
                         ) {
                             openFilterDialog.value = true
                         },
@@ -217,7 +217,7 @@ fun ExpensesOverviewScreen(
                             openFilterDialog = openFilterDialog,
                             onSelectMonth = viewModel::expandMonth,
                             onSelectCategory = viewModel::expandCategory,
-                            onEditExpense = { viewModel.onEditExpense(navController, it) },
+                            onEditExpense = { navController.navigateToWithArgs(ExpensesNavigationItem.EditExpense, it.id) },
                             onDeleteExpense = viewModel::onDeleteExpense,
                             onSortBySelected = viewModel::onSortBy,
                             onFilterSelected = viewModel::onFilter,
@@ -450,8 +450,8 @@ private fun HasFinancialProfile(
                     .size(20.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false)
-                    ) { navController.navigate(ExpensesNavigationItem.EditFinancialProfile) },
+                        indication = ripple(bounded = false)
+                    ) { navController.navigateTo(ExpensesNavigationItem.EditFinancialProfile) },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit)
             )
@@ -588,7 +588,7 @@ private fun MonthCard(
                         .size(20.dp)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false)
+                            indication = ripple(bounded = false)
                         ) {
                             selectedMonth.value = expensesMonthUi
                         },
@@ -846,7 +846,7 @@ private fun NoFinancialProfile(
             text = stringResource(id = R.string.expenses_overview_no_financial_profile),
             buttonText = stringResource(id = R.string.financial_overview_create_profile),
             onButtonClick = {
-                navController.navigate(ExpensesNavigationItem.EditFinancialProfile)
+                navController.navigateTo(ExpensesNavigationItem.EditFinancialProfile)
             }
         )
     }
@@ -861,7 +861,7 @@ private fun EmptyAndNoFinancialProfile(
             text = stringResource(id = R.string.expenses_overview_no_financial_profile),
             buttonText = stringResource(id = R.string.financial_overview_create_profile),
             onButtonClick = {
-                navController.navigate(ExpensesNavigationItem.EditFinancialProfile)
+                navController.navigateTo(ExpensesNavigationItem.EditFinancialProfile)
             }
         )
     }
@@ -874,7 +874,7 @@ private fun NoExpenses(navController: NavHostController) {
             text = stringResource(id = R.string.expenses_overview_no_expenses),
             buttonText = stringResource(id = R.string.expenses_overview_add_expense),
             onButtonClick = {
-                navController.navigate(ExpensesNavigationItem.AddExpense)
+                navController.navigateTo(ExpensesNavigationItem.AddExpense)
             }
         )
     }
@@ -984,7 +984,7 @@ private fun ShowFilterDialog(
 
         ModalBottomSheet(
             sheetState = modalBottomSheetState,
-            windowInsets = NavigationBarDefaults.windowInsets,
+            contentWindowInsets = { NavigationBarDefaults.windowInsets },
             onDismissRequest = { openFilterDialog.value = false }
         ) {
             LazyColumn(
@@ -1106,7 +1106,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigate(ExpensesNavigationItem.AddExpense)
+            navController.navigateTo(ExpensesNavigationItem.AddExpense)
         }
     ) {
         Icon(

@@ -8,6 +8,7 @@ import versions.AppVersions.COMPOSE_TOOLING_VERSION
 import versions.AppVersions.FIREBASE_BOM_VERSION
 import versions.AppVersions.HILT_NAVIGATION_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
+import versions.AppVersions.KTX_SERIALIZATION_VERSION
 import versions.AppVersions.KTX_VERSION
 import versions.AppVersions.NAVIGATION_VERSION
 import versions.SharedVersions.HILT_VERSION
@@ -21,6 +22,7 @@ object AppDependencies {
         // Kotlin
         "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION",
         "androidx.core:core-ktx:$KTX_VERSION",
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:$KTX_SERIALIZATION_VERSION",
 
         //Coroutines
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KOTLIN_COROUTINES_VERSION",

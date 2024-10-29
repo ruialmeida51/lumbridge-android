@@ -17,11 +17,11 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +45,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.platform.navigate
+import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState
 import com.eyther.lumbridge.features.feed.navigation.FeedNavigationItem
@@ -103,8 +103,8 @@ fun FeedOverviewScreen(
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
-                            onClick = { navController.navigate(FeedNavigationItem.FeedEdit) }
+                            indication = ripple(bounded = false),
+                            onClick = { navController.navigateTo(FeedNavigationItem.FeedEdit) }
                         ),
                         painter = painterResource(R.drawable.ic_edit),
                         contentDescription = stringResource(id = R.string.edit)

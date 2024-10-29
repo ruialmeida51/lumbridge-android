@@ -17,13 +17,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableLongStateOf
@@ -38,7 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.extensions.platform.navigateWithArgs
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.tools.notes.model.list.NotesListScreenViewState
 import com.eyther.lumbridge.features.tools.notes.viewmodel.list.INotesListScreenViewModel
 import com.eyther.lumbridge.features.tools.notes.viewmodel.list.NotesListScreenViewModel
@@ -87,7 +87,7 @@ fun NotesListScreen(
 
                 is NotesListScreenViewState.Empty -> {
                     EmptyScreen {
-                        navController.navigateWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
+                        navController.navigateToWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
                     }
                 }
 
@@ -145,7 +145,7 @@ private fun Content(
                                 .size(20.dp)
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberRipple(bounded = false),
+                                    indication = ripple(bounded = false),
                                     onClick = { notesToDelete.value = notesListItem.id }
                                 ),
                             imageVector = Icons.Outlined.Delete,
@@ -153,7 +153,7 @@ private fun Content(
                         )
                     },
                     peekContentCardType = PeekContentCardType.PlainText,
-                    onClick = { navController.navigateWithArgs(ToolsNavigationItem.Notes.NotesDetails, notesListItem.id) }
+                    onClick = { navController.navigateToWithArgs(ToolsNavigationItem.Notes.NotesDetails, notesListItem.id) }
                 )
             }
 
@@ -244,7 +244,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
+            navController.navigateToWithArgs(ToolsNavigationItem.Notes.NotesDetails, -1L)
         }
     ) {
         Icon(

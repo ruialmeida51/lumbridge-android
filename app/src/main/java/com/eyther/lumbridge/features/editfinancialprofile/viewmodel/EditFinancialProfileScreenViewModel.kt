@@ -145,7 +145,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
 
             saveUserFinancials(userFinancials)
 
-            navController.navigateUp()
+            viewEffects.emit(EditFinancialProfileScreenViewEffect.CloseScreen)
         }
     }
 }

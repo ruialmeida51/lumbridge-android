@@ -45,7 +45,7 @@ fun FeedAddOrEditBottomSheet(
 
     ModalBottomSheet(
         sheetState = modalBottomSheetState,
-        windowInsets = NavigationBarDefaults.windowInsets,
+        contentWindowInsets = { NavigationBarDefaults.windowInsets },
         onDismissRequest = { showBottomSheet.value = false }
     ) {
         Column(

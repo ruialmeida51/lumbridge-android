@@ -1,11 +1,12 @@
 package com.eyther.lumbridge.ui.navigation
 
-import androidx.annotation.StringRes
+import kotlinx.serialization.Serializable
 
-abstract class NavigationItem(
-    val route: String,
-    @StringRes val label: Int
-) {
+@Serializable
+abstract class NavigationItem {
+    abstract val route: String
+    abstract val label: Int
+
     /**
      * Optional method to build a route with arguments.
      * @param args the arguments to build the route with

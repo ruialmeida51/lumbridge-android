@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.extensions.platform.navigateTo
+import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewEffects
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.INetSalaryInputScreenInputHandler
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.NetSalaryInputScreenInputHandler
@@ -19,6 +21,7 @@ import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -40,9 +43,11 @@ class NetSalaryInputScreenViewModel @Inject constructor(
 
     private var cachedUserFinancials: UserFinancialsUi? = null
 
-    override val viewState = MutableStateFlow<NetSalaryInputScreenViewState>(
-        NetSalaryInputScreenViewState.Loading
-    )
+    override val viewState: MutableStateFlow<NetSalaryInputScreenViewState> =
+        MutableStateFlow(NetSalaryInputScreenViewState.Loading)
+
+    override val viewEffects: MutableSharedFlow<NetSalaryInputScreenViewEffects> =
+        MutableSharedFlow()
 
     init {
         fetchInitialUserData()
@@ -153,7 +158,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
             cacheArguments(netSalary, inputState.locale)
 
             // Navigate to the result screen
-            navController.navigate(route = ToolsNavigationItem.NetSalary.Result.route)
+            viewEffects.emit(NetSalaryInputScreenViewEffects.NavigateToNetSalaryResults)
         }
     }
 

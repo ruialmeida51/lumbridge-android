@@ -17,12 +17,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -45,7 +45,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigateWithArgs
+import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewEffect
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewState
 import com.eyther.lumbridge.features.overview.loandetails.viewmodel.ILoanDetailsScreenViewModel
@@ -110,7 +110,7 @@ fun LoanDetailsScreen(
                 is LoanDetailsScreenViewState.Loading -> LoadingIndicator()
                 is LoanDetailsScreenViewState.Empty -> EmptyScreen(
                     onCreateLoan = {
-                        navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, -1L)
+                        navController.navigateToWithArgs(OverviewNavigationItem.Loan.Edit, -1L)
                     }
                 )
                 is LoanDetailsScreenViewState.Content -> Content(
@@ -198,9 +198,9 @@ private fun ColumnScope.PaymentOverview(
                     .size(20.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false)
+                        indication = ripple(bounded = false)
                     ) {
-                        navController.navigateWithArgs(OverviewNavigationItem.Loan.Edit, state.loanUi.id)
+                        navController.navigateToWithArgs(OverviewNavigationItem.Loan.Edit, state.loanUi.id)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_financial_profile)

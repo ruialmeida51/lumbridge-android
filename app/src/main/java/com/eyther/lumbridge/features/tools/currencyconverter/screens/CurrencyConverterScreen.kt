@@ -40,7 +40,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.ui.common.composables.components.text.DataOverview
 import com.eyther.lumbridge.features.tools.currencyconverter.model.CurrencyConverterScreenViewState
 import com.eyther.lumbridge.features.tools.currencyconverter.viewmodel.CurrencyConverterScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
@@ -48,6 +47,7 @@ import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrap
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
+import com.eyther.lumbridge.ui.common.composables.components.text.DataOverview
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -201,7 +201,7 @@ private fun ColumnScope.Input(
             onInputChanged = { viewModel.onFromAmountChanged(it.toFloatOrNull()) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done,
+                imeAction = ImeAction.Done
             )
         )
 

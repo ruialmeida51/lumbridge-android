@@ -15,11 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,18 +33,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigate
-import com.eyther.lumbridge.features.overview.shared.components.IncomeOverview
-import com.eyther.lumbridge.features.overview.shared.components.PerCountryBreakdown
-import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
+import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.overview.financialprofiledetails.model.DetailsFinancialProfileScreenViewState
 import com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel.DetailsFinancialProfileScreenViewModel
 import com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel.IDetailsFinancialProfileScreenViewModel
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem
+import com.eyther.lumbridge.features.overview.shared.components.IncomeOverview
+import com.eyther.lumbridge.features.overview.shared.components.PerCountryBreakdown
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
+import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -81,7 +81,7 @@ fun DetailsFinancialProfileScreen(
                 }
 
                 is DetailsFinancialProfileScreenViewState.Empty -> EmptyScreen(
-                    onCtaClick = { navController.navigate(OverviewNavigationItem.FinancialProfile.Edit) }
+                    onCtaClick = { navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit) }
                 )
 
                 is DetailsFinancialProfileScreenViewState.Content -> Content(
@@ -104,7 +104,7 @@ private fun ColumnScope.Content(
         netSalaryUi = state.salaryDetails,
         currencySymbol = currencySymbol,
         onEditClick = {
-            navController.navigate(OverviewNavigationItem.FinancialProfile.Edit)
+            navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit)
         }
     )
 
@@ -163,9 +163,9 @@ private fun ColumnScope.MoneyAllocationBreakdown(
                     .size(20.dp)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false)
+                        indication = ripple(bounded = false)
                     ) {
-                        navController.navigate(OverviewNavigationItem.FinancialProfile.Edit)
+                        navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit)
                     },
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_financial_profile)
