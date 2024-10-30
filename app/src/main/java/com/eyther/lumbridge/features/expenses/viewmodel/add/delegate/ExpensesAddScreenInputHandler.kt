@@ -5,6 +5,8 @@ import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.shared.time.toLocalDate
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenInputState
+import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice
+import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice.Surplus
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -13,6 +15,8 @@ import javax.inject.Inject
 class ExpensesAddScreenInputHandler @Inject constructor() : IExpensesAddScreenInputHandler {
     override val inputState: MutableStateFlow<ExpensesAddScreenInputState> =
         MutableStateFlow(ExpensesAddScreenInputState())
+
+    private var cachedCategorySelection: ExpensesCategoryTypesUi? = null
 
     override fun onNameChanged(expenseName: String?) {
         updateInput { state ->
@@ -71,6 +75,25 @@ class ExpensesAddScreenInputHandler @Inject constructor() : IExpensesAddScreenIn
         }
     }
 
+    override fun onSurplusOrExpenseChanged(choiceOrdinal: Int) {
+        updateInput { state ->
+            state.copy(
+                surplusOrExpenseChoice = state.surplusOrExpenseChoice.copy(
+                    selectedTab = choiceOrdinal
+                ),
+                categoryType = if (isSurplus(choiceOrdinal)) {
+                    // Cache the category selection if it's a surplus, as we need to restore it when switching back to expenses.
+                    cachedCategorySelection = state.categoryType
+                    // Force select the surplus category when switching to surplus.
+                    ExpensesCategoryTypesUi.Surplus
+                } else {
+                    // Restore the cached category selection when switching back to expenses.
+                    cachedCategorySelection ?: ExpensesCategoryTypesUi.Food
+                }
+            )
+        }
+    }
+
     override fun validateInput(inputState: ExpensesAddScreenInputState): Boolean {
         return inputState.nameInput.isValid() &&
             inputState.amountInput.isValid() &&
@@ -89,5 +112,9 @@ class ExpensesAddScreenInputHandler @Inject constructor() : IExpensesAddScreenIn
         inputState.update { currentState ->
             update(currentState)
         }
+    }
+
+    private fun isSurplus(selectedOrdinal: Int): Boolean {
+        return selectedOrdinal == Surplus.ordinal
     }
 }

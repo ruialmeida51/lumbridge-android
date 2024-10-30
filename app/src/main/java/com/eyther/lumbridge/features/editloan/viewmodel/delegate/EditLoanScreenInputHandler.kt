@@ -4,9 +4,9 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.shared.time.toLocalDate
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
-import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeUi
+import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenInputState
-import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedUi
+import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedChoice
 import com.eyther.lumbridge.model.loan.LoanCategoryUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -159,8 +159,8 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
 
     override fun validateInput(inputState: EditLoanScreenInputState): Boolean {
         val isMortgageTypeValid = when (inputState.fixedOrVariableLoanChoiceState.selectedTab) {
-            EditLoanVariableOrFixedUi.Variable.ordinal -> validateVariableLoan(inputState)
-            EditLoanVariableOrFixedUi.Fixed.ordinal -> validateFixedLoan(inputState)
+            EditLoanVariableOrFixedChoice.Variable.ordinal -> validateVariableLoan(inputState)
+            EditLoanVariableOrFixedChoice.Fixed.ordinal -> validateFixedLoan(inputState)
             else -> false
         }
 
@@ -178,8 +178,8 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
 
     private fun validateFixedLoan(inputState: EditLoanScreenInputState): Boolean {
         return when (inputState.tanOrTaegLoanChoiceState.selectedTab) {
-            EditLoanFixedTypeUi.Tan.ordinal -> inputState.tanInterestRate.isValid()
-            EditLoanFixedTypeUi.Taeg.ordinal -> inputState.taegInterestRate.isValid()
+            EditLoanFixedTypeChoice.Tan.ordinal -> inputState.tanInterestRate.isValid()
+            EditLoanFixedTypeChoice.Taeg.ordinal -> inputState.taegInterestRate.isValid()
             else -> false
         }
     }

@@ -50,18 +50,18 @@ class ExpensesAddScreenViewModel @Inject constructor(
                     shouldEnableSaveButton = false
                 )
             }
-        }
 
-        inputState
-            .onEach { inputState ->
-                viewState.update { state ->
-                    state.asContent().copy(
-                        inputState = inputState,
-                        shouldEnableSaveButton = shouldEnableSaveButton(inputState)
-                    )
+            inputState
+                .onEach { inputState ->
+                    viewState.update { state ->
+                        state.asContent().copy(
+                            inputState = inputState,
+                            shouldEnableSaveButton = shouldEnableSaveButton(inputState)
+                        )
+                    }
                 }
-            }
-            .launchIn(viewModelScope)
+                .launchIn(this)
+        }
     }
 
     override fun getMaxSelectableYear(): Int {

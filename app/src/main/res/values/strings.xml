@@ -299,4 +299,6 @@
     <string name="vacations">Vacations</string>
     <string name="surplus">Surplus</string>
     <string name="other">Other</string>
+    <string name="expense">Expense</string>
+    <string name="gained">Gained</string>
 </resources>

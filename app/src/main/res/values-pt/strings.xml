@@ -273,6 +273,8 @@
     <string name="sports">Desporto</string>
     <string name="vacations">Férias</string>
     <string name="surplus">Excedente</string>
+    <string name="expense">Despesa</string>
+    <string name="gained">Ganho</string>
 
     <string-array name="loading_messages">
         <item>A preparar um pouco de magia digital…</item>

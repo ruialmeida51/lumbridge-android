@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,8 +40,10 @@ import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewState
+import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice
 import com.eyther.lumbridge.features.expenses.viewmodel.add.ExpensesAddScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.add.IExpensesAddScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
@@ -157,6 +160,12 @@ private fun ColumnScope.Content(
     )
 
     ColumnCardWrapper {
+        ChoiceTab(
+            modifier = Modifier.padding(bottom = DefaultPadding),
+            choiceTabState = state.inputState.surplusOrExpenseChoice,
+            onOptionClicked = { viewModel.onSurplusOrExpenseChanged(it)}
+        )
+
         DateInput(
             modifier = Modifier.fillMaxWidth(),
             state = state.inputState.dateInput,
@@ -171,12 +180,14 @@ private fun ColumnScope.Content(
             onSaveDate = { viewModel.onDateChanged(it) }
         )
 
-        DropdownInput(
-            label = stringResource(id = R.string.expenses_add_type),
-            selectedOption = stringResource(state.inputState.categoryType.categoryRes),
-            items = state.availableCategories.map { it.ordinal.toString() to stringResource(it.categoryRes) },
-            onItemClick = { ordinal, _ -> viewModel.onTypeChanged(ordinal.toIntOrNull()) }
-        )
+        if (!state.inputState.isSurplusSelected) {
+            DropdownInput(
+                label = stringResource(id = R.string.expenses_add_type),
+                selectedOption = stringResource(state.inputState.categoryType.categoryRes),
+                items = state.availableCategories.map { it.ordinal.toString() to stringResource(it.categoryRes) },
+                onItemClick = { ordinal, _ -> viewModel.onTypeChanged(ordinal.toIntOrNull()) }
+            )
+        }
 
         TextInput(
             state = state.inputState.nameInput,
@@ -188,7 +199,7 @@ private fun ColumnScope.Content(
         )
 
         NumberInput(
-            label = stringResource(id = R.string.spent),
+            label = stringResource(id = if (state.inputState.isSurplusSelected) R.string.gained else R.string.spent),
             placeholder = "0",
             state = state.inputState.amountInput,
             onInputChanged = { input -> viewModel.onAmountChanged(input.toFloatOrNull()) },

@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
@@ -26,6 +27,7 @@ import com.eyther.lumbridge.ui.theme.HalfPadding
 @Composable
 fun DropdownInput(
     label: String? = null,
+    enabled: Boolean = true,
     selectedOption: String,
     items: List<Pair<String, String>>, // When we need an identifier different from the display name.
     onItemClick: (String, String) -> Unit
@@ -43,9 +45,15 @@ fun DropdownInput(
     }
 
     ExposedDropdownMenuBox(
-        modifier = Modifier.padding(bottom = DefaultPadding),
+        modifier = Modifier
+            .padding(bottom = DefaultPadding)
+            .alpha(if (enabled) 1f else 0.5f),
         expanded = dropdownExpanded,
-        onExpandedChange = { dropdownExpanded = !dropdownExpanded }
+        onExpandedChange = {
+            if (enabled) {
+                dropdownExpanded = !dropdownExpanded
+            }
+        }
     ) {
         TextField(
             value = selectedOption,
@@ -53,7 +61,9 @@ fun DropdownInput(
             readOnly = true,
             textStyle = MaterialTheme.typography.bodyMedium,
             trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropdownExpanded)
+                if (enabled) {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropdownExpanded)
+                }
             },
             modifier = Modifier
                 .menuAnchor(MenuAnchorType.PrimaryNotEditable)

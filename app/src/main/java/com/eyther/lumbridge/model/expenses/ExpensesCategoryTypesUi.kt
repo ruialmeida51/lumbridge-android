@@ -29,8 +29,7 @@ sealed class ExpensesCategoryTypesUi(
             Pets,
             Sports,
             Vacations,
-            Other,
-            Surplus
+            Other
         ).sortedBy {
             it.orderOfAppearance
         }
@@ -128,6 +127,6 @@ sealed class ExpensesCategoryTypesUi(
         iconRes = R.drawable.ic_savings,
         operator = MathOperator.ADDITION,
         ordinal = 10,
-        orderOfAppearance = 9
+        orderOfAppearance = Int.MAX_VALUE
     )
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.extensions.kotlin.twoDecimalPlaces
+import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewState
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_EXPENSE_ID
@@ -77,6 +78,13 @@ class ExpensesEditScreenViewModel @Inject constructor(
                     ),
                     dateInput = state.dateInput.copy(
                         date = expense?.date
+                    ),
+                    surplusOrExpenseChoice = state.surplusOrExpenseChoice.copy(
+                        selectedTab = if (expense?.categoryType == ExpensesCategoryTypesUi.Surplus) {
+                            ExpensesAddSurplusOrExpenseChoice.Surplus.ordinal
+                        } else {
+                            ExpensesAddSurplusOrExpenseChoice.Expense.ordinal
+                        }
                     )
                 )
             }
