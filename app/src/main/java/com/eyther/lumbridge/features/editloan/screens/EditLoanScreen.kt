@@ -38,10 +38,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.shared.time.toLocalDate
-import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeUi
+import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState
-import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedUi
+import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedChoice
 import com.eyther.lumbridge.features.editloan.viewmodel.EditLoanScreenViewModel
 import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
@@ -297,8 +297,8 @@ private fun ColumnScope.MortgageType(
         Spacer(modifier = Modifier.height(DefaultPadding))
 
         when (state.inputState.fixedOrVariableLoanChoiceState.selectedTab) {
-            EditLoanVariableOrFixedUi.Variable.ordinal -> VariableMortgageInput(state, viewModel)
-            EditLoanVariableOrFixedUi.Fixed.ordinal -> FixedMortgageInput(state, viewModel)
+            EditLoanVariableOrFixedChoice.Variable.ordinal -> VariableMortgageInput(state, viewModel)
+            EditLoanVariableOrFixedChoice.Fixed.ordinal -> FixedMortgageInput(state, viewModel)
         }
     }
 }
@@ -341,7 +341,7 @@ private fun FixedMortgageInput(
     Spacer(modifier = Modifier.height(DefaultPadding))
 
     when (state.inputState.tanOrTaegLoanChoiceState.selectedTab) {
-        EditLoanFixedTypeUi.Tan.ordinal -> {
+        EditLoanFixedTypeChoice.Tan.ordinal -> {
             NumberInput(
                 modifier = Modifier.padding(bottom = DefaultPadding),
                 state = state.inputState.tanInterestRate,
@@ -354,7 +354,7 @@ private fun FixedMortgageInput(
             )
         }
 
-        EditLoanFixedTypeUi.Taeg.ordinal -> {
+        EditLoanFixedTypeChoice.Taeg.ordinal -> {
             NumberInput(
                 modifier = Modifier.padding(bottom = DefaultPadding),
                 state = state.inputState.taegInterestRate,

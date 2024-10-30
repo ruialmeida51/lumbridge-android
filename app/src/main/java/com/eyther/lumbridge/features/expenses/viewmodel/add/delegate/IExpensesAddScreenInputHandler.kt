@@ -14,6 +14,7 @@ interface IExpensesAddScreenInputHandler {
     fun onAmountChanged(expenseAmount: Float?)
     fun onDateChanged(expenseDate: Long?)
     fun onTypeChanged(typeOrdinal: Int?)
+    fun onSurplusOrExpenseChanged(choiceOrdinal: Int)
 
     /**
      * Validates the entire input state and returns an error message if the input state is invalid.

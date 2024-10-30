@@ -32,6 +32,16 @@
             android:value="true" />
         </service>
 
+        <!-- Firebase Messaging Service Display Icon -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_yarn" />
+
+        <!-- Receivers for notifications -->
+        <receiver android:name=".platform.notifications.LumbridgeDefaultNotificationReceiver" />
+        <receiver android:name=".platform.notifications.LumbridgeReminderNotificationReceiver" />
+        <receiver android:name=".platform.notifications.LumbridgeRepeatingReminderNotificationReceiver" />
+
         <activity
             android:name=".launcher.MainActivity"
             android:exported="true"

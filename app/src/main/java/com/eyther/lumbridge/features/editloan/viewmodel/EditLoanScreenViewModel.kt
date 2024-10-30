@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.shared.time.monthsUntil
 import com.eyther.lumbridge.shared.time.toLocalDate
-import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeUi
+import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenInputState
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState.Loading
-import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedUi
+import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedChoice
 import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel.Companion.MORTGAGE_MAX_DURATION
 import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel.Companion.PADDING_YEARS
 import com.eyther.lumbridge.features.editloan.viewmodel.delegate.EditLoanScreenInputHandler
@@ -91,11 +91,11 @@ class EditLoanScreenViewModel @Inject constructor(
                     ),
                     fixedOrVariableLoanChoiceState = state.fixedOrVariableLoanChoiceState.copy(
                         selectedTab = getFixedOrVariableLoanFromInterestRate(initialLoanUi?.loanInterestRateUi)?.ordinal ?: 0,
-                        tabsStringRes = EditLoanVariableOrFixedUi.entries().map { it.label }
+                        tabsStringRes = EditLoanVariableOrFixedChoice.entries().map { it.label }
                     ),
                     tanOrTaegLoanChoiceState = state.tanOrTaegLoanChoiceState.copy(
                         selectedTab = getTanOrTaegFromInterestRate(initialLoanUi?.loanInterestRateUi?.asFixed())?.ordinal ?: 0,
-                        tabsStringRes = EditLoanFixedTypeUi.entries().map { it.label }
+                        tabsStringRes = EditLoanFixedTypeChoice.entries().map { it.label }
                     ),
                     categoryUi = initialLoanUi?.loanCategoryUi ?: LoanCategoryUi.House
                 )
@@ -153,36 +153,36 @@ class EditLoanScreenViewModel @Inject constructor(
         return startDate.monthsUntil(endDateInMillis.toLocalDate()) >= 1
     }
 
-    private fun getFixedOrVariableLoanFromInterestRate(interestRateUi: LoanInterestRateUi?): EditLoanVariableOrFixedUi? {
+    private fun getFixedOrVariableLoanFromInterestRate(interestRateUi: LoanInterestRateUi?): EditLoanVariableOrFixedChoice? {
         return when (interestRateUi) {
-            is LoanInterestRateUi.Fixed -> EditLoanVariableOrFixedUi.Fixed
-            is LoanInterestRateUi.Variable -> EditLoanVariableOrFixedUi.Variable
+            is LoanInterestRateUi.Fixed -> EditLoanVariableOrFixedChoice.Fixed
+            is LoanInterestRateUi.Variable -> EditLoanVariableOrFixedChoice.Variable
             else -> null
         }
     }
 
-    private fun getTanOrTaegFromInterestRate(interestRateUi: LoanInterestRateUi.Fixed?): EditLoanFixedTypeUi? {
+    private fun getTanOrTaegFromInterestRate(interestRateUi: LoanInterestRateUi.Fixed?): EditLoanFixedTypeChoice? {
         return when (interestRateUi) {
-            is LoanInterestRateUi.Fixed.Tan -> EditLoanFixedTypeUi.Tan
-            is LoanInterestRateUi.Fixed.Taeg -> EditLoanFixedTypeUi.Taeg
+            is LoanInterestRateUi.Fixed.Tan -> EditLoanFixedTypeChoice.Tan
+            is LoanInterestRateUi.Fixed.Taeg -> EditLoanFixedTypeChoice.Taeg
             else -> null
         }
     }
 
     private fun getLoanInterestRateUiFromInputState(inputState: EditLoanScreenInputState): LoanInterestRateUi {
         return when (inputState.fixedOrVariableLoanChoiceState.selectedTab) {
-            EditLoanVariableOrFixedUi.Variable.ordinal -> LoanInterestRateUi.Variable(
+            EditLoanVariableOrFixedChoice.Variable.ordinal -> LoanInterestRateUi.Variable(
                 euribor = checkNotNull(inputState.euribor.text?.toFloatOrNull()),
                 spread = checkNotNull(inputState.spread.text?.toFloatOrNull())
             )
 
-            EditLoanVariableOrFixedUi.Fixed.ordinal -> {
+            EditLoanVariableOrFixedChoice.Fixed.ordinal -> {
                 when (inputState.tanOrTaegLoanChoiceState.selectedTab) {
-                    EditLoanFixedTypeUi.Tan.ordinal -> LoanInterestRateUi.Fixed.Tan(
+                    EditLoanFixedTypeChoice.Tan.ordinal -> LoanInterestRateUi.Fixed.Tan(
                         interestRate = checkNotNull(inputState.tanInterestRate.text?.toFloatOrNull())
                     )
 
-                    EditLoanFixedTypeUi.Taeg.ordinal -> LoanInterestRateUi.Fixed.Taeg(
+                    EditLoanFixedTypeChoice.Taeg.ordinal -> LoanInterestRateUi.Fixed.Taeg(
                         interestRate = checkNotNull(inputState.taegInterestRate.text?.toFloatOrNull())
                     )
 

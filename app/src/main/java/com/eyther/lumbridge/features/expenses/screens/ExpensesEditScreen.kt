@@ -43,6 +43,7 @@ import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewE
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewState
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.ExpensesEditScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.IExpensesEditScreenViewModel
+import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
@@ -163,6 +164,12 @@ private fun ColumnScope.Content(
     )
 
     ColumnCardWrapper {
+        ChoiceTab(
+            modifier = Modifier.padding(bottom = DefaultPadding),
+            choiceTabState = state.inputState.surplusOrExpenseChoice,
+            onOptionClicked = { viewModel.onSurplusOrExpenseChanged(it)}
+        )
+
         DateInput(
             modifier = Modifier.fillMaxWidth(),
             state = state.inputState.dateInput,
@@ -177,12 +184,14 @@ private fun ColumnScope.Content(
             onSaveDate = { viewModel.onDateChanged(it) }
         )
 
-        DropdownInput(
-            label = stringResource(id = R.string.expenses_add_type),
-            selectedOption = stringResource(state.inputState.categoryType.categoryRes),
-            items = state.availableCategories.map { it.ordinal.toString() to stringResource(it.categoryRes) },
-            onItemClick = { ordinal, _ -> viewModel.onTypeChanged(ordinal.toIntOrNull()) }
-        )
+        if (!state.inputState.isSurplusSelected) {
+            DropdownInput(
+                label = stringResource(id = R.string.expenses_add_type),
+                selectedOption = stringResource(state.inputState.categoryType.categoryRes),
+                items = state.availableCategories.map { it.ordinal.toString() to stringResource(it.categoryRes) },
+                onItemClick = { ordinal, _ -> viewModel.onTypeChanged(ordinal.toIntOrNull()) }
+            )
+        }
 
         Spacer(modifier = Modifier.height(DefaultPadding))
 
@@ -197,7 +206,7 @@ private fun ColumnScope.Content(
         )
 
         NumberInput(
-            label = stringResource(id = R.string.spent),
+            label = stringResource(id = if (state.inputState.isSurplusSelected) R.string.gained else R.string.spent),
             placeholder = "0",
             state = state.inputState.expenseAmount,
             onInputChanged = { input -> viewModel.onExpenseAmountChanged(input.toFloatOrNull()) },

@@ -27,7 +27,8 @@ import com.eyther.lumbridge.ui.theme.QuarterPadding
 
 @Composable
 fun ChoiceTab(
-    title: String,
+    modifier: Modifier = Modifier,
+    title: String = "",
     choiceTabState: ChoiceTabState,
     minHeight: Dp = 40.dp,
     onOptionClicked: (index: Int) -> Unit
@@ -48,14 +49,16 @@ fun ChoiceTab(
         }
     }
 
-    Text(
-        modifier = Modifier.padding(bottom = HalfPadding),
-        text = title,
-        style = MaterialTheme.typography.bodyMedium
-    )
+    if (!title.isEmpty()) {
+        Text(
+            modifier = Modifier.padding(bottom = HalfPadding),
+            text = title,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(min = minHeight)
             .background(
