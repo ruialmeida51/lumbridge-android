@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.shopping.model.list.ShoppingListScreenViewState
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.list.IShoppingListScreenViewModel
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.list.ShoppingListScreenViewModel

@@ -37,7 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState

@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.features.tools.overview.navigation
+package com.eyther.lumbridge.features.tools.navigation
 
 import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
@@ -16,24 +16,6 @@ sealed class ToolsNavigationItem(
         route = "tools_overview",
         label = R.string.tools
     )
-
-    sealed interface NetSalary {
-        companion object {
-            const val HOST_ROUTE = "net_salary"
-        }
-
-        @Serializable
-        data object Input : ToolsNavigationItem(
-            "net_salary_input",
-            R.string.tools_net_salary_calculator
-        )
-
-        @Serializable
-        data object Result : ToolsNavigationItem(
-            "net_salary_result",
-            R.string.tools_net_salary_result
-        )
-    }
 
     sealed interface Shopping {
         companion object {
@@ -70,6 +52,43 @@ sealed class ToolsNavigationItem(
         data object NotesDetails : ToolsNavigationItem(
             route = "notes_details/{$ARG_NOTE_ID}",
             label = R.string.tools_notes_details
+        )
+    }
+
+    sealed interface RecurringPayments {
+        companion object {
+            const val HOST_ROUTE = "recurring_payments"
+            const val ARG_RECURRING_PAYMENT_ID = "recurringPaymentId"
+        }
+
+        @Serializable
+        data object Overview : ToolsNavigationItem(
+            route = "recurring_payments_overview",
+            label = R.string.recurring_payments_overview
+        )
+
+        @Serializable
+        data object Edit : ToolsNavigationItem(
+            route = "edit_recurring_payment/{$ARG_RECURRING_PAYMENT_ID}",
+            label = R.string.recurring_payments_edit
+        )
+    }
+
+    sealed interface NetSalary {
+        companion object {
+            const val HOST_ROUTE = "net_salary"
+        }
+
+        @Serializable
+        data object Input : ToolsNavigationItem(
+            "net_salary_input",
+            R.string.tools_net_salary_calculator
+        )
+
+        @Serializable
+        data object Result : ToolsNavigationItem(
+            "net_salary_result",
+            R.string.tools_net_salary_result
         )
     }
 

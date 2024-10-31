@@ -34,7 +34,7 @@ import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputS
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.INetSalaryInputScreenViewModel
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.NetSalaryInputScreenViewModel
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton

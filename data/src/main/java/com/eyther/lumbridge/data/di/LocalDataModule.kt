@@ -68,6 +68,12 @@ object LocalDataModule {
 
     @Provides
     @Singleton
+    fun provideRecurringPaymentsDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.recurringPaymentsDao()
+
+    @Provides
+    @Singleton
     fun provideSnapshotSalaryDao(
         lumbridgeRoomDatabase: LumbridgeRoomDatabase
     ) = lumbridgeRoomDatabase.snapshotSalaryDao()

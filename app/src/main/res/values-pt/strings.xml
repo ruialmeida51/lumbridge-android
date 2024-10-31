@@ -75,6 +75,7 @@
     <string name="financial_overview_create_profile">Criar Perfil Financeiro</string>
     <string name="financial_overview_create_loan">Criar Empréstimo</string>
     <string name="financial_overview_loan_details">Detalhes do Empréstimo</string>
+    <string name="financial_overview_loan_details_subtitle">Empréstimo %1$s</string>
     <string name="financial_overview_mortgage_pay_a_month">Registar Pagamento Mensal</string>
 
     <string name="breakdown_salary_title">Perfil Financeiro</string>

@@ -178,7 +178,7 @@ private fun ColumnScope.PaymentOverview(
         modifier = Modifier
             .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
-        text = stringResource(id = R.string.financial_overview_loans),
+        text = stringResource(id = R.string.financial_overview_loan_details_subtitle, stringResource(state.loanUi.loanCategoryUi.label)),
         style = MaterialTheme.typography.bodyLarge
     )
 

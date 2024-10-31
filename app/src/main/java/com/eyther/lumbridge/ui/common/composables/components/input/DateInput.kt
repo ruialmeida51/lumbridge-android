@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.toIsoLocalDateString
+import com.eyther.lumbridge.shared.time.extensions.toIsoLocalDateString
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
 
 @Composable

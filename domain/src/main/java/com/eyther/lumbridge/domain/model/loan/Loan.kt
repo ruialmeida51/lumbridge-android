@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.domain.model.loan
 
-import com.eyther.lumbridge.shared.time.monthsUntil
+import com.eyther.lumbridge.shared.time.extensions.monthsUntil
 import java.time.LocalDate
 
 data class Loan(

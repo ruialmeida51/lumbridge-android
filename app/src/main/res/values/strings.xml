@@ -96,6 +96,7 @@
     <string name="financial_overview_create_profile">Create Financial Profile</string>
     <string name="financial_overview_create_loan">Create a Loan</string>
     <string name="financial_overview_loan_details">Loan Details</string>
+    <string name="financial_overview_loan_details_subtitle">%1$s Loan</string>
     <string name="financial_overview_mortgage_pay_a_month">Register Monthly Payment</string>
 
     <string name="profile">Profile</string>
@@ -177,6 +178,9 @@
     <string name="expenses_add_type">Expense Type</string>
     <string name="expenses_overview_no_financial_profile">You don\'t seem to have a financial profile.\nTap the button below to create one.</string>
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
+
+    <string name="recurring_payments_overview">Recurring Payments</string>
+    <string name="recurring_payments_edit">Edit Recurring Payment</string>
 
     <string name="app_settings_change_preferences">Change your preferences</string>
     <string name="app_settings_change_language">Change the app language</string>

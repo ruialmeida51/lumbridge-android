@@ -3,8 +3,8 @@ package com.eyther.lumbridge.features.editloan.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.shared.time.monthsUntil
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.monthsUntil
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenInputState
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
