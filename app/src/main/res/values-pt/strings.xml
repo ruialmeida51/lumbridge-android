@@ -228,8 +228,9 @@
     <string name="recurring_payment_edit_frequency_years_month">On which month?</string>
     <string name="recurring_payment_edit_frequency_invalid_number_of_years">Por favor, introduz um número de anos válido (maior que 0)</string>
     <string name="recurring_payment_edit_frequency_invalid_day_of_month">Por favor, introduz um dia do mês válido (entre 1 a 31)</string>
-    <string name="recurring_payment_notification">💰 Pagamento Recorrente</string>
-    <string name="recurring_payment_notification_message">O pagamento recorrente %1$s foi efetuado com sucesso. O valor de %2$s foi adicionado como despesa.</string>
+    <string name="recurring_payment_notification">💰 Pagamentos Recorrente</string>
+    <string name="recurring_payment_notification_message">%1$s adicionado como despesa no valor de %2$s</string>
+    <string name="recurring_payment_notification_summary">Mais %1$d mensagens</string>
 
     <string name="app_settings_change_preferences">Muda as tuas preferências</string>
     <string name="app_settings_change_language">Seleciona a tua linguagem preferida</string>

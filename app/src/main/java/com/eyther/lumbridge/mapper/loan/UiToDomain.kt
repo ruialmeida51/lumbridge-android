@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.mapper.loan
 
-import com.eyther.lumbridge.domain.model.loan.Loan
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanCategory
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
 import com.eyther.lumbridge.domain.model.loan.LoanType
@@ -8,7 +8,7 @@ import com.eyther.lumbridge.model.loan.LoanCategoryUi
 import com.eyther.lumbridge.model.loan.LoanInterestRateUi
 import com.eyther.lumbridge.model.loan.LoanUi
 
-fun LoanUi.toDomain() = Loan(
+fun LoanUi.toDomain() = LoanDomain(
     id = id,
     name = name,
     currentAmount = currentLoanAmount,

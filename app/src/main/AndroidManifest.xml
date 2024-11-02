@@ -52,6 +52,7 @@
         <receiver android:name=".platform.notifications.LumbridgeDefaultNotificationReceiver" />
         <receiver android:name=".platform.notifications.LumbridgeReminderNotificationReceiver" />
         <receiver android:name=".platform.notifications.LumbridgeRepeatingReminderNotificationReceiver" />
+        <receiver android:name=".platform.notifications.LumbridgeBatchNotificationReceiver" />
 
         <activity
             android:name=".launcher.MainActivity"

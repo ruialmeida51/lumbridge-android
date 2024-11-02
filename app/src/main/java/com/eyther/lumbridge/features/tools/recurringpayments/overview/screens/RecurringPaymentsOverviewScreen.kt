@@ -228,16 +228,15 @@ private fun RecurringPaymentItem(
         )
 
         TabbedDataOverview(
-            label = stringResource(id = R.string.recurring_payment_category),
-            text = stringResource(recurringPayment.categoryTypesUi.categoryRes),
+            label = stringResource(id = R.string.recurring_payments_next_due_date),
+            text = recurringPayment.periodicity.nextDueDate?.toDayMonthYearDateString().orEmpty(),
         )
-
 
         Spacer(modifier = Modifier.height(HalfPadding))
 
         TabbedDataOverview(
-            label = stringResource(id = R.string.recurring_payments_next_due_date),
-            text = recurringPayment.periodicity.nextDueDate?.toDayMonthYearDateString().orEmpty(),
+            label = stringResource(id = R.string.recurring_payment_category),
+            text = stringResource(recurringPayment.categoryTypesUi.categoryRes),
         )
 
         TabbedDataOverview(

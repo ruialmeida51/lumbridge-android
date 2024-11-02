@@ -1,19 +1,12 @@
 package com.eyther.lumbridge.usecase.recurringpayments
 
+import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
 import com.eyther.lumbridge.mapper.recurringpayments.toDomain
 import com.eyther.lumbridge.model.expenses.ExpenseUi
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
-import com.eyther.lumbridge.model.loan.LoanCategoryUi
-import com.eyther.lumbridge.model.loan.LoanUi
 import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
-import com.eyther.lumbridge.shared.di.model.Schedulers
+import com.eyther.lumbridge.shared.time.extensions.isAfterOrEqual
 import com.eyther.lumbridge.shared.time.extensions.isBeforeOrEqual
-import com.eyther.lumbridge.shared.time.model.Periodicity
 import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
-import com.eyther.lumbridge.usecase.loan.GetAllLoansUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -84,10 +77,7 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
     private fun RecurringPaymentUi.shouldPay(): Boolean {
         val paymentDomain = toDomain()
 
-        return getNextPaymentDate(
-            mostRecentStartDate = paymentDomain.tryGetMostRecentPaymentDate,
-            periodicity = paymentDomain.periodicity
-        ).isBeforeOrEqual(LocalDate.now())
+        return isWithinPaymentDate(paymentDomain) && !hasAlreadyBeenPaid(paymentDomain)
     }
 
     /**
@@ -95,10 +85,23 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
      *
      * @return The next payment date for the recurring payment.
      */
-    private fun getNextPaymentDate(
-        mostRecentStartDate: LocalDate,
-        periodicity: Periodicity
-    ): LocalDate {
-        return periodicity.getNextDate(mostRecentStartDate)
+    private fun isWithinPaymentDate(
+        paymentDomain: RecurringPaymentDomain
+    ): Boolean {
+        return paymentDomain.periodicity
+            .getNextDate(paymentDomain.tryGetMostRecentPaymentDate)
+            .isBeforeOrEqual(LocalDate.now())
+    }
+
+    /**
+     * Determines if a recurring payment has already been paid. A payment is considered paid if the last payment date is
+     * today or in the future in relation to the current date.
+     *
+     * @return True if the recurring payment has already been paid, false otherwise.
+     */
+    private fun hasAlreadyBeenPaid(paymentDomain: RecurringPaymentDomain): Boolean {
+        if (paymentDomain.lastPaymentDate == null) return false
+
+        return paymentDomain.lastPaymentDate?.isAfterOrEqual(LocalDate.now()) == true
     }
 }

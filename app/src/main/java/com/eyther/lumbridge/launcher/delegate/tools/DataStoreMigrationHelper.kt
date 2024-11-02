@@ -3,7 +3,7 @@ package com.eyther.lumbridge.launcher.delegate.tools
 import android.content.Context
 import android.util.Log
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.domain.model.loan.Loan
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanCategory
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
 import com.eyther.lumbridge.domain.model.loan.LoanType
@@ -62,7 +62,7 @@ class DataStoreMigrationHelper @Inject constructor(
             LoanType.FIXED_TAN
         }
 
-        val loan = Loan(
+        val loanDomain = LoanDomain(
             name = context.getString(R.string.mortgage),
             startDate = currentMortgage.startDate,
             endDate = currentMortgage.endDate,
@@ -82,7 +82,7 @@ class DataStoreMigrationHelper @Inject constructor(
             lastAutoPayDate = null
         )
 
-        loanRepository.saveLoan(loan)
+        loanRepository.saveLoan(loanDomain)
         appSettingsRepository.saveCompletedMortgageMigration()
 
         Log.d(TAG, "✅ Mortgage migration completed successfully")
