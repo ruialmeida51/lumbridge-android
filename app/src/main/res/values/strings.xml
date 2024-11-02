@@ -236,8 +236,9 @@
     <string name="recurring_payment_edit_frequency_years_month">On which month?</string>
     <string name="recurring_payment_edit_frequency_invalid_number_of_years">Please, enter a valid number of years (bigger than 0)</string>
     <string name="recurring_payment_edit_frequency_invalid_day_of_month">Please, select a valid day of the month (between 1 and 31)</string>
-    <string name="recurring_payment_notification">💰 Expense Automatically Added</string>
-    <string name="recurring_payment_notification_message">Your recurring payment %1$s has been automatically added to your expenses with the amount of %2$s.</string>
+    <string name="recurring_payment_notification">💰 Expenses Automatically Added</string>
+    <string name="recurring_payment_notification_message">%1$s added to your expenses for %2$s</string>
+    <string name="recurring_payment_notification_summary">%1$d more messages</string>
 
     <string name="app_settings_change_preferences">Change your preferences</string>
     <string name="app_settings_change_language">Change the app language</string>

@@ -1,11 +1,13 @@
 package com.eyther.lumbridge.usecase.loan
 
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.mapper.loan.toDomain
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import com.eyther.lumbridge.model.loan.LoanCalculationUi
 import com.eyther.lumbridge.model.loan.LoanCategoryUi
 import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.shared.time.extensions.isAfterOrEqual
 import com.eyther.lumbridge.shared.time.extensions.isBeforeOrEqual
 import com.eyther.lumbridge.shared.time.model.Periodicity
 import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
@@ -55,7 +57,11 @@ class TryPayPendingLoanPaymentsUseCase @Inject constructor(
      */
     private suspend fun addExpense(loan: LoanUi, loanCalculationUi: LoanCalculationUi) {
         val expense = ExpenseUi(
-            categoryType = if (loan.loanCategoryUi == LoanCategoryUi.House) ExpensesCategoryTypesUi.Housing else  ExpensesCategoryTypesUi.Other,
+            categoryType = if (loan.loanCategoryUi == LoanCategoryUi.House) {
+                ExpensesCategoryTypesUi.Housing
+            } else {
+                ExpensesCategoryTypesUi.Other
+            },
             expenseName = loan.name,
             expenseAmount = loanCalculationUi.monthlyPayment,
             date = LocalDate.now()
@@ -87,26 +93,38 @@ class TryPayPendingLoanPaymentsUseCase @Inject constructor(
 
         val loanDomain = toDomain()
 
-        val mostRecentStartDate = loanDomain.lastAutoPayDate ?: LocalDate.now() // Last payment date or today
-        val periodicity = Periodicity.EveryXMonths(numOfMonth = 1, dayOfMonth = loanDomain.paymentDay ?: 1) // Once a month, on a given day
-
-        return getNextPaymentDate(
-            mostRecentStartDate = mostRecentStartDate,
-            periodicity = periodicity
-        ).isBeforeOrEqual(LocalDate.now())
+        return isWithinPaymentDate(loanDomain) && !hasAlreadyPaid(loanDomain)
     }
 
     /**
-     * Calculates the next payment date for a loan. The next payment date is calculated based on the most recent
-     * payment date or today's date if the loan has not been paid yet but is flagged to be auto paid.
+     * Checks if a Loan is within the payment date range. A loan is within the payment date range if the next payment
+     * date is today or in the past in relation to the current date.
      *
-     * @param mostRecentStartDate The most recent payment date for the loan.
+     * @param loanDomain The loan to check.
      * @param periodicity The periodicity of the loan, at this moment only monthly payments are supported.
      */
-    private fun getNextPaymentDate(
-        mostRecentStartDate: LocalDate,
-        periodicity: Periodicity
-    ): LocalDate {
-        return periodicity.getNextDate(mostRecentStartDate)
+    private fun isWithinPaymentDate(
+        loanDomain: LoanDomain,
+        periodicity: Periodicity = Periodicity.EveryXMonths(numOfMonth = 1, dayOfMonth = loanDomain.paymentDay ?: 1)
+    ): Boolean {
+        val now = LocalDate.now()
+
+        return periodicity
+            .getNextDate(loanDomain.lastAutoPayDate ?: now)
+            .isBeforeOrEqual(now)
+    }
+
+    /**
+     * Determines if a loan has already been paid. A loan is considered paid if the last payment date is today or in the
+     * future in relation to the current date. If there's no last payment date it means the loan has not been paid yet.
+     *
+     * @param loanDomain The loan to check.
+     */
+    private fun hasAlreadyPaid(
+        loanDomain: LoanDomain
+    ): Boolean {
+        if (loanDomain.lastAutoPayDate == null) return false
+
+        return loanDomain.lastAutoPayDate?.isAfterOrEqual(LocalDate.now()) == true
     }
 }

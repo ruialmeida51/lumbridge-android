@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.domain.repository.loan.portugal
 
-import com.eyther.lumbridge.domain.model.loan.Loan
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanAmortization
 import com.eyther.lumbridge.domain.model.loan.LoanCalculation
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
@@ -49,32 +49,32 @@ class PortugalLoanCalculator @Inject constructor() : LoanCalculator {
      *
      * *  `P = L * r / (1 - (1 + r)^-n)`
      */
-    override suspend fun calculate(loan: Loan): LoanCalculation {
+    override suspend fun calculate(loanDomain: LoanDomain): LoanCalculation {
         val nextPayment = calculateMonthlyPayment(
-            interestRate = loan.loanInterestRate,
-            loanAmount = loan.currentAmount,
-            remainingMonths = loan.remainingMonths
+            interestRate = loanDomain.loanInterestRate,
+            loanAmount = loanDomain.currentAmount,
+            remainingMonths = loanDomain.remainingMonths
         )
 
         val (nextPaymentCapital, nextPaymentInterest) = calculateMonthlyPaymentCapitalAndInterestPortions(
             totalMonthlyPayment = nextPayment,
-            remainingLoanAmount = loan.currentAmount,
-            interestRate = loan.loanInterestRate
+            remainingLoanAmount = loanDomain.currentAmount,
+            interestRate = loanDomain.loanInterestRate
         )
 
         val amortizations = calculateAmortization(
-            interestRate = loan.loanInterestRate,
-            loanAmount = loan.currentAmount,
-            remainingMonths = loan.remainingMonths
+            interestRate = loanDomain.loanInterestRate,
+            loanAmount = loanDomain.currentAmount,
+            remainingMonths = loanDomain.remainingMonths
         )
 
         return LoanCalculation(
-            loanAmount = loan.currentAmount,
+            loanAmount = loanDomain.currentAmount,
             monthlyPayment = nextPayment,
             monthlyPaymentCapital = nextPaymentCapital,
-            remainingMonths = loan.remainingMonths,
-            loanCategory = loan.loanCategory,
-            loanType = loan.loanType,
+            remainingMonths = loanDomain.remainingMonths,
+            loanCategory = loanDomain.loanCategory,
+            loanType = loanDomain.loanType,
             monthlyPaymentInterest = nextPaymentInterest,
             amortizations = amortizations
         )

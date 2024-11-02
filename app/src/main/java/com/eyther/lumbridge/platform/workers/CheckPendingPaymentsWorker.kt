@@ -41,8 +41,7 @@ class CheckPendingPaymentsWorker @AssistedInject constructor(
             val paidLoans = tryPayPendingLoanPaymentsUseCase()
             val locale = getLocaleOrDefault()
 
-            notifyUserOfPaidRecurringPayments(paidRecurringPayments, locale.getCurrencySymbol())
-            notifyUserOfPaidLoans(paidLoans, locale.getCurrencySymbol())
+            notifyUsers(paidRecurringPayments, paidLoans, locale.getCurrencySymbol())
 
             Result.success()
         }.getOrElse {
@@ -51,37 +50,35 @@ class CheckPendingPaymentsWorker @AssistedInject constructor(
         }
     }
 
-    private fun notifyUserOfPaidRecurringPayments(
+    private fun notifyUsers(
         paidRecurringPayments: List<RecurringPaymentUi>,
-        currencySymbol: String
-    ) {
-        paidRecurringPayments.forEach { payment ->
-            notificationScheduler.scheduleDefaultNotification(
-                title = appContext.getString(R.string.recurring_payment_notification),
-                message = appContext.getString(
-                    R.string.recurring_payment_notification_message,
-                    payment.label,
-                    "${payment.amountToPay.forceTwoDecimalsPlaces()}$currencySymbol"
-                ),
-                whenToDisplayInMillis = System.currentTimeMillis()
-            )
-        }
-    }
-
-    private fun notifyUserOfPaidLoans(
         paidLoans: List<Pair<LoanUi, LoanCalculationUi>>,
         currencySymbol: String
     ) {
-        paidLoans.forEach { (loan, loanCalculation) ->
-            notificationScheduler.scheduleDefaultNotification(
-                title = appContext.getString(R.string.recurring_payment_notification),
-                message = appContext.getString(
+        if (paidRecurringPayments.isEmpty() && paidLoans.isEmpty()) {
+            return
+        }
+
+        val title = appContext.getString(R.string.recurring_payment_notification)
+        val messages = arrayListOf<String>()
+
+        val combinedList =
+            paidRecurringPayments.map { it.label to it.amountToPay } +
+            paidLoans.map { it.first.name to it.second.monthlyPayment }
+
+        combinedList.forEach { (label, amount) ->
+            messages.add(
+                appContext.getString(
                     R.string.recurring_payment_notification_message,
-                    loan.name,
-                    "${loanCalculation.monthlyPayment.forceTwoDecimalsPlaces()}$currencySymbol"
-                ),
-                whenToDisplayInMillis = System.currentTimeMillis()
+                    label, "${amount.forceTwoDecimalsPlaces()}$currencySymbol"
+                )
             )
         }
+
+        notificationScheduler.scheduleBatchNotification(
+            title = title,
+            messages = messages,
+            whenToDisplayInMillis = System.currentTimeMillis()
+        )
     }
 }

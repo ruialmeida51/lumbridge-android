@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.eyther.lumbridge.extensions.platform.getAlarmManager
+import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_BATCH_INTENT_REQUEST_CODE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_DEFAULT_INTENT_REQUEST_CODE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_REMINDER_INTENT_REQUEST_CODE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_REPEATING_REMINDER_INTENT_REQUEST_CODE
@@ -83,6 +84,27 @@ class LumbridgeNotificationScheduler @Inject constructor(
         )
     }
 
+    fun scheduleBatchNotification(
+        title: String,
+        messages: ArrayList<String>,
+        whenToDisplayInMillis: Long
+    ) {
+        val alarmManager = context.getAlarmManager() ?: return
+
+        val intent = createBatchPendingIntent(
+            requestCode = NOTIFICATION_BATCH_INTENT_REQUEST_CODE,
+            title = title,
+            messages = messages,
+            receiver = LumbridgeBatchNotificationReceiver::class.java
+        )
+
+        alarmManager.setAndAllowWhileIdle(
+            android.app.AlarmManager.RTC_WAKEUP,
+            whenToDisplayInMillis,
+            intent
+        )
+    }
+
     private fun createPendingIntent(
         requestCode: Int,
         title: String,
@@ -93,6 +115,26 @@ class LumbridgeNotificationScheduler @Inject constructor(
         val intent = Intent(context, receiver).apply {
             putExtra(LumbridgeNotificationChannelBuilder.NOTIFICATION_ARG_TITLE, title)
             putExtra(LumbridgeNotificationChannelBuilder.NOTIFICATION_ARG_MESSAGE, message)
+        }
+
+        return PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            flags
+        )
+    }
+
+    private fun createBatchPendingIntent(
+        requestCode: Int,
+        title: String,
+        messages: ArrayList<String>,
+        receiver: Class<*>,
+        flags: Int = PendingIntent.FLAG_IMMUTABLE
+    ): PendingIntent {
+        val intent = Intent(context, receiver).apply {
+            putExtra(LumbridgeNotificationChannelBuilder.NOTIFICATION_ARG_TITLE, title)
+            putStringArrayListExtra(LumbridgeNotificationChannelBuilder.NOTIFICATION_ARG_MESSAGE, messages)
         }
 
         return PendingIntent.getBroadcast(

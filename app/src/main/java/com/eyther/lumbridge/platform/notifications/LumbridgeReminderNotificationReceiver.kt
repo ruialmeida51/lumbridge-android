@@ -12,7 +12,7 @@ import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelB
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_ARG_TITLE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_OPEN_ACTIVITY_INTENT_REQUEST_CODE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_REMINDER_CHANNEL_ID
-import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_REMINDER_INTENT_REQUEST_CODE
+import java.util.UUID
 
 class LumbridgeReminderNotificationReceiver : BroadcastReceiver() {
 
@@ -39,7 +39,7 @@ class LumbridgeReminderNotificationReceiver : BroadcastReceiver() {
             .setContentIntent(contentIntent)
 
         notificationManager.notify(
-            NOTIFICATION_REMINDER_INTENT_REQUEST_CODE,
+            UUID.randomUUID().hashCode() + (title + message).hashCode(),
             notificationBuilder.build()
         )
     }

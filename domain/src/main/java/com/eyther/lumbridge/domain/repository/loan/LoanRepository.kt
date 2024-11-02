@@ -4,7 +4,7 @@ import com.eyther.lumbridge.data.datasource.loan.local.LoanLocalDataSource
 import com.eyther.lumbridge.domain.mapper.loan.toCached
 import com.eyther.lumbridge.domain.mapper.loan.toDomain
 import com.eyther.lumbridge.domain.mapper.user.toDomain
-import com.eyther.lumbridge.domain.model.loan.Loan
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanCalculation
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
@@ -20,7 +20,7 @@ class LoanRepository @Inject constructor(
     private val loanLocalDataSource: LoanLocalDataSource,
     private val schedulers: Schedulers
 ) {
-    fun getLoansAndCalculationsFlow(locale: SupportedLocales): Flow<List<Pair<Loan, LoanCalculation>>> =
+    fun getLoansAndCalculationsFlow(locale: SupportedLocales): Flow<List<Pair<LoanDomain, LoanCalculation>>> =
         loanLocalDataSource
             .loansFlow
             .mapNotNull { cachedLoans ->
@@ -32,7 +32,7 @@ class LoanRepository @Inject constructor(
     fun getLoanAndCalculationByIdStream(
         loanId: Long,
         locale: SupportedLocales
-    ): Flow<Pair<Loan, LoanCalculation>> =
+    ): Flow<Pair<LoanDomain, LoanCalculation>> =
         loanLocalDataSource
             .getLoanByIdStream(loanId)
             .mapNotNull { cachedLoan ->
@@ -41,7 +41,7 @@ class LoanRepository @Inject constructor(
                     ?.let { it to calculate(it, locale) }
             }
 
-    suspend fun getLoansAndCalculations(locale: SupportedLocales): List<Pair<Loan, LoanCalculation>> = withContext(schedulers.io) {
+    suspend fun getLoansAndCalculations(locale: SupportedLocales): List<Pair<LoanDomain, LoanCalculation>> = withContext(schedulers.io) {
         loanLocalDataSource
             .getLoans()
             .orEmpty()
@@ -49,33 +49,33 @@ class LoanRepository @Inject constructor(
             .map { it to calculate(it, locale) }
     }
 
-    suspend fun saveLoan(loan: Loan) = withContext(schedulers.io) {
-        loanLocalDataSource.saveLoan(loan.toCached())
+    suspend fun saveLoan(loanDomain: LoanDomain) = withContext(schedulers.io) {
+        loanLocalDataSource.saveLoan(loanDomain.toCached())
     }
 
     suspend fun deleteLoanById(loanId: Long) = withContext(schedulers.io) {
         loanLocalDataSource.deleteLoanById(loanId)
     }
 
-    suspend fun getLoanById(loanId: Long): Loan? = withContext(schedulers.io) {
+    suspend fun getLoanById(loanId: Long): LoanDomain? = withContext(schedulers.io) {
         loanLocalDataSource.getLoanById(loanId)?.toDomain()
     }
 
     /**
      * Calculates the loan meta data.
      *
-     * @param loan the information about the loan
+     * @param loanDomain the information about the loan
      * @param locale the locale to calculate the mortgage from
      *
      * @return the loan calculation
      */
     suspend fun calculate(
-        loan: Loan,
+        loanDomain: LoanDomain,
         locale: SupportedLocales
     ): LoanCalculation =
         withContext(schedulers.cpu) {
             return@withContext when (locale) {
-                SupportedLocales.PORTUGAL -> portugalLoanCalculator.calculate(loan)
+                SupportedLocales.PORTUGAL -> portugalLoanCalculator.calculate(loanDomain)
             }
         }
 
