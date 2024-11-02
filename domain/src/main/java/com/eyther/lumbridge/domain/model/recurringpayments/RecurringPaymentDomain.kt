@@ -1,7 +1,6 @@
-package com.eyther.lumbridge.domain.model.recurringpayments.model
+package com.eyther.lumbridge.domain.model.recurringpayments
 
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
-import com.eyther.lumbridge.shared.time.extensions.isAfterOrEqual
 import com.eyther.lumbridge.shared.time.model.Periodicity
 import java.time.LocalDate
 
@@ -24,4 +23,7 @@ data class RecurringPaymentDomain(
     val amountToPay: Float,
     val categoryTypes: ExpensesCategoryTypes,
     val shouldNotifyWhenPaid: Boolean
-)
+) {
+    val tryGetMostRecentPaymentDate
+        get() = lastPaymentDate ?: startDate
+}

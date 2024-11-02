@@ -17,7 +17,11 @@ fun LoanUi.toDomain() = Loan(
     endDate = endDate,
     loanInterestRate = loanInterestRateUi.toDomain(),
     loanType = loanInterestRateUi.getLoanType(),
-    loanCategory = loanCategoryUi.toDomain()
+    loanCategory = loanCategoryUi.toDomain(),
+    shouldNotifyWhenPaid = shouldNotifyWhenPaid,
+    shouldAutoAddToExpenses = shouldAutoAddToExpenses,
+    lastAutoPayDate = lastAutoPayDate,
+    paymentDay = paymentDay
 )
 
 fun LoanInterestRateUi.getLoanType() = when(this) {

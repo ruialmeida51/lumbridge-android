@@ -21,6 +21,9 @@ interface IEditLoanScreenInputHandler {
     fun onStartDateChanged(startDate: Long?)
     fun onEndDateChanged(endDate: Long?)
     fun onLoanCategoryChanged(ordinal: Int?)
+    fun onNotifyWhenPaidChanged(notifyWhenPaid: Boolean)
+    fun onAutomaticallyAddToExpensesChanged(automaticallyAddToExpenses: Boolean)
+    fun onPaymentDayChanged(paymentDay: Int?)
 
     /**
      * Validates the entire input state and returns an error message if the input state is invalid.

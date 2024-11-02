@@ -27,6 +27,10 @@ fun LoanCached.toDomain(): Loan {
         ),
         loanType = loanType,
         loanCategory = loanCategory,
+        shouldNotifyWhenPaid = shouldNotifyWhenPaid,
+        shouldAutoAddToExpenses = shouldAutoAddToExpenses,
+        lastAutoPayDate = lastAutoPayDate?.toLocalDate(),
+        paymentDay = paymentDay
     )
 }
 

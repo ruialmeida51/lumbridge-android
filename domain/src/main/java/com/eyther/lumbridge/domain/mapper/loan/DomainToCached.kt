@@ -16,5 +16,9 @@ fun Loan.toCached() = LoanCached(
     variableSpread = loanInterestRate.tryGetSpread(),
     fixedTanInterestRate = loanInterestRate.tryGetTanInterestRate(),
     loanTypeOrdinal = loanType.ordinal,
-    loanCategoryOrdinal = loanCategory.ordinal
+    loanCategoryOrdinal = loanCategory.ordinal,
+    shouldNotifyWhenPaid = shouldNotifyWhenPaid,
+    shouldAutoAddToExpenses = shouldAutoAddToExpenses,
+    lastAutoPayDate = lastAutoPayDate?.toIsoLocalDateString(),
+    paymentDay = paymentDay
 )

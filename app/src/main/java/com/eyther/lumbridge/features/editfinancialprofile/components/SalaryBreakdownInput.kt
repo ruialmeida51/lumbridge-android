@@ -64,7 +64,7 @@ fun ColumnScope.SalaryBreakdownInput(
             )
         }
 
-        Spacer(modifier = Modifier.height(DefaultPadding))
+        Spacer(modifier = Modifier.height(HalfPadding))
 
         NumberInput(
             label = stringResource(id = R.string.edit_financial_profile_per_diem_food_card),

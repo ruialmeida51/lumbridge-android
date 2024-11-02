@@ -49,6 +49,7 @@ import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrap
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
 import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
+import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInputWithIcon
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
@@ -185,18 +186,19 @@ private fun ColumnScope.Content(
         )
 
         if (!state.inputState.isSurplusSelected) {
-            DropdownInput(
+            DropdownInputWithIcon(
                 label = stringResource(id = R.string.expenses_add_type),
                 selectedOption = stringResource(state.inputState.categoryType.categoryRes),
-                items = state.availableCategories.map { it.ordinal.toString() to stringResource(it.categoryRes) },
-                onItemClick = { ordinal, _ -> viewModel.onTypeChanged(ordinal.toIntOrNull()) }
+                selectedIcon = state.inputState.categoryType.iconRes,
+                items = state.availableCategories.map { Triple(it.iconRes, it.ordinal.toString(), stringResource(it.categoryRes)) },
+                onItemClick = { _, ordinal, _ -> viewModel.onTypeChanged(ordinal.toIntOrNull()) }
             )
         }
 
-        Spacer(modifier = Modifier.height(DefaultPadding))
+        Spacer(modifier = Modifier.height(HalfPadding))
 
         TextInput(
-            modifier = Modifier.padding(bottom = DefaultPadding),
+            modifier = Modifier.padding(bottom = HalfPadding),
             state = state.inputState.expenseName,
             label = stringResource(id = R.string.name),
             onInputChanged = viewModel::onExpenseNameChanged,

@@ -13,8 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.eyther.lumbridge.extensions.platform.sharedViewModel
-import com.eyther.lumbridge.features.recurringpayments.editrecurringpayments.screens.EditRecurringPaymentsScreen
-import com.eyther.lumbridge.features.recurringpayments.overview.screens.RecurringPaymentsOverviewScreen
+import com.eyther.lumbridge.features.tools.recurringpayments.editrecurringpayments.screens.EditRecurringPaymentsScreen
+import com.eyther.lumbridge.features.tools.recurringpayments.overview.screens.RecurringPaymentsOverviewScreen
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
 import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen

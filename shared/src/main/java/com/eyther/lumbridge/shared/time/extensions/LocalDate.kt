@@ -26,6 +26,12 @@ fun LocalDate.toMonthYearDateString(): String =
     format(DateTimeFormatter.ofPattern("MMMM yyyy"))
 
 /**
+ * Converts a [LocalDate] to a [String] in the format "dd MMMM yyyy".
+ */
+fun LocalDate.toDayMonthYearDateString(): String =
+    format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
+
+/**
  * Calculates the number of months between two [LocalDate]s.
  *
  * @param other [LocalDate] to calculate the difference to.

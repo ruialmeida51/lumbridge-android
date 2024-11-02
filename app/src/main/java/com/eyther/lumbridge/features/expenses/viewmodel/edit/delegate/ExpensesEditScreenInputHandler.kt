@@ -93,7 +93,8 @@ class ExpensesEditScreenInputHandler @Inject constructor() : IExpensesEditScreen
 
     override fun validateInput(inputState: ExpensesEditScreenInputState): Boolean {
         return inputState.expenseName.isValid() &&
-            inputState.expenseAmount.isValid()
+            inputState.expenseAmount.isValid() &&
+            inputState.dateInput.isValid()
     }
 
     override fun shouldEnableSaveButton(inputState: ExpensesEditScreenInputState): Boolean {

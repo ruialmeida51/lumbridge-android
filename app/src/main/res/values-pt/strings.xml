@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name_release">Loom</string>
     <string name="app_name_debug">Loom Debug</string>
     <string name="app_name_beta">Loom Beta</string>
@@ -40,6 +40,10 @@
     <string name="edit_loan_profile_loan">Quais são as condições do teu empréstimo?</string>
     <string name="edit_loan_profile_owe">Quanto te falta pagar?</string>
     <string name="edit_loan_profile_save">Guardar Perfil de Empréstimo</string>
+    <string name="edit_loan_should_auto_add_to_expenses">Adicionar automaticamente o pagamento às despesas?</string>
+    <string name="edit_loan_should_notify_when_paid">Notificar quando adicionado?</string>
+    <string name="edit_loan_should_auto_add_to_expenses_payment_day">Em que dia do mês é que o pagamento é feito?</string>
+    <string name="edit_loan_payment_date">Dia de Pagamento</string>
     <string name="edit_loan_profile_loan_interest_rate">Tens taxa de juro variável ou fixa?</string>
     <string name="edit_loan_profile_loan_fixed_interest_rate">O cálculo do teu empréstimo é feito com base em TAN ou TAEG?</string>
     <string name="edit_loan_profile_invalid_interest_rate">Por favor, introduz uma taxa de juro válida</string>
@@ -49,6 +53,7 @@
     <string name="edit_loan_profile_invalid_loan_name">Por favor, introduz um nome de empréstimo válido</string>
     <string name="edit_loan_profile_invalid_start_date">Por favor, introduz uma data de início válida</string>
     <string name="edit_loan_profile_invalid_end_date">Por favor, introduz uma data de fim válida</string>
+    <string name="edit_loan_profile_invalid_payment_day">Por favor, introduz um dia de pagamento válido (entre 1 a 31)</string>
     <string name="edit_loan_profile_loan_category">Categoria de Empréstimo</string>
 
     <string name="financial_overview">Visão</string>
@@ -92,7 +97,9 @@
     <string name="breakdown_loans_paid_amount">Pago %1$s de %2$s</string>
     <string name="breakdown_loans_interest_rate">Taxa de Juro</string>
     <string name="breakdown_loans_months_left">Meses Restantes</string>
-    <string name="breakdown_loans_no_loans">Parece que ainda não tens nenhum empréstimo. Carrega no botão em baixo para começar a criar um!</string>
+    <string name="breakdown_loans_auto_add_to_expenses">Adicionar auto. às despesas</string>
+    <string name="breakdown_loans_notify_when_added_to_expenses">Notificar quando adicionado</string>
+    <string name="breakdown_loans_no_loans">Parece que ainda não tens nenhum empréstimo. Carrega no botão em baixo para criar um!</string>
     <string name="breakdown_loans_no_loans_create">Criar Empréstimo</string>
     <string name="breakdown_tap_to_view_more">Ver detalhes</string>
     <string name="breakdown_delete_loan_confirmation_message">Tens a certeza que queres remover o empréstimo %1$s?</string>
@@ -171,6 +178,59 @@
     <string name="expenses_add_type">Tipo de Despesa</string>
     <string name="expenses_overview_no_financial_profile">Parece que ainda não tens um perfil financeiro. Carrega no botão em baixo para criar um.</string>
     <string name="expenses_overview_no_expenses">Parece que ainda não tens nenhuma despesa. Carrega no botão para começar a adicionar.</string>
+    <string name="recurring_payments_overview">Pagamentos Recorrentes</string>
+    <string name="recurring_payments_edit">Editar Pagamento Recorrente</string>
+    <string name="recurring_payments_empty_title">Parece que ainda não tens nenhum pagamento recorrente.\nCarrega no botão em baixo para começar a adicionar!</string>
+    <string name="recurring_payment_add_button">Adicionar Pagamento Recorrente</string>
+    <plurals name="periodicity_every_x_days" tools:ignore="MissingQuantity">
+        <item quantity="one" tools:ignore="ImpliedQuantity">Todos os dias</item>
+        <item quantity="other">A cada %1$s dias</item>
+    </plurals>
+    <plurals name="periodicity_every_x_weeks_at_day_of_week" tools:ignore="MissingQuantity">
+        <item quantity="one">Todas as semanas à %2$s</item>
+        <item quantity="other">%2$s, a cada %1$s semanas</item>
+    </plurals>
+    <plurals name="periodicity_every_x_months_at_day_of_month" tools:ignore="MissingQuantity">
+        <item quantity="one">Todos os meses no dia %2$s</item>
+        <item quantity="other">A cada %1$s meses no dia %2$s</item>
+    </plurals>
+    <plurals name="periodicity_every_x_years_at_month" tools:ignore="MissingQuantity">
+        <item quantity="one">Todos os anos em %2$s</item>
+        <item quantity="other">A cada %1$s anos em %2$s</item>
+    </plurals>
+    <string name="periodicity_every_x_days_selection">A cada X dias</string>
+    <string name="periodicity_every_x_weeks_at_day_of_week_selection">A cada X semanas no dia da semana</string>
+    <string name="periodicity_every_x_months_at_day_of_month_selection">A cada X meses no dia</string>
+    <string name="periodicity_every_x_years_at_month_selection">A cada X anos no mês</string>
+    <string name="recurring_payments_periodicity">Periodicidade</string>
+    <string name="recurring_payments_next_due_date">Próxima Data</string>
+    <string name="recurring_payment_notify_me_when_paid">Notificar-me quando pago</string>
+    <string name="recurring_payment_amount">Valor</string>
+    <string name="recurring_payment_category">Categoria</string>
+    <string name="recurring_payment_notify_when_added">Notificar quando adicionado</string>
+    <string name="recurring_payment_delete_confirmation">Tens a certeza que queres remover o pagamento recorrente com o nome %1$s?</string>
+    <string name="recurring_payment_edit_invalid_amount">Por favor, introduz um valor válido</string>
+    <string name="recurring_payment_edit_invalid_name">Por favor, introduz um nome válido</string>
+    <string name="recurring_payment_edit_expense_input">Quais são os detalhes do pagamento?</string>
+    <string name="recurring_payment_edit_expense_frequency">Com que frequência é que este pagamento é feito?</string>
+    <string name="recurring_payment_edit_expense_frequency_input">Frequência do Pagamento</string>
+    <string name="recurring_payment_edit_frequency_start_date">Quando é que este pagamento começa?</string>
+    <string name="recurring_payment_edit_frequency_start_date_error">Por favor, introduz uma data de início válida</string>
+    <string name="recurring_payment_edit_frequency_days">Repetir a cada X dia(s)</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_days">Por favor, introduz um número de dias válido (maior que  0)</string>
+    <string name="recurring_payment_edit_frequency_weeks">Repetir a cada X semana(s)</string>
+    <string name="recurring_payment_edit_frequency_weeks_day">Em que dia da semana?</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_weeks">Por favor, introduz um número de semanas válido (maior que  0)</string>
+    <string name="recurring_payment_edit_frequency_months">Repeat every X month(s)</string>
+    <string name="recurring_payment_edit_frequency_months_day_of_month">On which day of the month?</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_months">Por favor, introduz um número de meses válido (maior que 0)</string>
+    <string name="recurring_payment_edit_frequency_years">Repeat every X year(s)</string>
+    <string name="recurring_payment_edit_frequency_years_month">On which month?</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_years">Por favor, introduz um número de anos válido (maior que 0)</string>
+    <string name="recurring_payment_edit_frequency_invalid_day_of_month">Por favor, introduz um dia do mês válido (entre 1 a 31)</string>
+    <string name="recurring_payment_notification">💰 Pagamento Recorrente</string>
+    <string name="recurring_payment_notification_message">O pagamento recorrente %1$s foi efetuado com sucesso. O valor de %2$s foi adicionado como despesa.</string>
+
     <string name="app_settings_change_preferences">Muda as tuas preferências</string>
     <string name="app_settings_change_language">Seleciona a tua linguagem preferida</string>
     <string name="language_portuguese">Português</string>

@@ -2,7 +2,7 @@ package com.eyther.lumbridge.domain.mapper.recurringpayments
 
 import com.eyther.lumbridge.data.model.recurringpayments.local.RecurringPaymentCached
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
-import com.eyther.lumbridge.domain.model.recurringpayments.model.RecurringPaymentDomain
+import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 
 fun RecurringPaymentCached.toDomain() = RecurringPaymentDomain(
@@ -15,3 +15,5 @@ fun RecurringPaymentCached.toDomain() = RecurringPaymentDomain(
     amountToPay = amountToPay,
     categoryTypes = ExpensesCategoryTypes.of(categoryTypeOrdinal)
 )
+
+fun List<RecurringPaymentCached>.toDomain() = map { it.toDomain() }

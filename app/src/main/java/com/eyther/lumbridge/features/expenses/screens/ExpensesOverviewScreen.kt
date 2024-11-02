@@ -578,7 +578,6 @@ private fun MonthCard(
                 .fillMaxWidth(),
             contentAlignment = Alignment.CenterStart
         ) {
-
             Row(
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {

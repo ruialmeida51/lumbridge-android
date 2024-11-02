@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "0c068481f2482340b1341dcbad6b654c",
+    "identityHash": "e98f9d459242d87097edb68d2a69b760",
     "entities": [
       {
         "tableName": "expenses",
@@ -162,7 +162,7 @@
       },
       {
         "tableName": "loan",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`loanId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `currentAmount` REAL NOT NULL, `initialAmount` REAL NOT NULL, `fixedTaegInterestRate` REAL, `variableEuribor` REAL, `variableSpread` REAL, `fixedTanInterestRate` REAL, `loanTypeOrdinal` INTEGER NOT NULL, `loanCategoryOrdinal` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`loanId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `startDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `currentAmount` REAL NOT NULL, `initialAmount` REAL NOT NULL, `fixedTaegInterestRate` REAL, `variableEuribor` REAL, `variableSpread` REAL, `fixedTanInterestRate` REAL, `loanTypeOrdinal` INTEGER NOT NULL, `loanCategoryOrdinal` INTEGER NOT NULL, `shouldNotifyWhenPaid` INTEGER NOT NULL DEFAULT 0, `shouldAutoAddToExpenses` INTEGER NOT NULL DEFAULT 0, `lastAutoPayDate` TEXT, `paymentDay` INTEGER)",
         "fields": [
           {
             "fieldPath": "loanId",
@@ -235,6 +235,32 @@
             "columnName": "loanCategoryOrdinal",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "shouldNotifyWhenPaid",
+            "columnName": "shouldNotifyWhenPaid",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldAutoAddToExpenses",
+            "columnName": "shouldAutoAddToExpenses",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "lastAutoPayDate",
+            "columnName": "lastAutoPayDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paymentDay",
+            "columnName": "paymentDay",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -297,7 +323,7 @@
       },
       {
         "tableName": "recurring_payments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recurringPaymentId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `startDate` TEXT NOT NULL, `lastPaymentDate` TEXT, `periodicity` TEXT NOT NULL, `label` TEXT NOT NULL, `amountToPay` REAL NOT NULL, `shouldNotifyWhenPaid` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recurringPaymentId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `startDate` TEXT NOT NULL, `lastPaymentDate` TEXT, `periodicity` TEXT NOT NULL, `label` TEXT NOT NULL, `amountToPay` REAL NOT NULL, `categoryTypeOrdinal` INTEGER NOT NULL, `shouldNotifyWhenPaid` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "recurringPaymentId",
@@ -336,6 +362,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "categoryTypeOrdinal",
+            "columnName": "categoryTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "shouldNotifyWhenPaid",
             "columnName": "shouldNotifyWhenPaid",
             "affinity": "INTEGER",
@@ -355,7 +387,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0c068481f2482340b1341dcbad6b654c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e98f9d459242d87097edb68d2a69b760')"
     ]
   }
 }

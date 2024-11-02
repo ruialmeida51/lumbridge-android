@@ -49,7 +49,7 @@ sealed class Periodicity(
             val currentDate = LocalDate.now()
             var nextDate = startFrom
 
-            while (nextDate.isBeforeOrEqual(currentDate)) {
+            while (nextDate.isBefore(currentDate)) {
                 nextDate = nextDate.plusDays(numOfDays.toLong())
             }
 
@@ -76,7 +76,7 @@ sealed class Periodicity(
             // Start with the next or same day of the week. Temporal adjusters are awesome. 🚀
             var nextDate = startFrom.with(TemporalAdjusters.nextOrSame(dayOfWeek))
 
-            while (nextDate.isBeforeOrEqual(currentDate)) {
+            while (nextDate.isBefore(currentDate)) {
                 nextDate = nextDate.plusWeeks(numOfWeeks.toLong())
             }
 
@@ -101,7 +101,7 @@ sealed class Periodicity(
             // Start with the specified day of the month, but cap it to the max days in the starting month
             var nextDate = startFrom.withDayOfMonth(minOf(dayOfMonth, startFrom.lengthOfMonth()))
 
-            while (nextDate.isBeforeOrEqual(currentDate)) {
+            while (nextDate.isBefore(currentDate)) {
                 // When we increment a month, LocalDate internally makes sure that we don't go over the last day of the month.
                 // Meaning, if we're on the 31st of January and we increment by a month, we'll end up on the 28th of February.
                 // Another example is if we're on the 31th of March and we increment by a month, we'll end up on the 30th of April.
@@ -134,7 +134,7 @@ sealed class Periodicity(
             val currentDate = LocalDate.now()
             var nextDate = startFrom.withMonth(minOf(month.value, MONTHS_IN_YEAR))
 
-            while (nextDate.isBeforeOrEqual(currentDate)) {
+            while (nextDate.isBefore(currentDate)) {
                 nextDate = nextDate.plusYears(numOfYear.toLong())
             }
 

@@ -2,30 +2,50 @@ package com.eyther.lumbridge.usecase.recurringpayments
 
 import com.eyther.lumbridge.mapper.recurringpayments.toDomain
 import com.eyther.lumbridge.model.expenses.ExpenseUi
+import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.loan.LoanCalculationUi
+import com.eyther.lumbridge.model.loan.LoanCategoryUi
+import com.eyther.lumbridge.model.loan.LoanUi
 import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.shared.time.extensions.isAfterOrEqual
+import com.eyther.lumbridge.shared.time.extensions.isBeforeOrEqual
 import com.eyther.lumbridge.shared.time.model.Periodicity
 import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
+import com.eyther.lumbridge.usecase.loan.GetAllLoansUseCase
+import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import javax.inject.Inject
 
 class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
     private val getRecurringPaymentsUseCase: GetRecurringPaymentsUseCase,
-    private val saveExpenseUseCase: SaveExpenseUseCase,
-    private val schedulers: Schedulers
+    private val saveRecurringPaymentUseCase: SaveRecurringPaymentUseCase,
+    private val saveExpenseUseCase: SaveExpenseUseCase
 ) {
-    suspend operator fun invoke() {
+    /**
+     * Tries to pay all pending recurring payments.
+     *
+     * A recurring payment is considered pending if the next payment date is today or in the past in relation to the current date.
+     * The payment is done by creating a new expense from the recurring payment and saving it.
+     *
+     * @return the list of payments that were paid to notify the user, empty if the flag to notify the user is false.
+     */
+    suspend operator fun invoke(): List<RecurringPaymentUi> {
+        val recurringPaymentsPaid = mutableListOf<RecurringPaymentUi>()
         val recurringPayments = getRecurringPaymentsUseCase()
 
-        withContext(schedulers.cpu) {
-            recurringPayments.forEach { payment ->
-                if (shouldPay(payment.periodicity, payment.startDate, payment.lastPaymentDate)) {
-                    payRecurringPayment(payment)
+        recurringPayments.forEach { paymentUi ->
+            if (paymentUi.shouldPay()) {
+                payRecurringPayment(paymentUi)
+                updateRecurringPaymentLastPaymentDate(paymentUi)
+
+                if (paymentUi.shouldNotifyWhenPaid) {
+                    recurringPaymentsPaid.add(paymentUi)
                 }
             }
         }
+
+        return recurringPaymentsPaid
     }
 
     /**
@@ -39,9 +59,20 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
             date = LocalDate.now()
         )
 
-        withContext(schedulers.io) {
-            saveExpenseUseCase(expense)
-        }
+        saveExpenseUseCase(expense)
+    }
+
+    /**
+     * Update the last payment date of a recurring payment to the current date.
+     *
+     * @param recurringPaymentUi The recurring payment to update.
+     */
+    private suspend fun updateRecurringPaymentLastPaymentDate(recurringPaymentUi: RecurringPaymentUi) {
+        saveRecurringPaymentUseCase(
+            recurringPaymentUi.copy(
+                mostRecentPaymentDate = LocalDate.now()
+            )
+        )
     }
 
     /**
@@ -50,13 +81,14 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
      *
      * @return True if the recurring payment should be paid, false otherwise.
      */
-    private fun shouldPay(
-        periodicity: Periodicity,
-        startDate: LocalDate,
-        lastPaymentDate: LocalDate?
-    ): Boolean =
-        getNextPaymentDate(periodicity, startDate, lastPaymentDate)
-            .isAfterOrEqual(LocalDate.now())
+    private fun RecurringPaymentUi.shouldPay(): Boolean {
+        val paymentDomain = toDomain()
+
+        return getNextPaymentDate(
+            mostRecentStartDate = paymentDomain.tryGetMostRecentPaymentDate,
+            periodicity = paymentDomain.periodicity
+        ).isBeforeOrEqual(LocalDate.now())
+    }
 
     /**
      * Calculates the next payment date for a recurring payment. If the last payment date is null, the start date is used.
@@ -64,11 +96,9 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
      * @return The next payment date for the recurring payment.
      */
     private fun getNextPaymentDate(
-        periodicity: Periodicity,
-        startDate: LocalDate,
-        lastPaymentDate: LocalDate?
+        mostRecentStartDate: LocalDate,
+        periodicity: Periodicity
     ): LocalDate {
-        val startFrom = lastPaymentDate ?: startDate
-        return periodicity.getNextDate(startFrom)
+        return periodicity.getNextDate(mostRecentStartDate)
     }
 }

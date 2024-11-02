@@ -20,6 +20,10 @@ fun Loan.toUi() = LoanUi(
     endDate = endDate,
     loanCategoryUi = loanCategory.toUi(),
     loanInterestRateUi = loanInterestRate.toUi(),
+    shouldNotifyWhenPaid = shouldNotifyWhenPaid,
+    shouldAutoAddToExpenses = shouldAutoAddToExpenses,
+    lastAutoPayDate = lastAutoPayDate,
+    paymentDay = paymentDay
 )
 
 fun LoanCalculation.toUi() = LoanCalculationUi(

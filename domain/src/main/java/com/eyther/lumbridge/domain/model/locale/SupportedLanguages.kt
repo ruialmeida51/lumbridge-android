@@ -1,5 +1,7 @@
 package com.eyther.lumbridge.domain.model.locale
 
+import java.util.Locale
+
 // ISO 3166 ALPHA 2 for country code
 enum class SupportedLanguages(
     val countryCode: String

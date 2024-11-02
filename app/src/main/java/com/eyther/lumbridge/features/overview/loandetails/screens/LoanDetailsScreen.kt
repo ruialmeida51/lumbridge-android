@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
@@ -53,6 +57,7 @@ import com.eyther.lumbridge.features.overview.loandetails.viewmodel.LoanDetailsS
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem
 import com.eyther.lumbridge.model.loan.LoanAmortizationUi
 import com.eyther.lumbridge.model.loan.LoanInterestRateUi
+import com.eyther.lumbridge.model.loan.LoanUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.card.RowCardWrapper
@@ -77,6 +82,7 @@ fun LoanDetailsScreen(
 ) {
     val viewState = viewModel.viewState.collectAsStateWithLifecycle().value
     val lifecycleOwner = LocalLifecycleOwner.current
+    val loanToDelete = remember { mutableStateOf<LoanUi?>(null) }
 
     LaunchedEffect(Unit) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -105,6 +111,9 @@ fun LoanDetailsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
+                .then(
+                    if (loanToDelete.value != null) Modifier.blur(5.dp) else Modifier
+                )
         ) {
             when (viewState) {
                 is LoanDetailsScreenViewState.Loading -> LoadingIndicator()
@@ -116,7 +125,9 @@ fun LoanDetailsScreen(
                 is LoanDetailsScreenViewState.Content -> Content(
                     navController = navController,
                     state = viewState,
+                    loanToDelete = loanToDelete,
                     onPayment = viewModel::onPayment,
+                    onDeleteLoan = viewModel::onDeleteLoan,
                     currencySymbol = viewState.currencySymbol
                 )
             }
@@ -128,7 +139,9 @@ fun LoanDetailsScreen(
 fun Content(
     navController: NavHostController,
     state: LoanDetailsScreenViewState.Content,
+    loanToDelete: MutableState<LoanUi?>,
     onPayment: () -> Unit,
+    onDeleteLoan: () -> Unit,
     currencySymbol: String
 ) {
     val shouldShowPaymentConfirmationDialog = remember { mutableStateOf(false) }
@@ -137,7 +150,8 @@ fun Content(
         PaymentOverview(
             state = state,
             currencySymbol = currencySymbol,
-            navController = navController
+            navController = navController,
+            onDelete = { loanToDelete.value = state.loanUi }
         )
 
         Spacer(
@@ -166,13 +180,20 @@ fun Content(
     }
 
     PaymentConfirmationDialog(shouldShowPaymentConfirmationDialog, onPayment)
+
+    ShowDeleteConfirmationDialog(
+        loanUi = state.loanUi,
+        loanToDelete = loanToDelete,
+        onDeleteLoan = onDeleteLoan
+    )
 }
 
 @Composable
 private fun ColumnScope.PaymentOverview(
     state: LoanDetailsScreenViewState.Content,
     currencySymbol: String,
-    navController: NavHostController
+    navController: NavHostController,
+    onDelete: () -> Unit
 ) {
     Text(
         modifier = Modifier
@@ -205,6 +226,20 @@ private fun ColumnScope.PaymentOverview(
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(id = R.string.edit_financial_profile)
             )
+
+            Spacer(modifier = Modifier.width(HalfPadding))
+
+            Icon(
+                modifier = Modifier
+                    .size(20.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(bounded = false),
+                        onClick = { onDelete() }
+                    ),
+                imageVector = Icons.Outlined.Delete,
+                contentDescription = stringResource(id = R.string.delete)
+            )
         }
 
         TabbedDataOverview(
@@ -221,6 +256,29 @@ private fun ColumnScope.PaymentOverview(
             label = stringResource(id = R.string.breakdown_loans_months_left),
             text = "${state.loanCalculationUi.remainingMonths}"
         )
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
+        TabbedDataOverview(
+            label = stringResource(id = R.string.breakdown_loans_auto_add_to_expenses),
+            text = if (state.loanUi.shouldAutoAddToExpenses) {
+                stringResource(id = R.string.yes)
+            } else {
+                stringResource(id = R.string.no)
+            }
+        )
+
+        if (state.loanUi.shouldAutoAddToExpenses) {
+            TabbedDataOverview(
+                label = stringResource(id = R.string.breakdown_loans_notify_when_added_to_expenses),
+                text = if (state.loanUi.shouldNotifyWhenPaid) {
+                    stringResource(id = R.string.yes)
+                } else {
+                    stringResource(id = R.string.no)
+                }
+            )
+        }
+
 
         LineProgressIndicator(
             modifier = Modifier
@@ -471,6 +529,45 @@ fun PaymentConfirmationDialog(
     }
 }
 
+@Composable
+private fun ShowDeleteConfirmationDialog(
+    loanUi: LoanUi?,
+    loanToDelete: MutableState<LoanUi?>,
+    onDeleteLoan: () -> Unit
+) {
+    if (loanToDelete.value != null) {
+        AlertDialog(
+            onDismissRequest = { loanToDelete.value = null },
+            confirmButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.yes),
+                    onClick = {
+                        onDeleteLoan()
+                        loanToDelete.value = null
+                    }
+                )
+            },
+            dismissButton = {
+                LumbridgeButton(
+                    label = stringResource(id = R.string.no),
+                    onClick = { loanToDelete.value = null }
+                )
+            },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.delete),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(id = R.string.breakdown_delete_loan_confirmation_message, loanUi?.name.orEmpty()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        )
+    }
+}
 @Composable
 private fun EmptyScreen(
     onCreateLoan: () -> Unit

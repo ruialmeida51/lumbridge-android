@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.ui.common.composables.components.setting
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -18,7 +19,7 @@ fun SimpleSetting(
     modifier: Modifier = Modifier,
     label: String,
     onClick: () -> Unit,
-    composableRight: (@Composable () -> Unit)? = null
+    composableRight: (@Composable RowScope.() -> Unit)? = null
 ) {
     Settings(
         modifier = modifier.clickable { onClick() },

@@ -12,7 +12,11 @@ data class Loan(
     val currentAmount: Float,
     val loanInterestRate: LoanInterestRate,
     val loanType: LoanType,
-    val loanCategory: LoanCategory
+    val loanCategory: LoanCategory,
+    val shouldNotifyWhenPaid: Boolean,
+    val shouldAutoAddToExpenses: Boolean,
+    val lastAutoPayDate: LocalDate? = null,
+    val paymentDay: Int? = null
 ) {
     val remainingMonths: Int
         get() = startDate.monthsUntil(endDate)

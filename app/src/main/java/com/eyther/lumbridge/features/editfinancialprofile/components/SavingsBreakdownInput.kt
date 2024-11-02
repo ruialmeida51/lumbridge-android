@@ -45,7 +45,7 @@ fun ColumnScope.SavingsBreakdownInput(
             onInputChanged = { input -> onSavingsPercentageChanged(input.toIntOrNull()) }
         )
 
-        Spacer(modifier = Modifier.height(DefaultPadding))
+        Spacer(modifier = Modifier.height(HalfPadding))
 
         NumberInput(
             label = stringResource(id = R.string.necessities_percentage),
@@ -54,7 +54,7 @@ fun ColumnScope.SavingsBreakdownInput(
             onInputChanged = { input -> onNecessitiesPercentageChanged(input.toIntOrNull()) }
         )
 
-        Spacer(modifier = Modifier.height(DefaultPadding))
+        Spacer(modifier = Modifier.height(HalfPadding))
 
         NumberInput(
             label = stringResource(id = R.string.luxuries_percentage),
