@@ -22,7 +22,6 @@ import java.time.temporal.TemporalAdjusters
  * We should be careful when using this periodicity to account for february and leap years. This class is merely
  * a representation of the periodicity and should be used in conjunction with a date to calculate whatever is needed.
  */
-@Keep
 sealed class Periodicity(
     val tag: String
 ) {
@@ -41,7 +40,6 @@ sealed class Periodicity(
      *
      * @param numOfDays The number of days between each occurrence.
      */
-    @Keep
     data class EveryXDays(
         val numOfDays: Int
     ): Periodicity(EveryXDays::class.java.simpleName) {
@@ -61,20 +59,19 @@ sealed class Periodicity(
      * Represents a periodicity that occurs every X weeks on a given day of the week.
      *
      * @param numOfWeeks The number of weeks between each occurrence.
-     * @param dayOfWeek The day of the week the occurrence should happen.
+     * @param dayOfWeekOrdinal The day of the week the occurrence should happen.
      *
      * @see DayOfWeek
      */
-    @Keep
     data class EveryXWeeks(
         val numOfWeeks: Int,
-        val dayOfWeek: DayOfWeek
+        val dayOfWeekOrdinal: Int
     ): Periodicity(EveryXWeeks::class.java.simpleName) {
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
 
             // Start with the next or same day of the week. Temporal adjusters are awesome. 🚀
-            var nextDate = startFrom.with(TemporalAdjusters.nextOrSame(dayOfWeek))
+            var nextDate = startFrom.with(TemporalAdjusters.nextOrSame(DayOfWeek.of(dayOfWeekOrdinal)))
 
             while (nextDate.isBefore(currentDate)) {
                 nextDate = nextDate.plusWeeks(numOfWeeks.toLong())
@@ -90,7 +87,6 @@ sealed class Periodicity(
      * @param numOfMonth The number of months between each occurrence.
      * @param dayOfMonth The day of the month the occurrence should happen.
      */
-    @Keep
     data class EveryXMonths(
         val numOfMonth: Int,
         val dayOfMonth: Int
@@ -123,16 +119,15 @@ sealed class Periodicity(
      * Represents a periodicity that occurs every X years on a given month.
      *
      * @param numOfYear The number of years between each occurrence.
-     * @param month The month the occurrence should happen.
+     * @param monthOrdinal The month the occurrence should happen.
      */
-    @Keep
     data class EveryXYears(
         val numOfYear: Int,
-        val month: Month
+        val monthOrdinal: Int
     ): Periodicity(EveryXYears::class.java.simpleName) {
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
-            var nextDate = startFrom.withMonth(minOf(month.value, MONTHS_IN_YEAR))
+            var nextDate = startFrom.withMonth(minOf(Month.of(monthOrdinal).value, MONTHS_IN_YEAR))
 
             while (nextDate.isBefore(currentDate)) {
                 nextDate = nextDate.plusYears(numOfYear.toLong())

@@ -5,7 +5,9 @@ import com.eyther.lumbridge.mapper.expenses.toUi
 import com.eyther.lumbridge.model.recurringpayments.PeriodicityUi
 import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.shared.time.model.Periodicity
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.Month
 
 fun RecurringPaymentDomain.toUi() = RecurringPaymentUi(
     id = id,
@@ -29,7 +31,7 @@ fun Periodicity.toUi(
         is Periodicity.EveryXWeeks -> PeriodicityUi.EveryXWeeks(
             nextDueDate = getNextDate(startFrom),
             numOfWeeks = numOfWeeks,
-            dayOfWeek = dayOfWeek
+            dayOfWeek = DayOfWeek.of(dayOfWeekOrdinal)
         )
         is Periodicity.EveryXMonths -> PeriodicityUi.EveryXMonths(
             nextDueDate = getNextDate(startFrom),
@@ -39,7 +41,7 @@ fun Periodicity.toUi(
         is Periodicity.EveryXYears -> PeriodicityUi.EveryXYears(
             nextDueDate = getNextDate(startFrom),
             numOfYear = numOfYear,
-            month = month
+            month = Month.of(monthOrdinal)
         )
     }
 }

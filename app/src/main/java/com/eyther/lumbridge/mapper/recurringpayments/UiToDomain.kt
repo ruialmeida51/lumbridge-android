@@ -24,7 +24,7 @@ fun PeriodicityUi.toDomain(): Periodicity {
         )
         is PeriodicityUi.EveryXWeeks -> Periodicity.EveryXWeeks(
             numOfWeeks = numOfWeeks,
-            dayOfWeek = dayOfWeek
+            dayOfWeekOrdinal = dayOfWeek.ordinal + 1 // DayOfWeek is 1-indexed
         )
         is PeriodicityUi.EveryXMonths -> Periodicity.EveryXMonths(
             numOfMonth = numOfMonth,
@@ -32,7 +32,7 @@ fun PeriodicityUi.toDomain(): Periodicity {
         )
         is PeriodicityUi.EveryXYears -> Periodicity.EveryXYears(
             numOfYear = numOfYear,
-            month = month
+            monthOrdinal = month.ordinal + 1 // Month is 1-indexed
         )
     }
 }
