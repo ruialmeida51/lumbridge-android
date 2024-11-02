@@ -13,15 +13,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.eyther.lumbridge.extensions.platform.sharedViewModel
+import com.eyther.lumbridge.features.tools.recurringpayments.editrecurringpayments.screens.EditRecurringPaymentsScreen
+import com.eyther.lumbridge.features.tools.recurringpayments.overview.screens.RecurringPaymentsOverviewScreen
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
 import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryResultScreen
 import com.eyther.lumbridge.features.tools.notes.screens.NoteDetailsScreen
 import com.eyther.lumbridge.features.tools.notes.screens.NotesListScreen
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Notes.Companion.ARG_NOTE_ID
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Notes.Companion.ARG_NOTE_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.RecurringPayments.Companion.ARG_RECURRING_PAYMENT_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
 import com.eyther.lumbridge.features.tools.overview.screens.ToolsOverviewScreen
 import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListDetailsScreen
 import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListsScreen
@@ -271,6 +274,60 @@ fun ToolsNavHost(
                 NoteDetailsScreen(
                     navController = navController,
                     label = ToolsNavigationItem.Notes.NotesDetails.label
+                )
+            }
+        }
+
+        navigation(
+            startDestination = ToolsNavigationItem.RecurringPayments.Overview.route,
+            route = ToolsNavigationItem.RecurringPayments.HOST_ROUTE
+        ) {
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                route = ToolsNavigationItem.RecurringPayments.Overview.route
+            ) {
+                RecurringPaymentsOverviewScreen(
+                    navController = navController,
+                    label = ToolsNavigationItem.RecurringPayments.Overview.label
+                )
+            }
+
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                route = ToolsNavigationItem.RecurringPayments.Edit.route,
+                arguments = listOf(
+                    navArgument(ARG_RECURRING_PAYMENT_ID) {
+                        type = NavType.LongType
+                        nullable = false
+                        defaultValue = 0L
+                    }
+                )
+            ) {
+                EditRecurringPaymentsScreen(
+                    navController = navController,
+                    label = ToolsNavigationItem.RecurringPayments.Edit.label
                 )
             }
         }

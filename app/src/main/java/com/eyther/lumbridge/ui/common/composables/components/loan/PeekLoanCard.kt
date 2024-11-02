@@ -96,6 +96,28 @@ fun PeekLoanCard(
             text = loanCalculationUi.remainingMonths.toString(),
         )
 
+        Spacer(modifier = Modifier.height(HalfPadding))
+
+        TabbedDataOverview(
+            label = stringResource(id = R.string.breakdown_loans_auto_add_to_expenses),
+            text = if (loanUi.shouldAutoAddToExpenses) {
+                stringResource(id = R.string.yes)
+            } else {
+                stringResource(id = R.string.no)
+            }
+        )
+
+        if (loanUi.shouldAutoAddToExpenses) {
+            TabbedDataOverview(
+                label = stringResource(id = R.string.breakdown_loans_notify_when_added_to_expenses),
+                text = if (loanUi.shouldNotifyWhenPaid) {
+                    stringResource(id = R.string.yes)
+                } else {
+                    stringResource(id = R.string.no)
+                }
+            )
+        }
+
         LineProgressIndicator(
             modifier = Modifier
                 .padding(top = DefaultPadding)

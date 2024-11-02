@@ -1,7 +1,8 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 
 package com.eyther.lumbridge.features.editloan.screens
 
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,13 +39,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState
 import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedChoice
 import com.eyther.lumbridge.features.editloan.viewmodel.EditLoanScreenViewModel
 import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel
+import com.eyther.lumbridge.launcher.model.permissions.NeededPermission
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
@@ -53,10 +56,17 @@ import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
+import com.eyther.lumbridge.ui.common.composables.components.permissions.TryRequestPermission
+import com.eyther.lumbridge.ui.common.composables.components.setting.SwitchSetting
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import java.time.LocalDate
@@ -70,6 +80,9 @@ fun EditLoanScreen(
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val snackbarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val neededPermission = remember { NeededPermission.Notifications }
+    val notificationsPermissionState = rememberPermissionState(neededPermission.permission)
+    val askForNotificationsPermission = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -82,6 +95,7 @@ fun EditLoanScreen(
                                 duration = SnackbarDuration.Short
                             )
                         }
+
                         is EditLoanScreenViewEffect.NavigateBack -> navController.popBackStack()
                     }
                 }
@@ -114,7 +128,10 @@ fun EditLoanScreen(
             when (state) {
                 is EditLoanScreenViewState.Content -> Content(
                     state = state,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    neededPermission = neededPermission,
+                    notificationsPermissionState = notificationsPermissionState,
+                    askForNotificationsPermission = askForNotificationsPermission
                 )
 
                 is EditLoanScreenViewState.Loading -> LoadingIndicator()
@@ -126,12 +143,17 @@ fun EditLoanScreen(
 @Composable
 fun Content(
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenViewModel
+    viewModel: IEditLoanScreenViewModel,
+    neededPermission: NeededPermission,
+    notificationsPermissionState: PermissionState,
+    askForNotificationsPermission: MutableState<Boolean>
 ) {
     Column {
         LoanType(
             state = state,
-            viewModel = viewModel
+            viewModel = viewModel,
+            notificationsPermissionState = notificationsPermissionState,
+            askForNotificationsPermission = askForNotificationsPermission
         )
 
         Spacer(modifier = Modifier.height(DefaultPadding))
@@ -155,12 +177,22 @@ fun Content(
             onClick = { viewModel.saveLoan() }
         )
     }
+
+    if (askForNotificationsPermission.value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        TryRequestPermission(
+            neededPermission = neededPermission,
+            permissionState = notificationsPermissionState,
+            askForNotificationsPermission = askForNotificationsPermission
+        )
+    }
 }
 
 @Composable
 private fun ColumnScope.LoanType(
     state: EditLoanScreenViewState.Content,
-    viewModel: IEditLoanScreenViewModel
+    viewModel: IEditLoanScreenViewModel,
+    notificationsPermissionState: PermissionState,
+    askForNotificationsPermission: MutableState<Boolean>
 ) {
     Text(
         modifier = Modifier
@@ -171,8 +203,40 @@ private fun ColumnScope.LoanType(
     )
 
     ColumnCardWrapper {
-        TextInput(
+        SwitchSetting(
             modifier = Modifier.padding(bottom = DefaultPadding),
+            label = stringResource(id = R.string.edit_loan_should_auto_add_to_expenses),
+            isChecked = state.inputState.shouldAutoAddToExpenses,
+            onCheckedChange = viewModel::onAutomaticallyAddToExpensesChanged
+        )
+
+        if (state.inputState.shouldAutoAddToExpenses) {
+            SwitchSetting(
+                modifier = Modifier.padding(top = HalfPadding, bottom = DefaultPadding),
+                label = stringResource(id = R.string.edit_loan_should_notify_when_paid),
+                isChecked = state.inputState.shouldNotifyWhenPaid,
+                onCheckedChange = { notifyWhenPaid ->
+                    viewModel.onNotifyWhenPaidChanged(notifyWhenPaid)
+
+                    if (notificationsPermissionState.status.isGranted) {
+                        return@SwitchSetting
+                    }
+
+                    if (notifyWhenPaid) {
+                        askForNotificationsPermission.value = true
+                    }
+                }
+            )
+
+            NumberInput(
+                state = state.inputState.paymentDay,
+                label = stringResource(id = R.string.edit_loan_should_auto_add_to_expenses_payment_day),
+                onInputChanged = { viewModel.onPaymentDayChanged(it.toIntOrNull()) }
+            )
+        }
+
+        TextInput(
+            modifier = Modifier.padding(bottom = HalfPadding),
             state = state.inputState.name,
             label = stringResource(id = R.string.name),
             onInputChanged = { viewModel.onNameChanged(it) }
@@ -236,7 +300,7 @@ private fun ColumnScope.RemainingAmount(
         DateInput(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = DefaultPadding),
+                .padding(bottom = HalfPadding),
             state = state.inputState.startDate,
             label = stringResource(id = R.string.start_date),
             placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
@@ -252,7 +316,7 @@ private fun ColumnScope.RemainingAmount(
         DateInput(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = DefaultPadding),
+                .padding(bottom = HalfPadding),
             state = state.inputState.endDate,
             label = stringResource(id = R.string.end_date),
             placeholder = stringResource(id = R.string.edit_loan_profile_invalid_end_date),
@@ -266,9 +330,8 @@ private fun ColumnScope.RemainingAmount(
         )
 
         NumberInput(
-            modifier = Modifier.padding(bottom = DefaultPadding),
             state = state.inputState.loanAmount,
-            label = stringResource(id =  if (state.isCreateLoan) R.string.initial_loan_amount else R.string.current_loan_amount),
+            label = stringResource(id = if (state.isCreateLoan) R.string.initial_loan_amount else R.string.current_loan_amount),
             onInputChanged = { viewModel.onMortgageAmountChanged(it.toFloatOrNull()) }
         )
     }
@@ -309,14 +372,13 @@ private fun VariableMortgageInput(
     viewModel: IEditLoanScreenViewModel
 ) {
     NumberInput(
-        modifier = Modifier.padding(bottom = DefaultPadding),
+        modifier = Modifier.padding(bottom = HalfPadding),
         state = state.inputState.euribor,
         label = stringResource(id = R.string.euribor),
         onInputChanged = { viewModel.onEuriborRateChanged(it.toFloatOrNull()) }
     )
 
     NumberInput(
-        modifier = Modifier.padding(bottom = DefaultPadding),
         state = state.inputState.spread,
         label = stringResource(id = R.string.spread),
         onInputChanged = { viewModel.onSpreadChanged(it.toFloatOrNull()) },
@@ -343,7 +405,6 @@ private fun FixedMortgageInput(
     when (state.inputState.tanOrTaegLoanChoiceState.selectedTab) {
         EditLoanFixedTypeChoice.Tan.ordinal -> {
             NumberInput(
-                modifier = Modifier.padding(bottom = DefaultPadding),
                 state = state.inputState.tanInterestRate,
                 label = stringResource(id = R.string.interest_rate),
                 onInputChanged = { viewModel.onTanInterestRateChanged(it.toFloatOrNull()) },
@@ -356,7 +417,6 @@ private fun FixedMortgageInput(
 
         EditLoanFixedTypeChoice.Taeg.ordinal -> {
             NumberInput(
-                modifier = Modifier.padding(bottom = DefaultPadding),
                 state = state.inputState.taegInterestRate,
                 label = stringResource(id = R.string.interest_rate),
                 onInputChanged = { viewModel.onTaegInterestRateChanged(it.toFloatOrNull()) },

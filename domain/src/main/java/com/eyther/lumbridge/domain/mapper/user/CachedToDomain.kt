@@ -8,7 +8,7 @@ import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 
 fun UserProfileCached.toDomain() = UserProfileDomain(
     name = name,

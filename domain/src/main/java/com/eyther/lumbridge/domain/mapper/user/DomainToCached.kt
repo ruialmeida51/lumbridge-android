@@ -6,7 +6,7 @@ import com.eyther.lumbridge.data.model.user.local.UserProfileCached
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
-import com.eyther.lumbridge.shared.time.toIsoLocalDateString
+import com.eyther.lumbridge.shared.time.extensions.toIsoLocalDateString
 
 fun UserProfileDomain.toCached() = UserProfileCached(
     countryCode = locale.countryCode,

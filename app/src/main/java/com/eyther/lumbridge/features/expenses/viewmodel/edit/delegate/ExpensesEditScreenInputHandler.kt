@@ -1,12 +1,11 @@
 package com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate
 
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice.Surplus
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenInputState
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -94,7 +93,8 @@ class ExpensesEditScreenInputHandler @Inject constructor() : IExpensesEditScreen
 
     override fun validateInput(inputState: ExpensesEditScreenInputState): Boolean {
         return inputState.expenseName.isValid() &&
-            inputState.expenseAmount.isValid()
+            inputState.expenseAmount.isValid() &&
+            inputState.dateInput.isValid()
     }
 
     override fun shouldEnableSaveButton(inputState: ExpensesEditScreenInputState): Boolean {

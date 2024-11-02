@@ -41,6 +41,14 @@ class LoanRepository @Inject constructor(
                     ?.let { it to calculate(it, locale) }
             }
 
+    suspend fun getLoansAndCalculations(locale: SupportedLocales): List<Pair<Loan, LoanCalculation>> = withContext(schedulers.io) {
+        loanLocalDataSource
+            .getLoans()
+            .orEmpty()
+            .map { it.toDomain() }
+            .map { it to calculate(it, locale) }
+    }
+
     suspend fun saveLoan(loan: Loan) = withContext(schedulers.io) {
         loanLocalDataSource.saveLoan(loan.toCached())
     }

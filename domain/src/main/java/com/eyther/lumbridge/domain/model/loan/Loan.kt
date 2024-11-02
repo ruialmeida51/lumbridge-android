@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.domain.model.loan
 
-import com.eyther.lumbridge.shared.time.monthsUntil
+import com.eyther.lumbridge.shared.time.extensions.monthsUntil
 import java.time.LocalDate
 
 data class Loan(
@@ -12,7 +12,11 @@ data class Loan(
     val currentAmount: Float,
     val loanInterestRate: LoanInterestRate,
     val loanType: LoanType,
-    val loanCategory: LoanCategory
+    val loanCategory: LoanCategory,
+    val shouldNotifyWhenPaid: Boolean,
+    val shouldAutoAddToExpenses: Boolean,
+    val lastAutoPayDate: LocalDate? = null,
+    val paymentDay: Int? = null
 ) {
     val remainingMonths: Int
         get() = startDate.monthsUntil(endDate)

@@ -192,8 +192,6 @@ private fun ColumnScope.Input(
             }
         )
 
-        Spacer(modifier = Modifier.height(HalfPadding))
-
         NumberInput(
             label = stringResource(id = R.string.tools_currency_converter_from_amount),
             placeholder = "250",

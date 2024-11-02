@@ -92,7 +92,6 @@ class ExpensesAddScreenViewModel @Inject constructor(
                     expenseAmount = checkNotNull(inputState.amountInput.text?.toFloat()),
                     expenseName = checkNotNull(inputState.nameInput.text),
                     date = checkNotNull(inputState.dateInput.date)
-
                 )
             )
 

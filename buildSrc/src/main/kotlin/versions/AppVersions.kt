@@ -2,6 +2,7 @@ package versions
 
 object AppVersions {
     const val APP_COMPAT_VERSION = "1.7.0"
+    const val ANDROIDX_WORK_VERSION = "2.9.1"
 
     const val KTX_VERSION = "1.13.1"
     const val KTX_SERIALIZATION_VERSION = "1.7.3"
@@ -14,7 +15,7 @@ object AppVersions {
 
     const val COIL_VERSION = "2.7.0"
 
-    const val HILT_NAVIGATION_VERSION = "1.2.0"
+    const val HILT_JETPACK_LIBS_VERSION = "1.2.0"
 
     const val FIREBASE_BOM_VERSION = "33.5.1"
 

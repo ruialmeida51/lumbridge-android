@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
 import com.eyther.lumbridge.features.tools.shopping.model.details.ShoppingListDetailsScreenViewEffect
 import com.eyther.lumbridge.features.tools.shopping.model.details.ShoppingListDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.shopping.model.details.StableShoppingListItem

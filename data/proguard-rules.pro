@@ -20,4 +20,13 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Periodicity: It uses class name to identify and deserialize the object w/ GSON to store in Room
+-keep class com.eyther.lumbridge.shared.time.model.Periodicity { *; }
+-keepclassmembers class com.eyther.lumbridge.shared.time.model.Periodicity$EveryXDays { *; }
+-keepclassmembers class com.eyther.lumbridge.shared.time.model.Periodicity$EveryXWeeks { *; }
+-keepclassmembers class com.eyther.lumbridge.shared.time.model.Periodicity$EveryXMonths { *; }
+-keepclassmembers class com.eyther.lumbridge.shared.time.model.Periodicity$EveryXYears { *; }
+
+# Retrofit classes. We normally used @SerializedName to avoid the need of this rule,
+# but better safe than sorry, so add all Retrofit Remote classes here.
 -keep class com.eyther.lumbridge.data.model.currencyexchange.remote.** { *; }

@@ -16,5 +16,8 @@ data class EditLoanScreenInputState(
     val taegInterestRate: TextInputState = TextInputState(),
     val categoryUi: LoanCategoryUi = LoanCategoryUi.House,
     val fixedOrVariableLoanChoiceState: ChoiceTabState = ChoiceTabState(),
-    val tanOrTaegLoanChoiceState: ChoiceTabState = ChoiceTabState()
+    val tanOrTaegLoanChoiceState: ChoiceTabState = ChoiceTabState(),
+    val shouldNotifyWhenPaid: Boolean = false,
+    val shouldAutoAddToExpenses: Boolean = false,
+    val paymentDay: TextInputState = TextInputState()
 )

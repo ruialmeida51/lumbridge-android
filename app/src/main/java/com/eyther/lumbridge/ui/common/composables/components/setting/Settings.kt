@@ -3,6 +3,7 @@ package com.eyther.lumbridge.ui.common.composables.components.setting
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 
@@ -30,7 +32,7 @@ fun Settings(
     modifier : Modifier = Modifier,
     label: String,
     @DrawableRes icon: Int? = null,
-    composableRight: (@Composable () -> Unit)? = null
+    composableRight: (@Composable RowScope.() -> Unit)? = null
 ) {
     Row(
         modifier = Modifier.sizeIn(minHeight = 32.dp).then(modifier),
@@ -47,12 +49,12 @@ fun Settings(
         }
 
         Text(
+            modifier = Modifier.weight(1f),
             text = label,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            overflow = TextOverflow.Ellipsis
         )
 
-        Spacer(Modifier.weight(1f))
-
-        composableRight?.invoke()
+        composableRight?.invoke(this)
     }
 }

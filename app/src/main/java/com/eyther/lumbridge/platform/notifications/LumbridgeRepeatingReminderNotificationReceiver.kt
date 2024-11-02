@@ -1,6 +1,5 @@
 package com.eyther.lumbridge.platform.notifications
 
-
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -35,6 +34,7 @@ class LumbridgeRepeatingReminderNotificationReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.ic_yarn)
             .setContentTitle(title)
             .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(contentIntent)
 

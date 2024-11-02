@@ -6,11 +6,12 @@ import versions.AppVersions.COIL_VERSION
 import versions.AppVersions.COMPOSE_BOM_VERSION
 import versions.AppVersions.COMPOSE_TOOLING_VERSION
 import versions.AppVersions.FIREBASE_BOM_VERSION
-import versions.AppVersions.HILT_NAVIGATION_VERSION
+import versions.AppVersions.HILT_JETPACK_LIBS_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
 import versions.AppVersions.KTX_SERIALIZATION_VERSION
 import versions.AppVersions.KTX_VERSION
 import versions.AppVersions.NAVIGATION_VERSION
+import versions.AppVersions.ANDROIDX_WORK_VERSION
 import versions.SharedVersions.HILT_VERSION
 import versions.SharedVersions.KOTLIN_VERSION
 
@@ -42,8 +43,12 @@ object AppDependencies {
         "androidx.navigation:navigation-compose:$NAVIGATION_VERSION",
 
         // Hilt
-        "androidx.hilt:hilt-navigation-compose:$HILT_NAVIGATION_VERSION",
+        "androidx.hilt:hilt-navigation-compose:$HILT_JETPACK_LIBS_VERSION",
         "com.google.dagger:hilt-android:$HILT_VERSION",
+
+        // Workers
+        "androidx.work:work-runtime-ktx:$ANDROIDX_WORK_VERSION",
+        "androidx.hilt:hilt-work:$HILT_JETPACK_LIBS_VERSION",
 
         // Firebase
         "com.google.firebase:firebase-inappmessaging-display",
@@ -68,6 +73,7 @@ object AppDependencies {
 
     fun getKapt() = listOf(
         // Hilt
-        "com.google.dagger:hilt-compiler:$HILT_VERSION"
+        "com.google.dagger:hilt-compiler:$HILT_VERSION",
+        "androidx.hilt:hilt-compiler:$HILT_JETPACK_LIBS_VERSION"
     )
 }

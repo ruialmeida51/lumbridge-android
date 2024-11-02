@@ -14,5 +14,9 @@ fun LoanCached.toEntity() = LoanEntity(
     variableSpread = variableSpread,
     fixedTanInterestRate = fixedTanInterestRate,
     loanTypeOrdinal = loanTypeOrdinal,
-    loanCategoryOrdinal = loanCategoryOrdinal
+    loanCategoryOrdinal = loanCategoryOrdinal,
+    shouldNotifyWhenPaid = shouldNotifyWhenPaid,
+    shouldAutoAddToExpenses = shouldAutoAddToExpenses,
+    lastAutoPayDate = lastAutoPayDate,
+    paymentDay = paymentDay
 )

@@ -1,8 +1,8 @@
 package com.eyther.lumbridge.model.expenses
 
 import com.eyther.lumbridge.extensions.kotlin.capitalise
-import com.eyther.lumbridge.shared.time.toLocalDate
-import com.eyther.lumbridge.shared.time.toMonthYearDateString
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toMonthYearDateString
 import java.time.Month
 import java.time.Year
 

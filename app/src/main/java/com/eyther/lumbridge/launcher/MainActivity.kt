@@ -19,7 +19,6 @@ import com.eyther.lumbridge.launcher.screens.MainScreen
 import com.eyther.lumbridge.launcher.viewmodel.IMainActivityViewModel
 import com.eyther.lumbridge.launcher.viewmodel.MainActivityViewModel
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder
-import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationScheduler
 import com.eyther.lumbridge.ui.theme.LumbridgeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -39,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         notificationChannelBuilder.createNotificationChannel()
-
         checkAppSettings()
 
         setContent {

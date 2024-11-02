@@ -5,7 +5,7 @@ import com.eyther.lumbridge.domain.model.loan.Loan
 import com.eyther.lumbridge.domain.model.loan.LoanCategory
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
 import com.eyther.lumbridge.domain.model.loan.LoanType
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 
 fun LoanCached.toDomain(): Loan {
     val loanType = LoanType.entries[loanTypeOrdinal]
@@ -27,6 +27,10 @@ fun LoanCached.toDomain(): Loan {
         ),
         loanType = loanType,
         loanCategory = loanCategory,
+        shouldNotifyWhenPaid = shouldNotifyWhenPaid,
+        shouldAutoAddToExpenses = shouldAutoAddToExpenses,
+        lastAutoPayDate = lastAutoPayDate?.toLocalDate(),
+        paymentDay = paymentDay
     )
 }
 

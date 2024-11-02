@@ -5,7 +5,7 @@ import versions.SharedVersions.HILT_VERSION
 object SharedDependencies {
     fun getImplementation() = listOf(
         // Hilt
-        "com.google.dagger:hilt-android:$HILT_VERSION"
+        "com.google.dagger:hilt-android:$HILT_VERSION",
     )
 
     fun getKapt() = listOf(

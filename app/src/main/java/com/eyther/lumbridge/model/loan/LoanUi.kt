@@ -10,7 +10,11 @@ data class LoanUi(
     val initialLoanAmount: Float,
     val currentLoanAmount: Float,
     val loanCategoryUi: LoanCategoryUi,
-    val loanInterestRateUi: LoanInterestRateUi
+    val loanInterestRateUi: LoanInterestRateUi,
+    val shouldNotifyWhenPaid: Boolean,
+    val shouldAutoAddToExpenses: Boolean,
+    val lastAutoPayDate: LocalDate? = null,
+    val paymentDay: Int? = null
 ) {
     val paidLoanAmount: Float
         get() = initialLoanAmount - currentLoanAmount

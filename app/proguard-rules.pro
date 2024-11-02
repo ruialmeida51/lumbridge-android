@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Periodicity: It uses class name to identify and deserialize the object w/ GSON to store in Room
+-keep class com.eyther.lumbridge.shared.time.model.Periodicity { *; }

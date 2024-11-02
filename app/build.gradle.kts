@@ -63,7 +63,7 @@ android {
             versionNameSuffix = "-beta"
             resValue ("string", "app_name", "@string/app_name_beta")
 
-            isDebuggable = false
+            isDebuggable = true
             isMinifyEnabled = true
             isShrinkResources = true
 

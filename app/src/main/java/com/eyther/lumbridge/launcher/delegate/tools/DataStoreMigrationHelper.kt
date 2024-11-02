@@ -76,7 +76,10 @@ class DataStoreMigrationHelper @Inject constructor(
                 fixedTaegInterestRate = null
             ),
             loanCategory = LoanCategory.HOUSE,
-            loanType = loanType
+            loanType = loanType,
+            shouldNotifyWhenPaid = false,
+            shouldAutoAddToExpenses = false,
+            lastAutoPayDate = null
         )
 
         loanRepository.saveLoan(loan)

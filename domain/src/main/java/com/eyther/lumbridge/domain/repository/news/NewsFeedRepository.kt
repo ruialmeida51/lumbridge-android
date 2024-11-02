@@ -47,11 +47,11 @@ class NewsFeedRepository @Inject constructor(
 
         val feedItems = parsedRss.items.map {
             FeedItem(
-                title = it.title.orEmpty().sanitize(),
-                description = it.description.orEmpty().sanitize(),
-                link = it.link.orEmpty().sanitize(),
-                image = it.image.orEmpty().sanitize(),
-                pubDate = it.pubDate.orEmpty().sanitize()
+                title = it.title.orEmpty().sanitise(),
+                description = it.description.orEmpty().sanitise(),
+                link = it.link.orEmpty().sanitise(),
+                image = it.image.orEmpty().sanitise(),
+                pubDate = it.pubDate.orEmpty().sanitise()
             )
         }
 
@@ -62,7 +62,7 @@ class NewsFeedRepository @Inject constructor(
      * Some RSS feeds have HTML tags in their content. This method sanitizes the content to avoid
      * any issues with the app. It uses [Html.fromHtml] to remove the tags.
      */
-    private fun String.sanitize(): String {
+    private fun String.sanitise(): String {
         return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString().trim()
     }
 }

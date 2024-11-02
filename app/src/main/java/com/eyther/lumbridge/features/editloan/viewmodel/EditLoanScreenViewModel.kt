@@ -3,8 +3,8 @@ package com.eyther.lumbridge.features.editloan.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.shared.time.monthsUntil
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.monthsUntil
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenInputState
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
@@ -54,10 +54,10 @@ class EditLoanScreenViewModel @Inject constructor(
     private var cachedLoanUi: LoanUi? = null
 
     init {
-        fetchMortgageProfile()
+        fetchLoan()
     }
 
-    private fun fetchMortgageProfile() {
+    private fun fetchLoan() {
         viewModelScope.launch {
             val (initialLoanUi, _) = getLoanAndCalculationsUseCase(loanId)
             val locale = getLocaleOrDefault()
@@ -97,7 +97,12 @@ class EditLoanScreenViewModel @Inject constructor(
                         selectedTab = getTanOrTaegFromInterestRate(initialLoanUi?.loanInterestRateUi?.asFixed())?.ordinal ?: 0,
                         tabsStringRes = EditLoanFixedTypeChoice.entries().map { it.label }
                     ),
-                    categoryUi = initialLoanUi?.loanCategoryUi ?: LoanCategoryUi.House
+                    categoryUi = initialLoanUi?.loanCategoryUi ?: LoanCategoryUi.House,
+                    shouldNotifyWhenPaid = initialLoanUi?.shouldNotifyWhenPaid == true,
+                    shouldAutoAddToExpenses = initialLoanUi?.shouldAutoAddToExpenses == true,
+                    paymentDay = state.paymentDay.copy(
+                        text = initialLoanUi?.paymentDay?.toString()
+                    )
                 )
             }
 
@@ -136,7 +141,10 @@ class EditLoanScreenViewModel @Inject constructor(
                 endDate = checkNotNull(inputState.endDate.date),
                 loanCategoryUi = LoanCategoryUi.fromOrdinal(inputState.categoryUi.ordinal),
                 loanInterestRateUi = getLoanInterestRateUiFromInputState(inputState),
-                initialLoanAmount = cachedLoanUi?.initialLoanAmount ?: checkNotNull(inputState.loanAmount.text?.toFloatOrNull())
+                initialLoanAmount = cachedLoanUi?.initialLoanAmount ?: checkNotNull(inputState.loanAmount.text.toFloatOrNull()),
+                shouldNotifyWhenPaid = inputState.shouldNotifyWhenPaid,
+                shouldAutoAddToExpenses = inputState.shouldAutoAddToExpenses,
+                paymentDay = inputState.paymentDay.text?.toIntOrNull()
             )
 
             saveLoanUseCase(loanUi)

@@ -8,7 +8,7 @@ import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreen
 import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.notes.viewmodel.details.delegate.INoteDetailsScreenInputHandler
 import com.eyther.lumbridge.features.tools.notes.viewmodel.details.delegate.NoteDetailsScreenInputHandler
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem.Notes.Companion.ARG_NOTE_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Notes.Companion.ARG_NOTE_ID
 import com.eyther.lumbridge.model.notes.NoteUi
 import com.eyther.lumbridge.usecase.notes.DeleteNoteUseCase
 import com.eyther.lumbridge.usecase.notes.GetNoteUseCase

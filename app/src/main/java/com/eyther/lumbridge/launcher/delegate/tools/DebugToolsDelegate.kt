@@ -41,7 +41,7 @@ class DebugToolsDelegate @Inject constructor(
      * Setup Firebase Messaging observer for debug builds, useful to test push notifications and
      * retrieve the FCM token to declare the device as a test device in the Firebase console.
      */
-    private suspend fun snoopFirebaseMessagingToken() {
+    private suspend fun snoopFirebaseMessagingToken() = runCatching {
         val token = suspendCoroutine { continuation ->
             FirebaseMessaging.getInstance().token
                 .addOnCompleteListener {
@@ -55,6 +55,8 @@ class DebugToolsDelegate @Inject constructor(
         }
 
         Log.d(TAG, "Firebase Messaging Token is: $token")
+    }.getOrElse {
+        Log.e(TAG, it.message.orEmpty(), it)
     }
 
     /**

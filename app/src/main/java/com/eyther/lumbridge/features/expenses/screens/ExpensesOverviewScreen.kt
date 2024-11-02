@@ -82,8 +82,8 @@ import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.shared.time.toLocalDate
-import com.eyther.lumbridge.shared.time.toMonthYearDateString
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toMonthYearDateString
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeYearMonthPicker
@@ -578,7 +578,6 @@ private fun MonthCard(
                 .fillMaxWidth(),
             contentAlignment = Alignment.CenterStart
         ) {
-
             Row(
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
@@ -756,7 +755,10 @@ private fun NoFinancialProfile(
     onClearFilter: () -> Unit,
     onClearSortBy: () -> Unit
 ) {
-    ColumnCardWrapper {
+    ColumnCardWrapper(
+        modifier = Modifier.animateContentSize(),
+        verticalArrangement = Arrangement.spacedBy(HalfPadding)
+    ) {
         AnimatedVisibility(totalSpent != null) {
             Row(
                 modifier = Modifier.fillMaxWidth(),

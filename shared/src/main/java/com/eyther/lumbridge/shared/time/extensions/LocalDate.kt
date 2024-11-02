@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.shared.time
+package com.eyther.lumbridge.shared.time.extensions
 
 import java.time.DayOfWeek
 import java.time.Instant
@@ -10,7 +10,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 const val MONTHS_IN_YEAR = 12
-const val DAYS_IN_MONTH = 30 // Average number of days in a month
 
 /**
  * Converts a [LocalDate] to a [String] in the format [DateTimeFormatter.ISO_LOCAL_DATE].
@@ -27,6 +26,12 @@ fun LocalDate.toMonthYearDateString(): String =
     format(DateTimeFormatter.ofPattern("MMMM yyyy"))
 
 /**
+ * Converts a [LocalDate] to a [String] in the format "dd MMMM yyyy".
+ */
+fun LocalDate.toDayMonthYearDateString(): String =
+    format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
+
+/**
  * Calculates the number of months between two [LocalDate]s.
  *
  * @param other [LocalDate] to calculate the difference to.
@@ -41,9 +46,7 @@ fun LocalDate.monthsUntil(other: LocalDate, startOnDayOne: Boolean = true): Int 
         Period.between(this, other)
     }
 
-    return (periodBetween.years * MONTHS_IN_YEAR) +
-        periodBetween.months +
-        (periodBetween.days / DAYS_IN_MONTH)
+    return (periodBetween.years * MONTHS_IN_YEAR) + periodBetween.months
 }
 
 /**
@@ -70,3 +73,13 @@ fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this)
  * @return [LocalDate] representation of the [Pair].
  */
 fun Pair<Year, Month>.toLocalDate(): LocalDate = LocalDate.of(first.value, second, DayOfWeek.MONDAY.value)
+
+/**
+ * Simple helper function because [LocalDate] doesn't have a isBeforeOrEqual function.
+ */
+fun LocalDate.isBeforeOrEqual(other: LocalDate): Boolean = isBefore(other) || isEqual(other)
+
+/**
+ * Simple helper function because [LocalDate] doesn't have a isAfterOrEqual function.
+ */
+fun LocalDate.isAfterOrEqual(other: LocalDate): Boolean = isAfter(other) || isEqual(other)

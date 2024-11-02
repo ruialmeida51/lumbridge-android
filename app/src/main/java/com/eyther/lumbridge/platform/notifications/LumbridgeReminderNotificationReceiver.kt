@@ -34,6 +34,7 @@ class LumbridgeReminderNotificationReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.ic_yarn)
             .setContentTitle(title)
             .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(contentIntent)
 

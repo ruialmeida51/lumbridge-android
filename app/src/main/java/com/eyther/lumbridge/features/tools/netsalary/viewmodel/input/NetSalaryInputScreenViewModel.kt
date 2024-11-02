@@ -5,12 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewEffects
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.INetSalaryInputScreenInputHandler
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.NetSalaryInputScreenInputHandler
-import com.eyther.lumbridge.features.tools.overview.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi

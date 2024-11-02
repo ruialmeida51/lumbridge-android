@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.editloan.viewmodel.delegate
 
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
@@ -157,6 +157,41 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
         }
     }
 
+    override fun onAutomaticallyAddToExpensesChanged(automaticallyAddToExpenses: Boolean) {
+        updateInput { state ->
+            state.copy(
+                shouldAutoAddToExpenses = automaticallyAddToExpenses
+            )
+        }
+    }
+
+    override fun onNotifyWhenPaidChanged(notifyWhenPaid: Boolean) {
+        updateInput { state ->
+            state.copy(
+                shouldNotifyWhenPaid = notifyWhenPaid
+            )
+        }
+    }
+
+    override fun onPaymentDayChanged(paymentDay: Int?) {
+        updateInput { state ->
+            val paymentDayString = if (validatePaymentDay(paymentDay ?: 0)) {
+                paymentDay?.toString()
+            } else {
+                null
+            }
+
+            state.copy(
+                paymentDay = state.paymentDay.copy(
+                    text = paymentDayString,
+                    error = paymentDayString.getErrorOrNull(
+                        R.string.edit_loan_profile_invalid_payment_day
+                    )
+                )
+            )
+        }
+    }
+
     override fun validateInput(inputState: EditLoanScreenInputState): Boolean {
         val isMortgageTypeValid = when (inputState.fixedOrVariableLoanChoiceState.selectedTab) {
             EditLoanVariableOrFixedChoice.Variable.ordinal -> validateVariableLoan(inputState)
@@ -164,12 +199,19 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
             else -> false
         }
 
+        val isPaymentDayValid = if (inputState.shouldAutoAddToExpenses) {
+            validatePaymentDay(inputState.paymentDay.text?.toInt())
+        } else {
+            true
+        }
+
         return inputState.loanAmount.isValid() &&
             inputState.loanAmount.isValid() &&
             inputState.startDate.isValid() &&
             inputState.endDate.isValid() &&
             inputState.name.isValid() &&
-            isMortgageTypeValid
+            isMortgageTypeValid &&
+            isPaymentDayValid
     }
 
     private fun validateVariableLoan(inputState: EditLoanScreenInputState): Boolean {
@@ -182,6 +224,10 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
             EditLoanFixedTypeChoice.Taeg.ordinal -> inputState.taegInterestRate.isValid()
             else -> false
         }
+    }
+
+    private fun validatePaymentDay(paymentDay: Int?): Boolean {
+        return paymentDay != null && paymentDay in 1..31
     }
 
     override fun shouldEnableSaveButton(inputState: EditLoanScreenInputState): Boolean {

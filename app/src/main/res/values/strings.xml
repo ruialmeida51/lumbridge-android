@@ -43,6 +43,10 @@
     <string name="edit_loan_profile_loan">What are the conditions of your loan?</string>
     <string name="edit_loan_profile_owe">How much do you still owe?</string>
     <string name="edit_loan_profile_save">Save Mortgage Profile</string>
+    <string name="edit_loan_should_auto_add_to_expenses">Automatically add to your expenses?</string>
+    <string name="edit_loan_should_notify_when_paid">Notify when added?</string>
+    <string name="edit_loan_should_auto_add_to_expenses_payment_day">At which day of the month is your payment due?</string>
+    <string name="edit_loan_payment_date">Payment Day</string>
     <string name="edit_loan_profile_loan_interest_rate">Do you have a variable or fixed rate?</string>
     <string name="edit_loan_profile_loan_fixed_interest_rate">Is your loan calculated using TAN or TAEG?</string>
     <string name="edit_loan_profile_invalid_interest_rate">Please enter a valid interest rate</string>
@@ -52,6 +56,7 @@
     <string name="edit_loan_profile_invalid_loan_name">Please enter a valid loan name</string>
     <string name="edit_loan_profile_invalid_start_date">Please enter a valid start date</string>
     <string name="edit_loan_profile_invalid_end_date">Please enter a valid end date</string>
+    <string name="edit_loan_profile_invalid_payment_day">Please enter a valid payment day (between 1 and 31)</string>
     <string name="edit_loan_profile_loan_category">Loan Category</string>
 
     <string name="breakdown_salary_title">Financial Profile</string>
@@ -67,6 +72,8 @@
     <string name="breakdown_loans_paid_amount">Paid %1$s of %2$s</string>
     <string name="breakdown_loans_interest_rate">Interest Rate</string>
     <string name="breakdown_loans_months_left">Months Left</string>
+    <string name="breakdown_loans_auto_add_to_expenses">Auto Add to Expenses</string>
+    <string name="breakdown_loans_notify_when_added_to_expenses">Notify when added</string>
     <string name="breakdown_loans_no_loans">You don\'t seem to have any loans yet.\nTap the button below to create one!</string>
     <string name="breakdown_loans_no_loans_create">Create Loan</string>
     <string name="breakdown_tap_to_view_more">Tap to View Details</string>
@@ -96,6 +103,7 @@
     <string name="financial_overview_create_profile">Create Financial Profile</string>
     <string name="financial_overview_create_loan">Create a Loan</string>
     <string name="financial_overview_loan_details">Loan Details</string>
+    <string name="financial_overview_loan_details_subtitle">%1$s Loan</string>
     <string name="financial_overview_mortgage_pay_a_month">Register Monthly Payment</string>
 
     <string name="profile">Profile</string>
@@ -177,6 +185,59 @@
     <string name="expenses_add_type">Expense Type</string>
     <string name="expenses_overview_no_financial_profile">You don\'t seem to have a financial profile.\nTap the button below to create one.</string>
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
+
+    <string name="recurring_payments_overview">Recurring Payments</string>
+    <string name="recurring_payments_edit">Edit Recurring Payment</string>
+    <string name="recurring_payments_empty_title">Looks like you don\'t have any recurring payments yet.\nTap the button below to add some!</string>
+    <string name="recurring_payment_add_button">Add Recurring Payment</string>
+    <plurals name="periodicity_every_x_days">
+        <item quantity="one">Every day</item>
+        <item quantity="other">Every %1$s days</item>
+    </plurals>
+    <plurals name="periodicity_every_x_weeks_at_day_of_week">
+        <item quantity="one">Every week on %2$s</item>
+        <item quantity="other">Every %1$s weeks on %2$s</item>
+    </plurals>
+    <plurals name="periodicity_every_x_months_at_day_of_month">
+        <item quantity="one">Every month on the %2$s</item>
+        <item quantity="other">Every %1$s months on the %2$s</item>
+    </plurals>
+    <plurals name="periodicity_every_x_years_at_month">
+        <item quantity="one">Every year on %2$s</item>
+        <item quantity="other">Every %1$s years on %2$s</item>
+    </plurals>
+    <string name="periodicity_every_x_days_selection">Every X days</string>
+    <string name="periodicity_every_x_weeks_at_day_of_week_selection">Every X weeks on day of week</string>
+    <string name="periodicity_every_x_months_at_day_of_month_selection">Every X months on day</string>
+    <string name="periodicity_every_x_years_at_month_selection">Every X years on month</string>
+    <string name="recurring_payments_periodicity">Periodicity</string>
+    <string name="recurring_payments_next_due_date">Next Due Date</string>
+    <string name="recurring_payment_notify_me_when_paid">Notify me when payment is added</string>
+    <string name="recurring_payment_amount">Amount</string>
+    <string name="recurring_payment_category">Category</string>
+    <string name="recurring_payment_notify_when_added">Notify when added</string>
+    <string name="recurring_payment_delete_confirmation">Are you sure you want to delete the recurring payment %1$s?</string>
+    <string name="recurring_payment_edit_invalid_amount">Please, enter a valid amount</string>
+    <string name="recurring_payment_edit_invalid_name">Please, enter a valid name</string>
+    <string name="recurring_payment_edit_expense_input">Please, fill out the recurring payment information</string>
+    <string name="recurring_payment_edit_expense_frequency">What\'s the frequency of this recurring payment?</string>
+    <string name="recurring_payment_edit_expense_frequency_input">Frequency</string>
+    <string name="recurring_payment_edit_frequency_start_date">When does this recurring payment start?</string>
+    <string name="recurring_payment_edit_frequency_start_date_error">Please, enter a valid start date to start the recurring payment</string>
+    <string name="recurring_payment_edit_frequency_days">Repeat every X day(s)</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_days">Please, enter a valid number of days (bigger than 0)</string>
+    <string name="recurring_payment_edit_frequency_weeks">Repeat every X week(s)</string>
+    <string name="recurring_payment_edit_frequency_weeks_day">On which day of the week?</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_weeks">Please, enter a valid number of weeks (bigger than 0)</string>
+    <string name="recurring_payment_edit_frequency_months">Repeat every X month(s)</string>
+    <string name="recurring_payment_edit_frequency_months_day_of_month">On which day of the month?</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_months">Please, enter a valid number of months (bigger than 0)</string>
+    <string name="recurring_payment_edit_frequency_years">Repeat every X year(s)</string>
+    <string name="recurring_payment_edit_frequency_years_month">On which month?</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_years">Please, enter a valid number of years (bigger than 0)</string>
+    <string name="recurring_payment_edit_frequency_invalid_day_of_month">Please, select a valid day of the month (between 1 and 31)</string>
+    <string name="recurring_payment_notification">💰 Expense Automatically Added</string>
+    <string name="recurring_payment_notification_message">Your recurring payment %1$s has been automatically added to your expenses with the amount of %2$s.</string>
 
     <string name="app_settings_change_preferences">Change your preferences</string>
     <string name="app_settings_change_language">Change the app language</string>

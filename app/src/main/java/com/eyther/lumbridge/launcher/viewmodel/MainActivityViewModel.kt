@@ -53,7 +53,7 @@ class MainActivityViewModel @Inject constructor(
         isDarkMode: Boolean?,
         appLanguageCountryCode: String?
     ) {
-        val newDarkMode = isDarkMode ?: getPreferencesFlow().firstOrNull()?.isDarkMode ?: false
+        val newDarkMode = (isDarkMode ?: getPreferencesFlow().firstOrNull()?.isDarkMode) == true
         val newAppLanguage = SupportedLanguages.getOrNull(appLanguageCountryCode) ?: getCurrentSystemLanguageOrDefault()
 
         savePreferences(

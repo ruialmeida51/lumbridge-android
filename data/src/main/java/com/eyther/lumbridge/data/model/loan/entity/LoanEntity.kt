@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.data.model.loan.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -22,6 +23,8 @@ const val LOAN_TABLE_NAME = "loan"
  * @property fixedTanInterestRate The fixed interest rate for the loan when using the TAN formula.
  * @property loanTypeOrdinal The ordinal of the loan type.
  * @property loanCategoryOrdinal The ordinal of the loan category.
+ * @property shouldNotifyWhenPaid If true, the user should be notified when the loan is paid off.
+ * @property shouldAutoAddToExpenses If true, the loan should be automatically added to the user's expenses.
  */
 @Entity(
     tableName = LOAN_TABLE_NAME
@@ -38,5 +41,9 @@ data class LoanEntity(
     val variableSpread: Float?,
     val fixedTanInterestRate: Float?,
     val loanTypeOrdinal: Int,
-    val loanCategoryOrdinal: Int
+    val loanCategoryOrdinal: Int,
+    @ColumnInfo(defaultValue = "0") val shouldNotifyWhenPaid: Boolean = false,
+    @ColumnInfo(defaultValue = "0") val shouldAutoAddToExpenses: Boolean = false,
+    val lastAutoPayDate: String? = null,
+    val paymentDay: Int? = null
 )

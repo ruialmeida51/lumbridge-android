@@ -12,5 +12,9 @@ data class LoanCached(
     val variableSpread: Float?,
     val fixedTanInterestRate: Float?,
     val loanTypeOrdinal: Int,
-    val loanCategoryOrdinal: Int
+    val loanCategoryOrdinal: Int,
+    val shouldNotifyWhenPaid: Boolean,
+    val shouldAutoAddToExpenses: Boolean,
+    val lastAutoPayDate: String? = null,
+    val paymentDay: Int? = null
 )
