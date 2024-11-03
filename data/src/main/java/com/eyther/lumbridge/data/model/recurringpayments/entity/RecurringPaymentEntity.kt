@@ -13,9 +13,16 @@ data class RecurringPaymentEntity(
     @PrimaryKey(autoGenerate = true) val recurringPaymentId: Long = 0,
     val startDate: String,
     val lastPaymentDate: String?,
-    val periodicity: Periodicity,
     val label: String,
     val amountToPay: Float,
     val categoryTypeOrdinal: Int,
-    val shouldNotifyWhenPaid: Boolean
+    val shouldNotifyWhenPaid: Boolean,
+    val periodicityTypeOrdinal: Int?,
+    val numOfDays: Int?,
+    val numOfWeeks: Int?,
+    val numOfMonths: Int?,
+    val numOfYears: Int?,
+    val dayOfWeekOrdinal: Int?,
+    val dayOfMonth: Int?,
+    val monthOfYearOrdinal: Int?
 )
