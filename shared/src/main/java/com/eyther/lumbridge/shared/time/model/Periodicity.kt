@@ -23,9 +23,14 @@ import java.time.temporal.TemporalAdjusters
  * a representation of the periodicity and should be used in conjunction with a date to calculate whatever is needed.
  */
 sealed class Periodicity(
-    val tag: String
+    val ordinal: Int
 ) {
-
+    companion object {
+        const val EVERY_X_DAYS = 0
+        const val EVERY_X_WEEKS = 1
+        const val EVERY_X_MONTHS = 2
+        const val EVERY_X_YEARS = 3
+    }
     /**
      * It increments the start date by the number of X (given by the periodicity) until it reaches a date that is after the current date,
      * and that's why we need that `while` loop in the implementation. In theory, we could make sure to store the last date and
@@ -42,7 +47,7 @@ sealed class Periodicity(
      */
     data class EveryXDays(
         val numOfDays: Int
-    ): Periodicity(EveryXDays::class.java.simpleName) {
+    ): Periodicity(EVERY_X_DAYS) {
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
             var nextDate = startFrom
@@ -66,7 +71,7 @@ sealed class Periodicity(
     data class EveryXWeeks(
         val numOfWeeks: Int,
         val dayOfWeekOrdinal: Int
-    ): Periodicity(EveryXWeeks::class.java.simpleName) {
+    ): Periodicity(EVERY_X_WEEKS) {
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
 
@@ -90,7 +95,7 @@ sealed class Periodicity(
     data class EveryXMonths(
         val numOfMonth: Int,
         val dayOfMonth: Int
-    ): Periodicity(EveryXMonths::class.java.simpleName) {
+    ): Periodicity(EVERY_X_MONTHS) {
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
 
@@ -124,7 +129,7 @@ sealed class Periodicity(
     data class EveryXYears(
         val numOfYear: Int,
         val monthOrdinal: Int
-    ): Periodicity(EveryXYears::class.java.simpleName) {
+    ): Periodicity(EVERY_X_YEARS) {
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
             var nextDate = startFrom.withMonth(minOf(Month.of(monthOrdinal).value, MONTHS_IN_YEAR))
