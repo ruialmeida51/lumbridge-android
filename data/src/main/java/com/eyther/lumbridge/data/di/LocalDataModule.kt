@@ -8,6 +8,7 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.eyther.lumbridge.data.database.migration.V5ToV6Migration
 import com.eyther.lumbridge.data.database.migration.V7ToV8Migration
+import com.eyther.lumbridge.data.database.migration.V8ToV9Migration
 import com.eyther.lumbridge.data.database.room.LumbridgeRoomDatabase
 import dagger.Module
 import dagger.Provides
@@ -26,7 +27,8 @@ object LocalDataModule {
     fun provideLumbridgeRoomDatabase(
         @ApplicationContext context: Context,
         v5ToV6Migration: V5ToV6Migration,
-        v7ToV8Migration: V7ToV8Migration
+        v7ToV8Migration: V7ToV8Migration,
+        v8ToV9Migration: V8ToV9Migration
     ): LumbridgeRoomDatabase {
         return Room.databaseBuilder(
             context,
@@ -35,7 +37,8 @@ object LocalDataModule {
         )
             .addMigrations(
                 v5ToV6Migration,
-                v7ToV8Migration
+                v7ToV8Migration,
+                v8ToV9Migration
             )
             .fallbackToDestructiveMigration()
             .build()

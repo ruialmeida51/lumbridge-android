@@ -55,6 +55,25 @@ sealed class ToolsNavigationItem(
         )
     }
 
+    sealed interface Reminders {
+        companion object {
+            const val HOST_ROUTE = "reminders"
+            const val ARG_REMINDER_ID = "reminderId"
+        }
+
+        @Serializable
+        data object RemindersList : ToolsNavigationItem(
+            route = "reminders_list",
+            label = R.string.tools_reminders_list
+        )
+
+        @Serializable
+        data object RemindersDetails : ToolsNavigationItem(
+            route = "reminders_details/{$ARG_REMINDER_ID}",
+            label = R.string.tools_reminders_details
+        )
+    }
+
     sealed interface RecurringPayments {
         companion object {
             const val HOST_ROUTE = "recurring_payments"

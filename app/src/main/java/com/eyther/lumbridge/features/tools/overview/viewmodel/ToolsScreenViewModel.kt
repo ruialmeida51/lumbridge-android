@@ -1,9 +1,9 @@
 package com.eyther.lumbridge.features.tools.overview.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolItem
 import com.eyther.lumbridge.features.tools.overview.model.ToolScreenViewState
-import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +23,7 @@ class ToolsScreenViewModel @Inject constructor() : ViewModel(), IToolsScreenView
             ToolItem.Personal.CurrencyConverter -> ToolsNavigationItem.CurrencyConverter
             ToolItem.Lifestyle.ShoppingList -> ToolsNavigationItem.Shopping.ShoppingList
             ToolItem.Lifestyle.Notes -> ToolsNavigationItem.Notes.NotesList
+            ToolItem.Lifestyle.Reminders -> ToolsNavigationItem.Reminders.RemindersList
             ToolItem.Lifestyle.RecurringPayments -> ToolsNavigationItem.RecurringPayments.Overview
         }
     }

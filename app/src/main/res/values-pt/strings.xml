@@ -164,6 +164,17 @@
     <string name="tools_notes_no_list_create">Criar Nota</string>
     <string name="tools_notes_details">Nota</string>
 
+    <string name="tools_reminders_list">Lembretes</string>
+    <string name="tools_reminders_add_reminder">Adicionar Lembrete</string>
+    <string name="tools_reminders_list_delete_confirmation">Tens a certeza que queres remover o lembrete %1$s?</string>
+    <string name="tools_reminders_no_list_message">Parece que ainda não tens nenhum lembrete.\nCarrega no botão em baixo para começar a criar um!</string>
+    <string name="tools_reminders_no_list_create">Criar Lembrete</string>
+    <string name="tools_reminders_due_date">Quando</string>
+    <string name="tools_reminders_invalid_name">Por favor, introduz um nome válido</string>
+    <string name="tools_reminders_invalid_date">Por favor, introduz uma data válida (no futuro)</string>
+
+    <string name="tools_reminders_details">Lembrete</string>
+
     <string name="expenses">Despesas</string>
     <string name="expenses_overview">Despesas</string>
     <string name="expenses_overview_title">Visão</string>
@@ -337,6 +348,8 @@
     <string name="surplus">Excedente</string>
     <string name="expense">Despesa</string>
     <string name="gained">Ganho</string>
+    <string name="time">Tempo</string>
+    <string name="invalid_date">Por favor, introduz uma data válida</string>
 
     <string-array name="loading_messages">
         <item>A preparar um pouco de magia digital…</item>

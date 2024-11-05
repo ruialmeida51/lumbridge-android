@@ -4,6 +4,7 @@ data class LoanCached(
     val id: Long = -1,
     val name: String,
     val startDate: String,
+    val currentPaymentDate: String,
     val endDate: String,
     val currentAmount: Float,
     val initialAmount: Float,

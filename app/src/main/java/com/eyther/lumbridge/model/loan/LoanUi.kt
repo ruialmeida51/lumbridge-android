@@ -6,6 +6,7 @@ data class LoanUi(
     val id: Long = -1,
     val name: String,
     val startDate: LocalDate,
+    val currentPaymentDate: LocalDate,
     val endDate: LocalDate,
     val initialLoanAmount: Float,
     val currentLoanAmount: Float,

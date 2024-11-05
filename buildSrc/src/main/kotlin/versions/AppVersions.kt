@@ -9,6 +9,7 @@ object AppVersions {
     const val KOTLIN_COROUTINES_VERSION = "1.9.0"
 
     const val COMPOSE_BOM_VERSION = "2024.10.00"
+    const val COMPOSE_MATERIAL_3_VERSION = "1.4.0-alpha02"
     const val COMPOSE_TOOLING_VERSION = "1.7.4"
 
     const val NAVIGATION_VERSION = "2.8.3"

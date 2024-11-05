@@ -7,7 +7,8 @@ import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 
 data class EditLoanScreenInputState(
     val name: TextInputState = TextInputState(),
-    val loanAmount: TextInputState = TextInputState(),
+    val initialAmount: TextInputState = TextInputState(),
+    val currentAmount: TextInputState = TextInputState(),
     val startDate: DateInputState = DateInputState(),
     val endDate: DateInputState = DateInputState(),
     val euribor: TextInputState = TextInputState(),

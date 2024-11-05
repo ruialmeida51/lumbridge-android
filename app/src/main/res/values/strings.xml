@@ -169,6 +169,17 @@
     <string name="tools_notes_no_list_create">Create Note</string>
     <string name="tools_notes_details">Note</string>
 
+    <string name="tools_reminders_list">Reminders</string>
+    <string name="tools_reminders_add_reminder">Add Reminder</string>
+    <string name="tools_reminders_list_delete_confirmation">Are you sure you want to delete the reminder %1$s?</string>
+    <string name="tools_reminders_no_list_message">You don\'t seem to have any reminders yet.\nTap the button below to create one!</string>
+    <string name="tools_reminders_no_list_create">Create Reminder</string>
+    <string name="tools_reminders_due_date">When</string>
+    <string name="tools_reminders_invalid_name">Please, enter a valid name</string>
+    <string name="tools_reminders_invalid_date">Please, enter a valid date (must be in the future)</string>
+
+    <string name="tools_reminders_details">Reminder</string>
+
     <string name="tools_net_salary_result">Net Salary Result</string>
 
     <string name="expenses">Expenses</string>
@@ -363,4 +374,6 @@
     <string name="other">Other</string>
     <string name="expense">Expense</string>
     <string name="gained">Gained</string>
+    <string name="time">Time</string>
+    <string name="invalid_date">Please, enter a valid date</string>
 </resources>

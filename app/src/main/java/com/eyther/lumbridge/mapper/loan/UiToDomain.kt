@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.mapper.loan
 
-import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanCategory
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
 import com.eyther.lumbridge.domain.model.loan.LoanType
 import com.eyther.lumbridge.model.loan.LoanCategoryUi
@@ -14,6 +14,7 @@ fun LoanUi.toDomain() = LoanDomain(
     currentAmount = currentLoanAmount,
     initialAmount = initialLoanAmount,
     startDate = startDate,
+    currentPaymentDate = currentPaymentDate,
     endDate = endDate,
     loanInterestRate = loanInterestRateUi.toDomain(),
     loanType = loanInterestRateUi.getLoanType(),

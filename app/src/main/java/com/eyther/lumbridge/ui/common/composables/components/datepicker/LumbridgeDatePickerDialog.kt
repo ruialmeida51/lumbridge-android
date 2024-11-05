@@ -17,6 +17,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
@@ -91,6 +93,49 @@ fun LumbridgeDatePickerDialog(
 }
 
 @Composable
+fun LumbridgeDateTimePickerDialog(
+    showDialog: MutableState<Boolean>,
+    datePickerState: DatePickerState,
+    timePickerState: TimePickerState,
+    onSaveDateTime: (selectedDateTime: Long?) -> Unit
+) {
+    if (showDialog.value) {
+        val showTimePicker = remember { mutableStateOf(true) }
+        val showDatePicker = remember { mutableStateOf(false) }
+
+        TimePickerDialog(
+            onDismiss = {
+                showTimePicker.value = false
+                showDialog.value = false
+            },
+            onConfirm = {
+                showTimePicker.value = false
+                showDatePicker.value = true
+            },
+            content = {
+                TimePicker(timePickerState)
+            }
+        )
+
+        LumbridgeDatePickerDialog(
+            showDialog = showDatePicker,
+            datePickerState = datePickerState,
+            onSaveDate = { selectedDateMillis ->
+                val hoursInMillis = timePickerState.hour * 60 * 60 * 1000 // Convert hours to milliseconds
+                val minutesInMillis = timePickerState.minute * 60 * 1000 // Convert minutes to milliseconds
+                val finalDateTime = (selectedDateMillis ?: 0L) + hoursInMillis + minutesInMillis
+
+                showDatePicker.value = false
+                showDialog.value = false
+
+                onSaveDateTime(finalDateTime)
+            }
+        )
+    }
+
+}
+
+@Composable
 fun LumbridgeYearMonthPicker(
     modifier: Modifier = Modifier,
     shouldShowDialog: MutableState<Boolean>,
@@ -134,8 +179,8 @@ fun LumbridgeYearMonthPicker(
                                 .fillMaxWidth()
                                 .padding(bottom = DefaultPadding),
                             state = dateInputState.value,
-                            label = stringResource(id = R.string.start_date),
-                            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
+                            label = stringResource(id = R.string.date),
+                            placeholder = stringResource(id = R.string.invalid_date),
                             onClick = { showDatePickerDialog.value = true }
                         )
 
@@ -245,7 +290,7 @@ fun LumbridgeYearMonthRangePicker(
                         LumbridgeButton(
                             enableButton = startYear.intValue != INVALID &&
                                 endMonth.intValue != INVALID &&
-                                endYear.intValue != INVALID  &&
+                                endYear.intValue != INVALID &&
                                 endMonth.intValue != INVALID,
                             label = stringResource(id = R.string.apply),
                             onClick = {

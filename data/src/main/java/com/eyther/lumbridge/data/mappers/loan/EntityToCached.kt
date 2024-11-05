@@ -7,6 +7,7 @@ fun LoanEntity.toCached() = LoanCached(
     id = loanId,
     name = name,
     startDate = startDate,
+    currentPaymentDate = currentPaymentDate,
     endDate = endDate,
     currentAmount = currentAmount,
     initialAmount = initialAmount,

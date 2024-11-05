@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 
 package com.eyther.lumbridge.features.editloan.screens
 
@@ -39,7 +39,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewState
@@ -66,10 +65,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import java.time.LocalDate
 
 @Composable
 fun EditLoanScreen(
@@ -257,15 +254,15 @@ private fun ColumnScope.RemainingAmount(
     state: EditLoanScreenViewState.Content,
     viewModel: IEditLoanScreenViewModel
 ) {
-    val selectableYears = LocalDate.now().year..viewModel.getMaxSelectableYear()
-    val isSelectableYear = { year: Int -> year >= LocalDate.now().year }
+    val selectableYears = viewModel.getMinSelectableYear()..viewModel.getMaxSelectableYear()
+    val isSelectableYear = { year: Int -> year in selectableYears }
 
     val showStartDateDialog = remember { mutableStateOf(false) }
     val startDatePickerState = rememberDatePickerState(
         yearRange = selectableYears,
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis.toLocalDate() >= LocalDate.now()
+                return true
             }
 
             override fun isSelectableYear(year: Int): Boolean {
@@ -330,9 +327,16 @@ private fun ColumnScope.RemainingAmount(
         )
 
         NumberInput(
-            state = state.inputState.loanAmount,
-            label = stringResource(id = if (state.isCreateLoan) R.string.initial_loan_amount else R.string.current_loan_amount),
-            onInputChanged = { viewModel.onMortgageAmountChanged(it.toFloatOrNull()) }
+            modifier = Modifier.padding(bottom = HalfPadding),
+            state = state.inputState.initialAmount,
+            label = stringResource(id = R.string.initial_loan_amount),
+            onInputChanged = { viewModel.onLoanInitialAmountChanged(it.toFloatOrNull()) }
+        )
+
+        NumberInput(
+            state = state.inputState.currentAmount,
+            label = stringResource(id = R.string.current_loan_amount),
+            onInputChanged = { viewModel.onLoanCurrentAmountChanged(it.toFloatOrNull()) }
         )
     }
 }

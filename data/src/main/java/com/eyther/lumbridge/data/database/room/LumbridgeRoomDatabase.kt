@@ -31,7 +31,7 @@ import com.eyther.lumbridge.data.model.snapshotsalary.entity.SnapshotNetSalaryEn
         SnapshotNetSalaryEntity::class,
         RecurringPaymentEntity::class
     ],
-    version = 8,
+    version = 9,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 2, to = 3),

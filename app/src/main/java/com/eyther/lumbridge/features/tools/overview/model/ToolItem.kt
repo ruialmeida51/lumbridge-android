@@ -13,6 +13,7 @@ sealed class ToolItem(
             R.string.tools_lifestyle_tools to listOf(
                 Lifestyle.ShoppingList,
                 Lifestyle.Notes,
+                Lifestyle.Reminders,
                 Lifestyle.RecurringPayments
             ),
             R.string.tools_finance_resources_tools to listOf(
@@ -32,17 +33,22 @@ sealed class ToolItem(
             text = R.string.tools_notes_list,
             icon = R.drawable.ic_sticky_note
         )
+        
+        data object Reminders : ToolItem(
+            text = R.string.tools_reminders_list,
+            icon = R.drawable.ic_checklist
+        )
 
         data object RecurringPayments : ToolItem(
             text = R.string.recurring_payments_overview,
-            icon = R.drawable.ic_repeat
+            icon = R.drawable.ic_time
         )
     }
 
     sealed interface Personal {
         data object NetSalaryCalculator : ToolItem(
             text = R.string.tools_net_salary_calculator,
-            icon = R.drawable.ic_money
+            icon = R.drawable.ic_balance
         )
 
         data object CurrencyConverter : ToolItem(

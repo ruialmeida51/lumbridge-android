@@ -33,7 +33,7 @@ sealed class LumbridgeNavigationItem(
 
     @Serializable
     data object Overview : LumbridgeNavigationItem(
-        route = "overview", icon = R.drawable.ic_chart, label = R.string.overview
+        route = "overview", icon = R.drawable.ic_monitoring, label = R.string.overview
     )
 
     @Serializable
