@@ -47,7 +47,7 @@ import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecu
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.EditRecurringPaymentsScreenViewModel
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.IEditRecurringPaymentsScreenViewModel
 import com.eyther.lumbridge.launcher.model.permissions.NeededPermission
-import com.eyther.lumbridge.model.recurringpayments.PeriodicityUi
+import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton

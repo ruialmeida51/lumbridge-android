@@ -41,12 +41,17 @@ private const val INVALID = -1
 fun LumbridgeDatePickerDialog(
     showDialog: MutableState<Boolean>,
     datePickerState: DatePickerState,
+    onDismissRequest: (() -> Unit)? = null,
     onSaveDate: (selectedDate: Long?) -> Unit
 ) {
     if (showDialog.value) {
         DatePickerDialog(
             onDismissRequest = {
-                showDialog.value = false
+                if (onDismissRequest != null) {
+                    onDismissRequest.invoke()
+                } else {
+                    showDialog.value = false
+                }
             },
             confirmButton = {
                 Column(
@@ -74,7 +79,13 @@ fun LumbridgeDatePickerDialog(
                             end = DefaultPadding,
                             bottom = DefaultPadding
                         )
-                        .clickable { showDialog.value = false },
+                        .clickable {
+                            if (onDismissRequest != null) {
+                                onDismissRequest.invoke()
+                            } else {
+                                showDialog.value = false
+                            }
+                        },
                 ) {
                     Text(
                         text = stringResource(id = R.string.cancel)
@@ -100,37 +111,42 @@ fun LumbridgeDateTimePickerDialog(
     onSaveDateTime: (selectedDateTime: Long?) -> Unit
 ) {
     if (showDialog.value) {
-        val showTimePicker = remember { mutableStateOf(true) }
-        val showDatePicker = remember { mutableStateOf(false) }
-
-        TimePickerDialog(
-            onDismiss = {
-                showTimePicker.value = false
-                showDialog.value = false
-            },
-            onConfirm = {
-                showTimePicker.value = false
-                showDatePicker.value = true
-            },
-            content = {
-                TimePicker(timePickerState)
-            }
-        )
+        val showTimePicker = remember { mutableStateOf(false) }
+        val showDatePicker = remember { mutableStateOf(true) }
 
         LumbridgeDatePickerDialog(
             showDialog = showDatePicker,
             datePickerState = datePickerState,
-            onSaveDate = { selectedDateMillis ->
-                val hoursInMillis = timePickerState.hour * 60 * 60 * 1000 // Convert hours to milliseconds
-                val minutesInMillis = timePickerState.minute * 60 * 1000 // Convert minutes to milliseconds
-                val finalDateTime = (selectedDateMillis ?: 0L) + hoursInMillis + minutesInMillis
-
-                showDatePicker.value = false
+            onDismissRequest = {
                 showDialog.value = false
-
-                onSaveDateTime(finalDateTime)
+            },
+            onSaveDate = { _ ->
+                showTimePicker.value = true
+                showDatePicker.value = false
             }
         )
+
+        if (showTimePicker.value) {
+            TimePickerDialog(
+                onDismiss = {
+                    showTimePicker.value = false
+                    showDialog.value = false
+                },
+                onConfirm = {
+                    val hoursInMillis = timePickerState.hour * 60 * 60 * 1000 // Convert hours to milliseconds
+                    val minutesInMillis = timePickerState.minute * 60 * 1000 // Convert minutes to milliseconds
+                    val finalDateTime = (datePickerState.selectedDateMillis ?: 0) + hoursInMillis + minutesInMillis
+
+                    showTimePicker.value = false
+                    showDialog.value = false
+
+                    onSaveDateTime(finalDateTime)
+                },
+                content = {
+                    TimePicker(timePickerState)
+                }
+            )
+        }
     }
 
 }

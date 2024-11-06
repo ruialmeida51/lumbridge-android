@@ -5,7 +5,7 @@ import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice.Surplus
 import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecurringPaymentScreenInputState
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.recurringpayments.PeriodicityUi
+import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -243,14 +243,11 @@ class EditRecurringPaymentInputHandler @Inject constructor() : IEditRecurringPay
     }
 
     private fun validatePeriodicity(): Boolean {
-        val periodicity = inputState.value.periodicityUi
-
-        return when (periodicity) {
+        return when (val periodicity = inputState.value.periodicityUi) {
             is PeriodicityUi.EveryXDays -> validateNumOfDays(periodicity.numOfDays)
             is PeriodicityUi.EveryXWeeks -> validateNumOfWeeks(periodicity.numOfWeeks) && periodicity.dayOfWeek in DayOfWeek.MONDAY..DayOfWeek.SUNDAY
             is PeriodicityUi.EveryXMonths -> validateNumOfMonths(periodicity.numOfMonth) && validateDayOfMonth(periodicity.dayOfMonth)
             is PeriodicityUi.EveryXYears -> validateNumOfYears(periodicity.numOfYear) && periodicity.month in Month.JANUARY..Month.DECEMBER
-            else -> false
         }
     }
 

@@ -5,26 +5,25 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.eyther.lumbridge.model.loan.LoanUi
-import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
-import com.eyther.lumbridge.platform.notifications.LumbridgeDefaultNotificationReceiver
-import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationScheduler
-import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.usecase.loan.TryPayPendingLoanPaymentsUseCase
-import com.eyther.lumbridge.usecase.recurringpayments.TryPayPendingRecurringPaymentsUseCase
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.model.loan.LoanCalculationUi
+import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
+import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationSender
+import com.eyther.lumbridge.shared.di.model.Schedulers
+import com.eyther.lumbridge.usecase.loan.TryPayPendingLoanPaymentsUseCase
+import com.eyther.lumbridge.usecase.recurringpayments.TryPayPendingRecurringPaymentsUseCase
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
 @HiltWorker
 class CheckPendingPaymentsWorker @AssistedInject constructor(
     @Assisted private val appContext: Context,
     private val tryPayPendingRecurringPaymentsUseCase: TryPayPendingRecurringPaymentsUseCase,
     private val tryPayPendingLoanPaymentsUseCase: TryPayPendingLoanPaymentsUseCase,
-    private val notificationScheduler: LumbridgeNotificationScheduler,
+    private val notificationSender: LumbridgeNotificationSender,
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val schedulers: Schedulers,
     @Assisted workerParams: WorkerParameters,
@@ -75,10 +74,9 @@ class CheckPendingPaymentsWorker @AssistedInject constructor(
             )
         }
 
-        notificationScheduler.scheduleBatchNotification(
+        notificationSender.sendBatchNotification(
             title = title,
-            messages = messages,
-            whenToDisplayInMillis = System.currentTimeMillis()
+            messages = messages
         )
     }
 }

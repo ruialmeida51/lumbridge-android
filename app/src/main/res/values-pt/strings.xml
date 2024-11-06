@@ -172,6 +172,35 @@
     <string name="tools_reminders_due_date">Quando</string>
     <string name="tools_reminders_invalid_name">Por favor, introduz um nome válido</string>
     <string name="tools_reminders_invalid_date">Por favor, introduz uma data válida (no futuro)</string>
+    <string name="tools_reminders_remind_me_in">Lembrar-me…</string>
+    <string name="tools_reminders_fifteen_minutes_before_selection">15 minutos antes</string>
+    <string name="tools_reminders_thirty_minutes_before_selection">30 minutos antes</string>
+    <string name="tools_reminders_one_hour_before_selection">1 hora antes</string>
+    <string name="tools_reminders_two_hours_before_selection">2 horas antes</string>
+    <string name="tools_reminders_one_day_before_selection">1 dia antes</string>
+    <string name="tools_reminders_two_days_before_selection">2 dias antes</string>
+    <string name="tools_reminder_n_minutes_before_selection">N minutos antes…</string>
+    <string name="tools_reminder_n_hours_before_selection">N horas antes…</string>
+    <string name="tools_reminder_n_days_before_selection">N dias antes…</string>
+    <string name="tools_reminder_fifteen_minutes_display">15 minutos antes</string>
+    <string name="tools_reminder_thirty_minutes_display">30 minutos antes</string>
+    <string name="tools_reminder_one_hour_display">1 hora antes</string>
+    <string name="tools_reminder_two_hours_display">2 horas antes</string>
+    <string name="tools_reminder_one_day_display">1 dia antes</string>
+    <string name="tools_reminder_two_days_display">2 dias antes</string>
+    <plurals name="tools_reminder_n_minutes_before_display" tools:ignore="MissingQuantity">
+        <item quantity="one">%1$s minuto antes</item>
+        <item quantity="other">%1$s minutos antes</item>
+    </plurals>
+    <plurals name="tools_reminder_n_hours_before_display" tools:ignore="MissingQuantity">
+        <item quantity="one">%1$s hora antes</item>
+        <item quantity="other">%1$s horas antes</item>
+    </plurals>
+    <plurals name="tools_reminder_n_days_before_display" tools:ignore="MissingQuantity">
+        <item quantity="one">%1$s dia antes</item>
+        <item quantity="other">%1$s dias antes</item>
+    </plurals>
+    <string name="tools_reminders_save">Guardar Lembrete</string>
 
     <string name="tools_reminders_details">Lembrete</string>
 
@@ -209,10 +238,10 @@
         <item quantity="one">Todos os anos em %2$s</item>
         <item quantity="other">A cada %1$s anos em %2$s</item>
     </plurals>
-    <string name="periodicity_every_x_days_selection">A cada X dias</string>
-    <string name="periodicity_every_x_weeks_at_day_of_week_selection">A cada X semanas no dia da semana</string>
-    <string name="periodicity_every_x_months_at_day_of_month_selection">A cada X meses no dia</string>
-    <string name="periodicity_every_x_years_at_month_selection">A cada X anos no mês</string>
+    <string name="periodicity_every_x_days_selection">A cada n dias…</string>
+    <string name="periodicity_every_x_weeks_at_day_of_week_selection">A cada n semanas no dia…</string>
+    <string name="periodicity_every_x_months_at_day_of_month_selection">A cada n meses no dia…</string>
+    <string name="periodicity_every_x_years_at_month_selection">A cada n anos no mês…</string>
     <string name="recurring_payments_periodicity">Periodicidade</string>
     <string name="recurring_payments_next_due_date">Próxima Data</string>
     <string name="recurring_payment_notify_me_when_paid">Notificar-me quando pago</string>
@@ -227,16 +256,16 @@
     <string name="recurring_payment_edit_expense_frequency_input">Frequência do Pagamento</string>
     <string name="recurring_payment_edit_frequency_start_date">Quando é que este pagamento começa?</string>
     <string name="recurring_payment_edit_frequency_start_date_error">Por favor, introduz uma data de início válida</string>
-    <string name="recurring_payment_edit_frequency_days">Repetir a cada X dia(s)</string>
-    <string name="recurring_payment_edit_frequency_invalid_number_of_days">Por favor, introduz um número de dias válido (maior que  0)</string>
-    <string name="recurring_payment_edit_frequency_weeks">Repetir a cada X semana(s)</string>
+    <string name="recurring_payment_edit_frequency_days">Repetir a cada n dia(s)…</string>
+    <string name="recurring_payment_edit_frequency_weeks">Repetir a cada n semana(s)…</string>
     <string name="recurring_payment_edit_frequency_weeks_day">Em que dia da semana?</string>
-    <string name="recurring_payment_edit_frequency_invalid_number_of_weeks">Por favor, introduz um número de semanas válido (maior que  0)</string>
-    <string name="recurring_payment_edit_frequency_months">Repeat every X month(s)</string>
+    <string name="recurring_payment_edit_frequency_months">Repeat every n month(s)…</string>
     <string name="recurring_payment_edit_frequency_months_day_of_month">On which day of the month?</string>
-    <string name="recurring_payment_edit_frequency_invalid_number_of_months">Por favor, introduz um número de meses válido (maior que 0)</string>
-    <string name="recurring_payment_edit_frequency_years">Repeat every X year(s)</string>
+    <string name="recurring_payment_edit_frequency_years">Repeat every n year(s)…</string>
     <string name="recurring_payment_edit_frequency_years_month">On which month?</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_days">Por favor, introduz um número de dias válido (maior que  0)</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_weeks">Por favor, introduz um número de semanas válido (maior que  0)</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_months">Por favor, introduz um número de meses válido (maior que 0)</string>
     <string name="recurring_payment_edit_frequency_invalid_number_of_years">Por favor, introduz um número de anos válido (maior que 0)</string>
     <string name="recurring_payment_edit_frequency_invalid_day_of_month">Por favor, introduz um dia do mês válido (entre 1 a 31)</string>
     <string name="recurring_payment_notification">💰 Pagamentos Recorrente</string>

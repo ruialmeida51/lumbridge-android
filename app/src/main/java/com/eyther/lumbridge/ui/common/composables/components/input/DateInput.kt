@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.extensions.toIsoLocalDateString
+import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearDateString
+import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearHourMinuteString
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
+import com.eyther.lumbridge.ui.common.composables.model.input.DateTimeInputState
 
 @Composable
 fun DateInput(
@@ -51,7 +53,79 @@ fun DateInput(
             enabled = enabled,
             interactionSource = interactionSource,
             modifier = Modifier.fillMaxWidth(),
-            value = state.date?.toIsoLocalDateString().orEmpty(),
+            value = state.date?.toDayMonthYearDateString().orEmpty(),
+            textStyle = MaterialTheme.typography.bodyMedium,
+            onValueChange = { },
+            label = {
+                label?.let {
+                    Text(
+                        text = label,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            },
+            placeholder = {
+                placeholder?.let {
+                    Text(
+                        text = placeholder,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            },
+            isError = state.isError(),
+            supportingText = {
+                if (state.isError()) {
+                    Text(
+                        text = state.error!!.getString(context),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            },
+            trailingIcon = {
+                if (state.isError()) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = stringResource(id = R.string.error)
+                    )
+                }
+            },
+            singleLine = true,
+            readOnly = true
+        )
+    }
+}
+
+@Composable
+fun DateTimeInput(
+    modifier: Modifier = Modifier,
+    state: DateTimeInputState,
+    enabled: Boolean = true,
+    label: String? = null,
+    placeholder: String? = null,
+    onClick: () -> Unit
+) {
+    val context = LocalContext.current
+    val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect {
+            if (it is PressInteraction.Release) {
+                onClick()
+            }
+        }
+    }
+
+    Column(
+        modifier = modifier
+            .then(
+                if (enabled) Modifier.clickable { onClick() } else Modifier
+            )
+    ) {
+        TextField(
+            enabled = enabled,
+            interactionSource = interactionSource,
+            modifier = Modifier.fillMaxWidth(),
+            value = state.dateTime?.toDayMonthYearHourMinuteString().orEmpty(),
             textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = { },
             label = {

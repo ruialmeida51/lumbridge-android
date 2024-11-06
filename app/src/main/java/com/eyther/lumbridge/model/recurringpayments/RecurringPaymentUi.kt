@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.model.recurringpayments
 
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.time.PeriodicityUi
 import java.time.LocalDate
 
 data class RecurringPaymentUi(

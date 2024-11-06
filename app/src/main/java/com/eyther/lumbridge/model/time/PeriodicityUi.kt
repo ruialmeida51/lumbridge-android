@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.model.recurringpayments
+package com.eyther.lumbridge.model.time
 
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.ui.common.model.text.TextResource
@@ -11,7 +11,7 @@ import java.util.Locale
 sealed class PeriodicityUi(
     open val nextDueDate: LocalDate? = null,
     open val ordinal: Int
-): Comparable<PeriodicityUi> {
+) : Comparable<PeriodicityUi> {
 
     companion object {
         fun getDefaults() = listOf(
@@ -22,6 +22,11 @@ sealed class PeriodicityUi(
         )
 
         fun defaultFromOrdinal(ordinal: Int) = getDefaults().first { it.ordinal == ordinal }
+    }
+
+    // Single compareTo for ordinal-based ordering
+    override fun compareTo(other: PeriodicityUi): Int {
+        return this.ordinal.compareTo(other.ordinal)
     }
 
     abstract fun getPeriodicityHumanReadable(locale: Locale): TextResource
@@ -45,9 +50,10 @@ sealed class PeriodicityUi(
         }
 
         override fun compareTo(other: PeriodicityUi): Int {
-            return when (other) {
-                is EveryXDays -> numOfDays.compareTo(other.numOfDays)
-                else -> -1
+            return if (other is EveryXDays) {
+                numOfDays.compareTo(other.numOfDays)
+            } else {
+                super.compareTo(other)
             }
         }
     }
@@ -71,10 +77,10 @@ sealed class PeriodicityUi(
         }
 
         override fun compareTo(other: PeriodicityUi): Int {
-            return when (other) {
-                is EveryXDays -> 1
-                is EveryXWeeks -> numOfWeeks.compareTo(other.numOfWeeks)
-                else -> -1
+            return if (other is EveryXWeeks) {
+                numOfWeeks.compareTo(other.numOfWeeks)
+            } else {
+                super.compareTo(other)
             }
         }
     }
@@ -98,10 +104,10 @@ sealed class PeriodicityUi(
         }
 
         override fun compareTo(other: PeriodicityUi): Int {
-            return when (other) {
-                is EveryXDays, is EveryXWeeks -> 1
-                is EveryXMonths -> numOfMonth.compareTo(other.numOfMonth)
-                else -> -1
+            return if (other is EveryXMonths) {
+                numOfMonth.compareTo(other.numOfMonth)
+            } else {
+                super.compareTo(other)
             }
         }
     }
@@ -125,9 +131,10 @@ sealed class PeriodicityUi(
         }
 
         override fun compareTo(other: PeriodicityUi): Int {
-            return when (other) {
-                is EveryXDays, is EveryXWeeks, is EveryXMonths -> 1
-                is EveryXYears -> numOfYear.compareTo(other.numOfYear)
+            return if (other is EveryXYears) {
+                numOfYear.compareTo(other.numOfYear)
+            } else {
+                super.compareTo(other)
             }
         }
     }

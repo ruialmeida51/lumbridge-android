@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.tools.recurringpayments.model.edit
 
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.recurringpayments.PeriodicityUi
+import com.eyther.lumbridge.model.time.PeriodicityUi
 
 sealed interface EditRecurringPaymentsScreenViewState {
     data object Loading : EditRecurringPaymentsScreenViewState

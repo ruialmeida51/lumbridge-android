@@ -1,7 +1,6 @@
 package com.eyther.lumbridge.features.tools.tasksandreminders.viewmodel.edit.delegate
 
 import com.eyther.lumbridge.features.tools.tasksandreminders.model.edit.RemindersEditScreenInputState
-import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.StateFlow
 
 interface IRemindersEditScreenInputHandler {
@@ -13,6 +12,7 @@ interface IRemindersEditScreenInputHandler {
      */
     fun onNameChanged(name: String?)
     fun onDueDateChanged(dueDate: Long?)
+    fun onRemindMeInTypeChanged(remindMeInOrdinal: Int?)
 
     /**
      * Checks if we have enough information available to enable the button.

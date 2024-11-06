@@ -11,7 +11,7 @@ import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecu
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.EditRecurringPaymentInputHandler
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.IEditRecurringPaymentInputHandler
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.recurringpayments.PeriodicityUi
+import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.usecase.recurringpayments.DeleteRecurringPaymentUseCase
 import com.eyther.lumbridge.usecase.recurringpayments.GetRecurringPaymentByIdUseCase
