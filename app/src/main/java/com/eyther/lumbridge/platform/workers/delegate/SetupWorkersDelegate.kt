@@ -7,6 +7,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.eyther.lumbridge.platform.workers.CheckPendingPaymentsWorker
+import com.eyther.lumbridge.platform.workers.CheckPendingRemindersWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Duration
 import java.time.LocalTime
@@ -22,12 +23,13 @@ class SetupWorkersDelegate @Inject constructor(
 
     fun setupWorkers() = runCatching {
         setupRecurringPaymentsWorker()
+        setupRemindersWorker()
     }.getOrElse {
-        Log.e(TAG, "\uD83D\uDCA5 Failed to setup workers: $it")
+        Log.e(TAG, "💥 Failed to setup workers: $it")
     }
 
     private fun setupRecurringPaymentsWorker() {
-        Log.d(TAG, "\uD83D\uDCAC Setting up recurring payments worker")
+        Log.d(TAG, "💬 Setting up recurring payments worker")
 
         val workerTag = "CheckPendingPaymentsWork"
 
@@ -55,10 +57,29 @@ class SetupWorkersDelegate @Inject constructor(
         WorkManager.getInstance(context)
             .enqueueUniquePeriodicWork(
                 workerTag,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 workRequest
             )
 
-        Log.d(TAG, "\uD83D\uDE80 Recurring payments worker set up")
+        Log.d(TAG, "🚀 Recurring payments worker set up")
+    }
+
+    private fun setupRemindersWorker() {
+        Log.d(TAG, "💬 Setting up reminders worker")
+
+        val workerTag = "CheckPendingRemindersWork"
+
+        // Run the worker in 15 minute intervals
+        val workRequest = PeriodicWorkRequestBuilder<CheckPendingRemindersWorker>(15, TimeUnit.MINUTES)
+            .build()
+
+        WorkManager.getInstance(context)
+            .enqueueUniquePeriodicWork(
+                workerTag,
+                ExistingPeriodicWorkPolicy.UPDATE,
+                workRequest
+            )
+
+        Log.d(TAG, "🚀 Reminders worker set up")
     }
 }

@@ -56,7 +56,7 @@ class NotesListScreenViewModel @Inject constructor(
 
     override fun onDeleteNote(note: NoteUi) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "\uD83D\uDCA5 Error deleting note $note", throwable)
+            Log.e(TAG, "💥 Error deleting note $note", throwable)
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {

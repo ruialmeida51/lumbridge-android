@@ -35,7 +35,7 @@ class CheckPendingPaymentsWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = with(schedulers.io) {
         runCatching {
-            Log.d(WORKER_TAG, "\uD83D\uDCAC Running CheckPendingPaymentsWorker")
+            Log.d(WORKER_TAG, "💬 Running CheckPendingPaymentsWorker")
             val paidRecurringPayments = tryPayPendingRecurringPaymentsUseCase()
             val paidLoans = tryPayPendingLoanPaymentsUseCase()
             val locale = getLocaleOrDefault()
@@ -44,7 +44,7 @@ class CheckPendingPaymentsWorker @AssistedInject constructor(
 
             Result.success()
         }.getOrElse {
-            Log.e(WORKER_TAG, "\uD83D\uDCA5 Failed to run CheckPendingPaymentsWorker: $it")
+            Log.e(WORKER_TAG, "💥 Failed to run CheckPendingPaymentsWorker: $it")
             Result.failure()
         }
     }

@@ -119,7 +119,7 @@ fun EditRecurringPaymentsScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
                 .then(
-                    if (recurringPaymentToDelete.longValue >= 0L) Modifier.blur(5.dp) else Modifier
+                    if (recurringPaymentToDelete.longValue >= 0L || askForNotificationsPermission.value) Modifier.blur(5.dp) else Modifier
                 )
         ) {
             when (viewState) {

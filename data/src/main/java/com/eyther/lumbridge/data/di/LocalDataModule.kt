@@ -88,6 +88,12 @@ object LocalDataModule {
 
     @Provides
     @Singleton
+    fun provideRemindersDao(
+        lumbridgeRoomDatabase: LumbridgeRoomDatabase
+    ) = lumbridgeRoomDatabase.remindersDao()
+
+    @Provides
+    @Singleton
     @UserProfileDataSource
     fun provideUserProfileDataStore(
         @ApplicationContext context: Context

@@ -2,10 +2,10 @@ package com.eyther.lumbridge.model.time
 
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.ui.common.model.text.TextResource
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 sealed class RemindMeInUi(
-    open val reminderTime: LocalDate? = null,
+    open val reminderTime: LocalDateTime?,
     open val ordinal: Int
 ) : Comparable<RemindMeInUi> {
 
@@ -17,9 +17,9 @@ sealed class RemindMeInUi(
             TwoHours(),
             OneDay(),
             TwoDays(),
-            XMinutesBefore(5),
-            XHoursBefore(1),
-            XDaysBefore(1)
+            XMinutesBefore(minutes = 5),
+            XHoursBefore(hours = 1),
+            XDaysBefore(days = 1)
         )
 
         fun defaultFromOrdinal(ordinal: Int) = getDefaults().first { it.ordinal == ordinal }
@@ -28,13 +28,15 @@ sealed class RemindMeInUi(
     abstract fun getPeriodicityHumanReadable(): TextResource
     abstract fun getPeriodicitySelectionHumanReadable(): TextResource
 
+    fun isCustom() = this is XMinutesBefore || this is XHoursBefore || this is XDaysBefore
+
     // Single compareTo for ordinal-based ordering
     override fun compareTo(other: RemindMeInUi): Int {
         return this.ordinal.compareTo(other.ordinal)
     }
 
     data class FifteenMinutes(
-        override val reminderTime: LocalDate? = null,
+        override val reminderTime: LocalDateTime? = null
     ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 0) {
         override fun getPeriodicityHumanReadable() =
             TextResource.Resource(R.string.tools_reminder_fifteen_minutes_display)
@@ -44,7 +46,7 @@ sealed class RemindMeInUi(
     }
 
     data class ThirtyMinutes(
-        override val reminderTime: LocalDate? = null
+        override val reminderTime: LocalDateTime? = null
     ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 1) {
         override fun getPeriodicityHumanReadable() =
             TextResource.Resource(R.string.tools_reminder_thirty_minutes_display)
@@ -54,7 +56,7 @@ sealed class RemindMeInUi(
     }
 
     data class OneHour(
-        override val reminderTime: LocalDate? = null,
+        override val reminderTime: LocalDateTime? = null
     ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 2) {
         override fun getPeriodicityHumanReadable() =
             TextResource.Resource(R.string.tools_reminder_one_hour_display)
@@ -64,7 +66,7 @@ sealed class RemindMeInUi(
     }
 
     data class TwoHours(
-        override val reminderTime: LocalDate? = null,
+        override val reminderTime: LocalDateTime? = null
     ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 3) {
         override fun getPeriodicityHumanReadable() =
             TextResource.Resource(R.string.tools_reminder_two_hours_display)
@@ -74,7 +76,7 @@ sealed class RemindMeInUi(
     }
 
     data class OneDay(
-        override val reminderTime: LocalDate? = null,
+        override val reminderTime: LocalDateTime? = null
     ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 4) {
         override fun getPeriodicityHumanReadable() =
             TextResource.Resource(R.string.tools_reminder_one_day_display)
@@ -84,7 +86,7 @@ sealed class RemindMeInUi(
     }
 
     data class TwoDays(
-        override val reminderTime: LocalDate? = null,
+        override val reminderTime: LocalDateTime? = null
     ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 5) {
         override fun getPeriodicityHumanReadable() =
             TextResource.Resource(R.string.tools_reminder_two_days_display)
@@ -93,7 +95,10 @@ sealed class RemindMeInUi(
             TextResource.Resource(R.string.tools_reminders_two_days_before_selection)
     }
 
-    data class XMinutesBefore(val minutes: Int) : RemindMeInUi(ordinal = 6) {
+    data class XMinutesBefore(
+        override val reminderTime: LocalDateTime? = null,
+        val minutes: Int
+    ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 6) {
         override fun getPeriodicityHumanReadable() =
             TextResource.PluralResource(R.plurals.tools_reminder_n_minutes_before_display, minutes, listOf(minutes))
 
@@ -108,7 +113,10 @@ sealed class RemindMeInUi(
         }
     }
 
-    data class XHoursBefore(val hours: Int) : RemindMeInUi(ordinal = 7) {
+    data class XHoursBefore(
+        override val reminderTime: LocalDateTime? = null,
+        val hours: Int
+    ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 7) {
         override fun getPeriodicityHumanReadable() =
             TextResource.PluralResource(R.plurals.tools_reminder_n_hours_before_display, hours, listOf(hours))
 
@@ -123,7 +131,10 @@ sealed class RemindMeInUi(
         }
     }
 
-    data class XDaysBefore(val days: Int) : RemindMeInUi(ordinal = 8) {
+    data class XDaysBefore(
+        override val reminderTime: LocalDateTime? = null,
+        val days: Int
+    ) : RemindMeInUi(reminderTime = reminderTime, ordinal = 8) {
         override fun getPeriodicityHumanReadable() =
             TextResource.PluralResource(R.plurals.tools_reminder_n_days_before_display, days, listOf(days))
 

@@ -28,12 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDateTime
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.DoublePadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
+import java.time.LocalDateTime
 
 private const val INVALID = -1
 
@@ -108,7 +110,9 @@ fun LumbridgeDateTimePickerDialog(
     showDialog: MutableState<Boolean>,
     datePickerState: DatePickerState,
     timePickerState: TimePickerState,
-    onSaveDateTime: (selectedDateTime: Long?) -> Unit
+    allowPastDates: Boolean = true,
+    onSaveDateTime: (selectedDateTime: Long?) -> Unit,
+    onInvalidDateTime: () -> Unit
 ) {
     if (showDialog.value) {
         val showTimePicker = remember { mutableStateOf(false) }
@@ -137,10 +141,13 @@ fun LumbridgeDateTimePickerDialog(
                     val minutesInMillis = timePickerState.minute * 60 * 1000 // Convert minutes to milliseconds
                     val finalDateTime = (datePickerState.selectedDateMillis ?: 0) + hoursInMillis + minutesInMillis
 
-                    showTimePicker.value = false
-                    showDialog.value = false
-
-                    onSaveDateTime(finalDateTime)
+                    if (!allowPastDates && finalDateTime.toLocalDateTime() <= LocalDateTime.now()) {
+                        onInvalidDateTime()
+                    } else {
+                        showTimePicker.value = false
+                        showDialog.value = false
+                        onSaveDateTime(finalDateTime)
+                    }
                 },
                 content = {
                     TimePicker(timePickerState)

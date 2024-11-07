@@ -29,8 +29,8 @@ import com.eyther.lumbridge.features.tools.recurringpayments.screens.EditRecurri
 import com.eyther.lumbridge.features.tools.recurringpayments.screens.RecurringPaymentsOverviewScreen
 import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListDetailsScreen
 import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListsScreen
-import com.eyther.lumbridge.features.tools.tasksandreminders.screens.RemindersEditScreen
-import com.eyther.lumbridge.features.tools.tasksandreminders.screens.RemindersOverviewScreen
+import com.eyther.lumbridge.features.tools.reminders.screens.RemindersEditScreen
+import com.eyther.lumbridge.features.tools.reminders.screens.RemindersOverviewScreen
 
 @Composable
 fun ToolsNavHost(

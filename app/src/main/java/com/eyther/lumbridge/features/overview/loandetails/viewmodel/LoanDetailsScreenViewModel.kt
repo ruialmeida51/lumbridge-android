@@ -69,6 +69,7 @@ class LoanDetailsScreenViewModel @Inject constructor(
                     }
                 }
                 .catch {
+                    Log.e(TAG, "💥 Error fetching loan and calculations", it)
                     viewState.update {
                         LoanDetailsScreenViewState.Empty
                     }

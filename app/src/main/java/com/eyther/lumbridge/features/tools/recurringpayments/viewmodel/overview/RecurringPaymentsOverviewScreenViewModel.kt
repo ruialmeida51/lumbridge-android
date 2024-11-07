@@ -64,6 +64,7 @@ class RecurringPaymentsOverviewScreenViewModel @Inject constructor(
                     }
                 }
                 .catch {
+                    Log.e(TAG, "💥 Failed to fetch recurring payments", it)
                     viewState.update {
                         RecurringPaymentsOverviewScreenViewState.Empty
                     }
@@ -74,7 +75,7 @@ class RecurringPaymentsOverviewScreenViewModel @Inject constructor(
 
     override fun deleteRecurringPayment(recurringPaymentId: Long) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "\uD83D\uDCA5 Error deleting recurring payment", throwable)
+            Log.e(TAG, "💥 Error deleting recurring payment", throwable)
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {

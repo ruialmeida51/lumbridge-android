@@ -13,7 +13,7 @@ import javax.inject.Inject
 class LumbridgeNotificationSender @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    fun scheduleReminderNotification(
+    fun sendReminderNotification(
         title: String,
         message: String,
     ) {
@@ -25,7 +25,7 @@ class LumbridgeNotificationSender @Inject constructor(
         ).send()
     }
 
-    fun scheduleDefaultNotification(
+    fun sendDefaultNotification(
         title: String,
         message: String
     ) {
@@ -37,13 +37,13 @@ class LumbridgeNotificationSender @Inject constructor(
         ).send()
     }
 
-    fun scheduleRepeatingReminderNotification(
+    fun sendRepeatingReminderNotification(
         title: String,
         message: String,
         timeBetweenDisplaysInMillis: Long
     ) {
         if (timeBetweenDisplaysInMillis < 60000) {
-            throw IllegalArgumentException("\uD83D\uDCA5 Repeating reminder notifications must be at least 1 minute apart.")
+            throw IllegalArgumentException("💥 Repeating reminder notifications must be at least 1 minute apart.")
         }
 
         createPendingIntent(

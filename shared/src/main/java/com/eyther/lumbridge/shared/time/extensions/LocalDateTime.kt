@@ -17,11 +17,19 @@ fun Long.toLocalDateTime(): LocalDateTime = Instant.ofEpochMilli(this)
     .toLocalDateTime()
 
 /**
+ * Converts a [String] to a [LocalDateTime] in the format [DateTimeFormatter.ISO_LOCAL_DATE_TIME].
+ *
+ * @return [LocalDateTime] representation of the [String].
+ */
+fun String.toLocalDateTime(): LocalDateTime =
+    LocalDateTime.parse(this, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+
+/**
  * Converts a [LocalDate] to a [String] in the format [DateTimeFormatter.ISO_LOCAL_DATE_TIME].
  *
  * @return [String] representation of the [LocalDate].
  */
-fun LocalDate.toIsoLocalDateTimeString(): String =
+fun LocalDateTime.toIsoLocalDateTimeString(): String =
     format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
 
 /**
@@ -31,3 +39,8 @@ fun LocalDate.toIsoLocalDateTimeString(): String =
  */
 fun LocalDateTime.toDayMonthYearHourMinuteString(): String =
     format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm"))
+
+/**
+ * Simple helper function because [LocalDateTime] doesn't have a isBeforeOrEqual function.
+ */
+fun LocalDateTime.isBeforeOrEqual(other: LocalDateTime): Boolean = isBefore(other) || isEqual(other)

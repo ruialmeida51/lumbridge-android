@@ -11,8 +11,8 @@ import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecu
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.EditRecurringPaymentInputHandler
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.IEditRecurringPaymentInputHandler
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
+import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.usecase.recurringpayments.DeleteRecurringPaymentUseCase
 import com.eyther.lumbridge.usecase.recurringpayments.GetRecurringPaymentByIdUseCase
 import com.eyther.lumbridge.usecase.recurringpayments.SaveRecurringPaymentUseCase
@@ -79,7 +79,6 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
                     categoryType = ExpensesCategoryTypesUi.of(
                         ordinal = recurringPaymentUi?.categoryTypesUi?.ordinal ?: 0
                     ),
-
                     surplusOrExpenseChoice = state.surplusOrExpenseChoice.copy(
                         selectedTab = if (recurringPaymentUi?.categoryTypesUi == ExpensesCategoryTypesUi.Surplus) {
                             ExpensesAddSurplusOrExpenseChoice.Surplus.ordinal
@@ -125,7 +124,7 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
 
     override fun onDeleteRecurringPayment(recurringPaymentId: Long) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "\uD83D\uDCA5 Error deleting recurring payment", throwable)
+            Log.e(TAG, "💥 Error deleting recurring payment", throwable)
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
@@ -136,7 +135,7 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
 
     override fun saveRecurringPayment() {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "\uD83D\uDCA5 Error saving recurring payment", throwable)
+            Log.e(TAG, "💥 Error saving recurring payment", throwable)
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {

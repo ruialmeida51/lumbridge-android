@@ -177,7 +177,8 @@
     <string name="tools_reminders_due_date">When</string>
     <string name="tools_reminders_invalid_name">Please, enter a valid name</string>
     <string name="tools_reminders_invalid_date">Please, enter a valid date (must be in the future)</string>
-    <string name="tools_reminders_remind_me_in">Remind me…</string>
+    <string name="tools_reminders_remind_me_in">Remind me</string>
+    <string name="tools_reminders_no_longer_relevant">Past due date?</string>
     <string name="tools_reminders_fifteen_minutes_before_selection">15 minutes before</string>
     <string name="tools_reminders_thirty_minutes_before_selection">30 minutes before</string>
     <string name="tools_reminders_one_hour_before_selection">1 hour before</string>
@@ -205,8 +206,11 @@
         <item quantity="one">%1$s day before</item>
         <item quantity="other">%1$s days before</item>
     </plurals>
+    <string name="tools_reminder_n_days_before_input">How many days before?</string>
+    <string name="tools_reminder_n_hours_before_input">How many hours before?</string>
+    <string name="tools_reminder_n_minutes_before_input">How many minutes before?</string>
+    <string name="tools_reminder_n_input_invalid">Please, enter a valid number (bigger than 0 and in the future)</string>
     <string name="tools_reminders_save">Save Reminder</string>
-
 
     <string name="tools_reminders_details">Reminder</string>
 

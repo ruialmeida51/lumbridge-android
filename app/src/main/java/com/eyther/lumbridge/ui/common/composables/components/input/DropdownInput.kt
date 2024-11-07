@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 
@@ -28,6 +29,9 @@ import com.eyther.lumbridge.ui.theme.HalfPadding
 fun DropdownInput(
     label: String? = null,
     enabled: Boolean = true,
+    isError: Boolean = false,
+    errorText: String? = null,
+    errorTextStyle: TextStyle = MaterialTheme.typography.bodySmall,
     selectedOption: String,
     items: List<Pair<String, String>>, // When we need an identifier different from the display name.
     onItemClick: (String, String) -> Unit
@@ -60,6 +64,12 @@ fun DropdownInput(
             onValueChange = {},
             readOnly = true,
             textStyle = MaterialTheme.typography.bodyMedium,
+            isError = isError,
+            supportingText = {
+                errorText?.let {
+                    Text(text = errorText, style = errorTextStyle)
+                }
+            },
             trailingIcon = {
                 if (enabled) {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropdownExpanded)

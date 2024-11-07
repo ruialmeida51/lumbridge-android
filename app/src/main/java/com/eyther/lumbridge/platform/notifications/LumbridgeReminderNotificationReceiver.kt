@@ -5,14 +5,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.eyther.lumbridge.extensions.platform.getNotificationManager
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.platform.getLaunchMainActivityIntent
+import com.eyther.lumbridge.extensions.platform.getNotificationManager
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_ARG_MESSAGE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_ARG_TITLE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_OPEN_ACTIVITY_INTENT_REQUEST_CODE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_REMINDER_CHANNEL_ID
-import java.util.UUID
 
 class LumbridgeReminderNotificationReceiver : BroadcastReceiver() {
 
@@ -39,7 +38,7 @@ class LumbridgeReminderNotificationReceiver : BroadcastReceiver() {
             .setContentIntent(contentIntent)
 
         notificationManager.notify(
-            UUID.randomUUID().hashCode() + (title + message).hashCode(),
+            (title + message).hashCode(),
             notificationBuilder.build()
         )
     }

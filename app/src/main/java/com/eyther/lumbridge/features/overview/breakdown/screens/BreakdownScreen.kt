@@ -138,7 +138,7 @@ private fun Overview(
                 onCreateFinancialProfile = { navController.navigateTo(OverviewNavigationItem.FinancialProfile.Edit) }
             )
 
-            Spacer(modifier = Modifier.height(DefaultPadding))
+            Spacer(modifier = Modifier.height(HalfPadding))
         }
 
         if (state.loans.isEmpty()) {

@@ -7,6 +7,12 @@ import java.time.LocalDateTime
  */
 sealed class RemindMeIn(val ordinal: Int) {
 
+    companion object {
+        const val X_MINUTES_BEFORE = 6
+        const val X_HOURS_BEFORE = 7
+        const val X_DAYS_BEFORE = 8
+    }
+
     /**
      * Returns the time to remind the user in, starting from the given time.
      *
@@ -52,7 +58,7 @@ sealed class RemindMeIn(val ordinal: Int) {
         }
     }
 
-    data class XMinutesBefore(val minutes: Int): RemindMeIn(ordinal = 6) {
+    data class XMinutesBefore(val minutes: Int = 0): RemindMeIn(ordinal = X_MINUTES_BEFORE) {
         init {
             require(minutes > 0) { "Number of minutes must be greater than 0" }
         }
@@ -62,7 +68,7 @@ sealed class RemindMeIn(val ordinal: Int) {
         }
     }
 
-    data class XHoursBefore(val hours: Int): RemindMeIn(ordinal = 7) {
+    data class XHoursBefore(val hours: Int = 0): RemindMeIn(ordinal = X_HOURS_BEFORE) {
         init {
             require(hours > 0) { "Number of hours must be greater than 0" }
         }
@@ -72,7 +78,7 @@ sealed class RemindMeIn(val ordinal: Int) {
         }
     }
 
-    data class XDaysBefore(val days: Int): RemindMeIn(ordinal = 8) {
+    data class XDaysBefore(val days: Int = 0): RemindMeIn(ordinal = X_DAYS_BEFORE) {
         init {
             require(days > 0) { "Number of days must be greater than 0" }
         }
