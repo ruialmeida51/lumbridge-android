@@ -4,7 +4,7 @@ import com.eyther.lumbridge.data.model.currencyexchange.remote.CurrencyRatesRemo
 import com.eyther.lumbridge.domain.model.currencyexchange.CurrencyRates
 
 fun CurrencyRatesRemote.toDomain(): CurrencyRates {
-    val data = checkNotNull(data) { "\uD83D\uDCA5 currency data is null!" }
+    val data = checkNotNull(data) { "💥 currency data is null!" }
 
     return CurrencyRates(
         baseCurrency = checkNotNull(data.base),

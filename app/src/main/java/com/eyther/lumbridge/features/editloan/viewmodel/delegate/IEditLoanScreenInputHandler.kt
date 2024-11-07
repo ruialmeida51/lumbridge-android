@@ -11,7 +11,8 @@ interface IEditLoanScreenInputHandler {
      * the new value and performs any necessary validation.
      */
     fun onNameChanged(name: String?)
-    fun onMortgageAmountChanged(mortgageAmount: Float?)
+    fun onLoanInitialAmountChanged(initialAmount: Float?)
+    fun onLoanCurrentAmountChanged(currentAmount: Float?)
     fun onEuriborRateChanged(euriborRate: Float?)
     fun onSpreadChanged(spread: Float?)
     fun onTanInterestRateChanged(tanInterestRate: Float?)

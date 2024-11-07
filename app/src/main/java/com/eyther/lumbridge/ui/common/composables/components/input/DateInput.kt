@@ -18,8 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.extensions.toIsoLocalDateString
+import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearDateString
+import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearHourMinuteString
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
+import com.eyther.lumbridge.ui.common.composables.model.input.DateTimeInputState
 
 @Composable
 fun DateInput(
@@ -51,7 +53,7 @@ fun DateInput(
             enabled = enabled,
             interactionSource = interactionSource,
             modifier = Modifier.fillMaxWidth(),
-            value = state.date?.toIsoLocalDateString().orEmpty(),
+            value = state.date?.toDayMonthYearDateString().orEmpty(),
             textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = { },
             label = {
@@ -94,10 +96,9 @@ fun DateInput(
 }
 
 @Composable
-fun DateRangeInput(
+fun DateTimeInput(
     modifier: Modifier = Modifier,
-    startDate: DateInputState,
-    endDate: DateInputState,
+    state: DateTimeInputState,
     enabled: Boolean = true,
     label: String? = null,
     placeholder: String? = null,
@@ -124,11 +125,7 @@ fun DateRangeInput(
             enabled = enabled,
             interactionSource = interactionSource,
             modifier = Modifier.fillMaxWidth(),
-            value = if (startDate.date == null || endDate.date == null ) {
-                ""
-            } else {
-                "${startDate.date.toIsoLocalDateString()} - ${endDate.date.toIsoLocalDateString()}"
-            },
+            value = state.dateTime?.toDayMonthYearHourMinuteString().orEmpty(),
             textStyle = MaterialTheme.typography.bodyMedium,
             onValueChange = { },
             label = {
@@ -147,17 +144,17 @@ fun DateRangeInput(
                     )
                 }
             },
-            isError = startDate.isError() || endDate.isError(),
+            isError = state.isError(),
             supportingText = {
-                if (startDate.isError() || endDate.isError()) {
+                if (state.isError()) {
                     Text(
-                        text = (startDate.error ?: endDate.error)!!.getString(context),
+                        text = state.error!!.getString(context),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
             },
             trailingIcon = {
-                if (startDate.isError() || endDate.isError()) {
+                if (state.isError()) {
                     Icon(
                         imageVector = Icons.Outlined.Info,
                         contentDescription = stringResource(id = R.string.error)

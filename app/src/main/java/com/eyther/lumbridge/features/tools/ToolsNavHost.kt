@@ -13,21 +13,24 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.eyther.lumbridge.extensions.platform.sharedViewModel
-import com.eyther.lumbridge.features.tools.recurringpayments.editrecurringpayments.screens.EditRecurringPaymentsScreen
-import com.eyther.lumbridge.features.tools.recurringpayments.overview.screens.RecurringPaymentsOverviewScreen
 import com.eyther.lumbridge.features.tools.currencyconverter.screens.CurrencyConverterScreen
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Notes.Companion.ARG_NOTE_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.RecurringPayments.Companion.ARG_RECURRING_PAYMENT_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Reminders.Companion.ARG_REMINDER_ID
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
 import com.eyther.lumbridge.features.tools.netsalary.arguments.NetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryInputScreen
 import com.eyther.lumbridge.features.tools.netsalary.screens.NetSalaryResultScreen
 import com.eyther.lumbridge.features.tools.notes.screens.NoteDetailsScreen
 import com.eyther.lumbridge.features.tools.notes.screens.NotesListScreen
-import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
-import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Notes.Companion.ARG_NOTE_ID
-import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.RecurringPayments.Companion.ARG_RECURRING_PAYMENT_ID
-import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
 import com.eyther.lumbridge.features.tools.overview.screens.ToolsOverviewScreen
+import com.eyther.lumbridge.features.tools.recurringpayments.screens.EditRecurringPaymentsScreen
+import com.eyther.lumbridge.features.tools.recurringpayments.screens.RecurringPaymentsOverviewScreen
 import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListDetailsScreen
 import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListsScreen
+import com.eyther.lumbridge.features.tools.reminders.screens.RemindersEditScreen
+import com.eyther.lumbridge.features.tools.reminders.screens.RemindersOverviewScreen
 
 @Composable
 fun ToolsNavHost(
@@ -274,6 +277,60 @@ fun ToolsNavHost(
                 NoteDetailsScreen(
                     navController = navController,
                     label = ToolsNavigationItem.Notes.NotesDetails.label
+                )
+            }
+        }
+
+        navigation(
+            startDestination = ToolsNavigationItem.Reminders.RemindersList.route,
+            route = ToolsNavigationItem.Reminders.HOST_ROUTE
+        ) {
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                route = ToolsNavigationItem.Reminders.RemindersList.route
+            ) {
+                RemindersOverviewScreen(
+                    navController = navController,
+                    label = ToolsNavigationItem.Reminders.RemindersList.label
+                )
+            }
+
+            composable(
+                enterTransition = {
+                    slideInHorizontally { it }
+                },
+                exitTransition = {
+                    slideOutHorizontally { -it }
+                },
+                popExitTransition = {
+                    slideOutHorizontally { it }
+                },
+                popEnterTransition = {
+                    slideInHorizontally { -it }
+                },
+                route = ToolsNavigationItem.Reminders.RemindersDetails.route,
+                arguments = listOf(
+                    navArgument(ARG_REMINDER_ID) {
+                        type = NavType.LongType
+                        nullable = false
+                        defaultValue = 0L
+                    }
+                )
+            ) {
+                RemindersEditScreen(
+                    navController = navController,
+                    label = ToolsNavigationItem.Reminders.RemindersDetails.label
                 )
             }
         }

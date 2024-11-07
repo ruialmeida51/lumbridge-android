@@ -3,8 +3,6 @@ package com.eyther.lumbridge.features.editloan.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.shared.time.extensions.monthsUntil
-import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenInputState
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenViewEffect
@@ -19,6 +17,8 @@ import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.
 import com.eyther.lumbridge.model.loan.LoanCategoryUi
 import com.eyther.lumbridge.model.loan.LoanInterestRateUi
 import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.shared.time.extensions.monthsUntil
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.usecase.loan.GetLoanAndCalculationsUseCase
 import com.eyther.lumbridge.usecase.loan.SaveLoanUseCase
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
@@ -68,7 +68,10 @@ class EditLoanScreenViewModel @Inject constructor(
                     name = state.name.copy(
                         text = initialLoanUi?.name
                     ),
-                    loanAmount = state.loanAmount.copy(
+                    initialAmount = state.initialAmount.copy(
+                        text = initialLoanUi?.initialLoanAmount?.toString()
+                    ),
+                    currentAmount = state.currentAmount.copy(
                         text = initialLoanUi?.currentLoanAmount?.toString()
                     ),
                     euribor = state.euribor.copy(
@@ -132,19 +135,22 @@ class EditLoanScreenViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
             val inputState = inputState.value
+            val newStartDate = checkNotNull(inputState.startDate.date)
+            val newEndDate = checkNotNull(inputState.endDate.date)
 
             val loanUi = LoanUi(
                 id = loanId,
                 name = checkNotNull(inputState.name.text),
-                currentLoanAmount = checkNotNull(inputState.loanAmount.text?.toFloatOrNull()),
-                startDate = checkNotNull(inputState.startDate.date),
-                endDate = checkNotNull(inputState.endDate.date),
+                initialLoanAmount = checkNotNull(inputState.initialAmount.text?.toFloatOrNull()),
+                currentLoanAmount = checkNotNull(inputState.currentAmount.text?.toFloatOrNull()),
+                startDate = newStartDate,
+                endDate = newEndDate,
                 loanCategoryUi = LoanCategoryUi.fromOrdinal(inputState.categoryUi.ordinal),
                 loanInterestRateUi = getLoanInterestRateUiFromInputState(inputState),
-                initialLoanAmount = cachedLoanUi?.initialLoanAmount ?: checkNotNull(inputState.loanAmount.text.toFloatOrNull()),
                 shouldNotifyWhenPaid = inputState.shouldNotifyWhenPaid,
                 shouldAutoAddToExpenses = inputState.shouldAutoAddToExpenses,
-                paymentDay = inputState.paymentDay.text?.toIntOrNull()
+                paymentDay = inputState.paymentDay.text?.toIntOrNull(),
+                currentPaymentDate = getCurrentPaymentDate(newStartDate)
             )
 
             saveLoanUseCase(loanUi)
@@ -154,6 +160,10 @@ class EditLoanScreenViewModel @Inject constructor(
 
     override fun getMaxSelectableYear(): Int {
         return LocalDate.now().year + MORTGAGE_MAX_DURATION + PADDING_YEARS
+    }
+
+    override fun getMinSelectableYear(): Int {
+        return LocalDate.now().year - MORTGAGE_MAX_DURATION - PADDING_YEARS
     }
 
     override fun isSelectableEndDate(endDateInMillis: Long): Boolean {
@@ -199,6 +209,24 @@ class EditLoanScreenViewModel @Inject constructor(
             }
 
             else -> throw IllegalStateException("Invalid loan type")
+        }
+    }
+
+    /**
+     * The current payment date is used to calculate the remaining months between the current date and the end date.
+     *
+     * There a few conditions to consider:
+     * * If there's no cached loan, the current payment date will be RIGHT NOW.
+     * * If there's a cached loan, and the start date has changed, the current payment date will be RIGHT NOW.
+     * * If there's a cached loan, and the start date doesn't change, the current payment date will also not change.
+     */
+    private fun getCurrentPaymentDate(startDate: LocalDate): LocalDate {
+        return if (cachedLoanUi == null || cachedLoanUi?.startDate != startDate) {
+            return LocalDate.now()
+        } else {
+            checkNotNull(cachedLoanUi?.currentPaymentDate) {
+                "Cached loan should have a current payment date if it's not null"
+            }
         }
     }
 }

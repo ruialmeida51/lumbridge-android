@@ -169,6 +169,51 @@
     <string name="tools_notes_no_list_create">Create Note</string>
     <string name="tools_notes_details">Note</string>
 
+    <string name="tools_reminders_list">Reminders</string>
+    <string name="tools_reminders_add_reminder">Add Reminder</string>
+    <string name="tools_reminders_list_delete_confirmation">Are you sure you want to delete the reminder %1$s?</string>
+    <string name="tools_reminders_no_list_message">You don\'t seem to have any reminders yet.\nTap the button below to create one!</string>
+    <string name="tools_reminders_no_list_create">Create Reminder</string>
+    <string name="tools_reminders_due_date">When</string>
+    <string name="tools_reminders_invalid_name">Please, enter a valid name</string>
+    <string name="tools_reminders_invalid_date">Please, enter a valid date (must be in the future)</string>
+    <string name="tools_reminders_remind_me_in">Remind me</string>
+    <string name="tools_reminders_no_longer_relevant">Past due date?</string>
+    <string name="tools_reminders_fifteen_minutes_before_selection">15 minutes before</string>
+    <string name="tools_reminders_thirty_minutes_before_selection">30 minutes before</string>
+    <string name="tools_reminders_one_hour_before_selection">1 hour before</string>
+    <string name="tools_reminders_two_hours_before_selection">2 hours before</string>
+    <string name="tools_reminders_one_day_before_selection">1 day before</string>
+    <string name="tools_reminders_two_days_before_selection">2 days before</string>
+    <string name="tools_reminder_n_minutes_before_selection">N minutes before…</string>
+    <string name="tools_reminder_n_hours_before_selection">N hours before…</string>
+    <string name="tools_reminder_n_days_before_selection">N days before…</string>
+    <string name="tools_reminder_fifteen_minutes_display">15 minutes before</string>
+    <string name="tools_reminder_thirty_minutes_display">30 minutes before</string>
+    <string name="tools_reminder_one_hour_display">1 hour before</string>
+    <string name="tools_reminder_two_hours_display">2 hours before</string>
+    <string name="tools_reminder_one_day_display">1 day before</string>
+    <string name="tools_reminder_two_days_display">2 days before</string>
+    <plurals name="tools_reminder_n_minutes_before_display">
+        <item quantity="one">%1$s minute before</item>
+        <item quantity="other">%1$s minutes before</item>
+    </plurals>
+    <plurals name="tools_reminder_n_hours_before_display">
+        <item quantity="one">%1$s hour before</item>
+        <item quantity="other">%1$s hours before</item>
+    </plurals>
+    <plurals name="tools_reminder_n_days_before_display">
+        <item quantity="one">%1$s day before</item>
+        <item quantity="other">%1$s days before</item>
+    </plurals>
+    <string name="tools_reminder_n_days_before_input">How many days before?</string>
+    <string name="tools_reminder_n_hours_before_input">How many hours before?</string>
+    <string name="tools_reminder_n_minutes_before_input">How many minutes before?</string>
+    <string name="tools_reminder_n_input_invalid">Please, enter a valid number (bigger than 0 and in the future)</string>
+    <string name="tools_reminders_save">Save Reminder</string>
+
+    <string name="tools_reminders_details">Reminder</string>
+
     <string name="tools_net_salary_result">Net Salary Result</string>
 
     <string name="expenses">Expenses</string>
@@ -207,9 +252,9 @@
         <item quantity="other">Every %1$s years on %2$s</item>
     </plurals>
     <string name="periodicity_every_x_days_selection">Every X days</string>
-    <string name="periodicity_every_x_weeks_at_day_of_week_selection">Every X weeks on day of week</string>
-    <string name="periodicity_every_x_months_at_day_of_month_selection">Every X months on day</string>
-    <string name="periodicity_every_x_years_at_month_selection">Every X years on month</string>
+    <string name="periodicity_every_x_weeks_at_day_of_week_selection">Every few weeks on…</string>
+    <string name="periodicity_every_x_months_at_day_of_month_selection">Every few months…</string>
+    <string name="periodicity_every_x_years_at_month_selection">Every few years on…</string>
     <string name="recurring_payments_periodicity">Periodicity</string>
     <string name="recurring_payments_next_due_date">Next Due Date</string>
     <string name="recurring_payment_notify_me_when_paid">Notify me when payment is added</string>
@@ -223,17 +268,17 @@
     <string name="recurring_payment_edit_expense_frequency">What\'s the frequency of this recurring payment?</string>
     <string name="recurring_payment_edit_expense_frequency_input">Frequency</string>
     <string name="recurring_payment_edit_frequency_start_date">When does this recurring payment start?</string>
-    <string name="recurring_payment_edit_frequency_start_date_error">Please, enter a valid start date to start the recurring payment</string>
-    <string name="recurring_payment_edit_frequency_days">Repeat every X day(s)</string>
-    <string name="recurring_payment_edit_frequency_invalid_number_of_days">Please, enter a valid number of days (bigger than 0)</string>
-    <string name="recurring_payment_edit_frequency_weeks">Repeat every X week(s)</string>
+    <string name="recurring_payment_edit_frequency_days">Repeat every n day(s)…</string>
+    <string name="recurring_payment_edit_frequency_weeks">Repeat every n week(s)…</string>
     <string name="recurring_payment_edit_frequency_weeks_day">On which day of the week?</string>
-    <string name="recurring_payment_edit_frequency_invalid_number_of_weeks">Please, enter a valid number of weeks (bigger than 0)</string>
-    <string name="recurring_payment_edit_frequency_months">Repeat every X month(s)</string>
+    <string name="recurring_payment_edit_frequency_months">Repeat every n month(s)…</string>
     <string name="recurring_payment_edit_frequency_months_day_of_month">On which day of the month?</string>
-    <string name="recurring_payment_edit_frequency_invalid_number_of_months">Please, enter a valid number of months (bigger than 0)</string>
-    <string name="recurring_payment_edit_frequency_years">Repeat every X year(s)</string>
+    <string name="recurring_payment_edit_frequency_years">Repeat every n year(s)…</string>
     <string name="recurring_payment_edit_frequency_years_month">On which month?</string>
+    <string name="recurring_payment_edit_frequency_start_date_error">Please, enter a valid start date to start the recurring payment</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_days">Please, enter a valid number of days (bigger than 0)</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_weeks">Please, enter a valid number of weeks (bigger than 0)</string>
+    <string name="recurring_payment_edit_frequency_invalid_number_of_months">Please, enter a valid number of months (bigger than 0)</string>
     <string name="recurring_payment_edit_frequency_invalid_number_of_years">Please, enter a valid number of years (bigger than 0)</string>
     <string name="recurring_payment_edit_frequency_invalid_day_of_month">Please, select a valid day of the month (between 1 and 31)</string>
     <string name="recurring_payment_notification">💰 Expenses Automatically Added</string>
@@ -363,4 +408,6 @@
     <string name="other">Other</string>
     <string name="expense">Expense</string>
     <string name="gained">Gained</string>
+    <string name="time">Time</string>
+    <string name="invalid_date">Please, enter a valid date</string>
 </resources>

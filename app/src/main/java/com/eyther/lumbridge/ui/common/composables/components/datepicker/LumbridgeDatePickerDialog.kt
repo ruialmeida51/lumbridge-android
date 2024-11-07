@@ -17,6 +17,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
@@ -26,12 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
+import com.eyther.lumbridge.shared.time.extensions.toLocalDateTime
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.DoublePadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
+import java.time.LocalDateTime
 
 private const val INVALID = -1
 
@@ -39,12 +43,17 @@ private const val INVALID = -1
 fun LumbridgeDatePickerDialog(
     showDialog: MutableState<Boolean>,
     datePickerState: DatePickerState,
+    onDismissRequest: (() -> Unit)? = null,
     onSaveDate: (selectedDate: Long?) -> Unit
 ) {
     if (showDialog.value) {
         DatePickerDialog(
             onDismissRequest = {
-                showDialog.value = false
+                if (onDismissRequest != null) {
+                    onDismissRequest.invoke()
+                } else {
+                    showDialog.value = false
+                }
             },
             confirmButton = {
                 Column(
@@ -72,7 +81,13 @@ fun LumbridgeDatePickerDialog(
                             end = DefaultPadding,
                             bottom = DefaultPadding
                         )
-                        .clickable { showDialog.value = false },
+                        .clickable {
+                            if (onDismissRequest != null) {
+                                onDismissRequest.invoke()
+                            } else {
+                                showDialog.value = false
+                            }
+                        },
                 ) {
                     Text(
                         text = stringResource(id = R.string.cancel)
@@ -88,6 +103,59 @@ fun LumbridgeDatePickerDialog(
             }
         )
     }
+}
+
+@Composable
+fun LumbridgeDateTimePickerDialog(
+    showDialog: MutableState<Boolean>,
+    datePickerState: DatePickerState,
+    timePickerState: TimePickerState,
+    allowPastDates: Boolean = true,
+    onSaveDateTime: (selectedDateTime: Long?) -> Unit,
+    onInvalidDateTime: () -> Unit
+) {
+    if (showDialog.value) {
+        val showTimePicker = remember { mutableStateOf(false) }
+        val showDatePicker = remember { mutableStateOf(true) }
+
+        LumbridgeDatePickerDialog(
+            showDialog = showDatePicker,
+            datePickerState = datePickerState,
+            onDismissRequest = {
+                showDialog.value = false
+            },
+            onSaveDate = { _ ->
+                showTimePicker.value = true
+                showDatePicker.value = false
+            }
+        )
+
+        if (showTimePicker.value) {
+            TimePickerDialog(
+                onDismiss = {
+                    showTimePicker.value = false
+                    showDialog.value = false
+                },
+                onConfirm = {
+                    val hoursInMillis = timePickerState.hour * 60 * 60 * 1000 // Convert hours to milliseconds
+                    val minutesInMillis = timePickerState.minute * 60 * 1000 // Convert minutes to milliseconds
+                    val finalDateTime = (datePickerState.selectedDateMillis ?: 0) + hoursInMillis + minutesInMillis
+
+                    if (!allowPastDates && finalDateTime.toLocalDateTime() <= LocalDateTime.now()) {
+                        onInvalidDateTime()
+                    } else {
+                        showTimePicker.value = false
+                        showDialog.value = false
+                        onSaveDateTime(finalDateTime)
+                    }
+                },
+                content = {
+                    TimePicker(timePickerState)
+                }
+            )
+        }
+    }
+
 }
 
 @Composable
@@ -134,8 +202,8 @@ fun LumbridgeYearMonthPicker(
                                 .fillMaxWidth()
                                 .padding(bottom = DefaultPadding),
                             state = dateInputState.value,
-                            label = stringResource(id = R.string.start_date),
-                            placeholder = stringResource(id = R.string.edit_loan_profile_invalid_start_date),
+                            label = stringResource(id = R.string.date),
+                            placeholder = stringResource(id = R.string.invalid_date),
                             onClick = { showDatePickerDialog.value = true }
                         )
 
@@ -245,7 +313,7 @@ fun LumbridgeYearMonthRangePicker(
                         LumbridgeButton(
                             enableButton = startYear.intValue != INVALID &&
                                 endMonth.intValue != INVALID &&
-                                endYear.intValue != INVALID  &&
+                                endYear.intValue != INVALID &&
                                 endMonth.intValue != INVALID,
                             label = stringResource(id = R.string.apply),
                             onClick = {

@@ -6,6 +6,7 @@ import com.eyther.lumbridge.data.model.loan.local.LoanCached
 fun LoanCached.toEntity() = LoanEntity(
     name = name,
     startDate = startDate,
+    currentPaymentDate = currentPaymentDate,
     endDate = endDate,
     currentAmount = currentAmount,
     initialAmount = initialAmount,

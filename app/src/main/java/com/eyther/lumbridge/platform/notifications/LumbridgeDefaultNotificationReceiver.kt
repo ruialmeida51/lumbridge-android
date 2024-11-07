@@ -12,8 +12,6 @@ import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelB
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_ARG_TITLE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_DEFAULT_CHANNEL_ID
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_OPEN_ACTIVITY_INTENT_REQUEST_CODE
-import java.util.UUID
-import kotlin.uuid.Uuid
 
 class LumbridgeDefaultNotificationReceiver : BroadcastReceiver() {
 
@@ -41,7 +39,7 @@ class LumbridgeDefaultNotificationReceiver : BroadcastReceiver() {
             .setContentIntent(contentIntent)
 
         notificationManager.notify(
-            UUID.randomUUID().hashCode() + (title + message).hashCode(),
+            (title + message).hashCode(),
             notificationBuilder.build()
         )
     }

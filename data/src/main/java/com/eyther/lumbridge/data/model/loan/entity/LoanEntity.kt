@@ -12,19 +12,24 @@ const val LOAN_TABLE_NAME = "loan"
  * Given an interest rate and a loan type, we can use the proper formula to calculate the
  * monthly payment, the total amount paid, and the total interest paid and the months left.
  *
- * @property loanId The unique identifier for the loan.
- * @property name The name of the loan.
- * @property startDate The date the loan was taken out.
- * @property endDate The date the loan will be paid off.
- * @property currentAmount The amount of the loan.
- * @property fixedTaegInterestRate The fixed interest rate for the loan when using the TAEG formula.
- * @property variableEuribor The variable interest rate for the loan when using the EURIBOR formula.
- * @property variableSpread The variable spread for the loan when using the EURIBOR formula.
- * @property fixedTanInterestRate The fixed interest rate for the loan when using the TAN formula.
- * @property loanTypeOrdinal The ordinal of the loan type.
- * @property loanCategoryOrdinal The ordinal of the loan category.
- * @property shouldNotifyWhenPaid If true, the user should be notified when the loan is paid off.
- * @property shouldAutoAddToExpenses If true, the loan should be automatically added to the user's expenses.
+ * @property loanId The id of the loan. Defaults to 0 when creating a new one.
+ * @property name The name of the loan, e.g. "Car Loan".
+ * @property startDate The date when the loan was taken, when the contract was made.
+ * @property currentPaymentDate The date when the current payment is due. This date is hidden from the user and it's just an internal information
+ * to calculate the remaining months between the current date and the end date.
+ * @property endDate The date when the loan is expected to be paid off.
+ * @property currentAmount The current amount of the loan. This amount is updated every time a payment is made.
+ * @property initialAmount The initial amount of the loan.
+ * @property fixedTaegInterestRate The fixed interest rate of the loan, represented by a percentage.
+ * @property variableEuribor The Euribor rate of the loan, represented by a percentage.
+ * @property variableSpread The spread rate of the loan, represented by a percentage.
+ * @property fixedTanInterestRate The fixed interest rate of the loan, represented by a percentage.
+ * @property loanTypeOrdinal The ordinal of the loan type, can be fixed or variable.
+ * @property loanCategoryOrdinal The ordinal of the loan category, e.g. "House", "Car", "Personal", "Other".
+ * @property shouldNotifyWhenPaid True if the user wants to be notified when the loan is paid off, false otherwise.
+ * @property shouldAutoAddToExpenses True if the user wants the loan to be automatically added to the expenses, false otherwise.
+ * @property lastAutoPayDate The last date when the loan was automatically paid. This is used to calculate the next payment date.
+ * @property paymentDay The day of the month when the payment is due, if the user enabled automatic payments.
  */
 @Entity(
     tableName = LOAN_TABLE_NAME
@@ -33,6 +38,7 @@ data class LoanEntity(
     @PrimaryKey(autoGenerate = true) val loanId: Long = 0,
     val name: String,
     val startDate: String,
+    val currentPaymentDate: String,
     val endDate: String,
     val currentAmount: Float,
     val initialAmount: Float,

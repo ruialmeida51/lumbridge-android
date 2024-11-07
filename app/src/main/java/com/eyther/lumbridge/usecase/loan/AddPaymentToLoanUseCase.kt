@@ -17,14 +17,15 @@ class AddPaymentToLoanUseCase @Inject constructor(
      * @param loanUi The loan UI to add the amortization to.
      */
     suspend operator fun invoke(loanUi: LoanUi, loanCalculationUi: LoanCalculationUi) {
-        val newAmount = loanUi.currentLoanAmount - loanCalculationUi.monthlyPaymentCapital
-        val newStartDate = loanUi.startDate.plusMonths(1)
+        val loan = loanUi.toDomain()
+        val newAmount = loan.currentAmount - loanCalculationUi.monthlyPaymentCapital
+        val newStartDate = loan.currentPaymentDate.plusMonths(1)
 
         loanRepository.saveLoan(
-            loanUi.copy(
-                currentLoanAmount = newAmount,
-                startDate = newStartDate
-            ).toDomain()
+            loan.copy(
+                currentAmount = newAmount,
+                currentPaymentDate = newStartDate
+            )
         )
     }
 }

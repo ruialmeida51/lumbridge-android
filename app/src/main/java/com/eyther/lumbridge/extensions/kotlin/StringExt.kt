@@ -22,25 +22,3 @@ fun String?.getErrorOrNull(@StringRes errorRes: Int) = if (isNullOrEmpty()) {
 } else {
     null
 }
-
-/**
- * Replace the arguments in the route with the values provided. This is useful for
- * replacing the placeholders in the route with the actual values.
- * For example, if the route is "net_salary_overview/{$NET_SALARY_EXTRA}/{$LOCALE_EXTRA}"
- * and the values are "3000" and "PORTUGAL", the route will be replaced with the actual
- * values, such as "net_salary_overview/3000/PORTUGAL".
- *
- * @param args the arguments to replace in the route
- *        e.g mapOf("netSalary" to "1000", "locale" to "en")
- *
- * @return the route with the arguments replaced
- */
-fun String.replaceArgsInRoute(args: Map<String, String>): String {
-    var stringCopy = this
-
-    args.forEach { (key, value) ->
-        stringCopy = stringCopy.replace("{$key}", value)
-    }
-
-    return stringCopy
-}

@@ -8,6 +8,7 @@ fun LoanDomain.toCached() = LoanCached(
     id = id,
     name = name,
     startDate = startDate.toIsoLocalDateString(),
+    currentPaymentDate = currentPaymentDate.toIsoLocalDateString(),
     endDate = endDate.toIsoLocalDateString(),
     currentAmount = currentAmount,
     initialAmount = initialAmount,

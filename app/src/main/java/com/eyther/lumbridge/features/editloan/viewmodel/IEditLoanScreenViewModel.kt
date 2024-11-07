@@ -30,6 +30,15 @@ interface IEditLoanScreenViewModel : IEditLoanScreenInputHandler {
     fun getMaxSelectableYear(): Int
 
     /**
+     * Calculates the minimum selectable year for the mortgage profile. This is done by
+     * getting the current year and subtracting the maximum duration of a mortgage and
+     * some padding years for odd cases that we might not have considered.
+     *
+     * @return The minimum selectable year for the mortgage profile.
+     */
+    fun getMinSelectableYear(): Int
+
+    /**
      * Checks if the end date is selectable based on the start date. There needs to be at least
      * one month difference between the start and end date.
      *

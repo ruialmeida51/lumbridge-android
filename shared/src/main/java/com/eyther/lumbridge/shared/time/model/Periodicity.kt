@@ -1,8 +1,6 @@
 package com.eyther.lumbridge.shared.time.model
 
-import androidx.annotation.Keep
 import com.eyther.lumbridge.shared.time.extensions.MONTHS_IN_YEAR
-import com.eyther.lumbridge.shared.time.extensions.isBeforeOrEqual
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
@@ -31,6 +29,7 @@ sealed class Periodicity(
         const val EVERY_X_MONTHS = 2
         const val EVERY_X_YEARS = 3
     }
+
     /**
      * It increments the start date by the number of X (given by the periodicity) until it reaches a date that is after the current date,
      * and that's why we need that `while` loop in the implementation. In theory, we could make sure to store the last date and
@@ -47,7 +46,12 @@ sealed class Periodicity(
      */
     data class EveryXDays(
         val numOfDays: Int
-    ): Periodicity(EVERY_X_DAYS) {
+    ) : Periodicity(EVERY_X_DAYS) {
+
+        init {
+            require(numOfDays > 0) { "Number of days must be greater than 0" }
+        }
+
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
             var nextDate = startFrom
@@ -71,7 +75,12 @@ sealed class Periodicity(
     data class EveryXWeeks(
         val numOfWeeks: Int,
         val dayOfWeekOrdinal: Int
-    ): Periodicity(EVERY_X_WEEKS) {
+    ) : Periodicity(EVERY_X_WEEKS) {
+        init {
+            require(numOfWeeks > 0) { "Number of weeks must be greater than 0" }
+            require(dayOfWeekOrdinal in 1..7) { "Day of week must be between 1 and 7" }
+        }
+
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
 
@@ -95,7 +104,13 @@ sealed class Periodicity(
     data class EveryXMonths(
         val numOfMonth: Int,
         val dayOfMonth: Int
-    ): Periodicity(EVERY_X_MONTHS) {
+    ) : Periodicity(EVERY_X_MONTHS) {
+
+        init {
+            require(numOfMonth > 0) { "Number of months must be greater than 0" }
+            require(dayOfMonth in 1..31) { "Day of month must be between 1 and 31" }
+        }
+
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
 
@@ -129,7 +144,12 @@ sealed class Periodicity(
     data class EveryXYears(
         val numOfYear: Int,
         val monthOrdinal: Int
-    ): Periodicity(EVERY_X_YEARS) {
+    ) : Periodicity(EVERY_X_YEARS) {
+        init {
+            require(numOfYear > 0) { "Number of years must be greater than 0" }
+            require(monthOrdinal in 1..12) { "Month must be between 1 and 12" }
+        }
+
         override fun getNextDate(startFrom: LocalDate): LocalDate {
             val currentDate = LocalDate.now()
             var nextDate = startFrom.withMonth(minOf(Month.of(monthOrdinal).value, MONTHS_IN_YEAR))

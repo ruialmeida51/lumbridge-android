@@ -1,13 +1,13 @@
 package com.eyther.lumbridge.features.editloan.viewmodel.delegate
 
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenInputState
 import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedChoice
 import com.eyther.lumbridge.model.loan.LoanCategoryUi
+import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -28,14 +28,29 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
         }
     }
 
-    override fun onMortgageAmountChanged(mortgageAmount: Float?) {
+    override fun onLoanInitialAmountChanged(initialAmount: Float?) {
         updateInput { state ->
-            val loanAmount = mortgageAmount?.toString()
+            val loanAmount = initialAmount?.toString()
 
             state.copy(
-                loanAmount = state.loanAmount.copy(
+                initialAmount = state.initialAmount.copy(
                     text = loanAmount,
                     error = loanAmount.getErrorOrNull(
+                        R.string.edit_loan_profile_invalid_loan_amount
+                    )
+                )
+            )
+        }
+    }
+
+    override fun onLoanCurrentAmountChanged(currentAmount: Float?) {
+        updateInput { state ->
+            val currentAmountString = currentAmount?.toString()
+
+            state.copy(
+                currentAmount = state.currentAmount.copy(
+                    text = currentAmountString,
+                    error = currentAmountString.getErrorOrNull(
                         R.string.edit_loan_profile_invalid_loan_amount
                     )
                 )
@@ -205,8 +220,8 @@ class EditLoanScreenInputHandler @Inject constructor() : IEditLoanScreenInputHan
             true
         }
 
-        return inputState.loanAmount.isValid() &&
-            inputState.loanAmount.isValid() &&
+        return inputState.initialAmount.isValid() &&
+            inputState.currentAmount.isValid() &&
             inputState.startDate.isValid() &&
             inputState.endDate.isValid() &&
             inputState.name.isValid() &&
