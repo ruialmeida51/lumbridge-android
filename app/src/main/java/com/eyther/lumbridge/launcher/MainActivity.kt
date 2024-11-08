@@ -3,12 +3,14 @@ package com.eyther.lumbridge.launcher
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.ui.Modifier
@@ -33,8 +35,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: IMainActivityViewModel by viewModels<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         notificationChannelBuilder.createNotificationChannel()
@@ -43,18 +44,8 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val viewState = viewModel.viewState.collectAsStateWithLifecycle()
 
-            Box(
-                Modifier
-                    .padding(WindowInsets.systemBars.asPaddingValues())
-            ) {
-                Box(
-                    Modifier
-                        .consumeWindowInsets(WindowInsets.systemBars)
-                ) {
-                    LumbridgeTheme(darkTheme = viewState.value.uiMode.isDarkTheme()) {
-                        MainScreen()
-                    }
-                }
+            LumbridgeTheme(darkTheme = viewState.value.uiMode.isDarkTheme()) {
+                MainScreen()
             }
         }
     }

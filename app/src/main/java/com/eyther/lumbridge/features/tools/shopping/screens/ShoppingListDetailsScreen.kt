@@ -1,15 +1,25 @@
+@file:OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+
 package com.eyther.lumbridge.features.tools.shopping.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,10 +29,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,7 +62,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
@@ -81,6 +94,10 @@ fun ShoppingListDetailsScreen(
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val defaultTitle = stringResource(id = R.string.tools_shopping_list)
 
+    BackHandler {
+        viewModel.saveShoppingList(defaultTitle)
+    }
+
     LaunchedEffect(Unit) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.viewEffects
@@ -93,16 +110,12 @@ fun ShoppingListDetailsScreen(
         }
     }
 
-    LifecycleEventEffect(event = Lifecycle.Event.ON_PAUSE) {
-        viewModel.saveShoppingList(defaultTitle)
-    }
-
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
                 TopAppBarVariation.TitleAndIcon(
                     title = stringResource(id = label),
-                    onIconClick = { navController.popBackStack() },
+                    onIconClick = { viewModel.saveShoppingList(defaultTitle) },
                 ),
                 actions = {
                     Icon(
@@ -123,6 +136,7 @@ fun ShoppingListDetailsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .imePadding()
                 .then(
                     if (shouldShowDeleteShoppingListDialog.value) Modifier.blur(5.dp) else Modifier
                 )
@@ -163,7 +177,7 @@ private fun ShoppingList(
     onTitleChanged: (String) -> Unit,
     onItemSelected: (Int, Boolean) -> Unit,
     onTextUpdated: (Int, String) -> Unit,
-    onNextKeyboardAction: (Int) -> Unit,
+    onNextKeyboardAction: (cursorPosition: Int?, index: Int) -> Unit,
     onDeleteKeyboardAction: (Int) -> Boolean,
     onClearItem: (Int) -> Unit
 ) {
@@ -173,6 +187,14 @@ private fun ShoppingList(
         val focusedIndex = rememberSaveable { mutableIntStateOf(-1) }
         val listState = rememberLazyListState()
         val coroutineScope = rememberCoroutineScope()
+
+        LaunchedEffect(focusedIndex.intValue) {
+            coroutineScope.launch {
+                if (focusedIndex.intValue != -1) {
+                    listState.animateScrollToItem(focusedIndex.intValue)
+                }
+            }
+        }
 
         SwitchSetting(
             icon = R.drawable.ic_check,
@@ -187,7 +209,7 @@ private fun ShoppingList(
                 .padding(vertical = DefaultPadding),
             state = state.inputState.title,
             defaultInitialValue = defaultTitle,
-            onInputChanged = { title -> onTitleChanged(title) },
+            onInputChanged = { cursorPos, title -> onTitleChanged(title) },
             textStyle = MaterialTheme.typography.titleSmall,
             singleLine = true
         )
@@ -195,7 +217,7 @@ private fun ShoppingList(
         if (state.inputState.items.isEmpty()) {
             AddItemText(
                 state = state,
-                onNextKeyboardAction = onNextKeyboardAction,
+                onNextKeyboardAction = { index -> onNextKeyboardAction(null, index) },
                 focusedIndex = focusedIndex
             )
         } else {
@@ -209,6 +231,7 @@ private fun ShoppingList(
 
                     // Create a FocusRequester for each item.
                     val focusRequester = remember { FocusRequester() }
+                    val cursorPosition = remember { mutableIntStateOf(0) }
 
                     if ((!state.inputState.showTickedItems && !checkedState.checked) || state.inputState.showTickedItems) {
                         Row {
@@ -232,10 +255,10 @@ private fun ShoppingList(
                                     }
                                     .onKeyEvent { keyEvent ->
                                         if (keyEvent.key == Key.Backspace) {
-                                            onDeleteKeyboardAction(listIndex)
+                                            val deleted = onDeleteKeyboardAction(listIndex)
 
                                             // If we're at the last index and there are items, focus the previous item.
-                                            if (listIndex == state.inputState.items.lastIndex && state.inputState.items.isNotEmpty()) {
+                                            if (listIndex == state.inputState.items.lastIndex && state.inputState.items.isNotEmpty() && deleted) {
                                                 focusedIndex.intValue = listIndex - 1
                                             }
                                         }
@@ -243,22 +266,18 @@ private fun ShoppingList(
                                         false
                                     },
                                 state = textState,
-                                onInputChanged = {
-                                    onTextUpdated(listIndex, it)
+                                onInputChanged = { cursorPos, text ->
+                                    cursorPosition.intValue = cursorPos
+                                    onTextUpdated(listIndex, text)
                                 },
                                 keyboardOptions = KeyboardOptions(
                                     imeAction = ImeAction.Next
                                 ),
                                 keyboardActions = KeyboardActions(
                                     onNext = {
-                                        onNextKeyboardAction(listIndex)
+                                        onNextKeyboardAction(cursorPosition.intValue, listIndex)
                                         // Move focus to the next item
                                         focusedIndex.intValue = listIndex + 1
-
-                                        // Scroll to the next item
-                                        coroutineScope.launch {
-                                            listState.scrollToItem(listIndex + 1)
-                                        }
                                     },
                                 ),
                                 strikethrough = checkedState.checked
@@ -298,7 +317,7 @@ private fun ShoppingList(
                     if (listIndex == state.inputState.items.lastIndex) {
                         AddItemText(
                             state = state,
-                            onNextKeyboardAction = onNextKeyboardAction,
+                            onNextKeyboardAction = { index -> onNextKeyboardAction(null, index) },
                             focusedIndex = focusedIndex
                         )
                     }

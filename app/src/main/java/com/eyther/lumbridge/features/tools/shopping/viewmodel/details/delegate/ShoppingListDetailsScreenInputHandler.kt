@@ -76,6 +76,8 @@ class ShoppingListDetailsScreenInputHandler @Inject constructor() : IShoppingLis
     }
 
     override fun onKeyboardDelete(index: Int): Boolean {
+        var handled = false
+
         updateInput { state ->
             val item = state.items.getOrNull(index) ?: return@updateInput state
 
@@ -85,30 +87,54 @@ class ShoppingListDetailsScreenInputHandler @Inject constructor() : IShoppingLis
                     .apply { removeAt(index) }
                     .toImmutableList()
 
+                handled = true
                 state.copy(items = newList)
             } else {
                 state
             }
         }
 
-        return false // Return true to indicate that the event was handled.
+        return handled
     }
 
     /**
      * Adds a new blank entry at index + 1 to the shopping list to be filled by the user.
      * The subsequent entries are shifted one index up, if they exist.
      */
-    override fun onKeyboardNext(index: Int) {
+    override fun onKeyboardNext(cursorPosition: Int?, index: Int) {
         updateInput { state ->
             val items = inputState.value.items.toMutableList()
 
-            items.add(
-                index + 1, StableShoppingListItem(
-                    id = UUID.randomUUID(),
-                    checkboxState = CheckboxInputState(),
-                    textInputState = TextInputState()
+            val currentItem = items.getOrNull(index)
+            val textLength = currentItem?.textInputState?.text?.length ?: 0
+            val cursorPosition = cursorPosition?.coerceAtMost(textLength) ?: 0
+
+            if (currentItem == null || cursorPosition == textLength || cursorPosition == 0) {
+                items.add(
+                    index + 1, StableShoppingListItem(
+                        id = UUID.randomUUID(),
+                        checkboxState = CheckboxInputState(),
+                        textInputState = TextInputState()
+                    )
                 )
-            )
+            } else {
+                val textAfterCursorPosition = currentItem.textInputState.text?.substring(cursorPosition)
+                val textBeforeCursorPosition = currentItem.textInputState.text?.substring(0, cursorPosition)
+
+                items[index] = currentItem.copy(
+                    textInputState = TextInputState(
+                        text = textBeforeCursorPosition
+                    )
+                )
+
+                items.add(
+                    index + 1, StableShoppingListItem(
+                        id = UUID.randomUUID(),
+                        checkboxState = CheckboxInputState(),
+                        textInputState = TextInputState(text = textAfterCursorPosition)
+                    )
+                )
+            }
 
             state.copy(items = items.toImmutableList())
         }

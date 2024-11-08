@@ -86,18 +86,13 @@ class NoteDetailsScreenViewModel @Inject constructor(
 
     override fun saveNotes(defaultTitle: String) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "Error saving note $noteId", throwable)
+            viewModelScope.launch {
+                Log.e(TAG, "Error saving note $noteId", throwable)
+                viewEffects.emit(NoteDetailsScreenViewEffect.NavigateBack)
+            }
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            if (inputState.value.text.text.isNullOrEmpty()) {
-                if (noteId != -1L) {
-                    deleteNoteUseCase(noteId)
-                }
-
-                return@launch
-            }
-
             val noteUi = NoteUi(
                 id = noteId,
                 title = inputState.value.title.text.orEmpty().ifEmpty { defaultTitle },
@@ -105,6 +100,7 @@ class NoteDetailsScreenViewModel @Inject constructor(
             )
 
             saveNoteUseCase(noteUi)
+            viewEffects.emit(NoteDetailsScreenViewEffect.NavigateBack)
         }
     }
 

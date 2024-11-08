@@ -1,9 +1,15 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.eyther.lumbridge.launcher.screens
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,15 +23,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize(),
         bottomBar = { LumbridgeBottomNavigationBar(navController) },
+        contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(NavigationBarDefaults.windowInsets)
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
+        LumbridgeNavigationHost(
+            modifier = modifier
                 .padding(paddingValues)
-        ) {
-            LumbridgeNavigationHost(modifier, navController)
-        }
+                .consumeWindowInsets(paddingValues),
+            navController = navController
+        )
     }
 }
 

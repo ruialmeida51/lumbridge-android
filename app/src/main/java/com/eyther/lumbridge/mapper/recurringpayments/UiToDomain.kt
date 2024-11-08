@@ -2,8 +2,8 @@ package com.eyther.lumbridge.mapper.recurringpayments
 
 import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
 import com.eyther.lumbridge.mapper.expenses.toDomain
-import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
+import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.shared.time.model.Periodicity
 
 fun RecurringPaymentUi.toDomain() = RecurringPaymentDomain(

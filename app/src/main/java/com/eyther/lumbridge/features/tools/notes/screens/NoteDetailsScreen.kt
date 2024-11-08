@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.tools.notes.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -62,6 +63,10 @@ fun NoteDetailsScreen(
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val defaultTitle = stringResource(id = R.string.tools_notes_details)
 
+    BackHandler {
+        viewModel.saveNotes(defaultTitle)
+    }
+
     LaunchedEffect(Unit) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.viewEffects
@@ -74,16 +79,12 @@ fun NoteDetailsScreen(
         }
     }
 
-    LifecycleEventEffect(event = Lifecycle.Event.ON_PAUSE) {
-        viewModel.saveNotes(defaultTitle)
-    }
-
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
                 TopAppBarVariation.TitleAndIcon(
                     title = stringResource(id = label),
-                    onIconClick = { navController.popBackStack() },
+                    onIconClick = { viewModel.saveNotes(defaultTitle) },
                 ),
                 actions = {
                     Icon(
@@ -147,7 +148,7 @@ private fun WriteNote(
                 .fillMaxWidth(),
             state = state.inputState.title,
             defaultInitialValue = defaultTitle,
-            onInputChanged = { title -> onTitleChanged(title) },
+            onInputChanged = { cursorPos, title -> onTitleChanged(title) },
             textStyle = MaterialTheme.typography.titleSmall,
             singleLine = true
         )

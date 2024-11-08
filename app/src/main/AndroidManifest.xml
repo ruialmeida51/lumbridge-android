@@ -16,7 +16,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
-        android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.Lumbridge">
 
         <!--

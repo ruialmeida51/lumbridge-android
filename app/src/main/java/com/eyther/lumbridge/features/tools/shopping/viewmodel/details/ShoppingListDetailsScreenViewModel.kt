@@ -98,18 +98,13 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
 
     override fun saveShoppingList(defaultTitle: String) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(TAG, "Error saving shopping list", throwable)
+            viewModelScope.launch {
+                viewEffects.emit(ShoppingListDetailsScreenViewEffect.NavigateBack)
+                Log.e(TAG, "Error saving shopping list", throwable)
+            }
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            if (inputState.value.items.isEmpty()) {
-                if (shoppingListId != -1L) {
-                    deleteShoppingListUseCase(shoppingListId)
-                }
-
-                return@launch
-            }
-
             val shoppingListUi = ShoppingListUi(
                 id = shoppingListId,
                 showTickedItems = inputState.value.showTickedItems,
@@ -124,6 +119,8 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
             )
 
             saveShoppingListUseCase(shoppingListUi)
+
+            viewEffects.emit(ShoppingListDetailsScreenViewEffect.NavigateBack)
         }
     }
 
