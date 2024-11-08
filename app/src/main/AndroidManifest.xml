@@ -57,6 +57,7 @@
             android:name=".launcher.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Lumbridge"
+            android:windowSoftInputMode="adjustResize"
             android:configChanges="locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

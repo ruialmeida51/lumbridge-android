@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -74,6 +75,7 @@ fun CurrencyConverterScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
         ) {
             when (val state = viewModel.viewState.collectAsStateWithLifecycle().value) {
@@ -97,10 +99,6 @@ private fun Content(
         Input(
             state = state,
             viewModel = viewModel
-        )
-
-        Calculation(
-            state = state
         )
     }
 }
@@ -203,17 +201,18 @@ private fun ColumnScope.Input(
             )
         )
 
-        Spacer(modifier = Modifier.height(HalfPadding))
-
-        LumbridgeButton(
-            label = stringResource(id = R.string.tools_currency_converter_exchange_currency),
-            enableButton = state.shouldEnableCalculateButton,
-            isLoading = state.isCalculating,
-            onClick = viewModel::onConvert
+        Calculation(
+            state = state
         )
-
-        Spacer(modifier = Modifier.height(DefaultPadding))
     }
+
+    LumbridgeButton(
+        modifier = Modifier.padding(DefaultPadding),
+        label = stringResource(id = R.string.tools_currency_converter_exchange_currency),
+        enableButton = state.shouldEnableCalculateButton,
+        isLoading = state.isCalculating,
+        onClick = viewModel::onConvert
+    )
 }
 
 @Composable
@@ -221,51 +220,44 @@ private fun ColumnScope.Calculation(state: CurrencyConverterScreenViewState.Cont
     if (state.displayCalculation()) {
         Text(
             modifier = Modifier
-                .padding(
-                    start = DefaultPadding,
-                    end = DefaultPadding,
-                    top = DefaultPadding,
-                    bottom = HalfPadding
-                )
+                .padding(vertical = HalfPadding)
                 .align(Alignment.Start),
             text = stringResource(id = R.string.tools_currency_converter_result),
             style = MaterialTheme.typography.bodyLarge
         )
 
-        ColumnCardWrapper {
-            when {
-                state.hasError -> {
-                    Text(
-                        text = stringResource(id = R.string.tools_exchange_error),
-                        modifier = Modifier.padding(DefaultPadding),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
+        when {
+            state.hasError -> {
+                Text(
+                    text = stringResource(id = R.string.tools_exchange_error),
+                    modifier = Modifier.padding(vertical = HalfPadding),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
 
-                state.hasExchangeRate() -> {
-                    // Display the exchange rate and converted amount
-                    DataOverview(
-                        label = stringResource(id = R.string.tools_exchange_rate),
-                        text = stringResource(
-                            id = R.string.tools_exchange_rate_value,
-                            state.inputState.fromCurrency.getCurrencySymbol(),
-                            requireNotNull(state.exchangeRate).forceTwoDecimalsPlaces(),
-                            state.inputState.toCurrency.getCurrencySymbol()
-                        )
+            state.hasExchangeRate() -> {
+                // Display the exchange rate and converted amount
+                DataOverview(
+                    label = stringResource(id = R.string.tools_exchange_rate),
+                    text = stringResource(
+                        id = R.string.tools_exchange_rate_value,
+                        state.inputState.fromCurrency.getCurrencySymbol(),
+                        requireNotNull(state.exchangeRate).forceTwoDecimalsPlaces(),
+                        state.inputState.toCurrency.getCurrencySymbol()
                     )
+                )
 
-                    DataOverview(
-                        label = stringResource(id = R.string.tools_currency_converter_to),
-                        text = stringResource(
-                            id = R.string.tools_currency_converter_to_value,
-                            state.inputState.fromAmount.text?.toFloatOrNull()?.forceTwoDecimalsPlaces().orEmpty(),
-                            state.inputState.fromCurrency.getCurrencySymbol(),
-                            state.toExchangedAmount?.forceTwoDecimalsPlaces().orEmpty(),
-                            state.inputState.toCurrency.getCurrencySymbol()
-                        )
+                DataOverview(
+                    label = stringResource(id = R.string.tools_currency_converter_to),
+                    text = stringResource(
+                        id = R.string.tools_currency_converter_to_value,
+                        state.inputState.fromAmount.text?.toFloatOrNull()?.forceTwoDecimalsPlaces().orEmpty(),
+                        state.inputState.fromCurrency.getCurrencySymbol(),
+                        state.toExchangedAmount?.forceTwoDecimalsPlaces().orEmpty(),
+                        state.inputState.toCurrency.getCurrencySymbol()
                     )
-                }
+                )
             }
         }
     }

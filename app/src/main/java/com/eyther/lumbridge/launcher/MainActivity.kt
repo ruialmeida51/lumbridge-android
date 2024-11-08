@@ -1,7 +1,9 @@
 package com.eyther.lumbridge.launcher
 
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -13,7 +15,9 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,16 +39,18 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: IMainActivityViewModel by viewModels<MainActivityViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
 
         notificationChannelBuilder.createNotificationChannel()
         checkAppSettings()
 
         setContent {
             val viewState = viewModel.viewState.collectAsStateWithLifecycle()
+            val darkTheme = viewState.value.uiMode.isDarkTheme()
 
-            LumbridgeTheme(darkTheme = viewState.value.uiMode.isDarkTheme()) {
+            LumbridgeTheme(darkTheme = darkTheme) {
                 MainScreen()
             }
         }

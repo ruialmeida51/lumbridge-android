@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Shopping.Companion.ARG_SHOPPING_LIST_ID
+import com.eyther.lumbridge.features.tools.netsalary.viewmodel.result.INetSalaryResultScreenViewModel
 import com.eyther.lumbridge.features.tools.shopping.model.details.ShoppingListDetailsScreenViewEffect
 import com.eyther.lumbridge.features.tools.shopping.model.details.ShoppingListDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.shopping.model.details.StableShoppingListItem
@@ -17,10 +18,14 @@ import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 import com.eyther.lumbridge.usecase.shopping.DeleteShoppingListUseCase
 import com.eyther.lumbridge.usecase.shopping.GetShoppingListUseCase
 import com.eyther.lumbridge.usecase.shopping.SaveShoppingListUseCase
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -28,7 +33,8 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
-@HiltViewModel
+@OptIn(FlowPreview::class)
+@HiltViewModel()
 class ShoppingListDetailsScreenViewModel @Inject constructor(
     private val getShoppingListUseCase: GetShoppingListUseCase,
     private val saveShoppingListUseCase: SaveShoppingListUseCase,
@@ -41,6 +47,7 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
 
     companion object {
         private const val TAG = "ShoppingListDetailsScreenViewModel"
+        private const val SHOPPING_LIST_SAVE_DEBOUNCE_MS = 500L
     }
 
     override val viewState: MutableStateFlow<ShoppingListDetailsScreenViewState> =
@@ -53,6 +60,8 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
         "Shopping list ID must be provided or defaulted to -1"
     }
 
+    private var cachedDefaultTitle: String? = null
+
     init {
         viewModelScope.launch {
             inputState
@@ -61,6 +70,14 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
                         ShoppingListDetailsScreenViewState.Content(newInputState)
                     }
                 }
+                .launchIn(this)
+
+            // Attempt to save the shopping list every time the input state changes,
+            // with a debounce of SHOPPING_LIST_SAVE_DEBOUNCE_MS to avoid saving too
+            // often while the user is still typing.
+            inputState
+                .debounce(SHOPPING_LIST_SAVE_DEBOUNCE_MS)
+                .onEach { saveShoppingList(finish = false) }
                 .launchIn(this)
 
             loadShoppingList()
@@ -96,7 +113,11 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
         }
     }
 
-    override fun saveShoppingList(defaultTitle: String) {
+    override fun setDefaultTitle(defaultTitle: String) {
+        cachedDefaultTitle = defaultTitle
+    }
+
+    override fun saveShoppingList(finish: Boolean) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             viewModelScope.launch {
                 viewEffects.emit(ShoppingListDetailsScreenViewEffect.NavigateBack)
@@ -108,7 +129,7 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
             val shoppingListUi = ShoppingListUi(
                 id = shoppingListId,
                 showTickedItems = inputState.value.showTickedItems,
-                title = inputState.value.title.text.orEmpty().ifEmpty { defaultTitle },
+                title = inputState.value.title.text.orEmpty().ifEmpty { cachedDefaultTitle.orEmpty() },
                 entries = inputState.value.items.mapIndexed { index, stableShoppingListItem ->
                     ShoppingListEntryUi(
                         index = index,
@@ -120,7 +141,9 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
 
             saveShoppingListUseCase(shoppingListUi)
 
-            viewEffects.emit(ShoppingListDetailsScreenViewEffect.NavigateBack)
+            if (finish) {
+                viewEffects.emit(ShoppingListDetailsScreenViewEffect.NavigateBack)
+            }
         }
     }
 
