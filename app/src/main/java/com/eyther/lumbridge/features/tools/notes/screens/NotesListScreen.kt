@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -39,10 +40,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.notes.model.list.NotesListScreenViewState
 import com.eyther.lumbridge.features.tools.notes.viewmodel.list.INotesListScreenViewModel
 import com.eyther.lumbridge.features.tools.notes.viewmodel.list.NotesListScreenViewModel
-import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.model.notes.NoteUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.PeekContentCard
@@ -76,6 +77,7 @@ fun NotesListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .imePadding()
                 .then(
                     if (notesToDelete.longValue >= 0L) Modifier.blur(5.dp) else Modifier
                 )

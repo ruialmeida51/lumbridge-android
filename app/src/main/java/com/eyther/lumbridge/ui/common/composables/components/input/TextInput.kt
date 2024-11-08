@@ -130,8 +130,8 @@ fun BasicTextInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     defaultInitialValue: String? = null,
-    onInputChanged: ((String) -> Unit) = {},
-    onFocusChanged: ((String) -> Unit) = {}
+    onInputChanged: ((Int, String) -> Unit) = {_, _ -> },
+    onFocusChanged: ((String) -> Unit) = {},
 ) {
     val initialText = state.text.takeIf { !it.isNullOrEmpty() } ?: defaultInitialValue.orEmpty()
 
@@ -164,7 +164,7 @@ fun BasicTextInput(
         onValueChange = {
             if (it.text.filter { char -> char.isLetterOrDigit() }.length > maxLength) return@BasicTextField
             text.value = it.copy(text = it.text)
-            onInputChanged(text.value.text)
+            onInputChanged(text.value.selection.start, text.value.text)
         },
         value = text.value,
         cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurface),

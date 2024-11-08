@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -43,11 +44,11 @@ import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewState
 import com.eyther.lumbridge.features.feed.viewmodel.edit.FeedEditScreenViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.edit.IFeedEditScreenViewModel
-import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
+import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
 import com.eyther.lumbridge.ui.theme.DefaultPadding
@@ -106,6 +107,7 @@ fun FeedEditScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .imePadding()
                 .padding(top = DefaultPadding)
         ) {
             when (state) {

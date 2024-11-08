@@ -16,7 +16,7 @@ interface IShoppingListDetailsScreenInputHandler {
     fun onEntrySelected(index: Int, selected: Boolean)
     fun onClearItem(index: Int)
     fun onKeyboardDelete(index: Int): Boolean
-    fun onKeyboardNext(index: Int)
+    fun onKeyboardNext(cursorPosition: Int?, index: Int)
 
     /**
      * Helper function to update the input state.

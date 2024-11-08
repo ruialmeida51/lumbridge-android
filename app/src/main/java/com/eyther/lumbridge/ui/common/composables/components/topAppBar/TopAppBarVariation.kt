@@ -1,10 +1,8 @@
 package com.eyther.lumbridge.ui.common.composables.components.topAppBar
 
-import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.eyther.lumbridge.R
 
 /**
  * Represents the available variations for the toolbar.

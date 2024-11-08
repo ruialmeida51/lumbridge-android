@@ -1,6 +1,5 @@
 package com.eyther.lumbridge.ui.navigation.bottomNavigation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -18,7 +17,7 @@ fun LumbridgeNavigationHost(
     navController: NavHostController
 ) {
     NavHost(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         navController = navController,
         startDestination = LumbridgeNavigationItem.Feed.route,
     ) {

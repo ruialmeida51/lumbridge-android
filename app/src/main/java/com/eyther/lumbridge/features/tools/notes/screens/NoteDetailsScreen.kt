@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.tools.notes.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
@@ -22,8 +24,11 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.res.stringResource
@@ -62,6 +67,14 @@ fun NoteDetailsScreen(
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val defaultTitle = stringResource(id = R.string.tools_notes_details)
 
+    BackHandler {
+        viewModel.saveNotes()
+    }
+
+    LaunchedEffect(defaultTitle) {
+        viewModel.setDefaultTitle(defaultTitle)
+    }
+
     LaunchedEffect(Unit) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.viewEffects
@@ -74,16 +87,12 @@ fun NoteDetailsScreen(
         }
     }
 
-    LifecycleEventEffect(event = Lifecycle.Event.ON_PAUSE) {
-        viewModel.saveNotes(defaultTitle)
-    }
-
     Scaffold(
         topBar = {
             LumbridgeTopAppBar(
                 TopAppBarVariation.TitleAndIcon(
                     title = stringResource(id = label),
-                    onIconClick = { navController.popBackStack() },
+                    onIconClick = { viewModel.saveNotes() },
                 ),
                 actions = {
                     Icon(
@@ -104,6 +113,7 @@ fun NoteDetailsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .imePadding()
                 .then(
                     if (shouldShowDeleteNoteDialog.value) Modifier.blur(5.dp) else Modifier
                 )
@@ -140,14 +150,14 @@ private fun WriteNote(
 ) {
     Column(
         modifier = Modifier
-            .padding(top = DefaultPadding, start = DefaultPadding, end = DefaultPadding)
+            .padding(DefaultPadding)
     ) {
         BasicTextInput(
             modifier = Modifier
                 .fillMaxWidth(),
             state = state.inputState.title,
             defaultInitialValue = defaultTitle,
-            onInputChanged = { title -> onTitleChanged(title) },
+            onInputChanged = { cursorPos, title -> onTitleChanged(title) },
             textStyle = MaterialTheme.typography.titleSmall,
             singleLine = true
         )
