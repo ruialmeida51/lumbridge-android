@@ -48,7 +48,7 @@ class NoteDetailsScreenViewModel @Inject constructor(
     override val viewEffects: MutableSharedFlow<NoteDetailsScreenViewEffect> =
         MutableSharedFlow()
 
-    private val noteId = requireNotNull(savedStateHandle.get<Long>(ARG_NOTE_ID)) {
+    private var noteId = requireNotNull(savedStateHandle.get<Long>(ARG_NOTE_ID)) {
         "Note ID must be provided or defaulted to -1"
     }
 
@@ -117,7 +117,11 @@ class NoteDetailsScreenViewModel @Inject constructor(
                 text = inputState.value.text.text.orEmpty()
             )
 
-            saveNoteUseCase(noteUi)
+            // We need to keep updating this because: If the note ID was -1 when opening the screen,
+            // it means that it's a new note and we need to update the ID with the one returned by
+            // the database. This is necessary to avoid saving notes multiple times, as a -1L ID is
+            // used to indicate a new note.
+            noteId = saveNoteUseCase(noteUi)
 
             if (finish) {
                 viewEffects.emit(NoteDetailsScreenViewEffect.NavigateBack)

@@ -16,11 +16,12 @@ class ShoppingLocalDataSource @Inject constructor(
             flowItem?.map { shoppingListEntity -> shoppingListEntity.toCached() }
         }
 
-    suspend fun saveShoppingList(shoppingList: ShoppingListCached) {
-        if (shoppingList.id == -1L) {
+    suspend fun saveShoppingList(shoppingList: ShoppingListCached): Long {
+        return if (shoppingList.id == -1L) {
             shoppingDao.insertShoppingList(shoppingList.toEntity())
         } else {
             shoppingDao.updateShoppingList(shoppingList.toEntity().copy(shoppingListId = shoppingList.id))
+                .let { shoppingList.id }
         }
     }
 

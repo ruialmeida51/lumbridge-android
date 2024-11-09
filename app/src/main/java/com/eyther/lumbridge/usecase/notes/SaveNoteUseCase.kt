@@ -8,7 +8,7 @@ import javax.inject.Inject
 class SaveNoteUseCase @Inject constructor(
     private val notesRepository: NotesRepository
 ) {
-    suspend operator fun invoke(note: NoteUi) {
-        notesRepository.saveNote(note.toDomain())
+    suspend operator fun invoke(note: NoteUi): Long {
+        return notesRepository.saveNote(note.toDomain())
     }
 }

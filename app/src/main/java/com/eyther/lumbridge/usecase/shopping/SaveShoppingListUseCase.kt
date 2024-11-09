@@ -8,7 +8,7 @@ import javax.inject.Inject
 class SaveShoppingListUseCase @Inject constructor(
     private val shoppingRepository: ShoppingRepository
 ) {
-    suspend operator fun invoke(shoppingList: ShoppingListUi) {
-        shoppingRepository.saveShoppingList(shoppingList.toDomain())
+    suspend operator fun invoke(shoppingList: ShoppingListUi): Long {
+        return shoppingRepository.saveShoppingList(shoppingList.toDomain())
     }
 }
