@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,7 +40,6 @@ import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewState
-import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice
 import com.eyther.lumbridge.features.expenses.viewmodel.add.ExpensesAddScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.add.IExpensesAddScreenViewModel
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
@@ -49,7 +47,6 @@ import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeBu
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
 import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
-import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInputWithIcon
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput

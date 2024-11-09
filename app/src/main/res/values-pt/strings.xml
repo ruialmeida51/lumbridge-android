@@ -264,10 +264,10 @@
     <string name="recurring_payment_edit_frequency_days">Repetir a cada n dia(s)…</string>
     <string name="recurring_payment_edit_frequency_weeks">Repetir a cada n semana(s)…</string>
     <string name="recurring_payment_edit_frequency_weeks_day">Em que dia da semana?</string>
-    <string name="recurring_payment_edit_frequency_months">Repeat every n month(s)…</string>
-    <string name="recurring_payment_edit_frequency_months_day_of_month">On which day of the month?</string>
-    <string name="recurring_payment_edit_frequency_years">Repeat every n year(s)…</string>
-    <string name="recurring_payment_edit_frequency_years_month">On which month?</string>
+    <string name="recurring_payment_edit_frequency_months">Repetir a cada n mes(es)</string>
+    <string name="recurring_payment_edit_frequency_months_day_of_month">Em que dias do mês?</string>
+    <string name="recurring_payment_edit_frequency_years">Repetir a cada n ano(s)...</string>
+    <string name="recurring_payment_edit_frequency_years_month">Em que mês?</string>
     <string name="recurring_payment_edit_frequency_invalid_number_of_days">Por favor, introduz um número de dias válido (maior que  0)</string>
     <string name="recurring_payment_edit_frequency_invalid_number_of_weeks">Por favor, introduz um número de semanas válido (maior que  0)</string>
     <string name="recurring_payment_edit_frequency_invalid_number_of_months">Por favor, introduz um número de meses válido (maior que 0)</string>

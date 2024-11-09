@@ -59,9 +59,9 @@ class UserFinancialsLocalDataSource @Inject constructor(
             val necessitiesPercentage = preferences[NECESSITIES_PERCENTAGE]
             val luxuriesPercentage = preferences[LUXURIES_PERCENTAGE]
             val numberOfDependants = preferences[NUMBER_OF_DEPENDANTS]
-            val singleIncome = preferences[SINGLE_INCOME] ?: false
-            val married = preferences[MARRIED] ?: false
-            val handicapped = preferences[HANDICAPPED] ?: false
+            val singleIncome = preferences[SINGLE_INCOME] == true
+            val married = preferences[MARRIED] == true
+            val handicapped = preferences[HANDICAPPED] == true
 
             UserFinancialsCached(
                 annualGrossSalary = annualGrossSalary,

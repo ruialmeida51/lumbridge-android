@@ -51,7 +51,6 @@ import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeBu
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeDatePickerDialog
 import com.eyther.lumbridge.ui.common.composables.components.input.DateInput
-import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInputWithIcon
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput

@@ -29,12 +29,12 @@ import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.features.editfinancialprofile.components.DemographicInformationInput
 import com.eyther.lumbridge.features.editfinancialprofile.components.SalaryBreakdownInput
+import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.netsalary.arguments.INetSalaryScreenArgumentsCacheViewModel
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewEffects
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.INetSalaryInputScreenViewModel
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.NetSalaryInputScreenViewModel
-import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton

@@ -10,9 +10,9 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.model.user.UserProfileUi
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import com.eyther.lumbridge.usecase.user.profile.GetUserProfileStream
 import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile

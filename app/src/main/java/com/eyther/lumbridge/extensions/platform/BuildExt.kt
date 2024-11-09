@@ -12,5 +12,5 @@ import android.content.pm.ApplicationInfo
  * @return true if the application is running in debug mode, false otherwise.
  */
 fun Context?.isDebuggable(): Boolean {
-    return this?.let { applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 } ?: false
+    return this?.let { applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 } == true
 }
