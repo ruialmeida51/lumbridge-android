@@ -1,28 +1,50 @@
 # Loom (Previously Lumbridge) - Android Financial App
 
-Lumbridge is a simple financial app built for Android using and learning Jetpack Compose. It was created as a passion project to help manage day-to-day tasks and is open-source just for the love of the game. If you're interested, feel free to use it, improve it, or fork it!
+Loom is a simple financial app built for Android using and learning Jetpack Compose. It was created as a passion project to help manage day-to-day tasks and is open-source just for the love of the game, but eventually grew to a more solid piece. If you're interested, feel free to use it, improve it, or fork it!
 
 ---
 
 ## 🎯 Project Purpose
 
-Lumbridge is more than just a financial utility app — it's a playground for me to learn and experiment with **Jetpack Compose** and modern Android development. The app includes several financial tools that I personally find useful, but it's entirely open to contributions, feature requests, and improvements!
+As stated before, it started a playground for me to learn and experiment with **Jetpack Compose** and modern Android development. However, my SO and friends around me saw use in this so I decided to keep adding features to it that they found useful. Eventually, it grew to a sizeable app, enough to be shared with everyone. I stand that open-source is the way to go, and I probably made and will continue to make a bunch of mistakes and less optimal choices during this development but, as coding usual is, this is a best effort to provide both learning material if anyone finds it interesting enough and a way to find people willing to contribute if they so desire. It's entirely open to more contributions, feature requests, and improvements!
 
 ---
 
 ## ⚠️ Disclaimer 🇵🇹
 
-**Please note:** The **Net Salary Calculator** and **Tax Calculations** in Lumbridge are currently tailored to **Portugal's tax system**. As such, they may not be accurate or applicable to other countries. Stay tuned for future updates that could include broader support!
+**Please note:** The **Net Salary Calculator** and **Tax Calculations** in Loom are currently tailored to **Portugal's tax system**. As such, they may not be accurate or applicable to other countries. I made this so other countries calculations can be added with "relative ease", and quotes are mandatory here as it's nevery easy to introduce an entirely new tax system into an app. But if you feel that's the only thing missing to use the app, why not create it yourself? 😄
 
 ---
 
-You can place this disclaimer near the "Notable Features" section or wherever you think it will get the most visibility!
 ## 💡 Some notable features
 
-- **Track Expenses**: Easily manage your day-to-day expenses.
-- **Net Salary Calculator**: Easily check how much your salary is discounted to the IRS and budget accordingly
-- **Mortgage Calculator**: Plan & Manage your mortgage with a simple overview of the next payment and simulator
-- **Simple UI**: Built 100% with **Jetpack Compose**, with minimal dependencies.
+---
+
+### Feed
+* 🗞️ Dynamic RSS Feed, customizable with your links
+
+### Tools
+* 🛍️ Tools: Shopping Lists for day-to-day shopping & tracking
+* 🗒️ Notes for mental scribbles
+* 🗓️ Reminders for tasks with a subset of notification timings
+* 💰 Net Salary Calculator
+* 💱 Currency Converter
+
+### Expenses
+
+* 💸 Keep track of your expenses and surplus money
+
+### Overview
+
+* 🏦 Keep track of your loans, how much you'll pay on the next cycle, their status, how much you still owe, etc.
+* 💰 Create a financial profile where you can see how much your net salary is, allocate your earnings and understand your deductions.
+
+### Profile
+
+* 🧒 Create your user profile and select country of choice.
+* ⚙️ Define app settings such as: Locale, Enable/Disable Notifications, Enable/Disable Dark Mode
+* 🧑‍💻Check source code & give feedback
+* .. other redundant pages such as edit loans & edit financial profile.
 
 ---
 
@@ -30,40 +52,36 @@ You can place this disclaimer near the "Notable Features" section or wherever yo
 
 You can download Lumbridge from the Google Play Store: [Lumbridge on Play Store](https://play.google.com/store/apps/details?id=com.eyther.lumbridge)  
 
-_⚠️ - Still trying to get the app accepted, as now one needs 20 active users/testers. Contact me if you'd like to participate in early access_
-
 ---
 
 ## 📷 Screenshots
 
-| feed | expenses | financial overview | profile |
-| ---- | -------- | ------------------ | ------- |
-| ![image](https://github.com/user-attachments/assets/ba92c36b-66ac-44c3-9ec4-55ee184d5d13) | ![image](https://github.com/user-attachments/assets/32991430-0801-4214-9627-a0d94327417c) | ![image](https://github.com/user-attachments/assets/a8818432-57be-403f-973b-d74e26129d69) | ![image](https://github.com/user-attachments/assets/ab625fb5-48ae-427e-9e30-5b690ea3ed7c) |
+| feed | tools | expenses | overview | profile |
+| ---- | -------- | ---- | ------------------ | ------- |
+| | | |  |
 
 ---
 
 ## 🛠️ Tech Stack
 
-Lumbridge leverages a modern Android development stack to ensure scalability, maintainability, and a smooth user experience:
-
-- **Jetpack Compose**: The entire UI is built with Jetpack Compose, eliminating the need for XML and enabling declarative UI development.
-- **Kotlin**: Developed entirely in Kotlin for concise and expressive code.
+- **Jetpack Compose**: The entire UI is built with Jetpack Compose
+- **Kotlin**: Developed entirely in Kotlin
 - **MVVM**: Implements the MVVM architectural pattern.
 - **Retrofit**: Handles networking operations.
 - **Room**: Provides a robust database solution for local data persistence.
-- **DataStore**: Manages key-value pairs and typed objects for data storage, offering a modern alternative to SharedPreferences.
-- **BuildSrc (Gradle)**: Utilizes buildSrc for managing Gradle dependencies and build logic, ensuring a clean and organized build configuration.
+- **DataStore**: Manages key-value pairs and typed objects for data storage
+- **BuildSrc (Gradle)**: Utilizes buildSrc for managing Gradle dependencies and build logic
 - **Others**: Amongst other less famous dependencies. Feel free to check build.gradle to know more.
 
 ---
 
 ## 🙌 Contributions & Feedback
 
-This app is **open-source** because I believe in the value in the spirit of community contributions. So, contributions are always welcome! If you find any bugs, have suggestions, or want to add new features, feel free to open an issue or submit a pull request.
+This app is **open-source** because I believe it's a way to give back to the community. So, contributions are always welcome! If you find any bugs, have suggestions, or want to add new features, feel free to open an issue or submit a pull request.
 
 - Report issues or feature requests on the [Issues page](https://github.com/ruialmeida51/lumbridge/issues)
-- Fork the repo and submit PRs for new features, bug fixes, or improvements!
-- Feedback and suggestions are highly appreciated!
+- Fork/Clone the repo and submit any new feature, bugfix or improvement you may find relevant!
+- Feedback and suggestions are always highly appreciated!
 
 ---
 
@@ -81,4 +99,4 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 ---
 
-Happy coding, and thanks for checking out Lumbridge! 🎉
+Happy coding, and thanks for checking out Loom! 🎉
