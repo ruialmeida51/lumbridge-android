@@ -16,11 +16,11 @@ class NotesLocalDataSource @Inject constructor(
             flowItem?.map { noteEntity -> noteEntity.toCached() }
         }
 
-    suspend fun saveNote(note: NoteCached) {
-        if (note.id == -1L) {
+    suspend fun saveNote(note: NoteCached): Long {
+        return if (note.id == -1L) {
             notesDao.insertNote(note.toEntity())
         } else {
-            notesDao.updateNote(note.toEntity().copy(noteId = note.id))
+            notesDao.updateNote(note.toEntity().copy(noteId = note.id)).let { note.id }
         }
     }
 

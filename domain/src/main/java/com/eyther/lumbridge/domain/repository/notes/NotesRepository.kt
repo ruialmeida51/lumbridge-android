@@ -17,7 +17,7 @@ class NotesRepository @Inject constructor(
         .notesFlow
         .mapNotNull { it.toDomain() }
 
-    suspend fun saveNote(note: Note) = withContext(schedulers.io) {
+    suspend fun saveNote(note: Note): Long = withContext(schedulers.io) {
         notesLocalDataSource.saveNote(note.toCached())
     }
 

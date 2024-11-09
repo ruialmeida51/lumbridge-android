@@ -56,7 +56,7 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
     override val viewEffects: MutableSharedFlow<ShoppingListDetailsScreenViewEffect> =
         MutableSharedFlow()
 
-    private val shoppingListId = requireNotNull(savedStateHandle.get<Long>(ARG_SHOPPING_LIST_ID)) {
+    private var shoppingListId = requireNotNull(savedStateHandle.get<Long>(ARG_SHOPPING_LIST_ID)) {
         "Shopping list ID must be provided or defaulted to -1"
     }
 
@@ -139,7 +139,11 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
                 }
             )
 
-            saveShoppingListUseCase(shoppingListUi)
+            // We need to keep updating this because: If the shopping list ID was -1 when opening the screen,
+            // it means that it's a new list and we need to update the ID with the one returned by
+            // the database. This is necessary to avoid saving notes multiple times, as a -1L ID is
+            // used to indicate a new list.
+            shoppingListId = saveShoppingListUseCase(shoppingListUi)
 
             if (finish) {
                 viewEffects.emit(ShoppingListDetailsScreenViewEffect.NavigateBack)

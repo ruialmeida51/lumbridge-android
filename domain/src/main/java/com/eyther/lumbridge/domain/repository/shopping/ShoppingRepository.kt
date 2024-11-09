@@ -17,7 +17,7 @@ class ShoppingRepository @Inject constructor(
         .shoppingListFlow
         .mapNotNull { it.toDomain() }
 
-    suspend fun saveShoppingList(shoppingList: ShoppingList) = withContext(schedulers.io) {
+    suspend fun saveShoppingList(shoppingList: ShoppingList): Long = withContext(schedulers.io) {
         shoppingLocalDataSource.saveShoppingList(shoppingList.toCached())
     }
 
