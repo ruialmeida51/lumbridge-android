@@ -1,4 +1,4 @@
-# Loom (Previously Lumbridge) - Android Financial App
+# Loom (Previously Lumbridge) - Android Day-to-Day App
 
 Loom is a simple financial app built for Android using and learning Jetpack Compose. It was created as a passion project to help manage day-to-day tasks and is open-source just for the love of the game, but eventually grew to a more solid piece. If you're interested, feel free to use it, improve it, or fork it!
 
