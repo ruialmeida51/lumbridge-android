@@ -90,9 +90,9 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
                         selectedTab = initialUserFinancials?.salaryInputTypeUi?.ordinal ?: 0,
                         tabsStringRes = SalaryInputTypeUi.entries().map { it.label }
                     ),
-                    singleIncome = initialUserFinancials?.singleIncome ?: false,
-                    married = initialUserFinancials?.married ?: false,
-                    handicapped = initialUserFinancials?.handicapped ?: false
+                    singleIncome = initialUserFinancials?.singleIncome == true,
+                    married = initialUserFinancials?.married == true,
+                    handicapped = initialUserFinancials?.handicapped == true
                 )
             }
 

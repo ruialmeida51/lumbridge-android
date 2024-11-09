@@ -12,10 +12,8 @@ import com.eyther.lumbridge.extensions.platform.getNotificationManager
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_ARG_MESSAGE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_ARG_TITLE
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_BATCH_CHANNEL_ID
-import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_DEFAULT_CHANNEL_ID
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_OPEN_ACTIVITY_INTENT_REQUEST_CODE
 import java.util.UUID
-import kotlin.uuid.Uuid
 
 class LumbridgeBatchNotificationReceiver : BroadcastReceiver() {
 

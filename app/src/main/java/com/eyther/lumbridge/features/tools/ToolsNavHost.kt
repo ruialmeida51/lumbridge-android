@@ -27,10 +27,10 @@ import com.eyther.lumbridge.features.tools.notes.screens.NotesListScreen
 import com.eyther.lumbridge.features.tools.overview.screens.ToolsOverviewScreen
 import com.eyther.lumbridge.features.tools.recurringpayments.screens.EditRecurringPaymentsScreen
 import com.eyther.lumbridge.features.tools.recurringpayments.screens.RecurringPaymentsOverviewScreen
-import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListDetailsScreen
-import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListsScreen
 import com.eyther.lumbridge.features.tools.reminders.screens.RemindersEditScreen
 import com.eyther.lumbridge.features.tools.reminders.screens.RemindersOverviewScreen
+import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListDetailsScreen
+import com.eyther.lumbridge.features.tools.shopping.screens.ShoppingListsScreen
 
 @Composable
 fun ToolsNavHost(

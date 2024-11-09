@@ -3,7 +3,6 @@ package com.eyther.lumbridge.features.expenses.viewmodel.add
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewState
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.ExpensesAddScreenInputHandler

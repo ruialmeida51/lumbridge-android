@@ -29,7 +29,7 @@ class V5ToV6Migration @Inject constructor() : Migration(5, 6) {
             """
             CREATE UNIQUE INDEX IF NOT EXISTS index_snapshot_net_salary_month_year ON snapshot_net_salary (month ASC, year ASC)
             """
-        );
+        )
 
 
         db.execSQL(

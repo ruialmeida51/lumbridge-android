@@ -40,9 +40,9 @@ class AppSettingsLocalDataSource @Inject constructor(
         .map { preferences ->
             val isDarkMode = preferences[IS_DARK_MODE] ?: return@map null
             val appLanguageCountryCode = preferences[APP_LANGUAGE_COUNTRY_CODE] ?: return@map null
-            val completedMortgageMigration = preferences[PreferencesKeys.COMPLETED_MORTGAGE_MIGRATION] ?: false
-            val completedNetSalarySnapshotMigration = preferences[PreferencesKeys.COMPLETED_NET_SALARY_SNAPSHOT_MIGRATION] ?: false
-            val promptedAllowNotifications = preferences[PreferencesKeys.PROMPTED_ALLOW_NOTIFICATIONS] ?: false
+            val completedMortgageMigration = preferences[PreferencesKeys.COMPLETED_MORTGAGE_MIGRATION] == true
+            val completedNetSalarySnapshotMigration = preferences[PreferencesKeys.COMPLETED_NET_SALARY_SNAPSHOT_MIGRATION] == true
+            val promptedAllowNotifications = preferences[PreferencesKeys.PROMPTED_ALLOW_NOTIFICATIONS] == true
 
             AppSettings(
                 isDarkMode = isDarkMode,
@@ -54,11 +54,11 @@ class AppSettingsLocalDataSource @Inject constructor(
         }
 
     suspend fun getCompletedMortgageMigration(): Boolean {
-        return appSettingsFlow.map { it?.completedMortgageMigration ?: false }.first()
+        return appSettingsFlow.map { it?.completedMortgageMigration == true }.first()
     }
 
     suspend fun getCompletedNetSalarySnapshotMigration(): Boolean {
-        return appSettingsFlow.map { it?.completedNetSalarySnapshotMigration ?: false }.first()
+        return appSettingsFlow.map { it?.completedNetSalarySnapshotMigration == true }.first()
     }
 
     suspend fun saveAppSettings(appSettings: AppSettings) {
