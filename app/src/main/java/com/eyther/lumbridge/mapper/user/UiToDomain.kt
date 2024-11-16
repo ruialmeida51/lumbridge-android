@@ -1,8 +1,10 @@
 package com.eyther.lumbridge.mapper.user
 
-import com.eyther.lumbridge.domain.model.finance.salarypaymenttype.SalaryInputType
+import com.eyther.lumbridge.domain.model.netsalary.deduction.DuodecimosType
+import com.eyther.lumbridge.domain.model.netsalary.salarypaymenttype.SalaryInputType
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.model.user.UserProfileUi
@@ -27,5 +29,12 @@ fun UserFinancialsUi.toDomain() = UserFinancialsDomain(
     salaryInputType = when(salaryInputTypeUi) {
         SalaryInputTypeUi.Monthly -> SalaryInputType.MONTHLY
         SalaryInputTypeUi.Annually -> SalaryInputType.ANNUALLY
-    }
+    },
+    duodecimosType = duodecimosTypeUi.toDomain()
 )
+
+fun DuodecimosTypeUi.toDomain() = when(this) {
+    DuodecimosTypeUi.TwelveMonths -> DuodecimosType.TWELVE_MONTHS
+    DuodecimosTypeUi.ThirteenMonths -> DuodecimosType.THIRTEEN_MONTHS
+    DuodecimosTypeUi.FourteenMonths -> DuodecimosType.FOURTEEN_MONTHS
+}

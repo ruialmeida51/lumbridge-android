@@ -47,9 +47,7 @@ fun ToolsOverviewScreen(
 ) {
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .systemBarsPadding(),
+            .fillMaxSize(),
         topBar = {
             LumbridgeTopAppBar(TopAppBarVariation.Title(title = stringResource(id = label)))
         }

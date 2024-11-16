@@ -9,6 +9,7 @@ import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialPro
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Loading
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.EditFinancialProfileInputHandler
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.IEditFinancialProfileInputHandler
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.finance.GetAnnualSalaryUseCase
@@ -90,6 +91,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
                         selectedTab = initialUserFinancials?.salaryInputTypeUi?.ordinal ?: 0,
                         tabsStringRes = SalaryInputTypeUi.entries().map { it.label }
                     ),
+                    duodecimosTypeUi = initialUserFinancials?.duodecimosTypeUi ?: DuodecimosTypeUi.FourteenMonths,
                     singleIncome = initialUserFinancials?.singleIncome == true,
                     married = initialUserFinancials?.married == true,
                     handicapped = initialUserFinancials?.handicapped == true
@@ -102,6 +104,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
                         Content(
                             locale = locale,
                             shouldEnableSaveButton = shouldEnableSaveButton(inputState),
+                            availableDuodecimos = DuodecimosTypeUi.entries(),
                             inputState = inputState
                         )
                     }
@@ -140,7 +143,8 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
                 singleIncome = inputState.singleIncome,
                 married = inputState.married,
                 handicapped = inputState.handicapped,
-                salaryInputTypeUi = salaryType
+                salaryInputTypeUi = salaryType,
+                duodecimosTypeUi = inputState.duodecimosTypeUi
             )
 
             saveUserFinancials(userFinancials)

@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.domain.model.finance.deduction
+package com.eyther.lumbridge.domain.model.netsalary.deduction
 
 /**
  * Deduction types may differ between countries. Therefore, there's no reliable way to

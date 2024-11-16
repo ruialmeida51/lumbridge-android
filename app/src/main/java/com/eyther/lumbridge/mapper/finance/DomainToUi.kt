@@ -1,13 +1,15 @@
 package com.eyther.lumbridge.mapper.finance
 
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.domain.model.finance.NetSalary
-import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocation
-import com.eyther.lumbridge.domain.model.finance.allocation.MoneyAllocationType
-import com.eyther.lumbridge.domain.model.finance.deduction.Deduction
-import com.eyther.lumbridge.domain.model.finance.deduction.DeductionType
+import com.eyther.lumbridge.domain.model.netsalary.NetSalary
+import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocation
+import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocationType
+import com.eyther.lumbridge.domain.model.netsalary.deduction.Deduction
+import com.eyther.lumbridge.domain.model.netsalary.deduction.DeductionType
+import com.eyther.lumbridge.domain.model.netsalary.deduction.DuodecimosType
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.model.finance.DeductionUi
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 
@@ -20,7 +22,8 @@ fun NetSalary.toUi(): NetSalaryUi {
         monthlyFoodCard = monthlyFoodCard,
         dailyFoodCard = dailyFoodCard,
         deductions = deductions.map { it.toUi() },
-        moneyAllocations = moneyAllocation?.map { it.toUi() }
+        moneyAllocations = moneyAllocation?.map { it.toUi() },
+        duodecimosTypeUi = duodecimosType.toUi()
     )
 }
 
@@ -37,6 +40,14 @@ fun Deduction.toUi(): DeductionUi {
             amount = value,
             label = getLabelForDeductionType(type)
         )
+    }
+}
+
+fun DuodecimosType.toUi(): DuodecimosTypeUi {
+   return when(this) {
+        DuodecimosType.TWELVE_MONTHS -> DuodecimosTypeUi.TwelveMonths
+        DuodecimosType.THIRTEEN_MONTHS -> DuodecimosTypeUi.ThirteenMonths
+        DuodecimosType.FOURTEEN_MONTHS -> DuodecimosTypeUi.FourteenMonths
     }
 }
 

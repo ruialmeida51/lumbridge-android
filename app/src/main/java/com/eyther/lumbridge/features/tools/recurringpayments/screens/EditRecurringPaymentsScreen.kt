@@ -232,7 +232,7 @@ private fun ColumnScope.ExpenseDetails(
         modifier = Modifier
             .padding(top = DefaultPadding, start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding)
             .align(Alignment.Start),
-        text = stringResource(id = R.string.edit_loan_profile_loan_type),
+        text = stringResource(id = R.string.recurring_payments_edit_information),
         style = MaterialTheme.typography.bodyLarge
     )
 

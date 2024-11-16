@@ -151,10 +151,13 @@ private fun ColumnScope.Content(
         monthlyGrossSalary = state.inputState.monthlyGrossSalary,
         annualGrossSalary = state.inputState.annualGrossSalary,
         foodCardPerDiem = state.inputState.foodCardPerDiem,
+        currentDuodecimosTypeUi = state.inputState.duodecimosTypeUi,
+        availableDuodecimos = state.availableDuodecimos,
         onMonthlyGrossSalaryChanged = viewModel::onMonthlyGrossSalaryChanged,
         onAnnualGrossSalaryChanged = viewModel::onAnnualGrossSalaryChanged,
         onFoodCardPerDiemChanged = viewModel::onFoodCardPerDiemChanged,
-        onSalaryInputTypeChanged = viewModel::onSalaryInputTypeChanged
+        onSalaryInputTypeChanged = viewModel::onSalaryInputTypeChanged,
+        onDuodecimosTypeChanged = viewModel::onDuodecimosTypeChanged
     )
 
     Spacer(modifier = Modifier.height(DefaultPadding))

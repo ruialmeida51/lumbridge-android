@@ -25,7 +25,8 @@ fun UserFinancialsDomain.toCached() = UserFinancialsCached(
     singleIncome = singleIncome,
     married = married,
     handicapped = handicapped,
-    salaryInputType = salaryInputType.name
+    salaryInputType = salaryInputType.name,
+    duodecimosType = duodecimosType.name
 )
 
 fun UserMortgageDomain.toCached() = UserMortgageCached(

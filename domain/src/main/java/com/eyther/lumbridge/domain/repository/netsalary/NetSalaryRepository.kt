@@ -1,10 +1,10 @@
 package com.eyther.lumbridge.domain.repository.netsalary
 
-import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.domain.model.finance.NetSalary
+import com.eyther.lumbridge.domain.model.netsalary.NetSalary
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.netsalary.portugal.PortugalNetSalaryCalculator
+import com.eyther.lumbridge.shared.di.model.Schedulers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -24,14 +24,15 @@ class NetSalaryRepository @Inject constructor(
     suspend fun calculate(
         userFinancialsDomain: UserFinancialsDomain,
         locale: SupportedLocales
-    ): NetSalary =
+    ): NetSalary = withContext(schedulers.io) {
         withContext(schedulers.cpu) {
-            return@withContext when (locale) {
+            when (locale) {
                 SupportedLocales.PORTUGAL -> portugalNetSalaryCalculator.calculate(
                     userFinancialsDomain = userFinancialsDomain
                 )
             }
         }
+    }
 
     /**
      * Calculates the annual salary based on the monthly salary. The calculation is done

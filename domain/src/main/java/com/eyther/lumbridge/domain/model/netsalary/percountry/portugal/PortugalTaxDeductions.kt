@@ -1,6 +1,6 @@
-package com.eyther.lumbridge.domain.repository.netsalary.portugal.irs.model
+package com.eyther.lumbridge.domain.model.netsalary.percountry.portugal
 
-data class PortugalIrsBracket(
+data class PortugalTaxDeductions(
     val irsDeductionValue: Float,
     val irsBracketPercentage: Float,
     val ssDeductionValue: Float,
