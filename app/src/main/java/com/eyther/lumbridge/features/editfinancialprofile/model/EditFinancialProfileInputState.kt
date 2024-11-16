@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.features.editfinancialprofile.model
 
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 
@@ -12,6 +13,7 @@ data class EditFinancialProfileInputState(
     val luxuriesPercentage: TextInputState = TextInputState(),
     val numberOfDependants: TextInputState = TextInputState(),
     val salaryInputChoiceState: ChoiceTabState = ChoiceTabState(),
+    val duodecimosTypeUi: DuodecimosTypeUi = DuodecimosTypeUi.FourteenMonths,
     val singleIncome: Boolean = false,
     val married: Boolean = false,
     val handicapped: Boolean = false

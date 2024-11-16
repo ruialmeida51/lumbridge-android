@@ -122,13 +122,16 @@ private fun Content(
             currencySymbol = currencySymbol,
             salaryInputChoice = state.inputState.salaryInputChoiceState,
             selectedTab = state.inputState.salaryInputChoiceState.selectedTab,
+            availableDuodecimos = state.availableDuodecimos,
+            currentDuodecimosTypeUi = state.inputState.duodecimosTypeUi,
             monthlyGrossSalary = state.inputState.monthlyGrossSalary,
             annualGrossSalary = state.inputState.annualGrossSalary,
             foodCardPerDiem = state.inputState.foodCardPerDiem,
             onSalaryInputTypeChanged = viewModel::onSalaryInputTypeChanged,
             onMonthlyGrossSalaryChanged = viewModel::onMonthlyGrossSalaryChanged,
             onAnnualGrossSalaryChanged = viewModel::onAnnualGrossSalaryChanged,
-            onFoodCardPerDiemChanged = viewModel::onFoodCardPerDiemChanged
+            onFoodCardPerDiemChanged = viewModel::onFoodCardPerDiemChanged,
+            onDuodecimosTypeChanged = viewModel::onDuodecimosTypeChanged
         )
 
         Spacer(modifier = Modifier.height(DefaultPadding))

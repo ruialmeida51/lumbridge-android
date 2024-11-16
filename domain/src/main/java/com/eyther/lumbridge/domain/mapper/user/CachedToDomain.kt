@@ -3,7 +3,8 @@ package com.eyther.lumbridge.domain.mapper.user
 import com.eyther.lumbridge.data.model.user.local.UserFinancialsCached
 import com.eyther.lumbridge.data.model.user.local.UserMortgageCached
 import com.eyther.lumbridge.data.model.user.local.UserProfileCached
-import com.eyther.lumbridge.domain.model.finance.salarypaymenttype.SalaryInputType
+import com.eyther.lumbridge.domain.model.netsalary.deduction.DuodecimosType
+import com.eyther.lumbridge.domain.model.netsalary.salarypaymenttype.SalaryInputType
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
@@ -27,7 +28,8 @@ fun UserFinancialsCached.toDomain() = UserFinancialsDomain(
     singleIncome = singleIncome,
     married = married,
     handicapped = handicapped,
-    salaryInputType = SalaryInputType.valueOf(salaryInputType)
+    salaryInputType = SalaryInputType.valueOf(salaryInputType),
+    duodecimosType = duodecimosType?.let { DuodecimosType.valueOf(it) } ?: DuodecimosType.FOURTEEN_MONTHS
 )
 
 fun UserMortgageCached.toDomain() = UserMortgageDomain(

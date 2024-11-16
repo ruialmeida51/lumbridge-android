@@ -4,6 +4,7 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileInputState
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,14 @@ class EditFinancialProfileInputHandler @Inject constructor() : IEditFinancialPro
                 salaryInputChoiceState = state.salaryInputChoiceState.copy(
                     selectedTab = option
                 )
+            )
+        }
+    }
+
+    override fun onDuodecimosTypeChanged(option: Int) {
+        updateInput { state ->
+            state.copy(
+                duodecimosTypeUi = DuodecimosTypeUi.fromOrdinal(option)
             )
         }
     }

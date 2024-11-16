@@ -11,9 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
+import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput
 import com.eyther.lumbridge.ui.common.composables.components.input.NumberInput
 import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
@@ -25,10 +27,13 @@ fun ColumnScope.SalaryBreakdownInput(
     currencySymbol: String,
     salaryInputChoice: ChoiceTabState,
     selectedTab: Int,
+    availableDuodecimos: List<DuodecimosTypeUi>,
     monthlyGrossSalary: TextInputState,
     annualGrossSalary: TextInputState,
     foodCardPerDiem: TextInputState,
+    currentDuodecimosTypeUi: DuodecimosTypeUi,
     onSalaryInputTypeChanged: (index: Int) -> Unit,
+    onDuodecimosTypeChanged: (ordinal: Int) -> Unit,
     onMonthlyGrossSalaryChanged: (Float?) -> Unit,
     onAnnualGrossSalaryChanged: (Float?) -> Unit,
     onFoodCardPerDiemChanged: (Float?) -> Unit
@@ -65,6 +70,13 @@ fun ColumnScope.SalaryBreakdownInput(
         }
 
         Spacer(modifier = Modifier.height(HalfPadding))
+
+        DropdownInput(
+            label = stringResource(id = R.string.edit_financial_profile_duodecimos),
+            selectedOption = stringResource(currentDuodecimosTypeUi.label),
+            items = availableDuodecimos.map { it.ordinal.toString() to stringResource(it.label) },
+            onItemClick = { ordinal, _ -> onDuodecimosTypeChanged(ordinal.toIntOrNull() ?: 0) }
+        )
 
         NumberInput(
             label = stringResource(id = R.string.edit_financial_profile_per_diem_food_card),

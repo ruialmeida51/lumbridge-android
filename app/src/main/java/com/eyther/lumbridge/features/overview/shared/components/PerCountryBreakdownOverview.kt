@@ -31,7 +31,8 @@ fun ColumnScope.PerCountryBreakdown(
     when (locale) {
         SupportedLocales.PORTUGAL -> FinancialOverviewPortugal(
             netSalaryUi = netSalaryUi,
-            currencySymbol = currencySymbol
+            currencySymbol = currencySymbol,
+            duodecimosTypeUi = netSalaryUi.duodecimosTypeUi
         )
     }
 }

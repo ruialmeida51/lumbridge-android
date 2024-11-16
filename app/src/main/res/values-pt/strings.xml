@@ -27,6 +27,10 @@
     <string name="edit_financial_profile">Editar o Perfil Financeiro</string>
     <string name="edit_financial_profile_income">Qual é o teu salário atual?</string>
     <string name="edit_financial_profile_choice">Preferes introduzir o teu salário com valor anual ou mensal?</string>
+    <string name="edit_financial_profile_duodecimos">Recebes o subsídio(s) em duodécimos?</string>
+    <string name="edit_financial_profile_duocedimos_12_months">Pago em 12 meses</string>
+    <string name="edit_financial_profile_duodecimos_13_months">Pago em 13 meses</string>
+    <string name="edit_financial_profile_duodecimos_14_months">Pago em 14 meses</string>
     <string name="edit_financial_profile_household">Como é o teu agregado familiar?</string>
     <string name="edit_financial_profile_allocate_earnings">Como planeias alocar o teu dinheiro?</string>
     <string name="edit_financial_profile_per_diem_food_card">Cartão de Refeição Per Diem</string>
@@ -226,6 +230,7 @@
     <string name="recurring_payments_overview">Pagamentos Recorrentes</string>
     <string name="recurring_payments_edit">Editar Pagamento Recorrente</string>
     <string name="recurring_payments_empty_title">Parece que ainda não tens nenhum pagamento recorrente.\nCarrega no botão em baixo para começar a adicionar!</string>
+    <string name="recurring_payments_edit_information">Por favor, preenche os detalhes do pagamento recorrente</string>
     <string name="recurring_payment_add_button">Adicionar Pagamento Recorrente</string>
     <plurals name="periodicity_every_x_days" tools:ignore="MissingQuantity">
         <item quantity="one" tools:ignore="ImpliedQuantity">Todos os dias</item>
@@ -312,6 +317,7 @@
     <string name="email">Email</string>
     <string name="settings">Definições</string>
     <string name="net_annual">Líquido Anual</string>
+    <string name="duodecimos">Duodécimos</string>
     <string name="net_monthly">Líquido Mensal</string>
     <string name="gross_annual">Bruto Anual</string>
     <string name="gross_monthly">Bruto Mensal</string>

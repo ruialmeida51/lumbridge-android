@@ -29,6 +29,10 @@
     <string name="edit_financial_profile">Edit Financial Profile</string>
     <string name="edit_financial_profile_income">What\'s your current income?</string>
     <string name="edit_financial_profile_choice">Do you prefer to input a monthly or annual salary?</string>
+    <string name="edit_financial_profile_duodecimos">Do you receive subsidy(s) in duodecimos?</string>
+    <string name="edit_financial_profile_duocedimos_12_months">Paid in 12 months</string>
+    <string name="edit_financial_profile_duodecimos_13_months">Paid in 13 months</string>
+    <string name="edit_financial_profile_duodecimos_14_months">Paid in 14 months</string>
     <string name="edit_financial_profile_household">How does your household look like?</string>
     <string name="edit_financial_profile_allocate_earnings">How do you plan to allocate your earnings?</string>
     <string name="edit_financial_profile_per_diem_food_card">Per Diem for Food Card</string>
@@ -234,6 +238,7 @@
     <string name="recurring_payments_overview">Recurring Payments</string>
     <string name="recurring_payments_edit">Edit Recurring Payment</string>
     <string name="recurring_payments_empty_title">Looks like you don\'t have any recurring payments yet.\nTap the button below to add some!</string>
+    <string name="recurring_payments_edit_information">Please, fill out the recurring payment details</string>
     <string name="recurring_payment_add_button">Add Recurring Payment</string>
     <plurals name="periodicity_every_x_days">
         <item quantity="one">Every day</item>
@@ -341,6 +346,7 @@
     <string name="email">Email</string>
     <string name="settings">Settings</string>
     <string name="net_annual">Net Annual</string>
+    <string name="duodecimos">Duodecimos</string>
     <string name="net_monthly">Net Monthly</string>
     <string name="gross_annual">Gross Annual</string>
     <string name="gross_monthly">Gross Monthly</string>

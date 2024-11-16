@@ -9,6 +9,7 @@ import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputS
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.INetSalaryInputScreenInputHandler
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.NetSalaryInputScreenInputHandler
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
@@ -61,6 +62,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
                         NetSalaryInputScreenViewState.Content(
                             locale = inputState.locale,
                             availableLocales = SupportedLocales.entries,
+                            availableDuodecimos = DuodecimosTypeUi.entries(),
                             inputState = inputState,
                             shouldEnableSaveButton = shouldEnableSaveButton(inputState)
                         )
@@ -98,6 +100,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
                     selectedTab = initialUserFinancials?.salaryInputTypeUi?.ordinal ?: 0,
                     tabsStringRes = SalaryInputTypeUi.entries().map { it.label }
                 ),
+                duodecimosTypeUi = initialUserFinancials?.duodecimosTypeUi ?: DuodecimosTypeUi.FourteenMonths,
                 singleIncome = initialUserFinancials?.singleIncome == true,
                 married = initialUserFinancials?.married == true,
                 handicapped = initialUserFinancials?.handicapped == true
@@ -108,6 +111,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
             NetSalaryInputScreenViewState.Content(
                 locale = inputState.locale,
                 availableLocales = SupportedLocales.entries,
+                availableDuodecimos = DuodecimosTypeUi.entries(),
                 inputState = inputState,
                 shouldEnableSaveButton = shouldEnableSaveButton(inputState)
             )
@@ -145,7 +149,8 @@ class NetSalaryInputScreenViewModel @Inject constructor(
                 singleIncome = inputState.singleIncome,
                 married = inputState.married,
                 handicapped = inputState.handicapped,
-                salaryInputTypeUi = salaryType
+                salaryInputTypeUi = salaryType,
+                duodecimosTypeUi = inputState.duodecimosTypeUi
             )
 
             cachedUserFinancials = userFinancials

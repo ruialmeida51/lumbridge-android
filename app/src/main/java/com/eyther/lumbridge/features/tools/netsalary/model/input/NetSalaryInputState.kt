@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.features.tools.netsalary.model.input
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 
@@ -10,6 +11,7 @@ data class NetSalaryInputState(
     val foodCardPerDiem: TextInputState = TextInputState(),
     val numberOfDependants: TextInputState = TextInputState(),
     val salaryInputChoiceState: ChoiceTabState = ChoiceTabState(),
+    val duodecimosTypeUi: DuodecimosTypeUi = DuodecimosTypeUi.FourteenMonths,
     val singleIncome: Boolean = false,
     val married: Boolean = false,
     val handicapped: Boolean = false,

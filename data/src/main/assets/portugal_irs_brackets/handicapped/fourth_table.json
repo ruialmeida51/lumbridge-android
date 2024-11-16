@@ -1,0 +1,78 @@
+{
+  "taxPercentage": [
+    {
+      "range": [0, 1677.00],
+      "value": 0.0
+    },
+    {
+      "range": [1677.01, 2012.00],
+      "value": 0.22
+    },
+    {
+      "range": [2012.01, 2428.00],
+      "value": 0.32
+    },
+    {
+      "range": [2428.01, 4376.00],
+      "value": 0.3550
+    },
+    {
+      "range": [4376.01, 4634.00],
+      "value": 0.3872
+    },
+    {
+      "range": [4634.01, 6621.00],
+      "value": 0.4005
+    },
+    {
+      "range": [6621.01, 20265.00],
+      "value": 0.4495
+    },
+    {
+      "range": [20265.01, 4294967295],
+      "value": 0.4717
+    }
+  ],
+  "flatRate": [
+    {
+      "range": [0, 1677.00],
+      "value": 0,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [1677.01, 2012.00],
+      "value": 368.86,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [2012.01, 2428.00],
+      "value": 570.08,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [2428.01, 4376.00],
+      "value": 655.08,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [4376.01, 4634.00],
+      "value": 795.77,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [4634.01, 6621.00],
+      "value": 857.63,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [6621.01, 20265.00],
+      "value": 1181.74,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [20265.01, 4294967295],
+      "value": 1632.63,
+      "perDependentAmount": 0
+    }
+  ]
+}

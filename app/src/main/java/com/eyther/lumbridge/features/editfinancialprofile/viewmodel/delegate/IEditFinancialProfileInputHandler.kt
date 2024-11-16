@@ -12,6 +12,7 @@ interface IEditFinancialProfileInputHandler {
      * the new value and performs any necessary validation.
      */
     fun onSalaryInputTypeChanged(option: Int)
+    fun onDuodecimosTypeChanged(option: Int)
     fun onAnnualGrossSalaryChanged(annualGrossSalary: Float?)
     fun onMonthlyGrossSalaryChanged(monthlyGrossSalary: Float?)
     fun onFoodCardPerDiemChanged(foodCardPerDiem: Float?)

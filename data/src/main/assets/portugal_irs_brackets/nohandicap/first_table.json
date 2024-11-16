@@ -1,0 +1,122 @@
+{
+  "taxPercentage": [
+    {
+      "range": [0, 820.00],
+      "value": 0.0
+    },
+    {
+      "range": [820.01, 935.00],
+      "value": 0.13
+    },
+    {
+      "range": [935.01, 989.00],
+      "value": 0.1650
+    },
+    {
+      "range": [989.01, 1125.00],
+      "value": 0.1650
+    },
+    {
+      "range": [1125.01, 1175.00],
+      "value": 0.22
+    },
+    {
+      "range": [1175.01, 1769.00],
+      "value": 0.25
+    },
+    {
+      "range": [1769.01, 2057.00],
+      "value": 0.32
+    },
+    {
+      "range": [2057.01, 2408.00],
+      "value": 0.355
+    },
+    {
+      "range": [2408.01, 3201.00],
+      "value": 0.3872
+    },
+    {
+      "range": [3201.01, 5492.00],
+      "value": 0.4005
+    },
+    {
+      "range": [5492.01, 20021.00],
+      "value": 0.4495
+    },
+    {
+      "range": [20021.01, 4294967295],
+      "value": 0.4717
+    }
+  ],
+  "flatRate": [
+    {
+      "range": [0, 820.00],
+      "value": 0,
+      "perDependentAmount": 0
+    },
+    {
+      "range": [820.01, 935.00],
+      "formula": {
+        "taxPercentage": 0.13,
+        "multiplier": 2.6,
+        "rate": 1135.39
+      },
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [935.01, 989.00],
+      "formula": {
+        "taxPercentage": 0.1650,
+        "multiplier": 1.35,
+        "rate": 1386.11
+      },
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [989.01, 1125.00],
+      "value": 88.39,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [1125.01, 1175.00],
+      "value": 150.26,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [1175.01, 1769.00],
+      "value": 185.50,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [1769.01, 2057.00],
+      "value": 309.36,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [2057.01, 2408.00],
+      "value": 381.35,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [2408.01, 3201.00],
+      "value": 458.76,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [3201.01, 5492.00],
+      "value": 501.49,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [5492.01, 20021.00],
+      "value": 770.33,
+      "perDependentAmount": 21.43
+    },
+    {
+      "range": [20021.01, 4294967295],
+      "value": 1215.80,
+      "perDependentAmount": 21.43
+    }
+  ]
+}

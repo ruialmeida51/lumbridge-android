@@ -5,6 +5,7 @@ import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputState
+import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -20,6 +21,14 @@ class NetSalaryInputScreenInputHandler @Inject constructor() : INetSalaryInputSc
                 salaryInputChoiceState = state.salaryInputChoiceState.copy(
                     selectedTab = option
                 )
+            )
+        }
+    }
+
+    override fun onDuodecimosTypeChanged(option: Int) {
+        updateInput { state ->
+            state.copy(
+                duodecimosTypeUi = DuodecimosTypeUi.fromOrdinal(option)
             )
         }
     }

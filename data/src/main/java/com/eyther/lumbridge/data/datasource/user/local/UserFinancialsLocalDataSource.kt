@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.ANNUAL_GROSS_SALARY
+import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.DUODECIMOS_TYPE
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.FOOD_CARD_PER_DIEM
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.HANDICAPPED
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.LUXURIES_PERCENTAGE
@@ -40,6 +41,7 @@ class UserFinancialsLocalDataSource @Inject constructor(
         val MARRIED = booleanPreferencesKey("married")
         val HANDICAPPED = booleanPreferencesKey("handicapped")
         val SALARY_INPUT_TYPE = stringPreferencesKey("salary_input_type")
+        val DUODECIMOS_TYPE = stringPreferencesKey("duodecimos_type")
     }
 
     val userFinancialsFlow: Flow<UserFinancialsCached?> = userFinancialsDataStore.data
@@ -55,6 +57,7 @@ class UserFinancialsLocalDataSource @Inject constructor(
             val annualGrossSalary = preferences[ANNUAL_GROSS_SALARY] ?: return@map null
             val foodCardPerDiem = preferences[FOOD_CARD_PER_DIEM] ?: return@map null
             val salaryInputType = preferences[SALARY_INPUT_TYPE] ?: return@map null
+            val duodecimosType = preferences[DUODECIMOS_TYPE]
             val savingsPercentage = preferences[SAVINGS_PERCENTAGE]
             val necessitiesPercentage = preferences[NECESSITIES_PERCENTAGE]
             val luxuriesPercentage = preferences[LUXURIES_PERCENTAGE]
@@ -73,7 +76,8 @@ class UserFinancialsLocalDataSource @Inject constructor(
                 singleIncome = singleIncome,
                 married = married,
                 handicapped = handicapped,
-                salaryInputType = salaryInputType
+                salaryInputType = salaryInputType,
+                duodecimosType = duodecimosType
             )
         }
 
@@ -85,6 +89,10 @@ class UserFinancialsLocalDataSource @Inject constructor(
             preferences[MARRIED] = userProfileCached.married
             preferences[HANDICAPPED] = userProfileCached.handicapped
             preferences[SALARY_INPUT_TYPE] = userProfileCached.salaryInputType
+
+            userProfileCached.duodecimosType?.let {
+                preferences[DUODECIMOS_TYPE] = it
+            } ?: preferences.remove(DUODECIMOS_TYPE)
 
             userProfileCached.savingsPercentage?.toFloat()?.let {
                 preferences[SAVINGS_PERCENTAGE] = it
