@@ -44,7 +44,7 @@ class AppSettingsLocalDataSource @Inject constructor(
         .map { preferences ->
             val isDarkMode = preferences[IS_DARK_MODE] ?: return@map null
             val appLanguageCountryCode = preferences[APP_LANGUAGE_COUNTRY_CODE] ?: return@map null
-            val showAllocationsOnExpenses = preferences[SHOW_ALLOCATIONS_ON_EXPENSES] == true
+            val showAllocationsOnExpenses = preferences[SHOW_ALLOCATIONS_ON_EXPENSES] ?: true // Care, default value is true, not doing a comparison here
             val completedMortgageMigration = preferences[PreferencesKeys.COMPLETED_MORTGAGE_MIGRATION] == true
             val completedNetSalarySnapshotMigration = preferences[PreferencesKeys.COMPLETED_NET_SALARY_SNAPSHOT_MIGRATION] == true
             val completedAllocationSnapshotMigration = preferences[PreferencesKeys.COMPLETED_ALLOCATION_SNAPSHOT_MIGRATION] == true
