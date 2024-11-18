@@ -17,7 +17,8 @@ fun RecurringPaymentDomain.toUi() = RecurringPaymentUi(
     label = label,
     shouldNotifyWhenPaid = shouldNotifyWhenPaid,
     amountToPay = amountToPay,
-    categoryTypesUi = categoryTypes.toUi()
+    categoryTypesUi = categoryTypes.toUi(),
+    allocationTypeUi = allocationType.toUi()
 )
 
 fun Periodicity.toUi(

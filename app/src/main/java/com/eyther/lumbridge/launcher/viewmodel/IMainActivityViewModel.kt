@@ -29,6 +29,7 @@ interface IMainActivityViewModel {
      */
     suspend fun updateSettings(
         isDarkMode: Boolean? = null,
-        appLanguageCountryCode: String? = null
+        appLanguageCountryCode: String? = null,
+        showAllocationsOnExpenses: Boolean? = null
     )
 }

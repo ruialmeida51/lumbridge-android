@@ -87,6 +87,12 @@
     <string name="financial_overview_loan_details_subtitle">Empréstimo %1$s</string>
     <string name="financial_overview_mortgage_pay_a_month">Registar Pagamento Mensal</string>
 
+    <string name="breakdown_balance_sheet">Movimentos</string>
+    <string name="breakdown_balance_sheet_no_data">Parece que ainda não tens nenhum movimento. Adiciona despesas e alocações para começar a ver os teus movimentos!</string>
+    <string name="breakdown_balance_sheet_average_savings_allocated_vs_spent">Avg. </string>
+    <string name="breakdown_balance_sheet_money_in">Ganhos</string>
+    <string name="breakdown_balance_sheet_money_out">Despesas</string>
+    <string name="breakdown_balance_sheet_net">Total Líquido</string>
     <string name="breakdown_salary_title">Perfil Financeiro</string>
     <string name="breakdown_salary_card_income">Rendimentos</string>
     <string name="breakdown_salary_card_allocations">Alocação</string>
@@ -121,7 +127,7 @@
     <string name="profile_support_feedback">Feedback &amp; Reportar Problemas</string>
     <string name="profile_support_source_code">Código Fonte</string>
     <string name="profile_support_donate">Oferece-me um café!</string>
-    <string name="profile_support_donate_disclaimer">As doações são uma maneira incrível de apoiar a aplicação, mas são comletamente opcionais!\n\nUma doação não te vai dar nenhuma vantagem ou funcionalidades novas, mas também não doar também não te afeta de forma alguma.\n\nApenas estamos contentes que estejas a usar a app Loom - obrigado por seres parte da comunidade!</string>
+    <string name="profile_support_donate_disclaimer">As doações são a melhor maneira de apoiar a aplicação, mas são completamente opcionais!\n\nUma doação não te vai dar nenhuma vantagem ou funcionalidade novas, mas também não ficas com nenhuma desvantagem.\n\nApenas ficamos contentes que estejas a usar a app Loom - obrigado por seres parte da comunidade!</string>
     <string name="profile_support_feedback_email_subject">Feedback para Loom de %1$s</string>
     <string name="profile_support_feedback_email_subject_no_name">Feedback para Loom</string>
     <string name="profile_support_feedback_email_selector">Seleciona um client ede email para enviar o teu feedback</string>
@@ -225,8 +231,12 @@
     <string name="expenses_edit_hint">Editar os detalhes de uma despesa</string>
     <string name="expenses_add_hint">Por favor, preenche os detalhes da despesa</string>
     <string name="expenses_add_type">Tipo de Despesa</string>
+    <string name="expenses_add_allocation">Alocação</string>
     <string name="expenses_overview_no_financial_profile">Parece que ainda não tens um perfil financeiro. Carrega no botão em baixo para criar um.</string>
     <string name="expenses_overview_no_expenses">Parece que ainda não tens nenhuma despesa. Carrega no botão para começar a adicionar.</string>
+    <string name="expenses_spent_versus_allocated">%1$s de %2$s</string>
+    <string name="expenses_profile_setting_show_allocations">Mostrar Alocações nas Despesas</string>
+
     <string name="recurring_payments_overview">Pagamentos Recorrentes</string>
     <string name="recurring_payments_edit">Editar Pagamento Recorrente</string>
     <string name="recurring_payments_empty_title">Parece que ainda não tens nenhum pagamento recorrente.\nCarrega no botão em baixo para começar a adicionar!</string>
@@ -322,12 +332,12 @@
     <string name="gross_annual">Bruto Anual</string>
     <string name="gross_monthly">Bruto Mensal</string>
     <string name="food_card">Cartão de Refeição</string>
-    <string name="savings">Poupanças</string>
-    <string name="savings_percentage">Percentagem de Poupanças</string>
-    <string name="necessities">Necessidades</string>
-    <string name="necessities_percentage">Percentagem de Necessidades</string>
-    <string name="luxuries">Luxos</string>
-    <string name="luxuries_percentage">Percentagem de Luxos</string>
+    <string name="savings">Poupar</string>
+    <string name="savings_percentage">Percentagem para Poupar</string>
+    <string name="necessities">Essencial</string>
+    <string name="necessities_percentage">Percentagem para Essencial</string>
+    <string name="luxuries">Hobbies</string>
+    <string name="luxuries_percentage">Percentagem para Hobbies</string>
     <string name="number_of_dependants">Número de dependentes</string>
     <string name="single_incomne">Salário Único</string>
     <string name="handicapped">Deficiente</string>
@@ -386,6 +396,7 @@
     <string name="sports">Desporto</string>
     <string name="vacations">Férias</string>
     <string name="surplus">Excedente</string>
+    <string name="investments">Investimentos</string>
     <string name="expense">Despesa</string>
     <string name="gained">Ganho</string>
     <string name="time">Tempo</string>

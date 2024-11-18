@@ -9,9 +9,11 @@ import java.time.Year
 data class ExpensesMonthUi(
     val categoryExpenses: List<ExpensesCategoryUi>,
     val snapshotMonthlyNetSalary: Float = 0f,
+    val snapshotAllocations: List<ExpensesMonthAllocationUi>,
     val month: Month,
     val year: Year,
     val spent: Float = -1f,
+    val gained: Float = -1f,
     val remainder: Float = -1f,
     val expanded: Boolean = false
 ) {
@@ -19,4 +21,7 @@ data class ExpensesMonthUi(
     fun getDateWithLocale(): String {
         return (year to month).toLocalDate().toMonthYearDateString().capitalise()
     }
+
+    val totalGained: Float
+        get() = snapshotMonthlyNetSalary + gained
 }

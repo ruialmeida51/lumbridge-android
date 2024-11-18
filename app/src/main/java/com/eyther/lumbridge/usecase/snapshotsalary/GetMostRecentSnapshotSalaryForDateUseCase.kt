@@ -13,10 +13,9 @@ class GetMostRecentSnapshotSalaryForDateUseCase @Inject constructor() {
         snapshotNetSalaries: List<SnapshotNetSalaryUi>,
         year: Int,
         month: Int
-    ): Float {
+    ): SnapshotNetSalaryUi? {
         return snapshotNetSalaries
             .filter { it.year < year || (it.year <= year && it.month <= month) }
             .maxWithOrNull(compareBy({ it.year }, { it.month }))
-            ?.netSalary ?: 0f
     }
 }

@@ -54,7 +54,8 @@ class ProfileAppSettingsScreenViewModel @Inject constructor(
             updateInput {
                 it.copy(
                     isDarkMode = preferences.isDarkMode,
-                    appLanguage = preferences.appLanguage
+                    appLanguage = preferences.appLanguage,
+                    showAllocationsOnExpenses = preferences.showAllocationsOnExpenses
                 )
             }
 
@@ -88,10 +89,12 @@ class ProfileAppSettingsScreenViewModel @Inject constructor(
     private suspend fun updateSettings(inputState: ProfileAppSettingsScreenInputState) {
         val newDarkMode = inputState.isDarkMode
         val newAppLanguage = inputState.appLanguage
+        val showAllocationsOnExpenses = inputState.showAllocationsOnExpenses
 
         savePreferences(
             isDarkMode = newDarkMode,
-            appLanguages = newAppLanguage
+            appLanguages = newAppLanguage,
+            showAllocationsOnExpenses = showAllocationsOnExpenses
         )
     }
 }

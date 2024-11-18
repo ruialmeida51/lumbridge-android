@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -41,7 +42,7 @@ import com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel.
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem
 import com.eyther.lumbridge.features.overview.shared.components.IncomeOverview
 import com.eyther.lumbridge.features.overview.shared.components.PerCountryBreakdown
-import com.eyther.lumbridge.model.finance.MoneyAllocationUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
@@ -139,7 +140,7 @@ private fun ColumnScope.Content(
 private fun ColumnScope.MoneyAllocationBreakdown(
     currencySymbol: String,
     navController: NavHostController,
-    moneyAllocation: List<MoneyAllocationUi>?
+    moneyAllocation: List<MoneyAllocationTypeUi>?
 ) {
     Text(
         modifier = Modifier
@@ -189,10 +190,21 @@ private fun ColumnScope.MoneyAllocationBreakdown(
             }
         } else {
             moneyAllocation.forEach { moneyAllocationUi ->
-                TabbedDataOverview(
-                    label = stringResource(id = moneyAllocationUi.label),
-                    text = "${moneyAllocationUi.amount.forceTwoDecimalsPlaces()}$currencySymbol"
-                )
+                Row {
+                    Icon(
+                        painter = painterResource(id = moneyAllocationUi.iconRes),
+                        modifier = Modifier.size(16.dp).align(Alignment.CenterVertically),
+                        contentDescription = null
+                    )
+
+                    Spacer(modifier = Modifier.width(HalfPadding))
+
+                    TabbedDataOverview(
+                        modifier = Modifier.weight(1f),
+                        label = stringResource(id = moneyAllocationUi.labelRes),
+                        text = "${moneyAllocationUi.allocated.forceTwoDecimalsPlaces()}$currencySymbol"
+                    )
+                }
             }
         }
     }

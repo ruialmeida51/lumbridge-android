@@ -4,6 +4,7 @@ import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.mapper.loan.toDomain
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.model.loan.LoanCalculationUi
 import com.eyther.lumbridge.model.loan.LoanCategoryUi
 import com.eyther.lumbridge.model.loan.LoanUi
@@ -64,7 +65,8 @@ class TryPayPendingLoanPaymentsUseCase @Inject constructor(
             },
             expenseName = loan.name,
             expenseAmount = loanCalculationUi.monthlyPayment,
-            date = LocalDate.now()
+            date = LocalDate.now(),
+            allocationTypeUi = MoneyAllocationTypeUi.Necessities()
         )
 
         saveExpenseUseCase(expense)

@@ -6,6 +6,7 @@ import com.eyther.lumbridge.data.model.expenses.local.ExpenseCached
 fun ExpenseEntity.toCached() = ExpenseCached(
     expenseId = expenseId,
     categoryTypeOrdinal = categoryTypeOrdinal,
+    allocationTypeOrdinal = allocationTypeOrdinal,
     date = date,
     amount = amount,
     name = name

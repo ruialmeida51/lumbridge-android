@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -108,6 +109,7 @@ fun ProfileSettingsScreen(
                     state = state,
                     onDarkModeChange = viewModel::onDarkModeChanged,
                     onLanguageChanged = viewModel::onAppLanguageChanged,
+                    onShowAllocationsOnExpensesChanged = viewModel::onShowAllocationsOnExpensesChanged,
                     neededPermission = neededPermission,
                     notificationsPermissionState = notificationsPermissionState,
                     askForNotificationsPermission = askForNotificationsPermission
@@ -126,7 +128,8 @@ private fun ColumnScope.Content(
     notificationsPermissionState: PermissionState,
     askForNotificationsPermission: MutableState<Boolean>,
     onDarkModeChange: (Boolean) -> Unit,
-    onLanguageChanged: (String) -> Unit
+    onLanguageChanged: (String) -> Unit,
+    onShowAllocationsOnExpensesChanged: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -164,6 +167,15 @@ private fun ColumnScope.Content(
                     askForNotificationsPermission.value = true
                 }
             }
+        )
+
+        HorizontalDivider()
+
+        SwitchSetting(
+            icon = R.drawable.ic_allocation_necessities,
+            label = stringResource(id = R.string.expenses_profile_setting_show_allocations),
+            isChecked = state.inputState.showAllocationsOnExpenses,
+            onCheckedChange = { onShowAllocationsOnExpensesChanged(it) }
         )
     }
 

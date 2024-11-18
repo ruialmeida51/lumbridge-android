@@ -199,6 +199,14 @@ private fun ColumnScope.Content(
             )
         }
 
+        DropdownInputWithIcon(
+            label = stringResource(id = R.string.expenses_add_allocation),
+            selectedOption = stringResource(state.inputState.allocationTypeUi.labelRes),
+            selectedIcon = state.inputState.allocationTypeUi.iconRes,
+            items = state.availableAllocations.map { Triple(it.iconRes, it.ordinal.toString(), stringResource(it.labelRes)) },
+            onItemClick = { _, ordinal, _ -> viewModel.onAllocationTypeChanged(ordinal.toIntOrNull()) }
+        )
+
         Spacer(modifier = Modifier.height(HalfPadding))
 
         TextInput(

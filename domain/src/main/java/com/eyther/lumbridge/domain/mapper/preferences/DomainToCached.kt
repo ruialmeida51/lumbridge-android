@@ -6,6 +6,7 @@ import com.eyther.lumbridge.domain.model.preferences.Preferences
 fun Preferences.toCached(): AppSettings {
     return AppSettings(
         isDarkMode = isDarkMode,
-        appLanguageCountryCode = appLanguage.countryCode
+        appLanguageCountryCode = appLanguage.countryCode,
+        showAllocationsOnExpenses = showAllocationsOnExpenses
     )
 }

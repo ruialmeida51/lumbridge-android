@@ -13,5 +13,5 @@ data class NetSalaryUi(
     val dailyFoodCard: Float,
     val duodecimosTypeUi: DuodecimosTypeUi,
     val deductions: List<DeductionUi>,
-    val moneyAllocations: List<MoneyAllocationUi>?
+    val moneyAllocations: List<MoneyAllocationTypeUi>?
 ): Parcelable

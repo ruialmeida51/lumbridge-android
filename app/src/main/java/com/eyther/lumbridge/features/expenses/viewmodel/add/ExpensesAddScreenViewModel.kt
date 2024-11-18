@@ -9,6 +9,7 @@ import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.ExpensesAdd
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.IExpensesAddScreenInputHandler
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -46,6 +47,7 @@ class ExpensesAddScreenViewModel @Inject constructor(
                 ExpensesAddScreenViewState.Content(
                     inputState = expensesAddScreenInputHandler.inputState.value,
                     availableCategories = ExpensesCategoryTypesUi.get(),
+                    availableMoneyAllocations = MoneyAllocationTypeUi.get(),
                     shouldEnableSaveButton = false
                 )
             }
@@ -88,6 +90,7 @@ class ExpensesAddScreenViewModel @Inject constructor(
             saveExpenseUseCase(
                 ExpenseUi(
                     categoryType = inputState.categoryType,
+                    allocationTypeUi = inputState.allocationTypeUi,
                     expenseAmount = checkNotNull(inputState.amountInput.text?.toFloat()),
                     expenseName = checkNotNull(inputState.nameInput.text),
                     date = checkNotNull(inputState.dateInput.date)

@@ -136,6 +136,7 @@ fun EditRecurringPaymentsScreen(
                     onNotifyMeWhenPaidChanged = viewModel::onNotifyMeWhenPaidChanged,
                     onAmountChanged = viewModel::onPaymentAmountChanged,
                     onCategoryTypeChanged = viewModel::onPaymentTypeChanged,
+                    onMoneyAllocationChanged = viewModel::onPaymentAllocationChanged,
                     onSurplusOrExpenseChanged = viewModel::onPaymentSurplusOrExpenseChanged,
                     onStartAtDateChanged = viewModel::onPaymentStartDateChanged,
                     onPeriodicityChanged = viewModel::onPeriodicityTypeChanged,
@@ -164,6 +165,7 @@ private fun ColumnScope.Content(
     onNameChanged: (String) -> Unit,
     onAmountChanged: (Float?) -> Unit,
     onCategoryTypeChanged: (Int?) -> Unit,
+    onMoneyAllocationChanged: (Int?) -> Unit,
     onSurplusOrExpenseChanged: (Int) -> Unit,
     onStartAtDateChanged: (Long?) -> Unit,
     onPeriodicityChanged: (Int?) -> Unit,
@@ -184,7 +186,8 @@ private fun ColumnScope.Content(
         onNameChanged = onNameChanged,
         onAmountChanged = onAmountChanged,
         onCategoryTypeChanged = onCategoryTypeChanged,
-        onSurplusOrExpenseChanged = onSurplusOrExpenseChanged
+        onSurplusOrExpenseChanged = onSurplusOrExpenseChanged,
+        onMoneyAllocationChanged = onMoneyAllocationChanged
     )
 
     PeriodicityDetails(
@@ -226,6 +229,7 @@ private fun ColumnScope.ExpenseDetails(
     onNameChanged: (String) -> Unit,
     onAmountChanged: (Float?) -> Unit,
     onCategoryTypeChanged: (Int?) -> Unit,
+    onMoneyAllocationChanged: (Int?) -> Unit,
     onSurplusOrExpenseChanged: (Int) -> Unit
 ) {
     Text(
@@ -283,6 +287,15 @@ private fun ColumnScope.ExpenseDetails(
                 onItemClick = { _, ordinal, _ -> onCategoryTypeChanged(ordinal.toIntOrNull()) }
             )
         }
+
+
+        DropdownInputWithIcon(
+            label = stringResource(id = R.string.expenses_add_allocation),
+            selectedOption = stringResource(state.inputState.allocationTypeUi.labelRes),
+            selectedIcon = state.inputState.allocationTypeUi.iconRes,
+            items = state.availableMoneyAllocations.map { Triple(it.iconRes, it.ordinal.toString(), stringResource(it.labelRes)) },
+            onItemClick = { _, ordinal, _ -> onMoneyAllocationChanged(ordinal.toIntOrNull()) }
+        )
     }
 }
 

@@ -14,7 +14,8 @@ fun RecurringPaymentUi.toDomain() = RecurringPaymentDomain(
     label = label,
     shouldNotifyWhenPaid = shouldNotifyWhenPaid,
     amountToPay = amountToPay,
-    categoryTypes = categoryTypesUi.toDomain()
+    categoryTypes = categoryTypesUi.toDomain(),
+    allocationType = allocationTypeUi.toDomain()
 )
 
 fun PeriodicityUi.toDomain(): Periodicity {

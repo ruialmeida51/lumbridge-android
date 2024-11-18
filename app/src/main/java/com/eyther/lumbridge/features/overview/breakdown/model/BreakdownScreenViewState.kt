@@ -12,6 +12,7 @@ sealed interface BreakdownScreenViewState {
         val locale: SupportedLocales,
         val netSalary: NetSalaryUi? = null,
         val loans: List<Pair<LoanUi, LoanCalculationUi>> = emptyList(),
+        val balanceSheetNet: BalanceSheetNetUi? = null,
         val currencySymbol: String
     ) : BreakdownScreenViewState
 }

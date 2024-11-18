@@ -17,4 +17,8 @@ data class UserFinancialsUi(
     val singleIncome: Boolean = false,
     val married: Boolean = false,
     val handicapped: Boolean = false
-)
+) {
+    fun hasAllocations(): Boolean {
+        return savingsPercentage != null || necessitiesPercentage != null || luxuriesPercentage != null
+    }
+}

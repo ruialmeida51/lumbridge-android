@@ -6,5 +6,8 @@ import com.eyther.lumbridge.data.model.snapshotsalary.local.SnapshotNetSalaryCac
 fun SnapshotNetSalaryCached.toEntity() = SnapshotNetSalaryEntity(
     year = year,
     month = month,
-    amount = amount
+    amount = amount,
+    savingsPercentage = savingsPercentage,
+    necessitiesPercentage = necessitiesPercentage,
+    luxuriesPercentage = luxuriesPercentage
 )

@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 fun LineProgressIndicator(
     modifier: Modifier = Modifier,
     progress: Float,
-    progressColor: Color = MaterialTheme.colorScheme.inverseSurface,
-    backgroundColor: Color = MaterialTheme.colorScheme.inverseOnSurface,
+    progressColor: Color = MaterialTheme.colorScheme.primary,
+    backgroundColor: Color = MaterialTheme.colorScheme.onPrimary,
     clipShape: Shape = RoundedCornerShape(16.dp)
 ) {
     Box(

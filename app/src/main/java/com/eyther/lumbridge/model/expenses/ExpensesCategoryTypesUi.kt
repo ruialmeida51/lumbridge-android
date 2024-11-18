@@ -29,6 +29,7 @@ sealed class ExpensesCategoryTypesUi(
             Pets,
             Sports,
             Vacations,
+            Investments,
             Other
         ).sortedBy {
             it.orderOfAppearance
@@ -46,6 +47,7 @@ sealed class ExpensesCategoryTypesUi(
                 Pets.ordinal -> Pets
                 Sports.ordinal -> Sports
                 Vacations.ordinal -> Vacations
+                Investments.ordinal -> Investments
                 Surplus.ordinal -> Surplus
                 else -> throw IllegalArgumentException("💥 Unknown ordinal: $ordinal")
             }
@@ -128,5 +130,12 @@ sealed class ExpensesCategoryTypesUi(
         operator = MathOperator.ADDITION,
         ordinal = 10,
         orderOfAppearance = Int.MAX_VALUE
+    )
+
+    data object Investments : ExpensesCategoryTypesUi(
+        categoryRes = R.string.investments,
+        iconRes = R.drawable.ic_investments,
+        ordinal = 11,
+        orderOfAppearance = 9
     )
 }

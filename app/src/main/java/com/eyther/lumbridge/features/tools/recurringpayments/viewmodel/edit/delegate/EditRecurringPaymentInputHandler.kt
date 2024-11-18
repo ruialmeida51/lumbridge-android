@@ -5,6 +5,7 @@ import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice.Surplus
 import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecurringPaymentScreenInputState
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -79,6 +80,14 @@ class EditRecurringPaymentInputHandler @Inject constructor() : IEditRecurringPay
         updateInput { state ->
             state.copy(
                 categoryType = ExpensesCategoryTypesUi.of(typeOrdinal ?: 0)
+            )
+        }
+    }
+
+    override fun onPaymentAllocationChanged(allocationOrdinal: Int?) {
+        updateInput { state ->
+            state.copy(
+                allocationTypeUi = MoneyAllocationTypeUi.toDefaultAllocationFromOrdinal(allocationOrdinal ?: 0)
             )
         }
     }

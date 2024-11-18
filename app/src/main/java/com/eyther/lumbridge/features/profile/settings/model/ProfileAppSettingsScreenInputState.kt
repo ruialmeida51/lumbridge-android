@@ -5,5 +5,6 @@ import com.eyther.lumbridge.domain.model.locale.SupportedLanguages
 data class ProfileAppSettingsScreenInputState(
     val isDarkMode: Boolean = false,
     val areNotificationsEnabled: Boolean = false,
-    val appLanguage: SupportedLanguages = SupportedLanguages.ENGLISH
+    val appLanguage: SupportedLanguages = SupportedLanguages.ENGLISH,
+    val showAllocationsOnExpenses: Boolean = true
 )

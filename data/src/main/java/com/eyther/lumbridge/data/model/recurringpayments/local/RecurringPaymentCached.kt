@@ -10,5 +10,6 @@ data class RecurringPaymentCached(
     val label: String,
     val amountToPay: Float,
     val categoryTypeOrdinal: Int,
+    val allocationTypeOrdinal: Int,
     val shouldNotifyWhenPaid: Boolean
 )

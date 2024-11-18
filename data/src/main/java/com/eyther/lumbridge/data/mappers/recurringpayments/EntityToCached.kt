@@ -13,6 +13,7 @@ fun RecurringPaymentEntity.toCached(): RecurringPaymentCached {
         label = label,
         amountToPay = amountToPay,
         categoryTypeOrdinal = categoryTypeOrdinal,
+        allocationTypeOrdinal = allocationTypeOrdinal,
         shouldNotifyWhenPaid = shouldNotifyWhenPaid
     )
 }

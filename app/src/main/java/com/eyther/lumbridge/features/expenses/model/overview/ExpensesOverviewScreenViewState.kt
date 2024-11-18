@@ -25,6 +25,7 @@ sealed interface ExpensesOverviewScreenViewState {
     sealed class Content(
         open val locale: SupportedLocales,
         open val totalExpenses: Float,
+        open val showAllocations: Boolean,
         open val expensesMonthUi: List<ExpensesMonthUi>,
         open val availableSorts: List<DisplaySortBy>,
         open val availableFilters: List<DisplayFilter>,
@@ -35,6 +36,7 @@ sealed interface ExpensesOverviewScreenViewState {
             val netSalaryUi: NetSalaryUi,
             override val locale: SupportedLocales,
             override val totalExpenses: Float,
+            override val showAllocations: Boolean,
             override val expensesMonthUi: List<ExpensesMonthUi>,
             override val availableSorts: List<DisplaySortBy>,
             override val availableFilters: List<DisplayFilter>,
@@ -43,6 +45,7 @@ sealed interface ExpensesOverviewScreenViewState {
         ) : Content(
             locale = locale,
             totalExpenses = totalExpenses,
+            showAllocations = showAllocations,
             expensesMonthUi = expensesMonthUi,
             availableSorts = availableSorts,
             availableFilters = availableFilters,
@@ -53,6 +56,7 @@ sealed interface ExpensesOverviewScreenViewState {
         data class NoFinancialProfile(
             override val locale: SupportedLocales,
             override val totalExpenses: Float,
+            override val showAllocations: Boolean,
             override val expensesMonthUi: List<ExpensesMonthUi>,
             override val availableSorts: List<DisplaySortBy>,
             override val availableFilters: List<DisplayFilter>,
@@ -61,6 +65,7 @@ sealed interface ExpensesOverviewScreenViewState {
         ) : Content(
             locale = locale,
             totalExpenses = totalExpenses,
+            showAllocations = showAllocations,
             expensesMonthUi = expensesMonthUi,
             availableSorts = availableSorts,
             availableFilters = availableFilters,
@@ -74,4 +79,5 @@ sealed interface ExpensesOverviewScreenViewState {
 
     fun hasExpensesOrFilterApplied() = this is Content && (expensesMonthUi.isNotEmpty() || selectedFilter != getDefaultDisplayFilter())
     fun hasExpenses() = this is Content && expensesMonthUi.isNotEmpty()
+    fun showAllocationsOnExpenses() = this is Content && showAllocations
 }

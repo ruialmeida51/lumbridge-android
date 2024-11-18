@@ -7,6 +7,7 @@ import com.eyther.lumbridge.domain.model.preferences.Preferences
 fun AppSettings.toDomain(): Preferences {
     return Preferences(
         isDarkMode = isDarkMode,
-        appLanguage = SupportedLanguages.get(appLanguageCountryCode)
+        appLanguage = SupportedLanguages.get(appLanguageCountryCode),
+        showAllocationsOnExpenses = showAllocationsOnExpenses
     )
 }

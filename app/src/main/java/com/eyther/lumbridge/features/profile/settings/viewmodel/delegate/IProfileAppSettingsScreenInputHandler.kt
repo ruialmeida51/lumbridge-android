@@ -12,6 +12,7 @@ interface IProfileAppSettingsScreenInputHandler {
      */
     fun onDarkModeChanged(isDarkMode: Boolean)
     fun onAppLanguageChanged(countryCode: String)
+    fun onShowAllocationsOnExpensesChanged(showAllocationsOnExpenses: Boolean)
 
     /**
      * Helper function to update the input state.

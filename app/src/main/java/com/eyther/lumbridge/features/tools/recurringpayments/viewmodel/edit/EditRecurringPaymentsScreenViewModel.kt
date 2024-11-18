@@ -11,6 +11,7 @@ import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecu
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.EditRecurringPaymentInputHandler
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.IEditRecurringPaymentInputHandler
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.usecase.recurringpayments.DeleteRecurringPaymentUseCase
@@ -79,6 +80,9 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
                     categoryType = ExpensesCategoryTypesUi.of(
                         ordinal = recurringPaymentUi?.categoryTypesUi?.ordinal ?: 0
                     ),
+                    allocationTypeUi = MoneyAllocationTypeUi.toDefaultAllocationFromOrdinal(
+                        ordinal = recurringPaymentUi?.allocationTypeUi?.ordinal ?: 0
+                    ),
                     surplusOrExpenseChoice = state.surplusOrExpenseChoice.copy(
                         selectedTab = if (recurringPaymentUi?.categoryTypesUi == ExpensesCategoryTypesUi.Surplus) {
                             ExpensesAddSurplusOrExpenseChoice.Surplus.ordinal
@@ -114,6 +118,7 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
                         EditRecurringPaymentsScreenViewState.Content(
                             inputState = inputState,
                             availableCategories = ExpensesCategoryTypesUi.get(),
+                            availableMoneyAllocations = MoneyAllocationTypeUi.get(),
                             shouldEnableSaveButton = shouldEnableSaveButton(inputState),
                             availablePeriodicity = PeriodicityUi.getDefaults()
                         )
@@ -168,7 +173,8 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
                     )
                 },
                 shouldNotifyWhenPaid = inputState.shouldNotifyWhenPaid,
-                categoryTypesUi = inputState.categoryType
+                categoryTypesUi = inputState.categoryType,
+                allocationTypeUi = inputState.allocationTypeUi
             )
 
             saveRecurringPaymentUseCase(recurringPayment)
