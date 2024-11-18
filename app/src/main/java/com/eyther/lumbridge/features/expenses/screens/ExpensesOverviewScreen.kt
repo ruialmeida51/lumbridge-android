@@ -784,7 +784,7 @@ private fun MonthlyAllocationGraph(
         Column(
             verticalArrangement = Arrangement.spacedBy(HalfPadding)
         ) {
-            if (showAllocationForExpenses) {
+            if (showAllocationForExpenses && expensesMonthUi.snapshotAllocations.isNotEmpty()) {
                 expensesMonthUi.snapshotAllocations.forEach { allocation ->
                     AllocationItem(
                         availableWidth = boxWithConstraintsScope.maxWidth,
