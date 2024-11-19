@@ -17,5 +17,9 @@ class GetMostRecentSnapshotSalaryForDateUseCase @Inject constructor() {
         return snapshotNetSalaries
             .filter { it.year < year || (it.year <= year && it.month <= month) }
             .maxWithOrNull(compareBy({ it.year }, { it.month }))
+            // If the year and month are in the past related to the snapshot salaries, we return the last snapshot salary.
+            // This is because the snapshot salaries were introduced after the expenses, so we may have cases where
+            // we don't have a snapshot salary for a given month. It's a best effort approach.
+            ?: snapshotNetSalaries.firstOrNull()
     }
 }

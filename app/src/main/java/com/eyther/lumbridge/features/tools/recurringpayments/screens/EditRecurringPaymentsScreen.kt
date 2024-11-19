@@ -262,7 +262,11 @@ private fun ColumnScope.ExpenseDetails(
             modifier = Modifier.padding(bottom = HalfPadding),
             state = state.inputState.paymentName,
             label = stringResource(id = R.string.name),
-            onInputChanged = { onNameChanged(it) }
+            onInputChanged = { onNameChanged(it) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            )
         )
 
         NumberInput(
