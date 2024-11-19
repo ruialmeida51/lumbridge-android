@@ -51,14 +51,17 @@ class MainActivityViewModel @Inject constructor(
 
     override suspend fun updateSettings(
         isDarkMode: Boolean?,
-        appLanguageCountryCode: String?
+        appLanguageCountryCode: String?,
+        showAllocationsOnExpenses: Boolean?
     ) {
         val newDarkMode = (isDarkMode ?: getPreferencesFlow().firstOrNull()?.isDarkMode) == true
         val newAppLanguage = SupportedLanguages.getOrNull(appLanguageCountryCode) ?: getCurrentSystemLanguageOrDefault()
+        val newShowAllocationsOnExpenses = showAllocationsOnExpenses ?: getPreferencesFlow().firstOrNull()?.showAllocationsOnExpenses ?: true
 
         savePreferences(
             isDarkMode = newDarkMode,
-            appLanguages = newAppLanguage
+            appLanguages = newAppLanguage,
+            showAllocationsOnExpenses = newShowAllocationsOnExpenses
         )
     }
 }

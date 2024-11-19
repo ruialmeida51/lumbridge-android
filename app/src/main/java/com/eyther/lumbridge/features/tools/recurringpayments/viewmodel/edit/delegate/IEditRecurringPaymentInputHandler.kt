@@ -14,6 +14,7 @@ interface IEditRecurringPaymentInputHandler {
     fun onPaymentNamedChanged(paymentName: String?)
     fun onPaymentAmountChanged(paymentAmount: Float?)
     fun onPaymentTypeChanged(typeOrdinal: Int?)
+    fun onPaymentAllocationChanged(allocationOrdinal: Int?)
     fun onPaymentStartDateChanged(paymentStartDate: Long?)
     fun onPaymentSurplusOrExpenseChanged(choiceOrdinal: Int)
     fun onPeriodicityTypeChanged(periodicityTypeOrdinal: Int?)

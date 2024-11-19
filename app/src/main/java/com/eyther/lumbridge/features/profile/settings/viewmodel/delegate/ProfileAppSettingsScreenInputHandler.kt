@@ -23,6 +23,12 @@ class ProfileAppSettingsScreenInputHandler @Inject constructor(): IProfileAppSet
         }
     }
 
+    override fun onShowAllocationsOnExpensesChanged(showAllocationsOnExpenses: Boolean) {
+        updateInput { state ->
+            state.copy(showAllocationsOnExpenses = showAllocationsOnExpenses)
+        }
+    }
+
     /**
      * Helper function to update the inputState state of the screen.
      *

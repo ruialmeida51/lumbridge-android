@@ -1,0 +1,535 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 11,
+    "identityHash": "68cd4c890f80df99c59da4db60247e2b",
+    "entities": [
+      {
+        "tableName": "expenses",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`expenseId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `categoryTypeOrdinal` INTEGER NOT NULL, `allocationTypeOrdinal` INTEGER NOT NULL DEFAULT 0, `date` TEXT NOT NULL, `amount` REAL NOT NULL, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "expenseId",
+            "columnName": "expenseId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryTypeOrdinal",
+            "columnName": "categoryTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "allocationTypeOrdinal",
+            "columnName": "allocationTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "expenseId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_expenses_expenseId",
+            "unique": false,
+            "columnNames": [
+              "expenseId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_expenses_expenseId` ON `${TABLE_NAME}` (`expenseId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "rss_feed",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`rssId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "rssId",
+            "columnName": "rssId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "rssId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "shopping_list",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`shoppingListId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `showTickedItems` INTEGER NOT NULL, `title` TEXT NOT NULL, `shoppingListItems` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "shoppingListId",
+            "columnName": "shoppingListId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showTickedItems",
+            "columnName": "showTickedItems",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shoppingListItems",
+            "columnName": "shoppingListItems",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "shoppingListId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "notes_list",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`noteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `text` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "noteId",
+            "columnName": "noteId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "noteId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "loan",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`loanId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `startDate` TEXT NOT NULL, `currentPaymentDate` TEXT NOT NULL, `endDate` TEXT NOT NULL, `currentAmount` REAL NOT NULL, `initialAmount` REAL NOT NULL, `fixedTaegInterestRate` REAL, `variableEuribor` REAL, `variableSpread` REAL, `fixedTanInterestRate` REAL, `loanTypeOrdinal` INTEGER NOT NULL, `loanCategoryOrdinal` INTEGER NOT NULL, `shouldNotifyWhenPaid` INTEGER NOT NULL DEFAULT 0, `shouldAutoAddToExpenses` INTEGER NOT NULL DEFAULT 0, `lastAutoPayDate` TEXT, `paymentDay` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "loanId",
+            "columnName": "loanId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentPaymentDate",
+            "columnName": "currentPaymentDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endDate",
+            "columnName": "endDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentAmount",
+            "columnName": "currentAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "initialAmount",
+            "columnName": "initialAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fixedTaegInterestRate",
+            "columnName": "fixedTaegInterestRate",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "variableEuribor",
+            "columnName": "variableEuribor",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "variableSpread",
+            "columnName": "variableSpread",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fixedTanInterestRate",
+            "columnName": "fixedTanInterestRate",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "loanTypeOrdinal",
+            "columnName": "loanTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loanCategoryOrdinal",
+            "columnName": "loanCategoryOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shouldNotifyWhenPaid",
+            "columnName": "shouldNotifyWhenPaid",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldAutoAddToExpenses",
+            "columnName": "shouldAutoAddToExpenses",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "lastAutoPayDate",
+            "columnName": "lastAutoPayDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paymentDay",
+            "columnName": "paymentDay",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "loanId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "snapshot_net_salary",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`snapshotId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `savingsPercentage` REAL, `necessitiesPercentage` REAL, `luxuriesPercentage` REAL, `amount` REAL NOT NULL, `year` INTEGER NOT NULL, `month` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "snapshotId",
+            "columnName": "snapshotId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "savingsPercentage",
+            "columnName": "savingsPercentage",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "necessitiesPercentage",
+            "columnName": "necessitiesPercentage",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "luxuriesPercentage",
+            "columnName": "luxuriesPercentage",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "year",
+            "columnName": "year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "month",
+            "columnName": "month",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "snapshotId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_snapshot_net_salary_month_year",
+            "unique": true,
+            "columnNames": [
+              "month",
+              "year"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_snapshot_net_salary_month_year` ON `${TABLE_NAME}` (`month`, `year`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "recurring_payments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recurringPaymentId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `startDate` TEXT NOT NULL, `lastPaymentDate` TEXT, `label` TEXT NOT NULL, `amountToPay` REAL NOT NULL, `categoryTypeOrdinal` INTEGER NOT NULL, `allocationTypeOrdinal` INTEGER NOT NULL DEFAULT 0, `shouldNotifyWhenPaid` INTEGER NOT NULL, `periodicityTypeOrdinal` INTEGER, `numOfDays` INTEGER, `numOfWeeks` INTEGER, `numOfMonths` INTEGER, `numOfYears` INTEGER, `dayOfWeekOrdinal` INTEGER, `dayOfMonth` INTEGER, `monthOfYearOrdinal` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "recurringPaymentId",
+            "columnName": "recurringPaymentId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastPaymentDate",
+            "columnName": "lastPaymentDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amountToPay",
+            "columnName": "amountToPay",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryTypeOrdinal",
+            "columnName": "categoryTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "allocationTypeOrdinal",
+            "columnName": "allocationTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "shouldNotifyWhenPaid",
+            "columnName": "shouldNotifyWhenPaid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "periodicityTypeOrdinal",
+            "columnName": "periodicityTypeOrdinal",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "numOfDays",
+            "columnName": "numOfDays",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "numOfWeeks",
+            "columnName": "numOfWeeks",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "numOfMonths",
+            "columnName": "numOfMonths",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "numOfYears",
+            "columnName": "numOfYears",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dayOfWeekOrdinal",
+            "columnName": "dayOfWeekOrdinal",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dayOfMonth",
+            "columnName": "dayOfMonth",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "monthOfYearOrdinal",
+            "columnName": "monthOfYearOrdinal",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "recurringPaymentId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "reminders",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`reminderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `label` TEXT NOT NULL, `dueDate` TEXT NOT NULL, `remindMeInOrdinal` INTEGER NOT NULL, `remindMeInDaysCustomValue` INTEGER, `remindMeInHoursCustomValue` INTEGER, `remindMeInMinutesCustomValue` INTEGER, `alreadyNotified` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "reminderId",
+            "columnName": "reminderId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dueDate",
+            "columnName": "dueDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remindMeInOrdinal",
+            "columnName": "remindMeInOrdinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remindMeInDaysCustomValue",
+            "columnName": "remindMeInDaysCustomValue",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "remindMeInHoursCustomValue",
+            "columnName": "remindMeInHoursCustomValue",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "remindMeInMinutesCustomValue",
+            "columnName": "remindMeInMinutesCustomValue",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "alreadyNotified",
+            "columnName": "alreadyNotified",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "reminderId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '68cd4c890f80df99c59da4db60247e2b')"
+    ]
+  }
+}

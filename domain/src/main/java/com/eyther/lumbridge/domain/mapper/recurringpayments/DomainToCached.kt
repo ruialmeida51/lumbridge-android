@@ -12,5 +12,6 @@ fun RecurringPaymentDomain.toCached() = RecurringPaymentCached(
     periodicity = periodicity,
     shouldNotifyWhenPaid = shouldNotifyWhenPaid,
     amountToPay = amountToPay,
-    categoryTypeOrdinal = categoryTypes.ordinal
+    categoryTypeOrdinal = categoryTypes.ordinal,
+    allocationTypeOrdinal = allocationType.ordinal
 )

@@ -5,6 +5,7 @@ import java.time.LocalDate
 data class ExpenseCached(
     val expenseId: Long = -1,
     val categoryTypeOrdinal: Int,
+    val allocationTypeOrdinal: Int,
     val date: LocalDate,
     val amount: Float,
     val name: String

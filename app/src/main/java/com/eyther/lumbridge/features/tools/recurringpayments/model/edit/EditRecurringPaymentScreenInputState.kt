@@ -2,6 +2,7 @@ package com.eyther.lumbridge.features.tools.recurringpayments.model.edit
 
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
@@ -17,6 +18,7 @@ data class EditRecurringPaymentScreenInputState(
     val paymentName: TextInputState = TextInputState(),
     val paymentAmount: TextInputState = TextInputState(),
     val categoryType: ExpensesCategoryTypesUi = ExpensesCategoryTypesUi.Food,
+    val allocationTypeUi: MoneyAllocationTypeUi = MoneyAllocationTypeUi.Necessities(),
     val paymentStartDate: DateInputState = DateInputState(date = LocalDate.now()),
     val periodicityUi: PeriodicityUi = PeriodicityUi.EveryXDays(LocalDate.now(), 1),
     val numOfDays: TextInputState = TextInputState(),

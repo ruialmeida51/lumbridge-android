@@ -69,9 +69,9 @@ class UserFinancialsLocalDataSource @Inject constructor(
             UserFinancialsCached(
                 annualGrossSalary = annualGrossSalary,
                 foodCardPerDiem = foodCardPerDiem,
-                savingsPercentage = savingsPercentage?.toInt(),
-                necessitiesPercentage = necessitiesPercentage?.toInt(),
-                luxuriesPercentage = luxuriesPercentage?.toInt(),
+                savingsPercentage = savingsPercentage,
+                necessitiesPercentage = necessitiesPercentage,
+                luxuriesPercentage = luxuriesPercentage,
                 numberOfDependants = numberOfDependants,
                 singleIncome = singleIncome,
                 married = married,
@@ -94,15 +94,15 @@ class UserFinancialsLocalDataSource @Inject constructor(
                 preferences[DUODECIMOS_TYPE] = it
             } ?: preferences.remove(DUODECIMOS_TYPE)
 
-            userProfileCached.savingsPercentage?.toFloat()?.let {
+            userProfileCached.savingsPercentage?.let {
                 preferences[SAVINGS_PERCENTAGE] = it
             } ?: preferences.remove(SAVINGS_PERCENTAGE)
 
-            userProfileCached.necessitiesPercentage?.toFloat()?.let {
+            userProfileCached.necessitiesPercentage?.let {
                 preferences[NECESSITIES_PERCENTAGE] = it
             } ?: preferences.remove(NECESSITIES_PERCENTAGE)
 
-            userProfileCached.luxuriesPercentage?.toFloat()?.let {
+            userProfileCached.luxuriesPercentage?.let {
                 preferences[LUXURIES_PERCENTAGE] = it
             } ?: preferences.remove(LUXURIES_PERCENTAGE)
 

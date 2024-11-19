@@ -24,6 +24,7 @@ import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.expenses.GroupExpensesUseCase
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
 import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
@@ -48,6 +49,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     private val getNetSalaryUseCase: GetNetSalaryUseCase,
     private val getUserFinancialsStreamUseCase: GetUserFinancialsFlow,
     private val groupExpensesUseCase: GroupExpensesUseCase,
+    private val getPreferencesFlow: GetPreferencesFlow,
     private val getSnapshotNetSalariesFlowUseCase: GetSnapshotNetSalariesFlowUseCase,
     private val sortByDelegate: ExpensesOverviewScreenSortByDelegate,
     private val filterDelegate: ExpensesOverviewScreenFilterDelegate,
@@ -64,7 +66,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         private data class ExpensesStreamData(
             val expensesData: ExpensesData,
             val sortBy: ExpensesOverviewSortBy,
-            val filter: ExpensesOverviewFilter
+            val filter: ExpensesOverviewFilter,
+            val showAllocationsOnExpenses: Boolean
         )
 
         private data class ExpensesData(
@@ -114,12 +117,14 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         combine(
             dataFlow,
             sortBy,
-            filter
-        ) { expensesData, sortBy, filter ->
+            filter,
+            getPreferencesFlow()
+        ) { expensesData, sortBy, filter, preferences ->
             ExpensesStreamData(
                 expensesData = expensesData,
                 sortBy = sortBy,
-                filter = filter
+                filter = filter,
+                showAllocationsOnExpenses = preferences?.showAllocationsOnExpenses == true
             )
         }
             .flowOn(schedulers.io)
@@ -137,12 +142,14 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                         getContentState(
                             monthlyExpenses = groupExpensesUseCase(
                                 expenses = streamData.expensesData.expenses,
-                                snapshotNetSalaries = streamData.expensesData.snapshotNetSalaries
+                                snapshotNetSalaries = streamData.expensesData.snapshotNetSalaries,
+                                showAllocationsOnExpenses = streamData.showAllocationsOnExpenses
                             ),
                             netSalaryUi = streamData.expensesData.netSalaryUi,
                             locale = streamData.expensesData.locale,
                             sortBy = streamData.sortBy,
-                            filter = streamData.filter
+                            filter = streamData.filter,
+                            showAllocationsOnExpenses = streamData.showAllocationsOnExpenses
                         )
                     }
                 }
@@ -165,7 +172,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
-                filter = filter.value
+                filter = filter.value,
+                showAllocationsOnExpenses = oldState.showAllocationsOnExpenses()
             )
         }
     }
@@ -189,7 +197,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
-                filter = filter.value
+                filter = filter.value,
+                showAllocationsOnExpenses = viewState.value.showAllocationsOnExpenses()
             )
         }
     }
@@ -295,6 +304,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     private fun getContentState(
         monthlyExpenses: List<ExpensesMonthUi>,
         netSalaryUi: NetSalaryUi?,
+        showAllocationsOnExpenses: Boolean,
         locale: SupportedLocales,
         sortBy: ExpensesOverviewSortBy,
         filter: ExpensesOverviewFilter
@@ -309,6 +319,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             NoFinancialProfile(
                 expensesMonthUi = sortedExpenses,
                 totalExpenses = totalExpenses,
+                showAllocations = showAllocationsOnExpenses,
                 locale = locale,
                 availableSorts = ExpensesOverviewSortBy.get(),
                 availableFilters = availableFilters,
@@ -319,6 +330,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             HasFinancialProfile(
                 netSalaryUi = netSalaryUi,
                 totalExpenses = totalExpenses,
+                showAllocations = showAllocationsOnExpenses,
                 expensesMonthUi = sortedExpenses,
                 locale = locale,
                 availableSorts = availableSorts,
@@ -413,7 +425,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
-                filter = filter.value
+                filter = filter.value,
+                showAllocationsOnExpenses = oldState.showAllocationsOnExpenses()
             )
         }
     }
@@ -437,7 +450,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 netSalaryUi = cachedNetSalaryUi,
                 locale = oldState.asContent().locale,
                 sortBy = sortBy.value,
-                filter = filter.value
+                filter = filter.value,
+                showAllocationsOnExpenses = oldState.showAllocationsOnExpenses()
             )
         }
     }

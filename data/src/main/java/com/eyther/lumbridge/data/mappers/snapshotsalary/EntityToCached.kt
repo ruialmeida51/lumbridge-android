@@ -7,5 +7,8 @@ fun SnapshotNetSalaryEntity.toCached() = SnapshotNetSalaryCached(
     snapshotId = snapshotId,
     year = year,
     month = month,
-    amount = amount
+    amount = amount,
+    savingsPercentage = savingsPercentage,
+    necessitiesPercentage = necessitiesPercentage,
+    luxuriesPercentage = luxuriesPercentage
 )

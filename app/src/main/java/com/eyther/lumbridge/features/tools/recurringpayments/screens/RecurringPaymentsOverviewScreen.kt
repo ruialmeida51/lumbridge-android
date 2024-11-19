@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -235,15 +236,56 @@ private fun RecurringPaymentItem(
 
         Spacer(modifier = Modifier.height(HalfPadding))
 
-        TabbedDataOverview(
-            label = stringResource(id = R.string.recurring_payment_category),
-            text = stringResource(recurringPayment.categoryTypesUi.categoryRes),
-        )
+        Row {
+            Icon(
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.CenterVertically),
+                painter = painterResource(id = recurringPayment.categoryTypesUi.iconRes),
+                contentDescription = null
+            )
 
-        TabbedDataOverview(
-            label = stringResource(id = R.string.recurring_payment_amount),
-            text = "${recurringPayment.amountToPay.forceTwoDecimalsPlaces()}${supportedLocale.getCurrencySymbol()}",
-        )
+            Spacer(modifier = Modifier.width(QuarterPadding))
+
+            TabbedDataOverview(
+                label = stringResource(id = R.string.recurring_payment_category),
+                text = stringResource(recurringPayment.categoryTypesUi.categoryRes),
+            )
+        }
+
+        Row {
+            Icon(
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.CenterVertically),
+                painter = painterResource(id = recurringPayment.allocationTypeUi.iconRes),
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.width(QuarterPadding))
+
+            TabbedDataOverview(
+                label = stringResource(id = R.string.expenses_add_allocation),
+                text = stringResource(recurringPayment.allocationTypeUi.labelRes),
+            )
+        }
+
+        Row {
+            Icon(
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.CenterVertically),
+                painter = painterResource(id = R.drawable.ic_payments),
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.width(QuarterPadding))
+
+            TabbedDataOverview(
+                label = stringResource(id = R.string.recurring_payment_amount),
+                text = "${recurringPayment.amountToPay.forceTwoDecimalsPlaces()}${supportedLocale.getCurrencySymbol()}",
+            )
+        }
 
         Spacer(modifier = Modifier.height(HalfPadding))
 

@@ -11,6 +11,7 @@ fun RecurringPaymentCached.toEntity(): RecurringPaymentEntity {
         label = label,
         shouldNotifyWhenPaid = shouldNotifyWhenPaid,
         categoryTypeOrdinal = categoryTypeOrdinal,
+        allocationTypeOrdinal = allocationTypeOrdinal,
         amountToPay = amountToPay,
         periodicityTypeOrdinal = periodicity.ordinal,
         numOfDays = (periodicity as? Periodicity.EveryXDays)?.numOfDays,

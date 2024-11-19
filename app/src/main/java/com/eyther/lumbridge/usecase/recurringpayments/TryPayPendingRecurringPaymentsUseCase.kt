@@ -49,7 +49,8 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
             categoryType = recurringPaymentUi.categoryTypesUi,
             expenseName = recurringPaymentUi.label,
             expenseAmount = recurringPaymentUi.amountToPay,
-            date = LocalDate.now()
+            allocationTypeUi = recurringPaymentUi.allocationTypeUi,
+            date = LocalDate.now(),
         )
 
         saveExpenseUseCase(expense)

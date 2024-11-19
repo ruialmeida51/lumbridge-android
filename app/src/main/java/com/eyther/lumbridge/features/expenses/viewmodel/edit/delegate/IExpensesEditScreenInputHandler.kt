@@ -13,6 +13,7 @@ interface IExpensesEditScreenInputHandler {
     fun onExpenseNameChanged(expenseName: String?)
     fun onExpenseAmountChanged(expenseAmount: Float?)
     fun onTypeChanged(typeOrdinal: Int?)
+    fun onAllocationTypeChanged(allocationTypeOrdinal: Int?)
     fun onDateChanged(expenseDate: Long?)
     fun onSurplusOrExpenseChanged(choiceOrdinal: Int)
 

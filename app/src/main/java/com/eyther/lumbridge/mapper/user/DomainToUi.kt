@@ -18,9 +18,10 @@ fun UserProfileDomain.toUi() = UserProfileUi(
 fun UserFinancialsDomain.toUi() = UserFinancialsUi(
     annualGrossSalary = annualGrossSalary,
     foodCardPerDiem = foodCardPerDiem,
-    savingsPercentage = savingsPercentage,
-    necessitiesPercentage = necessitiesPercentage,
-    luxuriesPercentage = luxuriesPercentage,
+    // In the UI, we use percentages as integers from 0 to 100%, but we store it as a float from 0 to 1
+    savingsPercentage = savingsPercentage?.times(100f)?.toInt(),
+    necessitiesPercentage = necessitiesPercentage?.times(100f)?.toInt(),
+    luxuriesPercentage = luxuriesPercentage?.times(100f)?.toInt(),
     numberOfDependants = numberOfDependants,
     singleIncome = singleIncome,
     married = married,

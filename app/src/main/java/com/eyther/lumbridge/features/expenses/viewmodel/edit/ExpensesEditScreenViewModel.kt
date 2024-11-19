@@ -13,6 +13,7 @@ import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.ExpensesEd
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.delegate.IExpensesEditScreenInputHandler
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.usecase.expenses.DeleteExpenseUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpenseByIdUseCase
 import com.eyther.lumbridge.usecase.expenses.UpdateExpenseUseCase
@@ -76,6 +77,9 @@ class ExpensesEditScreenViewModel @Inject constructor(
                     categoryType = ExpensesCategoryTypesUi.of(
                         ordinal = expense?.categoryType?.ordinal ?: 0
                     ),
+                    allocationTypeUi = MoneyAllocationTypeUi.toDefaultAllocationFromOrdinal(
+                        ordinal = expense?.allocationTypeUi?.ordinal ?: 0
+                    ),
                     dateInput = state.dateInput.copy(
                         date = expense?.date
                     ),
@@ -95,7 +99,8 @@ class ExpensesEditScreenViewModel @Inject constructor(
                         ExpensesEditScreenViewState.Content(
                             shouldEnableSaveButton = shouldEnableSaveButton(inputState),
                             inputState = inputState,
-                            availableCategories = ExpensesCategoryTypesUi.get()
+                            availableCategories = ExpensesCategoryTypesUi.get(),
+                            availableAllocations = MoneyAllocationTypeUi.get()
                         )
                     }
                 }.launchIn(this)
@@ -131,6 +136,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
                 ExpenseUi(
                     id = expenseId,
                     categoryType = inputState.value.categoryType,
+                    allocationTypeUi = inputState.value.allocationTypeUi,
                     expenseAmount = checkNotNull(inputState.value.expenseAmount.text?.toFloat()),
                     expenseName = checkNotNull(inputState.value.expenseName.text),
                     date = checkNotNull(inputState.value.dateInput.date)

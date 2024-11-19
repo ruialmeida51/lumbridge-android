@@ -1,17 +1,23 @@
 package com.eyther.lumbridge.features.overview.breakdown.screens
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,6 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,6 +41,7 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
+import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
 import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenViewState
 import com.eyther.lumbridge.features.overview.breakdown.viewmodel.BreakdownScreenViewModel
 import com.eyther.lumbridge.features.overview.breakdown.viewmodel.IBreakdownScreenViewModel
@@ -44,6 +53,7 @@ import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrap
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyComponentWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
 import com.eyther.lumbridge.ui.common.composables.components.loan.PeekLoanCard
+import com.eyther.lumbridge.ui.common.composables.components.progress.LineProgressIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
@@ -133,6 +143,15 @@ private fun Overview(
             .padding(top = DefaultPadding)
     ) {
         item {
+            BalanceSheet(
+                currencySymbol = state.currencySymbol,
+                state = state
+            )
+
+            Spacer(modifier = Modifier.height(HalfPadding))
+        }
+
+        item {
             SalaryOverview(
                 netSalaryUi = state.netSalary,
                 currencySymbol = state.currencySymbol,
@@ -141,6 +160,15 @@ private fun Overview(
             )
 
             Spacer(modifier = Modifier.height(HalfPadding))
+        }
+
+        item {
+            Text(
+                modifier = Modifier
+                    .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding),
+                text = stringResource(id = R.string.breakdown_loans_title),
+                style = MaterialTheme.typography.bodyLarge
+            )
         }
 
         if (state.loans.isEmpty()) {
@@ -153,16 +181,11 @@ private fun Overview(
                     )
                 }
             }
-        } else {
-            item {
-                Text(
-                    modifier = Modifier
-                        .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding),
-                    text = stringResource(id = R.string.breakdown_loans_title),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
 
+            item {
+                Spacer(modifier = Modifier.height(DefaultPadding))
+            }
+        } else {
             items(state.loans) { (loanUi, loanCalculationUi) ->
                 PeekLoanCard(
                     loanUi = loanUi,
@@ -183,12 +206,171 @@ private fun Overview(
 }
 
 @Composable
+private fun BalanceSheet(
+    state: BreakdownScreenViewState.Content,
+    currencySymbol: String
+) {
+    Text(
+        modifier = Modifier
+            .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding),
+        text = stringResource(id = R.string.breakdown_balance_sheet),
+        style = MaterialTheme.typography.bodyLarge
+    )
+
+    ColumnCardWrapper {
+        if (state.balanceSheetNet != null) {
+            BalanceSheetNet(
+                balanceSheetNetUi = state.balanceSheetNet,
+                currencySymbol = currencySymbol
+            )
+        } else {
+            Text(
+                text = stringResource(id = R.string.breakdown_balance_sheet_no_data),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        }
+    }
+}
+
+@Composable
+private fun BalanceSheetNet(
+    balanceSheetNetUi: BalanceSheetNetUi,
+    currencySymbol: String
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row {
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .align(Alignment.CenterVertically),
+                    painter = painterResource(id = R.drawable.ic_outward),
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    contentDescription = null
+                )
+
+                Spacer(modifier = Modifier.width(QuarterPadding))
+
+                Text(
+                    text = stringResource(id = R.string.breakdown_balance_sheet_money_in),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Spacer(modifier = Modifier.width(HalfPadding))
+
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.Center
+            ) {
+
+                Text(
+                    text = stringResource(id = R.string.breakdown_balance_sheet_money_out),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.width(QuarterPadding))
+
+                Icon(
+                    modifier = Modifier
+                        .size(16.dp)
+                        .align(Alignment.CenterVertically),
+                    painter = painterResource(id = R.drawable.ic_downward),
+                    tint = MaterialTheme.colorScheme.error,
+                    contentDescription = null
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(HalfPadding))
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(HalfPadding)
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "+${balanceSheetNetUi.moneyIn.forceTwoDecimalsPlaces()}$currencySymbol",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
+                textAlign = TextAlign.Center
+            )
+
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "-${balanceSheetNetUi.moneyOut.forceTwoDecimalsPlaces()}$currencySymbol",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
+        LineProgressIndicator(
+            modifier = Modifier
+                .fillMaxWidth(fraction = 0.75f)
+                .height(8.dp)
+                .align(Alignment.CenterHorizontally),
+            backgroundColor = MaterialTheme.colorScheme.error,
+            progressColor = MaterialTheme.colorScheme.tertiary,
+            progress = 1 - balanceSheetNetUi.percentageSpent // Invert the percentage spent to show the money in as the progress
+        )
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
+        HorizontalDivider()
+
+        Spacer(modifier = Modifier.height(DefaultPadding))
+
+        Row {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_payments),
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.CenterVertically),
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.width(HalfPadding))
+
+            TabbedDataOverview(
+                modifier = Modifier.weight(1f),
+                label = stringResource(id = R.string.breakdown_balance_sheet_net),
+                text = "${balanceSheetNetUi.net.forceTwoDecimalsPlaces()}$currencySymbol"
+            )
+        }
+    }
+}
+
+@Composable
 private fun SalaryOverview(
     netSalaryUi: NetSalaryUi?,
     currencySymbol: String,
     onCardClick: () -> Unit,
     onCreateFinancialProfile: () -> Unit
 ) {
+    Text(
+        modifier = Modifier
+            .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding),
+        text = stringResource(id = R.string.breakdown_salary_title),
+        style = MaterialTheme.typography.bodyLarge
+    )
+
     if (netSalaryUi == null) {
         ColumnCardWrapper {
             EmptyComponentWithButton(
@@ -198,13 +380,6 @@ private fun SalaryOverview(
             )
         }
     } else {
-        Text(
-            modifier = Modifier
-                .padding(start = DefaultPadding, end = DefaultPadding, bottom = HalfPadding),
-            text = stringResource(id = R.string.breakdown_salary_title),
-            style = MaterialTheme.typography.bodyLarge
-        )
-
         ColumnCardWrapper(
             onClick = onCardClick
         ) {
@@ -239,10 +414,23 @@ private fun SalaryOverview(
                 )
 
                 netSalaryUi.moneyAllocations.forEach { moneyAllocationUi ->
-                    TabbedDataOverview(
-                        label = stringResource(id = moneyAllocationUi.label),
-                        text = "${moneyAllocationUi.amount.forceTwoDecimalsPlaces()}$currencySymbol"
-                    )
+                    Row {
+                        Icon(
+                            painter = painterResource(id = moneyAllocationUi.iconRes),
+                            modifier = Modifier
+                                .size(16.dp)
+                                .align(Alignment.CenterVertically),
+                            contentDescription = null
+                        )
+
+                        Spacer(modifier = Modifier.width(HalfPadding))
+
+                        TabbedDataOverview(
+                            modifier = Modifier.weight(1f),
+                            label = stringResource(id = moneyAllocationUi.labelRes),
+                            text = "${moneyAllocationUi.allocated.forceTwoDecimalsPlaces()}$currencySymbol"
+                        )
+                    }
                 }
             }
 

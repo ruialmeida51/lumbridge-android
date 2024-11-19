@@ -1,7 +1,8 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.eyther.lumbridge.features.expenses.screens
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -9,7 +10,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +30,7 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -50,6 +54,9 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -91,8 +98,8 @@ import com.eyther.lumbridge.ui.common.composables.components.datepicker.Lumbridg
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeYearMonthRangePicker
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyComponentWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
+import com.eyther.lumbridge.ui.common.composables.components.progress.LineProgressIndicator
 import com.eyther.lumbridge.ui.common.composables.components.setting.SimpleSetting
-import com.eyther.lumbridge.ui.common.composables.components.text.DataOverview
 import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
@@ -297,6 +304,7 @@ private fun Content(
                 expensesMonthUi = monthExpensesUi,
                 onSelectMonth = onSelectMonth,
                 onSelectCategory = onSelectCategory,
+                showAllocationForExpenses = state.showAllocations,
                 selectedMonth = selectedMonth,
                 currencySymbol = state.locale.getCurrencySymbol(),
                 onEditExpense = onEditExpense
@@ -565,6 +573,7 @@ private fun HasFinancialProfile(
 private fun MonthCard(
     modifier: Modifier = Modifier,
     expensesMonthUi: ExpensesMonthUi,
+    showAllocationForExpenses: Boolean,
     currencySymbol: String,
     selectedMonth: MutableState<ExpensesMonthUi?>,
     onSelectMonth: (ExpensesMonthUi) -> Unit,
@@ -610,21 +619,19 @@ private fun MonthCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    modifier = Modifier.padding(bottom = QuarterPadding),
+                    modifier = Modifier.padding(bottom = HalfPadding),
                     text = expensesMonthUi.getDateWithLocale(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.tertiary
                 )
 
-                DataOverview(
-                    label = stringResource(id = R.string.spent),
-                    text = "${expensesMonthUi.spent.forceTwoDecimalsPlaces()}$currencySymbol"
+                MonthlyAllocationGraph(
+                    showAllocationForExpenses = showAllocationForExpenses,
+                    expensesMonthUi = expensesMonthUi,
+                    currencySymbol = currencySymbol
                 )
 
-                DataOverview(
-                    label = stringResource(id = R.string.remainder),
-                    text = "${expensesMonthUi.remainder.forceTwoDecimalsPlaces()}$currencySymbol"
-                )
+                Spacer(modifier = Modifier.height(HalfPadding))
 
                 AnimatedVisibility(
                     visible = expensesMonthUi.expanded
@@ -633,6 +640,7 @@ private fun MonthCard(
 
                     CategoriesCard(
                         expensesCategories = expensesMonthUi.categoryExpenses,
+                        showAllocationForExpenses = showAllocationForExpenses,
                         onSelectCategory = onSelectCategory,
                         currencySymbol = currencySymbol,
                         onEditExpense = onEditExpense
@@ -646,6 +654,7 @@ private fun MonthCard(
 @Composable
 private fun CategoriesCard(
     expensesCategories: List<ExpensesCategoryUi>,
+    showAllocationForExpenses: Boolean,
     currencySymbol: String,
     onSelectCategory: (ExpensesCategoryUi) -> Unit,
     onEditExpense: (ExpensesDetailedUi) -> Unit
@@ -693,6 +702,7 @@ private fun CategoriesCard(
             ) {
                 DetailsCard(
                     expensesDetailed = category.expensesDetailedUi,
+                    showAllocationForExpenses = showAllocationForExpenses,
                     mathOperatorString = mathOperatorString,
                     currencySymbol = currencySymbol,
                     onEditExpense = onEditExpense
@@ -705,6 +715,7 @@ private fun CategoriesCard(
 @Composable
 private fun DetailsCard(
     expensesDetailed: List<ExpensesDetailedUi>,
+    showAllocationForExpenses: Boolean,
     mathOperatorString: String,
     currencySymbol: String,
     onEditExpense: (ExpensesDetailedUi) -> Unit
@@ -728,12 +739,29 @@ private fun DetailsCard(
                     textColour = MaterialTheme.colorScheme.tertiary,
                     label = detail.expenseName,
                     icon = {
-                        Icon(
-                            modifier = Modifier
-                                .size(16.dp),
-                            painter = painterResource(id = R.drawable.ic_edit_note),
-                            contentDescription = stringResource(id = R.string.edit)
-                        )
+                        Row {
+                            if (showAllocationForExpenses) {
+                                Spacer(
+                                    modifier = Modifier.width(QuarterPadding)
+                                )
+
+                                Icon(
+                                    modifier = Modifier.size(16.dp),
+                                    painter = painterResource(id = detail.allocationTypeUi.iconRes),
+                                    contentDescription = stringResource(id = detail.allocationTypeUi.labelRes)
+                                )
+                            }
+
+                            Spacer(
+                                modifier = Modifier.width(QuarterPadding)
+                            )
+
+                            Icon(
+                                modifier = Modifier.size(16.dp),
+                                painter = painterResource(id = R.drawable.ic_arrow_next),
+                                contentDescription = stringResource(id = R.string.edit)
+                            )
+                        }
                     },
                     text = "$mathOperatorString${detail.expenseAmount.forceTwoDecimalsPlaces()}$currencySymbol"
                 )
@@ -741,6 +769,156 @@ private fun DetailsCard(
                 Spacer(modifier = Modifier.width(HalfPadding))
             }
         }
+    }
+}
+
+@Composable
+private fun MonthlyAllocationGraph(
+    showAllocationForExpenses: Boolean,
+    expensesMonthUi: ExpensesMonthUi,
+    currencySymbol: String
+) {
+    BoxWithConstraints {
+        val boxWithConstraintsScope = this
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(HalfPadding)
+        ) {
+            if (showAllocationForExpenses && expensesMonthUi.snapshotAllocations.isNotEmpty()) {
+                expensesMonthUi.snapshotAllocations.forEach { allocation ->
+                    AllocationItem(
+                        availableWidth = boxWithConstraintsScope.maxWidth,
+                        iconRes = allocation.iconRes,
+                        labelRes = allocation.labelRes,
+                        spent = allocation.spent,
+                        allocated = allocation.allocated,
+                        percentage = allocation.percentage,
+                        currencySymbol = currencySymbol
+                    )
+                }
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = HalfPadding)
+                )
+
+                SpentVersusRemainder(
+                    expensesMonthUi = expensesMonthUi,
+                    currencySymbol = currencySymbol
+                )
+            } else {
+                SpentVersusRemainder(
+                    expensesMonthUi = expensesMonthUi,
+                    currencySymbol = currencySymbol
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ColumnScope.SpentVersusRemainder(
+    expensesMonthUi: ExpensesMonthUi,
+    currencySymbol: String
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_payments),
+            contentDescription = null,
+            modifier = Modifier.size(16.dp)
+        )
+
+        Spacer(modifier = Modifier.width(HalfPadding))
+
+        TabbedDataOverview(
+            label = stringResource(id = R.string.spent),
+            text = "${expensesMonthUi.spent.forceTwoDecimalsPlaces()}$currencySymbol"
+        )
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_savings),
+            contentDescription = null,
+            modifier = Modifier.size(16.dp)
+        )
+
+        Spacer(modifier = Modifier.width(HalfPadding))
+
+        TabbedDataOverview(
+            label = stringResource(id = R.string.remainder),
+            text = "${expensesMonthUi.remainder.forceTwoDecimalsPlaces()}$currencySymbol"
+        )
+    }
+}
+
+@Composable
+private fun AllocationItem(
+    availableWidth: Dp,
+    @DrawableRes iconRes: Int,
+    @StringRes labelRes: Int,
+    spent: Float,
+    allocated: Float,
+    percentage: Float,
+    currencySymbol: String
+) {
+    val labelWidth = availableWidth * 0.22f
+    val progressWidth = availableWidth * 0.17f
+    val textWidth = availableWidth * 0.60f
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = null,
+            modifier = Modifier
+                .size(16.dp)
+                .align(Alignment.CenterVertically)
+        )
+
+        Spacer(modifier = Modifier.width(HalfPadding))
+
+        Text(
+            modifier = Modifier
+                .width(labelWidth),
+            text = stringResource(id = labelRes),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.secondary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Start
+        )
+
+        Spacer(modifier = Modifier.width(HalfPadding))
+
+        LineProgressIndicator(
+            modifier = Modifier
+                .height(8.dp)
+                .align(Alignment.CenterVertically)
+                .width(progressWidth),
+            progress = percentage
+        )
+
+        Spacer(modifier = Modifier.width(HalfPadding))
+
+        Text(
+            modifier = Modifier
+                .width(textWidth),
+            text = stringResource(
+                id = R.string.expenses_spent_versus_allocated,
+                "${spent.forceTwoDecimalsPlaces()}$currencySymbol",
+                "${allocated.forceTwoDecimalsPlaces()}$currencySymbol"
+            ),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+            textAlign = TextAlign.End,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 

@@ -14,6 +14,7 @@ interface IExpensesAddScreenInputHandler {
     fun onAmountChanged(expenseAmount: Float?)
     fun onDateChanged(expenseDate: Long?)
     fun onTypeChanged(typeOrdinal: Int?)
+    fun onAllocationTypeChanged(allocationTypeOrdinal: Int?)
     fun onSurplusOrExpenseChanged(choiceOrdinal: Int)
 
     /**

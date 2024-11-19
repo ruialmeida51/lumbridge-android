@@ -16,6 +16,7 @@ sealed class ExpensesCategoryTypes(
                 Pets.ordinal -> Pets
                 Sports.ordinal -> Sports
                 Vacations.ordinal -> Vacations
+                Investments.ordinal -> Investments
                 Surplus.ordinal -> Surplus
                 else -> throw IllegalArgumentException("💥 Unknown ordinal: $ordinal")
             }
@@ -33,4 +34,5 @@ sealed class ExpensesCategoryTypes(
     data object Sports : ExpensesCategoryTypes(8)
     data object Vacations : ExpensesCategoryTypes(9)
     data object Surplus : ExpensesCategoryTypes(10)
+    data object Investments : ExpensesCategoryTypes(11)
 }

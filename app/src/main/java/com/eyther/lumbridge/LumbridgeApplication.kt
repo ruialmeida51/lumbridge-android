@@ -83,11 +83,15 @@ class LumbridgeApplication : Application(), Configuration.Provider {
      * Initially, we stored some data in DataStore which now needs to be migrated to Room due to
      * changing requirements. This method is used to check if there are any migrations to be made
      * and if so, to make them.
+     *
+     * The order of the migrations is important, as some migrations depend on others. For example,
+     * the first snapshot salary migration depends on the user financials salary percentage migration.
      */
     private fun tryMakeDataStoreMigrations() {
         MainScope().launch {
             dataStoreMigrationHelper.tryMigrateMortgage()
-            dataStoreMigrationHelper.tryMigrateFirstSnapshotSalary()
+            dataStoreMigrationHelper.tryMigrateUserFinancialsSalaryPercentage()
+            dataStoreMigrationHelper.tryMigrateFirstSnapshotSalaryAndAllocations()
         }
     }
 

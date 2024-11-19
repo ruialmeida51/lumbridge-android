@@ -63,6 +63,12 @@
     <string name="edit_loan_profile_invalid_payment_day">Please enter a valid payment day (between 1 and 31)</string>
     <string name="edit_loan_profile_loan_category">Loan Category</string>
 
+    <string name="breakdown_balance_sheet">Balance</string>
+    <string name="breakdown_balance_sheet_no_data">Looks like you don\'t have any allocations or expenses yet. Add some and come back to see your balance!</string>
+    <string name="breakdown_balance_sheet_average_savings_allocated_vs_spent">Avg. </string>
+    <string name="breakdown_balance_sheet_money_in">Income</string>
+    <string name="breakdown_balance_sheet_money_out">Spent</string>
+    <string name="breakdown_balance_sheet_net">Total Net</string>
     <string name="breakdown_salary_title">Financial Profile</string>
     <string name="breakdown_salary_card_income">Income</string>
     <string name="breakdown_salary_card_allocations">Allocation</string>
@@ -232,8 +238,11 @@
     <string name="expenses_edit_hint">Edit the details of your expense</string>
     <string name="expenses_add_hint">Please, fill out the expense information</string>
     <string name="expenses_add_type">Expense Type</string>
+    <string name="expenses_add_allocation">Allocation</string>
     <string name="expenses_overview_no_financial_profile">You don\'t seem to have a financial profile.\nTap the button below to create one.</string>
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
+    <string name="expenses_spent_versus_allocated">%1$s of %2$s</string>
+    <string name="expenses_profile_setting_show_allocations">Show Allocations on Expenses</string>
 
     <string name="recurring_payments_overview">Recurring Payments</string>
     <string name="recurring_payments_edit">Edit Recurring Payment</string>
@@ -346,17 +355,17 @@
     <string name="email">Email</string>
     <string name="settings">Settings</string>
     <string name="net_annual">Net Annual</string>
-    <string name="duodecimos">Duodecimos</string>
+    <string name="duodecimos">Subsidies</string>
     <string name="net_monthly">Net Monthly</string>
     <string name="gross_annual">Gross Annual</string>
     <string name="gross_monthly">Gross Monthly</string>
     <string name="food_card">Food Card</string>
     <string name="savings">Savings</string>
     <string name="savings_percentage">Savings Percentage</string>
-    <string name="necessities">Necessities</string>
-    <string name="necessities_percentage">Necessities Percentage</string>
-    <string name="luxuries">Luxuries</string>
-    <string name="luxuries_percentage">Luxuries Percentage</string>
+    <string name="necessities">Living</string>
+    <string name="necessities_percentage">Living Percentage</string>
+    <string name="luxuries">Hobbies</string>
+    <string name="luxuries_percentage">Hobbies Percentage</string>
     <string name="number_of_dependants">Number of Dependants</string>
     <string name="single_incomne">Single Income</string>
     <string name="handicapped">Handicapped</string>
@@ -411,6 +420,7 @@
     <string name="sports">Sports</string>
     <string name="vacations">Vacations</string>
     <string name="surplus">Surplus</string>
+    <string name="investments">Investments</string>
     <string name="other">Other</string>
     <string name="expense">Expense</string>
     <string name="gained">Gained</string>

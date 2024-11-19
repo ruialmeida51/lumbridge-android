@@ -10,10 +10,10 @@ import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocationTyp
 import com.eyther.lumbridge.domain.model.netsalary.deduction.Deduction
 import com.eyther.lumbridge.domain.model.netsalary.deduction.DeductionType
 import com.eyther.lumbridge.domain.model.netsalary.deduction.DuodecimosType
-import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
-import com.eyther.lumbridge.domain.repository.netsalary.NetSalaryCalculator
 import com.eyther.lumbridge.domain.model.netsalary.percountry.portugal.PortugalIrsTableType
 import com.eyther.lumbridge.domain.model.netsalary.percountry.portugal.PortugalTaxDeductions
+import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
+import com.eyther.lumbridge.domain.repository.netsalary.NetSalaryCalculator
 import javax.inject.Inject
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -122,9 +122,9 @@ class PortugalNetSalaryCalculator @Inject constructor(
      * Returns the money allocation for the net salary.
      */
     private fun getMoneyAllocation(
-        savingsPercentage: Int?,
-        necessitiesPercentage: Int?,
-        luxuriesPercentage: Int?,
+        savingsPercentage: Float?,
+        necessitiesPercentage: Float?,
+        luxuriesPercentage: Float?,
         netSalary: Float
     ): List<MoneyAllocation>? {
 
@@ -134,19 +134,28 @@ class PortugalNetSalaryCalculator @Inject constructor(
             return null
         }
 
-        return listOf(
-            MoneyAllocation(
-                type = MoneyAllocationType.Savings,
-                amount = ceil(netSalary * (savingsPercentage?.div(100f) ?: 0f))
-            ),
-            MoneyAllocation(
-                type = MoneyAllocationType.Necessities,
-                amount = ceil(netSalary * (necessitiesPercentage?.div(100f) ?: 0f))
-            ),
-            MoneyAllocation(
-                type = MoneyAllocationType.Luxuries,
-                amount = ceil(netSalary * (luxuriesPercentage?.div(100f) ?: 0f))
-            )
+        return listOfNotNull(
+            savingsPercentage?.let {
+                MoneyAllocation(
+                    type = MoneyAllocationType.Savings,
+                    percentage = it,
+                    netSalary = netSalary
+                )
+            },
+            necessitiesPercentage?.let {
+                MoneyAllocation(
+                    type = MoneyAllocationType.Necessities,
+                    percentage = it,
+                    netSalary = netSalary
+                )
+            },
+            luxuriesPercentage?.let {
+                MoneyAllocation(
+                    type = MoneyAllocationType.Luxuries,
+                    percentage = it,
+                    netSalary = netSalary
+                )
+            }
         )
     }
 

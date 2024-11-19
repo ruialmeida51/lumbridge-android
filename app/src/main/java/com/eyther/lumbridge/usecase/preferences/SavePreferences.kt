@@ -9,8 +9,13 @@ class SavePreferences @Inject constructor(
 ) {
     suspend operator fun invoke(
         isDarkMode: Boolean,
-        appLanguages: SupportedLanguages
+        appLanguages: SupportedLanguages,
+        showAllocationsOnExpenses: Boolean
     ) {
-        preferencesRepository.updatePreferences(isDarkMode, appLanguages)
+        preferencesRepository.updatePreferences(
+            isDarkMode = isDarkMode,
+            appLanguage = appLanguages,
+            showAllocationsOnExpenses = showAllocationsOnExpenses
+        )
     }
 }

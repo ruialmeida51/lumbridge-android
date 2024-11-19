@@ -1,8 +1,8 @@
 package com.eyther.lumbridge.data.model.recurringpayments.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.eyther.lumbridge.shared.time.model.Periodicity
 
 const val RECURRING_PAYMENTS_TABLE_NAME = "recurring_payments"
 
@@ -16,6 +16,7 @@ data class RecurringPaymentEntity(
     val label: String,
     val amountToPay: Float,
     val categoryTypeOrdinal: Int,
+    @ColumnInfo(defaultValue = "0") val allocationTypeOrdinal: Int = 0,
     val shouldNotifyWhenPaid: Boolean,
     val periodicityTypeOrdinal: Int?,
     val numOfDays: Int?,

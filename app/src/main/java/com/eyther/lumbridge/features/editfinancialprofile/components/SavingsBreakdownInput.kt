@@ -38,20 +38,21 @@ fun ColumnScope.SavingsBreakdownInput(
     )
 
     ColumnCardWrapper {
-        NumberInput(
-            label = stringResource(id = R.string.savings_percentage),
-            placeholder = stringResource(id = R.string.edit_financial_profile_suggested, "30"),
-            state = savingsPercentage,
-            onInputChanged = { input -> onSavingsPercentageChanged(input.toIntOrNull()) }
-        )
-
-        Spacer(modifier = Modifier.height(HalfPadding))
 
         NumberInput(
             label = stringResource(id = R.string.necessities_percentage),
             placeholder = stringResource(id = R.string.edit_financial_profile_suggested, "50"),
             state = necessitiesPercentage,
             onInputChanged = { input -> onNecessitiesPercentageChanged(input.toIntOrNull()) }
+        )
+
+        Spacer(modifier = Modifier.height(HalfPadding))
+
+        NumberInput(
+            label = stringResource(id = R.string.savings_percentage),
+            placeholder = stringResource(id = R.string.edit_financial_profile_suggested, "30"),
+            state = savingsPercentage,
+            onInputChanged = { input -> onSavingsPercentageChanged(input.toIntOrNull()) }
         )
 
         Spacer(modifier = Modifier.height(HalfPadding))

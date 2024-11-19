@@ -1,5 +1,6 @@
 package com.eyther.lumbridge.data.model.expenses.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -14,6 +15,7 @@ const val EXPENSES_TABLE_NAME = "expenses"
 data class ExpenseEntity(
     @PrimaryKey(autoGenerate = true) val expenseId:  Long = 0,
     val categoryTypeOrdinal: Int,
+    @ColumnInfo(defaultValue = "0") val allocationTypeOrdinal: Int = 0,
     val date: LocalDate,
     val amount: Float,
     val name: String

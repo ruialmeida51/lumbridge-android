@@ -5,6 +5,7 @@ import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice.Surplus
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenInputState
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -55,6 +56,14 @@ class ExpensesEditScreenInputHandler @Inject constructor() : IExpensesEditScreen
         updateInput { state ->
             state.copy(
                 categoryType = ExpensesCategoryTypesUi.of(typeOrdinal ?: 0)
+            )
+        }
+    }
+
+    override fun onAllocationTypeChanged(allocationTypeOrdinal: Int?) {
+        updateInput { state ->
+            state.copy(
+                allocationTypeUi = MoneyAllocationTypeUi.toDefaultAllocationFromOrdinal(allocationTypeOrdinal ?: 0)
             )
         }
     }
