@@ -10,21 +10,28 @@ data class PortugalIrsTableFromFile(
 )
 
 data class PortugalTaxPercentageFromFile(
+    @SerializedName("range")
     val range: List<Float>,
     @SerializedName("value")
     val percentage: Float
 )
 
 data class PortugalFlatRateFromFile(
+    @SerializedName("range")
     val range: List<Float>,
     @SerializedName("value")
     val rate: Float? = null,
+    @SerializedName("formula")
     val formula: PortugalFlatRateFormulaFromFile? = null,
+    @SerializedName("perDependentAmount")
     val perDependentAmount: Float
 )
 
 data class PortugalFlatRateFormulaFromFile(
+    @SerializedName("taxPercentage")
     val taxPercentage: Float,
+    @SerializedName("multiplier")
     val multiplier: Float,
+    @SerializedName("rate")
     val rate: Float
 )

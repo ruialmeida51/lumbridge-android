@@ -123,7 +123,7 @@ class DataStoreMigrationHelper @Inject constructor(
      * * If the snapshot salary already exists, the migration will be skipped.
      */
     suspend fun tryMigrateFirstSnapshotSalaryAndAllocations() = runCatching {
-        if (!appSettingsRepository.getCompletedSnapshotMigration()) {
+        if (appSettingsRepository.getCompletedSnapshotMigration()) {
             Log.d(TAG, "⏩ Snapshot migration has already been completed")
             return@runCatching
         }
