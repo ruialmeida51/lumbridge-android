@@ -17,11 +17,7 @@ data class ExpensesMonthUi(
     val remainder: Float = -1f,
     val expanded: Boolean = false
 ) {
-
     fun getDateWithLocale(): String {
         return (year to month).toLocalDate().toMonthYearDateString().capitalise()
     }
-
-    val totalGained: Float
-        get() = snapshotMonthlyNetSalary + gained
 }
