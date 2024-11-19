@@ -33,25 +33,25 @@ class GetBalanceSheetUseCase @Inject constructor(
         if (expenses.isEmpty() || currentNetSalary == null) return null
 
         val (moneyIn, moneyOut) = expenses
-            .groupBy { it.date }
-            .map { (date, expenses) ->
-                val snapshotSalaryForDate = getMostRecentSnapshotSalaryForDateUseCase(
+            .groupBy { it.date.year to it.date.month }
+            .map { (yearMonth, expenses) ->
+                val spent = expenses
+                    .filter { it.categoryType.operator == MathOperator.SUBTRACTION }
+                    .sumOf { it.expenseAmount.toDouble() }.toFloat()
+
+                val gained = expenses
+                    .filter { it.categoryType.operator == MathOperator.ADDITION }
+                    .sumOf { it.expenseAmount.toDouble() }.toFloat()
+
+                val snapshotSalary = getMostRecentSnapshotSalaryForDateUseCase(
                     snapshotNetSalaries = snapshotSalaries,
-                    year = date.year,
-                    month = date.monthValue
+                    year = yearMonth.first,
+                    month = yearMonth.second.value
                 )
 
-                val salaryForMonth = snapshotSalaryForDate?.netSalary ?: currentNetSalary
+                val snapshotNetSalary = snapshotSalary?.netSalary ?: 0f
 
-                val (expensesMoneyIn, expensesMoneyOut) = expenses.fold(0 to 0) { acc, expense ->
-                    if (expense.categoryType.operator == MathOperator.SUBTRACTION) {
-                        acc.copy(second = acc.second + expense.expenseAmount.toInt())
-                    } else {
-                        acc.copy(first = acc.first + expense.expenseAmount.toInt())
-                    }
-                }
-
-                return@map (expensesMoneyIn + salaryForMonth).toInt() to expensesMoneyOut
+                return@map (snapshotNetSalary + gained).toInt() to spent
             }.reduce { acc, (moneyIn, moneyOut) ->
                 acc.copy(
                     first = acc.first + moneyIn,
@@ -61,8 +61,8 @@ class GetBalanceSheetUseCase @Inject constructor(
 
         return BalanceSheetNetUi(
             moneyIn = moneyIn.toFloat(),
-            moneyOut = moneyOut.toFloat(),
-            net = (moneyIn - moneyOut).toFloat()
+            moneyOut = moneyOut,
+            net = (moneyIn - moneyOut)
         )
     }
 }

@@ -900,6 +900,7 @@ private fun AllocationItem(
                 .height(8.dp)
                 .align(Alignment.CenterVertically)
                 .width(progressWidth),
+            progressColor = if (percentage > 1.0f) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
             progress = percentage
         )
 
