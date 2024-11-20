@@ -24,18 +24,21 @@ As stated before, it started a playground for me to learn and experiment with **
 * 🗞️ Dynamic RSS Feed, customizable with your links
 
 ### Tools
-* 🛍️ Tools: Shopping Lists for day-to-day shopping & tracking
+* 🛍️ Shopping Lists for day-to-day shopping & tracking
 * 🗒️ Notes for mental scribbles
 * 🗓️ Reminders for tasks with a subset of notification timings
+* 🔃 Recurring Payments
 * 💰 Net Salary Calculator
 * 💱 Currency Converter
 
 ### Expenses
 
 * 💸 Keep track of your expenses and surplus money
+    * Optional allocation versus spending tracking available.
 
 ### Overview
 
+* ⚖️ Check your balance with a cummulative view of money in versus money out.
 * 🏦 Keep track of your loans, how much you'll pay on the next cycle, their status, how much you still owe, etc.
 * 💰 Create a financial profile where you can see how much your net salary is, allocate your earnings and understand your deductions.
 
@@ -55,9 +58,6 @@ You can download Lumbridge from the Google Play Store: [Lumbridge on Play Store]
 ---
 
 ## 📷 Screenshots
-
-
-
 
 
 
