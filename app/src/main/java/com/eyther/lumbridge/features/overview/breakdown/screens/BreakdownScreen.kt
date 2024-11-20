@@ -328,7 +328,7 @@ private fun BalanceSheetNet(
                 .align(Alignment.CenterHorizontally),
             backgroundColor = MaterialTheme.colorScheme.error,
             progressColor = MaterialTheme.colorScheme.tertiary,
-            progress = 1 - balanceSheetNetUi.percentageSpent // Invert the percentage spent to show the money in as the progress
+            progress = balanceSheetNetUi.percentageSpent
         )
 
         Spacer(modifier = Modifier.height(DefaultPadding))
