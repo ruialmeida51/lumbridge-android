@@ -5,5 +5,5 @@ data class BalanceSheetNetUi(
     val moneyOut: Float,
     val net: Float
 ) {
-    val percentageSpent: Float = minOf(moneyOut / moneyIn, 1f)
+    val percentageSpent: Float = minOf(moneyIn / (moneyOut + moneyIn), 1f)
 }
