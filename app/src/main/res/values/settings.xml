@@ -32,7 +32,8 @@
         </item>
     </string-array>
 
-    <string name="developer_email">eytherdeveloper@gmail.com</string>
-    <string name="source_code_url">https://github.com/ruialmeida51/lumbridge-android</string>
-    <string name="buy_me_a_coffee_url">https://buymeacoffee.com/ruialmeida51</string>
+    <string name="developer_email" translatable="false">eytherdeveloper@gmail.com</string>
+    <string name="source_code_url" translatable="false">https://github.com/ruialmeida51/lumbridge-android</string>
+    <string name="buy_me_a_coffee_url" translatable="false">https://buymeacoffee.com/ruialmeida51</string>
+    <string name="discord_invite_url" translatable="false">https://discord.gg/zGHsU83azK</string>
 </resources>

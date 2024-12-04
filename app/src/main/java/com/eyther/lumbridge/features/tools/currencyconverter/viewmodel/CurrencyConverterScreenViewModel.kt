@@ -28,6 +28,7 @@ class CurrencyConverterScreenViewModel @Inject constructor(
     ICurrencyConverterInputHandler by currencyConverterInputHandler {
 
     companion object {
+        private const val TAG = "CurrencyConverterScreenViewModel"
         private const val SHORT_REQUEST_DELAY = 300L
     }
 
@@ -78,7 +79,7 @@ class CurrencyConverterScreenViewModel @Inject constructor(
 
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
             viewState.update {
-                Log.e(this::class.simpleName, throwable.message ?: "💥 Unknown error.", throwable)
+                Log.e(TAG, throwable.message ?: "💥 Unknown error.", throwable)
 
                 (it as CurrencyConverterScreenViewState.Content).copy(
                     isCalculating = false,

@@ -60,6 +60,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     IExpensesOverviewScreenFilterDelegate by filterDelegate {
 
     companion object {
+        private const val TAG = "ExpensesOverviewScreenViewModel"
+
         /**
          * A helper class to hold the data emitted by the expenses stream, to be used in the combine operator.
          */
@@ -158,54 +160,20 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    override fun expandMonth(selectedMonth: ExpensesMonthUi) {
-        viewState.update { oldState ->
-            // Get the list of month expenses. The state is guaranteed to be of type Content if we reach this point,
-            // since we selected a month to expand.
-            val monthExpensesUiList = oldState
-                .asContent()
-                .let { expandMonthAndCollapseOthers(it.expensesMonthUi, selectedMonth) }
-
-            // Update the state with the new list of month expenses.
-            getContentState(
-                monthlyExpenses = monthExpensesUiList,
-                netSalaryUi = cachedNetSalaryUi,
-                locale = oldState.asContent().locale,
-                sortBy = sortBy.value,
-                filter = filter.value,
-                showAllocationsOnExpenses = oldState.showAllocationsOnExpenses()
-            )
-        }
-    }
-
-    override fun expandCategory(category: ExpensesCategoryUi) {
-        viewState.update { oldState ->
-            // Get the list of month expenses. The state is guaranteed to be of type Content if we reach this point,
-            // since we selected a category to expand.
-            val monthExpensesUiList = oldState
-                .asContent()
-                .expensesMonthUi
-                .map { monthExpensesUi ->
-                    monthExpensesUi.copy(
-                        categoryExpenses = expandCategory(monthExpensesUi.categoryExpenses, category)
-                    )
-                }
-
-            // Update the state with the new list of month expenses.
-            getContentState(
-                monthlyExpenses = monthExpensesUiList,
-                netSalaryUi = cachedNetSalaryUi,
-                locale = oldState.asContent().locale,
-                sortBy = sortBy.value,
-                filter = filter.value,
-                showAllocationsOnExpenses = viewState.value.showAllocationsOnExpenses()
+    override fun selectMonth(selectedMonth: ExpensesMonthUi) {
+        viewModelScope.launch {
+            viewEffects.emit(
+                ExpensesOverviewScreenViewEffect.NavigateToMonthDetail(
+                    year = selectedMonth.year.value,
+                    month = selectedMonth.month.value
+                )
             )
         }
     }
 
     override fun onDeleteExpense(expensesMonth: ExpensesMonthUi) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesOverviewScreenViewModel::class.java.simpleName, "💥 Error deleting expenses", throwable)
+            Log.e(TAG, "💥 Error deleting expenses", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(ExpensesOverviewScreenViewEffect.ShowError(throwable.message.orEmpty()))
@@ -219,72 +187,6 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 }
 
             deleteExpensesListUseCase(expensesIdToDelete)
-        }
-    }
-
-    /**
-     * Helper function that returns the monthly expenses with a selected month expanded, maintaining whatever expanded state
-     * the other months have.
-     *
-     * @param monthlyExpenses The list of month expenses.
-     * @param selectedMonth The month to expand.
-     */
-    private fun expandMonthAndCollapseOthers(
-        monthlyExpenses: List<ExpensesMonthUi>,
-        selectedMonth: ExpensesMonthUi
-    ): List<ExpensesMonthUi> {
-        // Find the index of the month we want to expand.
-        val selectedIndex = monthlyExpenses
-            .indexOf(selectedMonth)
-            .takeIf { indexOf -> indexOf >= 0 }
-
-        if (selectedIndex == null) {
-            return monthlyExpenses
-        }
-
-        return monthlyExpenses.mapIndexed { index, monthExpensesUi ->
-            if (index == selectedIndex) {
-                monthExpensesUi.copy(
-                    expanded = !monthExpensesUi.expanded
-                )
-            } else {
-                monthExpensesUi.copy(
-                    expanded = monthExpensesUi.expanded
-                )
-            }
-        }
-    }
-
-    /**
-     * Helper function that returns the category expenses with a selected category expanded, maintaining whatever expanded state
-     * the other categories have.
-     *
-     * @param categoryExpenses The list of category expenses.
-     * @param selectedCategory The category to expand.
-     */
-    private fun expandCategory(
-        categoryExpenses: List<ExpensesCategoryUi>,
-        selectedCategory: ExpensesCategoryUi
-    ): List<ExpensesCategoryUi> {
-        // Find the index of the category we want to expand.
-        val selectedIndex = categoryExpenses
-            .indexOf(selectedCategory)
-            .takeIf { indexOf -> indexOf >= 0 }
-
-        if (selectedIndex == null) {
-            return categoryExpenses
-        }
-
-        return categoryExpenses.mapIndexed { index, categoryExpensesUi ->
-            if (index == selectedIndex) {
-                categoryExpensesUi.copy(
-                    expanded = !categoryExpensesUi.expanded
-                )
-            } else {
-                categoryExpensesUi.copy(
-                    expanded = categoryExpensesUi.expanded
-                )
-            }
         }
     }
 
@@ -403,56 +305,6 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             withContext(schedulers.io) {
                 sortBy.value = ExpensesOverviewSortBy.DateDescending
             }
-        }
-    }
-
-    override fun collapseAll() {
-        viewState.update { oldState ->
-            val monthlyExpenses = oldState
-                .asContent()
-                .expensesMonthUi
-                .map { monthExpensesUi ->
-                    monthExpensesUi.copy(
-                        expanded = false,
-                        categoryExpenses = monthExpensesUi.categoryExpenses.map { categoryExpensesUi ->
-                            categoryExpensesUi.copy(expanded = false)
-                        }
-                    )
-                }
-
-            getContentState(
-                monthlyExpenses = monthlyExpenses,
-                netSalaryUi = cachedNetSalaryUi,
-                locale = oldState.asContent().locale,
-                sortBy = sortBy.value,
-                filter = filter.value,
-                showAllocationsOnExpenses = oldState.showAllocationsOnExpenses()
-            )
-        }
-    }
-
-    override fun expandAll() {
-        viewState.update { oldState ->
-            val monthlyExpenses = oldState
-                .asContent()
-                .expensesMonthUi
-                .map { monthExpensesUi ->
-                    monthExpensesUi.copy(
-                        expanded = true,
-                        categoryExpenses = monthExpensesUi.categoryExpenses.map { categoryExpensesUi ->
-                            categoryExpensesUi.copy(expanded = true)
-                        }
-                    )
-                }
-
-            getContentState(
-                monthlyExpenses = monthlyExpenses,
-                netSalaryUi = cachedNetSalaryUi,
-                locale = oldState.asContent().locale,
-                sortBy = sortBy.value,
-                filter = filter.value,
-                showAllocationsOnExpenses = oldState.showAllocationsOnExpenses()
-            )
         }
     }
 

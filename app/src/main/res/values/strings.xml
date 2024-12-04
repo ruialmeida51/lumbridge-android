@@ -136,6 +136,7 @@
     <string name="profile_support_feedback_email_body">Hi,\n\nI have some feedback on Loom that I would like to share with you:\n\n</string>
     <string name="profile_support_feedback_email_error_no_clients">There are no email clients installed on your device. Please, install one and try again.</string>
     <string name="profile_support_feedback_email_error_sending">There was an error sending your feedback. Please, try again later.</string>
+    <string name="profile_support_join_discord">Join our Discord</string>
 
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_how_to_contact">How should we contact you?</string>
@@ -243,6 +244,10 @@
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
     <string name="expenses_spent_versus_allocated">%1$s of %2$s</string>
     <string name="expenses_profile_setting_show_allocations">Show Allocations on Expenses</string>
+
+    <string name="expenses_month_detail">Month Expenses</string>
+    <string name="expenses_month_detail_error_not_found">Sorry, looks like we couldn\'t find any expenses for this month. Please, report this issue to the developers if you think this is a mistake.</string>
+    <string name="expenses_month_detail_error_not_found_button">Go Back</string>
 
     <string name="recurring_payments_overview">Recurring Payments</string>
     <string name="recurring_payments_edit">Edit Recurring Payment</string>
@@ -371,6 +376,7 @@
     <string name="handicapped">Handicapped</string>
     <string name="married">Married</string>
     <string name="error">Error</string>
+    <string name="generic_error_message">Sorry, looks like something went wrong.</string>
     <string name="loading">Loading</string>
     <string name="euribor">Euribor</string>
     <string name="spread">Spread</string>

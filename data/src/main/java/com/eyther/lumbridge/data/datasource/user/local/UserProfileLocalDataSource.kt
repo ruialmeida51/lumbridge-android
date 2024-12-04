@@ -27,6 +27,10 @@ import javax.inject.Inject
 class UserProfileLocalDataSource @Inject constructor(
     @UserProfileDataSource private val userProfileDataSource: DataStore<Preferences>
 ) {
+    companion object {
+        private const val TAG = "UserProfileLocalDataSource"
+    }
+
     private object PreferencesKeys {
         val NAME = stringPreferencesKey("name")
         val EMAIL = stringPreferencesKey("email")
@@ -88,7 +92,7 @@ class UserProfileLocalDataSource @Inject constructor(
             val encodeByte: ByteArray = Base64.decode(bitmapAsString, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
         } catch (e: Exception) {
-            Log.e(this::class.simpleName, "💥 Error decoding image", e)
+            Log.e(TAG, "💥 Error decoding image", e)
             null
         }
     }

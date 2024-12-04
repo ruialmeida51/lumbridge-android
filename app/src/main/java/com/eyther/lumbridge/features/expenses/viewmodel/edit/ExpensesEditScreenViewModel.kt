@@ -40,6 +40,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
     IExpensesEditScreenInputHandler by expensesEditScreenInputHandler {
 
     companion object {
+        private const val TAG = "ExpensesEditScreenViewModel"
         private const val MAX_YEARS_AHEAD = 5
         private const val MAX_YEARS_BEFORE = 5
     }
@@ -109,7 +110,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
 
     override fun delete() {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesEditScreenViewModel::class.java.simpleName, "Error deleting detailed expense", throwable)
+            Log.e(TAG, "Error deleting detailed expense", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(ExpensesEditScreenViewEffect.ShowError(throwable.message.orEmpty()))
@@ -124,7 +125,7 @@ class ExpensesEditScreenViewModel @Inject constructor(
 
     override fun save() {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesEditScreenViewModel::class.java.simpleName, "Error saving detailed expense", throwable)
+            Log.e(TAG, "Error saving detailed expense", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(ExpensesEditScreenViewEffect.ShowError(throwable.message.orEmpty()))

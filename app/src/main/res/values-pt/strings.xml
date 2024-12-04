@@ -124,7 +124,7 @@
     <string name="profile_financial_settings">Definições do Perfil Financeiro</string>
     <string name="profile_avatar_content_description">Avatar do Perfil</string>
     <string name="profile_support_the_app">Apoio &amp; Comunidade</string>
-    <string name="profile_support_feedback">Feedback &amp; Reportar Problemas</string>
+    <string name="profile_support_feedback">Feedback &amp; Bugs</string>
     <string name="profile_support_source_code">Código Fonte</string>
     <string name="profile_support_donate">Oferece-me um café!</string>
     <string name="profile_support_donate_disclaimer">As doações são a melhor maneira de apoiar a aplicação, mas são completamente opcionais!\n\nUma doação não te vai dar nenhuma vantagem ou funcionalidade novas, mas também não ficas com nenhuma desvantagem.\n\nApenas ficamos contentes que estejas a usar a app Loom - obrigado por seres parte da comunidade!</string>
@@ -134,6 +134,8 @@
     <string name="profile_support_feedback_email_body">OIá\n\nTenho feedback relacionado com a aplicação Loom que quero partilhar:\n\n</string>
     <string name="profile_support_feedback_email_error_no_clients">Parece que não há clientes de email instalados no teu dispositivo. Por favor, instala um e tenta novamente.</string>
     <string name="profile_support_feedback_email_error_sending">Parece que houve um problema ao enviar este feedback. Por favor, tenta mais tarde.</string>
+    <string name="profile_support_join_discord">Junta-te ao Discord</string>
+
     <string name="edit_profile">Editar Perfil</string>
     <string name="edit_profile_how_to_contact">Como te devemos contactar?</string>
     <string name="edit_profile_select_country">Seleciona o teu país</string>
@@ -236,6 +238,10 @@
     <string name="expenses_overview_no_expenses">Parece que ainda não tens nenhuma despesa. Carrega no botão para começar a adicionar.</string>
     <string name="expenses_spent_versus_allocated">%1$s de %2$s</string>
     <string name="expenses_profile_setting_show_allocations">Mostrar Alocações nas Despesas</string>
+
+    <string name="expenses_month_detail">Despesas do Mês</string>
+    <string name="expenses_month_detail_error_not_found">Parece que não conseguimos encontrar as despesas deste mês. Por favor, reporta este erro ao desenvolvedor se achares que é um erro.</string>
+    <string name="expenses_month_detail_error_not_found_button">Voltar ao Início</string>
 
     <string name="recurring_payments_overview">Pagamentos Recorrentes</string>
     <string name="recurring_payments_edit">Editar Pagamento Recorrente</string>
@@ -343,6 +349,7 @@
     <string name="handicapped">Deficiente</string>
     <string name="married">Casado</string>
     <string name="error">Erro</string>
+    <string name="generic_error_message">Desculpa, parece que algo correu mal.</string>
     <string name="loading">A Carregar</string>
     <string name="euribor">Euribor</string>
     <string name="spread">Spread</string>
@@ -375,9 +382,6 @@
     <string name="max_length_reached">Limite de caracteres atingido: %d</string>
     <string name="and_more">… mais %d itens</string>
     <string name="add_item">Adicionar Item</string>
-    <string name="developer_email">eytherdeveloper@gmail.com</string>
-    <string name="source_code_url">https://github.com/ruialmeida51/lumbridge-android</string>
-    <string name="buy_me_a_coffee_url">https://buymeacoffee.com/ruialmeida51</string>
     <string name="tan">TAN</string>
     <string name="taeg">TAEG</string>
     <string name="variable">Juro Variável</string>

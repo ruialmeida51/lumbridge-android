@@ -31,6 +31,7 @@ class ExpensesAddScreenViewModel @Inject constructor(
     IExpensesAddScreenInputHandler by expensesAddScreenInputHandler {
 
     companion object {
+        private const val TAG = "ExpensesAddScreenViewModel"
         private const val MAX_YEARS_AHEAD = 5
         private const val MAX_YEARS_BEFORE = 5
     }
@@ -75,7 +76,7 @@ class ExpensesAddScreenViewModel @Inject constructor(
 
     override fun onAddExpense() {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(ExpensesAddScreenViewModel::class.java.simpleName, "Error saving expense", throwable)
+            Log.e(TAG, "Error saving expense", throwable)
 
             viewModelScope.launch {
                 viewEffects.emit(

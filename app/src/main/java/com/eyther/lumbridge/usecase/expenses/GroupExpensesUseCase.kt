@@ -15,7 +15,7 @@ import java.time.Year
 import javax.inject.Inject
 
 /**
- * From a list of expenses, group them by month and then by category,  respectively, and return the total amount spent in each category.
+ * From a list of expenses, group them by month and then by category, respectively, and return the total amount spent in each category.
  *
  * @param getMostRecentSnapshotSalaryForDateUseCase Use case to get the most recent snapshot salary for a given date.
  */
@@ -27,7 +27,7 @@ class GroupExpensesUseCase @Inject constructor(
         expenses: List<ExpenseUi>,
         snapshotNetSalaries: List<SnapshotNetSalaryUi>,
         showAllocationsOnExpenses: Boolean
-    ) = expenses.createExpensesPerMonth(showAllocationsOnExpenses, snapshotNetSalaries)
+    ): List<ExpensesMonthUi> = expenses.createExpensesPerMonth(showAllocationsOnExpenses, snapshotNetSalaries)
 
     private suspend fun List<ExpenseUi>.createExpensesPerMonth(
         showAllocationsOnExpenses: Boolean,
@@ -58,7 +58,6 @@ class GroupExpensesUseCase @Inject constructor(
                     year = Year.of(yearMonth.first),
                     spent = spent,
                     gained = gained,
-                    expanded = false,
                     remainder = snapshotNetSalary - spent + gained,
                     snapshotMonthlyNetSalary = snapshotNetSalary,
                     snapshotAllocations = if (showAllocationsOnExpenses) {

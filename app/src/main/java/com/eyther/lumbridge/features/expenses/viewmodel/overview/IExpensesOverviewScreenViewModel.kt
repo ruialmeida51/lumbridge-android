@@ -14,22 +14,11 @@ interface IExpensesOverviewScreenViewModel {
     val viewEffects: SharedFlow<ExpensesOverviewScreenViewEffect>
 
     /**
-     * Expand the month at the given index. This will show a detailed view of the month's expenses.
-     * If the month is already expanded, it will collapse it. Otherwise, it will expand it.
-     * If there is another month already expanded, it will collapse it.
+     * Open the details for this month. This will show a detailed view of the month's expenses.
      *
-     * @param selectedMonth The month to expand
+     * @param selectedMonth The month to open the details for
      */
-    fun expandMonth(selectedMonth: ExpensesMonthUi)
-
-    /**
-     * Expand the given category inside the selected month. This will show a detailed view of the category's expenses.
-     * If the category is already expanded, it will collapse it.
-     * If there is another category already expanded, it will NOT collapse it.
-     *
-     * @param category The category to expand
-     */
-    fun expandCategory(category: ExpensesCategoryUi)
+    fun selectMonth(selectedMonth: ExpensesMonthUi)
 
     /**
      * Removes the given expense from the list of expenses.
@@ -75,14 +64,4 @@ interface IExpensesOverviewScreenViewModel {
      * Clears the applied sort by - restoring it to the default value.
      */
     fun onClearSortBy()
-
-    /**
-     * Collapses all the views, including months and categories.
-     */
-    fun collapseAll()
-
-    /**
-     * Expands all the views, including months and categories.
-     */
-    fun expandAll()
 }
