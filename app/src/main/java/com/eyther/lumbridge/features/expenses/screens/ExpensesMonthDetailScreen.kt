@@ -202,35 +202,36 @@ private fun Content(
     onSelectCategory: (category: ExpensesCategoryUi) -> Unit,
     onEditExpense: (expense: ExpensesDetailedUi) -> Unit
 ) {
-    Column {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = DefaultPadding)
-                .padding(bottom = HalfPadding),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(id = R.string.expenses_month_detail_movements, state.monthExpenses.getDateWithLocale()),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f)
-            )
-
-            Icon(
-                modifier = Modifier
-                    .padding(horizontal = HalfPadding)
-                    .size(20.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = ripple(bounded = false)
-                    ) {
-                        monthToDelete.value = state.monthExpenses
-                    },
-                imageVector = Icons.Outlined.Delete,
-                contentDescription = null
-            )
-        }
-
+    Column(
+        verticalArrangement = Arrangement.spacedBy(HalfPadding)
+    ) {
         ColumnCardWrapper {
+            Row(
+                modifier = Modifier.padding(bottom = DefaultPadding),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .weight(1f),
+                    text = state.monthExpenses.getDateWithLocale(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+
+                Icon(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(bounded = false)
+                        ) {
+                            monthToDelete.value = state.monthExpenses
+                        },
+                    imageVector = Icons.Outlined.Delete,
+                    contentDescription = null
+                )
+            }
+
             BalanceSheetNet(
                 balanceSheetNetUi = state.balanceSheetNetUi,
                 currencySymbol = state.locale.getCurrencySymbol()
@@ -238,15 +239,14 @@ private fun Content(
         }
 
         if (state.showAllocations) {
-            Text(
-                text = stringResource(id = R.string.expenses_month_detail_allocations_spending),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
-                    .padding(horizontal = DefaultPadding)
-                    .padding(top = DefaultPadding, bottom = HalfPadding)
-            )
-
             ColumnCardWrapper {
+                Text(
+                    modifier = Modifier.padding(bottom = DefaultPadding),
+                    text = stringResource(id = R.string.expenses_month_detail_allocations_spending),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+
                 MonthlyAllocationGraph(
                     expensesMonthUi = state.monthExpenses,
                     currencySymbol = state.locale.getCurrencySymbol(),
@@ -255,17 +255,16 @@ private fun Content(
             }
         }
 
-        Text(
-            text = stringResource(id = R.string.expenses_month_detail_categories_spending),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier
-                .padding(horizontal = DefaultPadding)
-                .padding(top = DefaultPadding, bottom = HalfPadding)
-        )
-
         ColumnCardWrapper(
             modifier = Modifier.animateContentSize()
         ) {
+            Text(
+                modifier = Modifier.padding(bottom = DefaultPadding),
+                text = stringResource(id = R.string.expenses_month_detail_categories_spending),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+
             CategoriesCard(
                 expensesCategories = state.monthExpenses.categoryExpenses,
                 showAllocationForExpenses = state.showAllocations,

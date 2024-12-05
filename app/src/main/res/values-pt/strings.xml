@@ -235,7 +235,6 @@
     <string name="expenses_profile_setting_show_allocations">Mostrar Alocações nas Despesas</string>
 
     <string name="expenses_month_detail">Despesas do Mês</string>
-    <string name="expenses_month_detail_movements">Despesas para %1$s</string>
     <string name="expenses_month_detail_allocations_spending">Despesas por Alocação</string>
     <string name="expenses_month_detail_categories_spending">Despesas por Categoria</string>
     <string name="expenses_month_detail_error_not_found">Parece que não conseguimos encontrar as despesas deste mês. Por favor, reporta este erro ao desenvolvedor se achares que é um erro.</string>

@@ -241,7 +241,6 @@
     <string name="expenses_profile_setting_show_allocations">Show Allocations on Expenses</string>
 
     <string name="expenses_month_detail">Month Expenses</string>
-    <string name="expenses_month_detail_movements">Expenses for %1$s</string>
     <string name="expenses_month_detail_allocations_spending">Spending by Allocation</string>
     <string name="expenses_month_detail_categories_spending">Spending by Category</string>
     <string name="expenses_month_detail_error_not_found">Sorry, looks like we couldn\'t find any expenses for this month. Please, report this issue to the developers if you think this is a mistake.</string>
