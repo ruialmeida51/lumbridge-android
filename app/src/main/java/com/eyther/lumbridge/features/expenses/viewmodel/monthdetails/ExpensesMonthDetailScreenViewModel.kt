@@ -10,15 +10,19 @@ import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDe
 import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDetailScreenViewState
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_MONTH
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_YEAR
+import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
+import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.usecase.expenses.DeleteExpenseUseCase
 import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
+import com.eyther.lumbridge.usecase.expenses.GetBalanceSheetUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamByDateUseCase
 import com.eyther.lumbridge.usecase.expenses.GroupExpensesUseCase
 import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
+import com.eyther.lumbridge.usecase.snapshotsalary.GetMostRecentSnapshotSalaryForDateUseCase
 import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,8 +46,10 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
     private val groupExpensesUseCase: GroupExpensesUseCase,
     private val getPreferencesFlow: GetPreferencesFlow,
     private val getSnapshotNetSalariesFlowUseCase: GetSnapshotNetSalariesFlowUseCase,
+    private val getMostRecentSnapshotSalaryForDateUseCase: GetMostRecentSnapshotSalaryForDateUseCase,
     private val getLocaleOrDefault: GetLocaleOrDefault,
     private val deleteExpensesListUseCase: DeleteExpensesListUseCase,
+    private val getBalanceSheetUseCase: GetBalanceSheetUseCase,
     private val schedulers: Schedulers,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
@@ -55,14 +61,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
         private data class StreamData(
             val preferences: Preferences?,
             val snapshotNetSalaries: List<SnapshotNetSalaryUi>,
-            private val expenses: List<ExpensesMonthUi>
-        ) {
-            val expensesForMonth = expenses.first()
-
-            init {
-                require(expenses.isNotEmpty()) { "No expenses found" }
-            }
-        }
+            val expenses: List<ExpenseUi>
+        )
     }
 
     override val viewState: MutableStateFlow<ExpensesMonthDetailScreenViewState> =
@@ -86,17 +86,36 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
         ) { expenses, snapshotNetSalaries, preferences ->
             StreamData(
                 preferences = preferences,
-                expenses = groupExpensesUseCase(expenses, snapshotNetSalaries, preferences?.showAllocationsOnExpenses == true),
+                expenses = expenses,
                 snapshotNetSalaries = snapshotNetSalaries
             )
         }
             .flowOn(schedulers.io)
             .onEach { data ->
+                val snapshotSalary = getMostRecentSnapshotSalaryForDateUseCase(
+                    snapshotNetSalaries = data.snapshotNetSalaries,
+                    year = year,
+                    month = month
+                )
+
+                val groupedExpenses = groupExpensesUseCase(
+                    expenses = data.expenses,
+                    snapshotNetSalaries = data.snapshotNetSalaries,
+                    showAllocationsOnExpenses = data.preferences?.showAllocationsOnExpenses == true
+                ).firstOrNull() ?: throw IllegalStateException("\uD83D\uDCA5 No expenses found for year $year and month $month")
+
+                val balanceSheet = getBalanceSheetUseCase(
+                    snapshotSalary?.netSalary,
+                    data.snapshotNetSalaries,
+                    data.expenses
+                ) ?: throw IllegalStateException("\uD83D\uDCA5 Couldn't calculate balance sheet for year $year and month $month")
+
                 viewState.update {
                     ExpensesMonthDetailScreenViewState.Content(
-                        monthExpenses = data.expensesForMonth,
+                        monthExpenses = groupedExpenses,
                         showAllocations = data.preferences?.showAllocationsOnExpenses == true,
-                        locale = getLocaleOrDefault()
+                        locale = getLocaleOrDefault(),
+                        balanceSheetNetUi = balanceSheet
                     )
                 }
             }
@@ -146,7 +165,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
             getContentState(
                 monthlyExpenses = oldState.asContent().monthExpenses.copy(categoryExpenses = monthExpensesUiList),
                 showAllocations = oldState.asContent().showAllocations,
-                locale = oldState.asContent().locale
+                locale = oldState.asContent().locale,
+                balanceSheetNetUi = oldState.asContent().balanceSheetNetUi
             )
         }
     }
@@ -158,7 +178,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
             getContentState(
                 monthlyExpenses = oldState.asContent().monthExpenses.copy(categoryExpenses = monthlyExpenses),
                 showAllocations = oldState.asContent().showAllocations,
-                locale = oldState.asContent().locale
+                locale = oldState.asContent().locale,
+                balanceSheetNetUi = oldState.asContent().balanceSheetNetUi
             )
         }
     }
@@ -170,7 +191,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
             getContentState(
                 monthlyExpenses = oldState.asContent().monthExpenses.copy(categoryExpenses = monthlyExpenses),
                 showAllocations = oldState.asContent().showAllocations,
-                locale = oldState.asContent().locale
+                locale = oldState.asContent().locale,
+                balanceSheetNetUi = oldState.asContent().balanceSheetNetUi
             )
         }
     }
@@ -194,10 +216,12 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
     private fun getContentState(
         monthlyExpenses: ExpensesMonthUi,
         showAllocations: Boolean,
-        locale: SupportedLocales
+        locale: SupportedLocales,
+        balanceSheetNetUi: BalanceSheetNetUi
     ) = ExpensesMonthDetailScreenViewState.Content(
         monthExpenses = monthlyExpenses,
         showAllocations = showAllocations,
-        locale = locale
+        locale = locale,
+        balanceSheetNetUi = balanceSheetNetUi
     )
 }

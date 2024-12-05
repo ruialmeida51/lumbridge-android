@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.features.expenses.model.monthdetails
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 
 sealed interface ExpensesMonthDetailScreenViewState {
@@ -10,6 +11,7 @@ sealed interface ExpensesMonthDetailScreenViewState {
     data class Content(
         val monthExpenses: ExpensesMonthUi,
         val showAllocations: Boolean,
+        val balanceSheetNetUi: BalanceSheetNetUi,
         val locale: SupportedLocales
     ) : ExpensesMonthDetailScreenViewState
 

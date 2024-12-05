@@ -47,7 +47,6 @@
     <string name="edit_loan_should_auto_add_to_expenses">Adicionar automaticamente o pagamento às despesas?</string>
     <string name="edit_loan_should_notify_when_paid">Notificar quando adicionado?</string>
     <string name="edit_loan_should_auto_add_to_expenses_payment_day">Em que dia do mês é que o pagamento é feito?</string>
-    <string name="edit_loan_payment_date">Dia de Pagamento</string>
     <string name="edit_loan_profile_loan_interest_rate">Tens taxa de juro variável ou fixa?</string>
     <string name="edit_loan_profile_loan_fixed_interest_rate">O cálculo do teu empréstimo é feito com base em TAN ou TAEG?</string>
     <string name="edit_loan_profile_invalid_interest_rate">Por favor, introduz uma taxa de juro válida</string>
@@ -61,7 +60,6 @@
     <string name="edit_loan_profile_loan_category">Categoria de Empréstimo</string>
 
     <string name="financial_overview">Visão</string>
-    <string name="financial_overview_loans">Empréstimos</string>
     <string name="financial_overview_mortgage_amortization_simulator">Simulador de Amortização</string>
     <string name="financial_overview_salary">Visão do Salário</string>
     <string name="financial_overview_annual_income">Salário Anual</string>
@@ -80,7 +78,6 @@
     <string name="financial_overview_loan_payment_dialog_confirmation_message">Tens a certeza que queres registar um novo pagamento?\nIsto irá deduzir ao teu empréstimo o capital pago e atualizar o tempo restante.</string>
     <string name="financial_overview_no_allocation_strategy">Ainda não criaste uma estratégia de alocação de dinheiro. Edita o teu perfil financeiro para criar uma.</string>
     <string name="financial_overview_no_profile">Ainda não criaste o teu perfil financeiro. Carrega no botão em baixo para começar.</string>
-    <string name="financial_overview_no_loan">Ainda não criaste um perfil de empréstimo. Carrega no botão em baixo para criar um.</string>
     <string name="financial_overview_create_profile">Criar Perfil Financeiro</string>
     <string name="financial_overview_create_loan">Criar Empréstimo</string>
     <string name="financial_overview_loan_details">Detalhes do Empréstimo</string>
@@ -89,7 +86,6 @@
 
     <string name="breakdown_balance_sheet">Movimentos</string>
     <string name="breakdown_balance_sheet_no_data">Parece que ainda não tens nenhum movimento. Adiciona despesas e alocações para começar a ver os teus movimentos!</string>
-    <string name="breakdown_balance_sheet_average_savings_allocated_vs_spent">Avg. </string>
     <string name="breakdown_balance_sheet_money_in">Ganhos</string>
     <string name="breakdown_balance_sheet_money_out">Despesas</string>
     <string name="breakdown_balance_sheet_net">Total Líquido</string>
@@ -182,7 +178,6 @@
     <string name="tools_reminders_no_list_message">Parece que ainda não tens nenhum lembrete.\nCarrega no botão em baixo para começar a criar um!</string>
     <string name="tools_reminders_no_list_create">Criar Lembrete</string>
     <string name="tools_reminders_due_date">Quando</string>
-    <string name="tools_reminders_invalid_name">Por favor, introduz um nome válido</string>
     <string name="tools_reminders_invalid_date">Por favor, introduz uma data válida (no futuro)</string>
     <string name="tools_reminders_remind_me_in">Lembrar-me</string>
     <string name="tools_reminders_no_longer_relevant">Passou a data?</string>
@@ -240,8 +235,12 @@
     <string name="expenses_profile_setting_show_allocations">Mostrar Alocações nas Despesas</string>
 
     <string name="expenses_month_detail">Despesas do Mês</string>
+    <string name="expenses_month_detail_movements">Despesas para %1$s</string>
+    <string name="expenses_month_detail_allocations_spending">Despesas por Alocação</string>
+    <string name="expenses_month_detail_categories_spending">Despesas por Categoria</string>
     <string name="expenses_month_detail_error_not_found">Parece que não conseguimos encontrar as despesas deste mês. Por favor, reporta este erro ao desenvolvedor se achares que é um erro.</string>
     <string name="expenses_month_detail_error_not_found_button">Voltar ao Início</string>
+    <string name="expenses_no_snapshot_allocations">Desculpa! Parece que não conseguimos visualizar as alocações.\n\nÉ provável que isto aconteça devido a um erro durante a migração de dados do sistema antigo de despesas para o novo.</string>
 
     <string name="recurring_payments_overview">Pagamentos Recorrentes</string>
     <string name="recurring_payments_edit">Editar Pagamento Recorrente</string>
@@ -277,7 +276,6 @@
     <string name="recurring_payment_delete_confirmation">Tens a certeza que queres remover o pagamento recorrente com o nome %1$s?</string>
     <string name="recurring_payment_edit_invalid_amount">Por favor, introduz um valor válido</string>
     <string name="recurring_payment_edit_invalid_name">Por favor, introduz um nome válido</string>
-    <string name="recurring_payment_edit_expense_input">Quais são os detalhes do pagamento?</string>
     <string name="recurring_payment_edit_expense_frequency">Com que frequência é que este pagamento é feito?</string>
     <string name="recurring_payment_edit_expense_frequency_input">Frequência do Pagamento</string>
     <string name="recurring_payment_edit_frequency_start_date">Quando é que este pagamento começa?</string>
@@ -403,7 +401,6 @@
     <string name="investments">Investimentos</string>
     <string name="expense">Despesa</string>
     <string name="gained">Ganho</string>
-    <string name="time">Tempo</string>
     <string name="invalid_date">Por favor, introduz uma data válida</string>
 
     <string-array name="loading_messages">
