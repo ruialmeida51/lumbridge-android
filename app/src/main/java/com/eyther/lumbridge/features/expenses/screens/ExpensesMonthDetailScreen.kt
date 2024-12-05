@@ -18,6 +18,12 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Delete
@@ -82,6 +88,7 @@ import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlin.math.exp
 
 @Composable
 fun ExpensesMonthDetailScreen(
@@ -202,78 +209,89 @@ private fun Content(
     onSelectCategory: (category: ExpensesCategoryUi) -> Unit,
     onEditExpense: (expense: ExpensesDetailedUi) -> Unit
 ) {
-    Column(
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(HalfPadding)
     ) {
-        ColumnCardWrapper {
-            Row(
-                modifier = Modifier.padding(bottom = DefaultPadding),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    modifier = Modifier
-                        .weight(1f),
-                    text = state.monthExpenses.getDateWithLocale(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.tertiary
-                )
+        item {
+            ColumnCardWrapper {
+                Row(
+                    modifier = Modifier.padding(bottom = DefaultPadding),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .weight(1f),
+                        text = state.monthExpenses.getDateWithLocale(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
 
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(bounded = false)
-                        ) {
-                            monthToDelete.value = state.monthExpenses
-                        },
-                    imageVector = Icons.Outlined.Delete,
-                    contentDescription = null
+                    Icon(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = ripple(bounded = false)
+                            ) {
+                                monthToDelete.value = state.monthExpenses
+                            },
+                        imageVector = Icons.Outlined.Delete,
+                        contentDescription = null
+                    )
+                }
+
+                BalanceSheetNet(
+                    balanceSheetNetUi = state.balanceSheetNetUi,
+                    currencySymbol = state.locale.getCurrencySymbol()
                 )
             }
-
-            BalanceSheetNet(
-                balanceSheetNetUi = state.balanceSheetNetUi,
-                currencySymbol = state.locale.getCurrencySymbol()
-            )
         }
 
+
         if (state.showAllocations) {
+            item {
+                ColumnCardWrapper {
+                    Text(
+                        modifier = Modifier.padding(bottom = DefaultPadding),
+                        text = stringResource(id = R.string.expenses_month_detail_allocations_spending),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+
+                    MonthlyAllocationGraph(
+                        expensesMonthUi = state.monthExpenses,
+                        currencySymbol = state.locale.getCurrencySymbol(),
+                        showErrorDisclaimer = true
+                    )
+                }
+            }
+        }
+
+        item {
             ColumnCardWrapper {
                 Text(
                     modifier = Modifier.padding(bottom = DefaultPadding),
-                    text = stringResource(id = R.string.expenses_month_detail_allocations_spending),
+                    text = stringResource(id = R.string.expenses_month_detail_categories_spending),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.tertiary
                 )
 
-                MonthlyAllocationGraph(
-                    expensesMonthUi = state.monthExpenses,
-                    currencySymbol = state.locale.getCurrencySymbol(),
-                    showErrorDisclaimer = true
-                )
+                state.monthExpenses.categoryExpenses.forEach { category ->
+                    CategoryItem(
+                        category = category,
+                        showAllocationForExpenses = state.showAllocations,
+                        onSelectCategory = onSelectCategory,
+                        currencySymbol = state.locale.getCurrencySymbol(),
+                        onEditExpense = onEditExpense
+                    )
+
+                }
             }
         }
 
-        ColumnCardWrapper(
-            modifier = Modifier.animateContentSize()
-        ) {
-            Text(
-                modifier = Modifier.padding(bottom = DefaultPadding),
-                text = stringResource(id = R.string.expenses_month_detail_categories_spending),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.tertiary
-            )
-
-            CategoriesCard(
-                expensesCategories = state.monthExpenses.categoryExpenses,
-                showAllocationForExpenses = state.showAllocations,
-                onSelectCategory = onSelectCategory,
-                currencySymbol = state.locale.getCurrencySymbol(),
-                onEditExpense = onEditExpense
-            )
+        item {
+            Spacer(modifier = Modifier.height(DefaultPadding * 2 + 56.0.dp)) // 56dp is the height of the FAB
         }
-
     }
 }
 
@@ -397,76 +415,72 @@ private fun ColumnScope.BalanceSheetNet(
 }
 
 @Composable
-private fun ColumnScope.CategoriesCard(
-    expensesCategories: List<ExpensesCategoryUi>,
+private fun CategoryItem(
+    category: ExpensesCategoryUi,
     showAllocationForExpenses: Boolean,
     currencySymbol: String,
     onSelectCategory: (ExpensesCategoryUi) -> Unit,
     onEditExpense: (ExpensesDetailedUi) -> Unit
 ) {
-    Column {
-        expensesCategories.forEach { category ->
-            val mathOperatorString = when (category.categoryType.operator) {
-                MathOperator.ADDITION -> "+"
-                MathOperator.SUBTRACTION -> ""
-            }
+    val mathOperatorString = when (category.categoryType.operator) {
+        MathOperator.ADDITION -> "+"
+        MathOperator.SUBTRACTION -> ""
+    }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .clickable { onSelectCategory(category) },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+            .clickable { onSelectCategory(category) },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = category.categoryType.iconRes),
+            contentDescription = null,
+            modifier = Modifier.size(16.dp)
+        )
+
+        Spacer(modifier = Modifier.width(QuarterPadding))
+
+        TabbedDataOverview(
+            icon = {
                 Icon(
-                    painter = painterResource(id = category.categoryType.iconRes),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier
+                        .size(16.dp)
+                        .rotate(if (category.expanded) 180f else 0f),
+                    imageVector = Icons.Outlined.ArrowDropDown,
+                    contentDescription = null
                 )
+            },
+            label = stringResource(category.categoryType.categoryRes),
+            text = "$mathOperatorString${category.spent.forceTwoDecimalsPlaces()}$currencySymbol"
+        )
 
-                Spacer(modifier = Modifier.width(QuarterPadding))
+    }
 
-                TabbedDataOverview(
-                    icon = {
-                        Icon(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .rotate(if (category.expanded) 180f else 0f),
-                            imageVector = Icons.Outlined.ArrowDropDown,
-                            contentDescription = null
-                        )
-                    },
-                    label = stringResource(category.categoryType.categoryRes),
-                    text = "$mathOperatorString${category.spent.forceTwoDecimalsPlaces()}$currencySymbol"
-                )
-
-            }
-
-            AnimatedVisibility(
-                visible = category.expanded
-            ) {
-                DetailsCard(
-                    expensesDetailed = { category.expensesDetailedUi },
-                    showAllocationForExpenses = showAllocationForExpenses,
-                    mathOperatorString = mathOperatorString,
-                    currencySymbol = currencySymbol,
-                    onEditExpense = onEditExpense
-                )
-            }
-        }
+    AnimatedVisibility(
+        visible = category.expanded
+    ) {
+        DetailsCard(
+            expensesDetailed = category.expensesDetailedUi,
+            showAllocationForExpenses = showAllocationForExpenses,
+            mathOperatorString = mathOperatorString,
+            currencySymbol = currencySymbol,
+            onEditExpense = onEditExpense
+        )
     }
 }
 
 @Composable
 private fun DetailsCard(
-    expensesDetailed: () -> List<ExpensesDetailedUi>,
+    expensesDetailed: List<ExpensesDetailedUi>,
     showAllocationForExpenses: Boolean,
     mathOperatorString: String,
     currencySymbol: String,
     onEditExpense: (ExpensesDetailedUi) -> Unit
 ) {
     Column {
-        expensesDetailed().forEach { detail ->
+        expensesDetailed.forEach { detail ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -524,6 +538,7 @@ private fun EmptyScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         EmptyScreenWithButton(
             modifier = Modifier.padding(DefaultPadding),
