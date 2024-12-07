@@ -541,7 +541,8 @@ private fun EmptyScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center
     ) {
         EmptyScreenWithButton(
             modifier = Modifier.padding(DefaultPadding),

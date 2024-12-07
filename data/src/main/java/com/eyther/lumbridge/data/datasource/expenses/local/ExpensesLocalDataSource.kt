@@ -17,7 +17,15 @@ class ExpensesLocalDataSource @Inject constructor(
         }
 
     fun getExpensesByDate(year: Int, month: Int): Flow<List<ExpenseCached>> {
-        return expensesDao.getExpensesByDate(year.toString(), month.toString())
+        // Prefix month with 0 if it's a single digit
+        val monthString = month.toString().padStart(
+            length = 2,
+            padChar = '0'
+        )
+
+        val yearString = year.toString()
+
+        return expensesDao.getExpensesByDate(yearString, monthString)
             .mapNotNull { flowItem ->
                 flowItem?.map { expenseEntity -> expenseEntity.toCached() }
             }
