@@ -40,6 +40,10 @@ class NetSalaryInputScreenViewModel @Inject constructor(
     INetSalaryInputScreenViewModel,
     INetSalaryInputScreenInputHandler by netSalaryScreenInputHandler {
 
+    companion object {
+        private const val TAG = "NetSalaryInputScreenViewModel"
+    }
+
     private var cachedUserFinancials: UserFinancialsUi? = null
 
     override val viewState: MutableStateFlow<NetSalaryInputScreenViewState> =
@@ -126,7 +130,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
         ) -> Unit
     ) {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(this::class.simpleName, "💥 Error calculating net salary", throwable)
+            Log.e(TAG, "💥 Error calculating net salary", throwable)
             viewState.update { NetSalaryInputScreenViewState.Error }
         }
 

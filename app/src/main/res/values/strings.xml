@@ -50,7 +50,6 @@
     <string name="edit_loan_should_auto_add_to_expenses">Automatically add to your expenses?</string>
     <string name="edit_loan_should_notify_when_paid">Notify when added?</string>
     <string name="edit_loan_should_auto_add_to_expenses_payment_day">At which day of the month is your payment due?</string>
-    <string name="edit_loan_payment_date">Payment Day</string>
     <string name="edit_loan_profile_loan_interest_rate">Do you have a variable or fixed rate?</string>
     <string name="edit_loan_profile_loan_fixed_interest_rate">Is your loan calculated using TAN or TAEG?</string>
     <string name="edit_loan_profile_invalid_interest_rate">Please enter a valid interest rate</string>
@@ -65,7 +64,6 @@
 
     <string name="breakdown_balance_sheet">Balance</string>
     <string name="breakdown_balance_sheet_no_data">Looks like you don\'t have any allocations or expenses yet. Add some and come back to see your balance!</string>
-    <string name="breakdown_balance_sheet_average_savings_allocated_vs_spent">Avg. </string>
     <string name="breakdown_balance_sheet_money_in">Income</string>
     <string name="breakdown_balance_sheet_money_out">Spent</string>
     <string name="breakdown_balance_sheet_net">Total Net</string>
@@ -90,7 +88,6 @@
     <string name="breakdown_delete_loan_confirmation_message">Are you sure you want to delete the loan %1$s?</string>
 
     <string name="financial_overview">Overview</string>
-    <string name="financial_overview_loans">Loans</string>
     <string name="financial_overview_mortgage_amortization_simulator">Amortization Simulator</string>
     <string name="financial_overview_salary">Salary Overview</string>
     <string name="financial_overview_annual_income">Annual Income</string>
@@ -109,7 +106,6 @@
     <string name="financial_overview_loan_payment_dialog_confirmation_message">Are you sure you want to register a new monthly payment?\n\nThis will subtract your loan by the capital amount and update your remaining time.</string>
     <string name="financial_overview_no_allocation_strategy">You haven\'t set a money allocation strategy.\nEdit your financial profile to set one.</string>
     <string name="financial_overview_no_profile">You don\'t seem have a financial profile yet.\nPress the button below to create one.</string>
-    <string name="financial_overview_no_loan">You don\'t seem have a mortgage profile yet.\nPress the button below to create one.</string>
     <string name="financial_overview_create_profile">Create Financial Profile</string>
     <string name="financial_overview_create_loan">Create a Loan</string>
     <string name="financial_overview_loan_details">Loan Details</string>
@@ -136,6 +132,7 @@
     <string name="profile_support_feedback_email_body">Hi,\n\nI have some feedback on Loom that I would like to share with you:\n\n</string>
     <string name="profile_support_feedback_email_error_no_clients">There are no email clients installed on your device. Please, install one and try again.</string>
     <string name="profile_support_feedback_email_error_sending">There was an error sending your feedback. Please, try again later.</string>
+    <string name="profile_support_join_discord">Join our Discord</string>
 
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_how_to_contact">How should we contact you?</string>
@@ -185,7 +182,6 @@
     <string name="tools_reminders_no_list_message">You don\'t seem to have any reminders yet.\nTap the button below to create one!</string>
     <string name="tools_reminders_no_list_create">Create Reminder</string>
     <string name="tools_reminders_due_date">When</string>
-    <string name="tools_reminders_invalid_name">Please, enter a valid name</string>
     <string name="tools_reminders_invalid_date">Please, enter a valid date (must be in the future)</string>
     <string name="tools_reminders_remind_me_in">Remind me</string>
     <string name="tools_reminders_no_longer_relevant">Past due date?</string>
@@ -243,6 +239,15 @@
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
     <string name="expenses_spent_versus_allocated">%1$s of %2$s</string>
     <string name="expenses_profile_setting_show_allocations">Show Allocations on Expenses</string>
+    <string name="expenses_profile_setting_add_food_card_to_necessities_allocation">Include Food Card in Necessities Allocation</string>
+
+    <string name="expenses_month_detail">Month Expenses</string>
+    <string name="expenses_month_detail_allocations_spending">Spending by Allocation</string>
+    <string name="expenses_month_detail_categories_spending">Spending by Category</string>
+    <string name="expenses_month_detail_error_not_found">Sorry, looks like we couldn\'t find any expenses for this month. Please, report this issue to the developers if you think this is a mistake.</string>
+    <string name="expenses_month_detail_error_not_found_button">Go Back</string>
+
+    <string name="expenses_no_snapshot_allocations">Sorry! Unfortunately, we couldn\'t fetch the allocations for this month.\n\nThis usually happens when something goes wrong during the migration process from legacy expenses to the new system.</string>
 
     <string name="recurring_payments_overview">Recurring Payments</string>
     <string name="recurring_payments_edit">Edit Recurring Payment</string>
@@ -278,7 +283,6 @@
     <string name="recurring_payment_delete_confirmation">Are you sure you want to delete the recurring payment %1$s?</string>
     <string name="recurring_payment_edit_invalid_amount">Please, enter a valid amount</string>
     <string name="recurring_payment_edit_invalid_name">Please, enter a valid name</string>
-    <string name="recurring_payment_edit_expense_input">Please, fill out the recurring payment information</string>
     <string name="recurring_payment_edit_expense_frequency">What\'s the frequency of this recurring payment?</string>
     <string name="recurring_payment_edit_expense_frequency_input">Frequency</string>
     <string name="recurring_payment_edit_frequency_start_date">When does this recurring payment start?</string>
@@ -371,6 +375,7 @@
     <string name="handicapped">Handicapped</string>
     <string name="married">Married</string>
     <string name="error">Error</string>
+    <string name="generic_error_message">Sorry, looks like something went wrong.</string>
     <string name="loading">Loading</string>
     <string name="euribor">Euribor</string>
     <string name="spread">Spread</string>
@@ -424,6 +429,5 @@
     <string name="other">Other</string>
     <string name="expense">Expense</string>
     <string name="gained">Gained</string>
-    <string name="time">Time</string>
     <string name="invalid_date">Please, enter a valid date</string>
 </resources>

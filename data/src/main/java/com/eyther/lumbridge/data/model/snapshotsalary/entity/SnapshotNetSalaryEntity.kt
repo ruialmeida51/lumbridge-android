@@ -17,6 +17,7 @@ data class SnapshotNetSalaryEntity(
     val savingsPercentage: Float? = null,
     val necessitiesPercentage: Float? = null,
     val luxuriesPercentage: Float? = null,
+    val foodCardAmount: Float? = null,
     val amount: Float,
     val year: Int,
     val month: Int

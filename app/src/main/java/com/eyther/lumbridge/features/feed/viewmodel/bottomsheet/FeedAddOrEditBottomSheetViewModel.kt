@@ -29,6 +29,10 @@ class FeedAddOrEditBottomSheetViewModel @AssistedInject constructor(
     IFeedAddOrEditBottomSheetViewModel,
     IFeedAddOrEditBottomSheetInputHandler by feedAddBottomSheetInputHandler {
 
+        companion object {
+            private const val TAG = "FeedAddOrEditBottomSheetViewModel"
+        }
+
     override val viewState: MutableStateFlow<FeedAddOrEditBottomSheetViewState> =
         MutableStateFlow(FeedAddOrEditBottomSheetViewState.Loading)
 
@@ -59,7 +63,7 @@ class FeedAddOrEditBottomSheetViewModel @AssistedInject constructor(
 
     override fun onAddOrUpdateFeed(name: String, url: String) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(FeedAddOrEditBottomSheetViewModel::class.java.simpleName, "💥 Error saving feed: $throwable")
+            Log.e(TAG, "💥 Error saving feed: $throwable")
         }
 
         viewModelScope.launch(exceptionHandler) {
@@ -91,7 +95,7 @@ class FeedAddOrEditBottomSheetViewModel @AssistedInject constructor(
 
     override fun onDeleteFeed() {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(FeedAddOrEditBottomSheetViewModel::class.java.simpleName, "💥 Error deleting feed: $throwable")
+            Log.e(TAG, "💥 Error deleting feed: $throwable")
         }
 
         viewModelScope.launch(exceptionHandler) {

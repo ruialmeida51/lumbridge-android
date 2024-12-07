@@ -73,4 +73,8 @@ sealed class MoneyAllocationTypeUi(
             return copy(allocated = allocated)
         }
     }
+
+    fun isNecessities() = this is Necessities
+
+    fun asNecessities() = this as Necessities
 }

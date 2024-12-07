@@ -26,10 +26,15 @@ interface IMainActivityViewModel {
      * read from the stored preferences.
      * @param appLanguageCountryCode the country code for the language setting. If it is null, the setting will not be updated and instead
      * read from the system defaults or stored preferences.
+     * @param showAllocationsOnExpenses true if the allocations should be shown on the expenses screen, false otherwise. If it is null,
+     * the setting will not be updated and instead read from the stored preferences.
+     * @param addFoodCardToNecessitiesAllocation true if the food card should be added to the necessities allocation, false otherwise. If it is null,
+     * the setting will not be updated and instead read from the stored preferences.
      */
     suspend fun updateSettings(
         isDarkMode: Boolean? = null,
         appLanguageCountryCode: String? = null,
-        showAllocationsOnExpenses: Boolean? = null
+        showAllocationsOnExpenses: Boolean? = null,
+        addFoodCardToNecessitiesAllocation: Boolean? = null
     )
 }

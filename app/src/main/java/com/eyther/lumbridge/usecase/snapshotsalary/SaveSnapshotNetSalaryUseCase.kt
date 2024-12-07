@@ -30,7 +30,8 @@ class SaveSnapshotNetSalaryUseCase @Inject constructor(
             snapshotSalaryRepository.saveSnapshotNetSalary(
                 currentSnapshotSalaryForDate.copy(
                     netSalary = netSalary.monthlyNetSalary,
-                    moneyAllocations = getMoneyAllocations(userFinancials, netSalary.monthlyNetSalary)
+                    moneyAllocations = getMoneyAllocations(userFinancials, netSalary.monthlyNetSalary),
+                    foodCardAmount = netSalary.monthlyFoodCard
                 )
             )
         } else {
@@ -38,7 +39,8 @@ class SaveSnapshotNetSalaryUseCase @Inject constructor(
                 year = now.year,
                 month = now.monthValue,
                 netSalary = netSalary.monthlyNetSalary,
-                moneyAllocations = getMoneyAllocations(userFinancials, netSalary.monthlyNetSalary)
+                moneyAllocations = getMoneyAllocations(userFinancials, netSalary.monthlyNetSalary),
+                foodCardAmount = netSalary.monthlyFoodCard
             )
 
             snapshotSalaryRepository.saveSnapshotNetSalary(snapshotNetSalary)

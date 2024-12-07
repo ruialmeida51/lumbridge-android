@@ -11,6 +11,7 @@ import versions.AppVersions.HILT_JETPACK_LIBS_VERSION
 import versions.AppVersions.KOTLIN_COROUTINES_VERSION
 import versions.AppVersions.KTX_SERIALIZATION_VERSION
 import versions.AppVersions.KTX_VERSION
+import versions.AppVersions.KTX_COLLECTIONS_IMMUTABLE
 import versions.AppVersions.NAVIGATION_VERSION
 import versions.SharedVersions.HILT_VERSION
 import versions.SharedVersions.KOTLIN_VERSION
@@ -24,6 +25,7 @@ object AppDependencies {
         "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION",
         "androidx.core:core-ktx:$KTX_VERSION",
         "org.jetbrains.kotlinx:kotlinx-serialization-json:$KTX_SERIALIZATION_VERSION",
+        "org.jetbrains.kotlinx:kotlinx-collections-immutable:$KTX_COLLECTIONS_IMMUTABLE",
 
         //Coroutines
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KOTLIN_COROUTINES_VERSION",

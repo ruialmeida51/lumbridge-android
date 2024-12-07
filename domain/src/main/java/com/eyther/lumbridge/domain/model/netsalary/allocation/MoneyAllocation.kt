@@ -9,6 +9,7 @@ import kotlin.math.ceil
  * @property type The type of money allocation.
  * @property percentage The percentage of the net salary allocated to the type.
  * @property amount The amount of money allocated to the type.
+ * @property netSalary The net salary used to calculate the amount.
  */
 data class MoneyAllocation(
     val type: MoneyAllocationType,

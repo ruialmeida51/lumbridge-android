@@ -17,11 +17,15 @@ import java.util.UUID
 
 class LumbridgeBatchNotificationReceiver : BroadcastReceiver() {
 
+    companion object {
+        private const val TAG = "LumbridgeBatchNotificationReceiver"
+    }
+
     override fun onReceive(context: Context?, intent: Intent?) {
         val notificationManager = context?.getNotificationManager() ?: return
         val nonNullIntent = intent ?: return
 
-        Log.d("LumbridgeBatchNotificationReceiver", "onReceive: $nonNullIntent")
+        Log.d(TAG, "onReceive: $nonNullIntent")
 
         val title = nonNullIntent.getStringExtra(NOTIFICATION_ARG_TITLE) ?: return
         val messages = nonNullIntent.getStringArrayListExtra(NOTIFICATION_ARG_MESSAGE) ?: return

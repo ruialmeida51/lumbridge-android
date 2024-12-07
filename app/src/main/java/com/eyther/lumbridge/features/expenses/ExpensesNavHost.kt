@@ -1,6 +1,8 @@
 package com.eyther.lumbridge.features.expenses
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,8 +15,11 @@ import com.eyther.lumbridge.features.editfinancialprofile.screens.EditFinancialP
 import com.eyther.lumbridge.features.editloan.screens.EditLoanScreen
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_EXPENSE_ID
+import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_MONTH
+import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_YEAR
 import com.eyther.lumbridge.features.expenses.screens.ExpensesAddScreen
 import com.eyther.lumbridge.features.expenses.screens.ExpensesEditScreen
+import com.eyther.lumbridge.features.expenses.screens.ExpensesMonthDetailScreen
 import com.eyther.lumbridge.features.expenses.screens.ExpensesOverviewScreen
 
 @Composable
@@ -95,11 +100,56 @@ fun ExpensesNavHost(
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
             },
-            route = ExpensesNavigationItem.AddExpense.route
+            route = ExpensesNavigationItem.AddExpense.route,
+            arguments = listOf(
+                navArgument(ARG_MONTH) {
+                    type = NavType.IntType
+                    nullable = false
+                    defaultValue = -1
+                },
+                navArgument(ARG_YEAR) {
+                    type = NavType.IntType
+                    nullable = false
+                    defaultValue = -1
+                }
+            )
         ) {
             ExpensesAddScreen(
                 navController = navController,
                 label = ExpensesNavigationItem.AddExpense.label
+            )
+        }
+
+        composable(
+            enterTransition = {
+                slideInHorizontally { it }
+            },
+            exitTransition = {
+                slideOutHorizontally { -it }
+            },
+            popEnterTransition = {
+                slideInHorizontally { -it }
+            },
+            popExitTransition = {
+                slideOutHorizontally { it }
+            },
+            route = ExpensesNavigationItem.ExpensesMonthDetail.route,
+            arguments = listOf(
+                navArgument(ARG_MONTH) {
+                    type = NavType.IntType
+                    nullable = false
+                    defaultValue = 0L
+                },
+                navArgument(ARG_YEAR) {
+                    type = NavType.IntType
+                    nullable = false
+                    defaultValue = 0L
+                }
+            )
+        ) {
+            ExpensesMonthDetailScreen(
+                navController = navController,
+                label = ExpensesNavigationItem.ExpensesMonthDetail.label
             )
         }
     }

@@ -9,7 +9,7 @@ import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsSc
 import com.eyther.lumbridge.features.profile.settings.viewmodel.delegate.IProfileAppSettingsScreenInputHandler
 import com.eyther.lumbridge.features.profile.settings.viewmodel.delegate.ProfileAppSettingsScreenInputHandler
 import com.eyther.lumbridge.usecase.locale.GetSupportedLanguages
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
+import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
 import com.eyther.lumbridge.usecase.preferences.SavePreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileAppSettingsScreenViewModel @Inject constructor(
-    private val getPreferencesFlow: GetPreferencesFlow,
+    private val getPreferencesFlow: GetPreferencesStream,
     private val getSupportedLanguages: GetSupportedLanguages,
     private val savePreferences: SavePreferences,
     private val profileAppSettingsScreenInputHandler: ProfileAppSettingsScreenInputHandler
@@ -90,11 +90,13 @@ class ProfileAppSettingsScreenViewModel @Inject constructor(
         val newDarkMode = inputState.isDarkMode
         val newAppLanguage = inputState.appLanguage
         val showAllocationsOnExpenses = inputState.showAllocationsOnExpenses
+        val addFoodCardToNecessitiesAllocation = inputState.addFoodCardToNecessitiesAllocation
 
         savePreferences(
             isDarkMode = newDarkMode,
             appLanguages = newAppLanguage,
-            showAllocationsOnExpenses = showAllocationsOnExpenses
+            showAllocationsOnExpenses = showAllocationsOnExpenses,
+            addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation
         )
     }
 }

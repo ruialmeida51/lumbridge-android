@@ -10,6 +10,7 @@ import com.eyther.lumbridge.domain.model.loan.LoanType
 import com.eyther.lumbridge.domain.repository.loan.LoanRepository
 import com.eyther.lumbridge.domain.repository.preferences.PreferencesRepository
 import com.eyther.lumbridge.domain.repository.snapshotsalary.SnapshotSalaryRepository
+import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
 import com.eyther.lumbridge.usecase.snapshotsalary.SaveSnapshotNetSalaryUseCase
 import com.eyther.lumbridge.usecase.snapshotsalary.UpdateSnapshotSalaryWithAllocation
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
@@ -21,6 +22,7 @@ class DataStoreMigrationHelper @Inject constructor(
     @ApplicationContext private val context: Context,
     private val loanRepository: LoanRepository,
     private val getUserFinancials: GetUserFinancials,
+    private val getNetSalaryUseCase: GetNetSalaryUseCase,
     private val saveUserFinancials: SaveUserFinancials,
     private val updateSnapshotSalaryWithAllocation: UpdateSnapshotSalaryWithAllocation,
     private val saveSnapshotNetSalaryUseCase: SaveSnapshotNetSalaryUseCase,
@@ -122,9 +124,13 @@ class DataStoreMigrationHelper @Inject constructor(
      * * The first snapshot salary will be created with the current net salary and allocations.
      * * If the snapshot salary already exists, the migration will be skipped.
      */
-    suspend fun tryMigrateFirstSnapshotSalaryAndAllocations() = runCatching {
-        if (appSettingsRepository.getCompletedSnapshotMigration()) {
-            Log.d(TAG, "⏩ Snapshot migration has already been completed")
+    suspend fun tryMigrateSnapshotSalaryAndAllocations() = runCatching {
+        if (
+            appSettingsRepository.getCompletedNetSalarySnapshotMigration() &&
+            appSettingsRepository.getCompletedAllocationSnapshotMigration() &&
+            appSettingsRepository.getCompletedSnapshotFoodCardMigration()
+        ) {
+            Log.d(TAG, "⏩ All snapshot migrations have already been completed")
             return@runCatching
         }
 
@@ -136,29 +142,65 @@ class DataStoreMigrationHelper @Inject constructor(
         }
 
         val snapshotSalaries = snapshotSalaryRepository.getAllSnapshotNetSalaries()
+        val netSalary = getNetSalaryUseCase(userFinancials)
 
-        when {
-            snapshotSalaries.isEmpty() -> {
-                Log.d(TAG, "⏩ User financials found, but no snapshot salary found, adding first snapshot salary as current salary.")
+        if (!appSettingsRepository.getCompletedNetSalarySnapshotMigration()) {
+            Log.d(TAG, "⏩ User financials found, but no snapshot salary found, adding first snapshot salary as current salary.")
 
-                saveSnapshotNetSalaryUseCase(userFinancials)
+            saveSnapshotNetSalaryUseCase(userFinancials)
 
-                Log.d(TAG, "✅ First snapshot migration completed successfully")
-            }
-            userFinancials.hasAllocations() && snapshotSalaries.any { it.moneyAllocations.isEmpty() } -> {
-                Log.d(TAG, "⏩ User financials found, but snapshot salary found without allocations, adding allocations to snapshot salary.")
+            appSettingsRepository.saveCompletedNetSalarySnapshotMigration()
+
+            Log.d(TAG, "✅ Snapshot net salary migration completed successfully")
+        }
+
+        if (!appSettingsRepository.getCompletedAllocationSnapshotMigration()) {
+            if (userFinancials.hasAllocations() && snapshotSalaries.any { it.moneyAllocations.isEmpty() }) {
+                Log.d(TAG, "⏩ Snapshot salary without allocations, adding allocations to snapshot salary.")
 
                 snapshotSalaries
                     .filter { it.moneyAllocations.isEmpty() }
-                    .forEach { snapshot -> updateSnapshotSalaryWithAllocation(userFinancials, snapshot.netSalary) }
+                    .forEach { snapshot ->
+                        updateSnapshotSalaryWithAllocation(
+                            userFinancialsUi = userFinancials,
+                            monthlyNetSalary = snapshot.netSalary,
+                            foodCardAmount = snapshot.foodCardAmount ?: 0f,
+                            snapshotYear = snapshot.year,
+                            snapshotMonth = snapshot.month
+                        )
+                    }
+
+                appSettingsRepository.saveCompletedAllocationSnapshotMigration()
 
                 Log.d(TAG, "✅ Snapshot migration completed successfully")
-            }
-            else -> {
-                Log.d(TAG, "⏩ User financials found, but snapshot already exists, skipping migration.")
+            } else {
+                Log.d(TAG, "⏩Snapshot allocations already exist, skipping migration.")
             }
         }
 
-        appSettingsRepository.saveCompletedSnapshotMigration()
+        if (!appSettingsRepository.getCompletedSnapshotFoodCardMigration()) {
+            if (snapshotSalaries.any { it.foodCardAmount == null }) {
+                Log.d(TAG, "⏩ Snapshot salary without food card amount, adding food card amount to snapshot salary.")
+
+                snapshotSalaries
+                    .filter { it.foodCardAmount == null }
+                    .forEach { snapshot ->
+                        Log.d(TAG, "⏩ Updating snapshot salary with food card amount for ${snapshot.year}/${snapshot.month} - $snapshot")
+                        updateSnapshotSalaryWithAllocation(
+                            userFinancialsUi = userFinancials,
+                            monthlyNetSalary = snapshot.netSalary,
+                            foodCardAmount = netSalary.monthlyFoodCard,
+                            snapshotYear = snapshot.year,
+                            snapshotMonth = snapshot.month
+                        )
+                    }
+
+                appSettingsRepository.saveCompletedSnapshotFoodCardMigration()
+
+                Log.d(TAG, "✅ Snapshot food card migration completed successfully")
+            } else {
+                Log.d(TAG, "⏩ Snapshot food card amount already exists, skipping migration.")
+            }
+       }
     }
 }

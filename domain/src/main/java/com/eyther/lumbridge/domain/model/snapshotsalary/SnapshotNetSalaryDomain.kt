@@ -7,5 +7,6 @@ data class SnapshotNetSalaryDomain(
     val year: Int,
     val month: Int,
     val moneyAllocations: List<MoneyAllocation>,
-    val netSalary: Float
+    val netSalary: Float,
+    val foodCardAmount: Float?
 )

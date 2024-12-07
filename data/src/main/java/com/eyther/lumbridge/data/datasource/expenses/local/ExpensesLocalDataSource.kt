@@ -15,6 +15,22 @@ class ExpensesLocalDataSource @Inject constructor(
         .mapNotNull { flowItem ->
             flowItem?.map { expenseEntity -> expenseEntity.toCached() }
         }
+
+    fun getExpensesByDate(year: Int, month: Int): Flow<List<ExpenseCached>> {
+        // Prefix month with 0 if it's a single digit
+        val monthString = month.toString().padStart(
+            length = 2,
+            padChar = '0'
+        )
+
+        val yearString = year.toString()
+
+        return expensesDao.getExpensesByDate(yearString, monthString)
+            .mapNotNull { flowItem ->
+                flowItem?.map { expenseEntity -> expenseEntity.toCached() }
+            }
+    }
+
     suspend fun saveExpense(expenseCached: ExpenseCached) {
         if (expenseCached.expenseId == -1L) {
             expensesDao.saveExpense(expenseCached.toEntity())

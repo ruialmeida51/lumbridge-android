@@ -7,6 +7,7 @@ fun Preferences.toCached(): AppSettings {
     return AppSettings(
         isDarkMode = isDarkMode,
         appLanguageCountryCode = appLanguage.countryCode,
-        showAllocationsOnExpenses = showAllocationsOnExpenses
+        showAllocationsOnExpenses = showAllocationsOnExpenses,
+        addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation
     )
 }

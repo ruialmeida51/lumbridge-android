@@ -17,6 +17,10 @@ class ExpensesRepository @Inject constructor(
         .expensesFlow
         .mapNotNull { it.toDomain() }
 
+    fun getExpensesByDate(year: Int, month: Int) = expensesLocalDataSource
+        .getExpensesByDate(year, month)
+        .mapNotNull { it.toDomain() }
+
     suspend fun saveExpense(expense: ExpenseDomain) = withContext(schedulers.io) {
         expensesLocalDataSource.saveExpense(expense.toCached())
     }

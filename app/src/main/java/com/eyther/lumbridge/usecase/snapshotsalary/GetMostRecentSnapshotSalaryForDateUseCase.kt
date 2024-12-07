@@ -5,8 +5,6 @@ import javax.inject.Inject
 
 /**
  * The method will try to fetch the most up to date net salary snapshot, if it exists, for the given date.
- *
- * @property snapshotSalaryRepository The repository to fetch the snapshot salary from.
  */
 class GetMostRecentSnapshotSalaryForDateUseCase @Inject constructor() {
     operator fun invoke(

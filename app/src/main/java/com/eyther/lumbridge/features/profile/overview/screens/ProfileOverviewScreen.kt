@@ -354,6 +354,12 @@ private fun SupportAndCommunityHub(
             label = stringResource(id = R.string.profile_support_donate),
             onClick = { shouldShowDonationDialog.value = true }
         )
+
+        MovementSetting(
+            icon = R.drawable.ic_discord,
+            label = stringResource(id = R.string.profile_support_join_discord),
+            onClick = { uriHandler.openUri(context.getString(R.string.discord_invite_url)) }
+        )
     }
 
     DonationDialog(

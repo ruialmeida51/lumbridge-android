@@ -14,16 +14,23 @@ class UpdateSnapshotSalaryWithAllocation @Inject constructor(
 ) {
     suspend operator fun invoke(
         userFinancialsUi: UserFinancialsUi,
-        monthlyNetSalary: Float
+        monthlyNetSalary: Float,
+        foodCardAmount: Float,
+        snapshotYear: Int?,
+        snapshotMonth: Int?
     ) {
         val now = LocalDate.now()
         val userFinancials = userFinancialsUi.toDomain()
-        val currentSnapshotSalaryForDate = snapshotSalaryRepository.getSnapshotNetSalaryByYearMonth(now.year, now.monthValue) ?: return
+        val currentSnapshotSalaryForDate = snapshotSalaryRepository.getSnapshotNetSalaryByYearMonth(
+            year = snapshotYear ?: now.year,
+            month = snapshotMonth ?: now.monthValue
+        ) ?: return
 
         snapshotSalaryRepository.saveSnapshotNetSalary(
             currentSnapshotSalaryForDate.copy(
                 netSalary = monthlyNetSalary,
-                moneyAllocations = getMoneyAllocations(userFinancials, monthlyNetSalary)
+                moneyAllocations = getMoneyAllocations(userFinancials, monthlyNetSalary),
+                foodCardAmount = foodCardAmount
             )
         )
     }

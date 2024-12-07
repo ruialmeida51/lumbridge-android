@@ -6,5 +6,6 @@ data class ProfileAppSettingsScreenInputState(
     val isDarkMode: Boolean = false,
     val areNotificationsEnabled: Boolean = false,
     val appLanguage: SupportedLanguages = SupportedLanguages.ENGLISH,
-    val showAllocationsOnExpenses: Boolean = true
+    val showAllocationsOnExpenses: Boolean = true,
+    val addFoodCardToNecessitiesAllocation: Boolean = true
 )

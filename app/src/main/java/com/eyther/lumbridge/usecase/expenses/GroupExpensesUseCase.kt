@@ -15,7 +15,7 @@ import java.time.Year
 import javax.inject.Inject
 
 /**
- * From a list of expenses, group them by month and then by category,  respectively, and return the total amount spent in each category.
+ * From a list of expenses, group them by month and then by category, respectively, and return the total amount spent in each category.
  *
  * @param getMostRecentSnapshotSalaryForDateUseCase Use case to get the most recent snapshot salary for a given date.
  */
@@ -26,11 +26,17 @@ class GroupExpensesUseCase @Inject constructor(
     suspend operator fun invoke(
         expenses: List<ExpenseUi>,
         snapshotNetSalaries: List<SnapshotNetSalaryUi>,
-        showAllocationsOnExpenses: Boolean
-    ) = expenses.createExpensesPerMonth(showAllocationsOnExpenses, snapshotNetSalaries)
+        showAllocationsOnExpenses: Boolean,
+        shouldAddFoodCardToNecessitiesAllocation: Boolean
+    ): List<ExpensesMonthUi> = expenses.createExpensesPerMonth(
+        showAllocationsOnExpenses = showAllocationsOnExpenses,
+        shouldAddFoodCardToNecessitiesAllocation = shouldAddFoodCardToNecessitiesAllocation,
+        snapshotNetSalaries = snapshotNetSalaries
+    )
 
     private suspend fun List<ExpenseUi>.createExpensesPerMonth(
         showAllocationsOnExpenses: Boolean,
+        shouldAddFoodCardToNecessitiesAllocation: Boolean,
         snapshotNetSalaries: List<SnapshotNetSalaryUi>
     ): List<ExpensesMonthUi> {
         return groupBy { it.date.year to it.date.month }
@@ -50,6 +56,7 @@ class GroupExpensesUseCase @Inject constructor(
                 )
 
                 val snapshotNetSalary = snapshotSalary?.netSalary ?: 0f
+                val snapshotFoodCardAmount = snapshotSalary?.foodCardAmount ?: 0f
                 val snapshotAllocations = snapshotSalary?.moneyAllocations ?: emptyList()
                 val expensesByCategory = expenses.toCategoryExpenses()
 
@@ -58,11 +65,15 @@ class GroupExpensesUseCase @Inject constructor(
                     year = Year.of(yearMonth.first),
                     spent = spent,
                     gained = gained,
-                    expanded = false,
                     remainder = snapshotNetSalary - spent + gained,
                     snapshotMonthlyNetSalary = snapshotNetSalary,
                     snapshotAllocations = if (showAllocationsOnExpenses) {
-                        getMoneyAllocations(snapshotAllocations, expensesByCategory)
+                        getMoneyAllocations(
+                            snapshotAllocations = snapshotAllocations,
+                            expensesByCategory = expensesByCategory,
+                            foodCardAmount = snapshotFoodCardAmount,
+                            shouldAddFoodCardToNecessitiesAllocation = shouldAddFoodCardToNecessitiesAllocation
+                        )
                     } else {
                         emptyList()
                     },
@@ -96,7 +107,9 @@ class GroupExpensesUseCase @Inject constructor(
 
     private suspend fun getMoneyAllocations(
         snapshotAllocations: List<MoneyAllocationTypeUi>,
-        expensesByCategory: List<ExpensesCategoryUi>
+        expensesByCategory: List<ExpensesCategoryUi>,
+        foodCardAmount: Float,
+        shouldAddFoodCardToNecessitiesAllocation: Boolean
     ): List<ExpensesMonthAllocationUi> = withContext(schedulers.cpu) {
         val allocations = mutableListOf<ExpensesMonthAllocationUi>()
 
@@ -111,6 +124,8 @@ class GroupExpensesUseCase @Inject constructor(
             .groupBy { it.allocationTypeUi }
 
         snapshotAllocations.forEach { allocationType ->
+            val addFoodCardToNecessities = allocationType.isNecessities() && shouldAddFoodCardToNecessitiesAllocation
+
             val spentForAllocationType = detailedExpensesByAllocation.entries
                 .find { it.key.ordinal == allocationType.ordinal }
                 ?.value
@@ -127,7 +142,7 @@ class GroupExpensesUseCase @Inject constructor(
                 ExpensesMonthAllocationUi(
                     type = allocationType,
                     spent = spentForAllocationType ?: 0f,
-                    gained = gainedForAllocationType ?: 0f
+                    gained = (gainedForAllocationType ?: 0f) + if (addFoodCardToNecessities) foodCardAmount else 0f
                 )
             )
         }

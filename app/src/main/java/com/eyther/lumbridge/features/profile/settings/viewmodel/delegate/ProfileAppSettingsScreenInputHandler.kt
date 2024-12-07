@@ -29,6 +29,12 @@ class ProfileAppSettingsScreenInputHandler @Inject constructor(): IProfileAppSet
         }
     }
 
+    override fun onAddFoodCardToNecessitiesAllocationChanged(addFoodCardToNecessitiesAllocation: Boolean) {
+        updateInput { state ->
+            state.copy(addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation)
+        }
+    }
+
     /**
      * Helper function to update the inputState state of the screen.
      *

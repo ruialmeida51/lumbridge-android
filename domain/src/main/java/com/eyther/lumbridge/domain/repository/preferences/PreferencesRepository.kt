@@ -17,7 +17,7 @@ class PreferencesRepository @Inject constructor(
     private val schedulers: Schedulers
 ) {
 
-    private suspend fun getPreferences(): Preferences? {
+    suspend fun getPreferences(): Preferences? {
         return appSettingsLocalDataSource.appSettingsFlow.firstOrNull()?.toDomain()
     }
 
@@ -35,46 +35,71 @@ class PreferencesRepository @Inject constructor(
     suspend fun updatePreferences(
         isDarkMode: Boolean,
         appLanguage: SupportedLanguages,
-        showAllocationsOnExpenses: Boolean
+        showAllocationsOnExpenses: Boolean,
+        addFoodCardToNecessitiesAllocation: Boolean
     ) = withContext(schedulers.io) {
         val currentPreferences = getPreferences()
 
         val newPreferences = currentPreferences?.copy(
             isDarkMode = isDarkMode,
             appLanguage = appLanguage,
-            showAllocationsOnExpenses = showAllocationsOnExpenses
+            showAllocationsOnExpenses = showAllocationsOnExpenses,
+            addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation
         ) ?: Preferences(
             isDarkMode = isDarkMode,
             appLanguage = appLanguage,
-            showAllocationsOnExpenses = showAllocationsOnExpenses
+            showAllocationsOnExpenses = showAllocationsOnExpenses,
+            addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation
         )
 
         appSettingsLocalDataSource.saveAppSettings(appSettings = newPreferences.toCached())
     }
 
+    // region Get Migrations
+
     suspend fun getCompletedMortgageMigration() = withContext(schedulers.io) {
         appSettingsLocalDataSource.getCompletedMortgageMigration()
-    }
-
-    suspend fun getCompletedSnapshotMigration() = withContext(schedulers.io) {
-        appSettingsLocalDataSource.getCompletedNetSalarySnapshotMigration() &&
-            appSettingsLocalDataSource.getCompletedAllocationSnapshotMigration()
     }
 
     suspend fun getCompletedSalaryPercentageMigration() = withContext(schedulers.io) {
         appSettingsLocalDataSource.getCompletedSalaryPercentageMigration()
     }
 
+    suspend fun getCompletedSnapshotFoodCardMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.getCompletedFoodCardAmountMigration()
+    }
+
+    suspend fun getCompletedNetSalarySnapshotMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.getCompletedNetSalarySnapshotMigration()
+    }
+
+    suspend fun getCompletedAllocationSnapshotMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.getCompletedAllocationSnapshotMigration()
+    }
+
+    // endregion
+
+    // region Save Migrations
+
     suspend fun saveCompletedMortgageMigration() = withContext(schedulers.io) {
         appSettingsLocalDataSource.saveCompletedMortgageMigration(true)
     }
 
-    suspend fun saveCompletedSnapshotMigration() = withContext(schedulers.io) {
+    suspend fun saveCompletedNetSalarySnapshotMigration() = withContext(schedulers.io) {
         appSettingsLocalDataSource.saveCompletedNetSalarySnapshotMigration(true)
+    }
+
+    suspend fun saveCompletedAllocationSnapshotMigration() = withContext(schedulers.io) {
         appSettingsLocalDataSource.saveCompletedAllocationSnapshotMigration(true)
+    }
+
+    suspend fun saveCompletedSnapshotFoodCardMigration() = withContext(schedulers.io) {
+        appSettingsLocalDataSource.saveCompletedFoodCardAmountMigration(true)
     }
 
     suspend fun saveCompletedSalaryPercentageMigration() = withContext(schedulers.io) {
         appSettingsLocalDataSource.saveCompletedSalaryPercentageMigration(true)
     }
+
+    // endregion
 }

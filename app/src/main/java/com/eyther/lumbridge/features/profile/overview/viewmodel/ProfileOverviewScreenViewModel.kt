@@ -35,6 +35,10 @@ class ProfileOverviewScreenViewModel @Inject constructor(
     private val schedulers: Schedulers
 ) : ViewModel(), IProfileOverviewScreenViewModel {
 
+    companion object {
+        private const val TAG = "ProfileOverviewScreenViewModel"
+    }
+
     override val viewState = MutableStateFlow<ProfileOverviewScreenViewState>(
         ProfileOverviewScreenViewState.Loading
     )
@@ -71,7 +75,7 @@ class ProfileOverviewScreenViewModel @Inject constructor(
 
     override suspend fun constructBitmapFromUri(uri: Uri, context: Context): Bitmap {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            Log.e(this::class.simpleName, "💥 Failed to load image", throwable)
+            Log.e(TAG, "💥 Failed to load image", throwable)
         }
 
         return withContext(schedulers.cpu + coroutineExceptionHandler) {

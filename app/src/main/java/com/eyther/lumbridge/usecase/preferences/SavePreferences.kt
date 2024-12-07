@@ -10,12 +10,14 @@ class SavePreferences @Inject constructor(
     suspend operator fun invoke(
         isDarkMode: Boolean,
         appLanguages: SupportedLanguages,
-        showAllocationsOnExpenses: Boolean
+        showAllocationsOnExpenses: Boolean,
+        addFoodCardToNecessitiesAllocation: Boolean
     ) {
         preferencesRepository.updatePreferences(
             isDarkMode = isDarkMode,
             appLanguage = appLanguages,
-            showAllocationsOnExpenses = showAllocationsOnExpenses
+            showAllocationsOnExpenses = showAllocationsOnExpenses,
+            addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation
         )
     }
 }

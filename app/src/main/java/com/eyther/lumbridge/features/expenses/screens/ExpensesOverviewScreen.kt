@@ -2,7 +2,6 @@
 
 package com.eyther.lumbridge.features.expenses.screens
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -25,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,12 +48,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -84,10 +77,9 @@ import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSor
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy.Companion.DisplaySortBy
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy.Companion.toDisplaySortBy
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
+import com.eyther.lumbridge.features.expenses.screens.components.MonthlyAllocationGraph
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.ExpensesOverviewScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.IExpensesOverviewScreenViewModel
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
-import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
@@ -98,13 +90,11 @@ import com.eyther.lumbridge.ui.common.composables.components.datepicker.Lumbridg
 import com.eyther.lumbridge.ui.common.composables.components.datepicker.LumbridgeYearMonthRangePicker
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyComponentWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator
-import com.eyther.lumbridge.ui.common.composables.components.progress.LineProgressIndicator
+import com.eyther.lumbridge.ui.common.composables.components.setting.MovementSetting
 import com.eyther.lumbridge.ui.common.composables.components.setting.SimpleSetting
 import com.eyther.lumbridge.ui.common.composables.components.text.TabbedDataOverview
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.LumbridgeTopAppBar
 import com.eyther.lumbridge.ui.common.composables.components.topAppBar.TopAppBarVariation
-import com.eyther.lumbridge.ui.common.model.math.MathOperator
-import com.eyther.lumbridge.ui.theme.DefaultAndAHalfPadding
 import com.eyther.lumbridge.ui.theme.DefaultPadding
 import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
@@ -120,7 +110,7 @@ fun ExpensesOverviewScreen(
     val state = viewModel.viewState.collectAsStateWithLifecycle().value
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val selectedMonth = remember { mutableStateOf<ExpensesMonthUi?>(null) }
+    val monthToDelete = remember { mutableStateOf<ExpensesMonthUi?>(null) }
     val openSortByDialog = remember { mutableStateOf(false) }
     val openFilterDialog = remember { mutableStateOf(false) }
 
@@ -133,6 +123,13 @@ fun ExpensesOverviewScreen(
                             snackbarHostState.showSnackbar(
                                 message = viewEffects.message,
                                 duration = SnackbarDuration.Short
+                            )
+                        }
+
+                        is ExpensesOverviewScreenViewEffect.NavigateToMonthDetail -> {
+                            navController.navigateToWithArgs(
+                                navigationItem = ExpensesNavigationItem.ExpensesMonthDetail,
+                                args = arrayOf(viewEffects.month, viewEffects.year)
                             )
                         }
                     }
@@ -149,26 +146,6 @@ fun ExpensesOverviewScreen(
                 ),
                 showIcons = state.hasExpensesOrFilterApplied(),
                 actions = {
-                    Icon(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(bounded = false),
-                            onClick = viewModel::collapseAll
-                        ),
-                        painter = painterResource(R.drawable.ic_unfold_less),
-                        contentDescription = stringResource(id = R.string.collapse)
-                    )
-
-                    Icon(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(bounded = false),
-                            onClick = viewModel::expandAll
-                        ),
-                        painter = painterResource(R.drawable.ic_unfold_more),
-                        contentDescription = stringResource(id = R.string.expand)
-                    )
-
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
@@ -206,7 +183,7 @@ fun ExpensesOverviewScreen(
                 .imePadding()
                 .padding(top = DefaultPadding)
                 .then(
-                    if (selectedMonth.value != null) Modifier.blur(5.dp) else Modifier
+                    if (monthToDelete.value != null) Modifier.blur(5.dp) else Modifier
                 )
         ) {
             when (state) {
@@ -221,12 +198,10 @@ fun ExpensesOverviewScreen(
                         Content(
                             state = state,
                             navController = navController,
-                            selectedMonth = selectedMonth,
+                            monthToDelete = monthToDelete,
                             openSortByDialog = openSortByDialog,
                             openFilterDialog = openFilterDialog,
-                            onSelectMonth = viewModel::expandMonth,
-                            onSelectCategory = viewModel::expandCategory,
-                            onEditExpense = { navController.navigateToWithArgs(ExpensesNavigationItem.EditExpense, it.id) },
+                            onSelectMonth = viewModel::selectMonth,
                             onDeleteExpense = viewModel::onDeleteExpense,
                             onSortBySelected = viewModel::onSortBy,
                             onFilterSelected = viewModel::onFilter,
@@ -258,12 +233,10 @@ fun ExpensesOverviewScreen(
 private fun Content(
     state: Content,
     navController: NavHostController,
-    selectedMonth: MutableState<ExpensesMonthUi?>,
+    monthToDelete: MutableState<ExpensesMonthUi?>,
     openSortByDialog: MutableState<Boolean>,
     openFilterDialog: MutableState<Boolean>,
     onSelectMonth: (ExpensesMonthUi) -> Unit,
-    onSelectCategory: (ExpensesCategoryUi) -> Unit,
-    onEditExpense: (ExpensesDetailedUi) -> Unit,
     onDeleteExpense: (ExpensesMonthUi) -> Unit,
     onSortBySelected: (Int) -> Unit,
     onFilterSelected: (ordinal: Int, startYear: Int?, startMonth: Int?, endYear: Int?, endMonth: Int?) -> Unit,
@@ -294,8 +267,6 @@ private fun Content(
                     onClearSortBy = onClearSortBy,
                     navController = navController
                 )
-
-                Spacer(modifier = Modifier.height(HalfPadding))
             }
 
             Spacer(modifier = Modifier.height(HalfPadding))
@@ -303,11 +274,9 @@ private fun Content(
             MonthCard(
                 expensesMonthUi = monthExpensesUi,
                 onSelectMonth = onSelectMonth,
-                onSelectCategory = onSelectCategory,
                 showAllocationForExpenses = state.showAllocations,
-                selectedMonth = selectedMonth,
-                currencySymbol = state.locale.getCurrencySymbol(),
-                onEditExpense = onEditExpense
+                monthToDelete = monthToDelete,
+                currencySymbol = state.locale.getCurrencySymbol()
             )
 
             if (index == state.expensesMonthUi.lastIndex) {
@@ -317,8 +286,8 @@ private fun Content(
     }
 
     ShowConfirmationDialog(
-        expensesMonthUi = selectedMonth.value,
-        selectedMonth = selectedMonth,
+        expensesMonthUi = monthToDelete.value,
+        monthToDelete = monthToDelete,
         onDeleteExpense = onDeleteExpense
     )
 
@@ -575,10 +544,8 @@ private fun MonthCard(
     expensesMonthUi: ExpensesMonthUi,
     showAllocationForExpenses: Boolean,
     currencySymbol: String,
-    selectedMonth: MutableState<ExpensesMonthUi?>,
-    onSelectMonth: (ExpensesMonthUi) -> Unit,
-    onSelectCategory: (ExpensesCategoryUi) -> Unit,
-    onEditExpense: (ExpensesDetailedUi) -> Unit
+    monthToDelete: MutableState<ExpensesMonthUi?>,
+    onSelectMonth: (ExpensesMonthUi) -> Unit
 ) {
     ColumnCardWrapper(
         modifier = modifier,
@@ -594,24 +561,15 @@ private fun MonthCard(
             ) {
                 Icon(
                     modifier = Modifier
-                        .padding(horizontal = HalfPadding)
                         .size(20.dp)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = ripple(bounded = false)
                         ) {
-                            selectedMonth.value = expensesMonthUi
+                            monthToDelete.value = expensesMonthUi
                         },
                     imageVector = Icons.Outlined.Delete,
-                    contentDescription = null
-                )
-
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .rotate(if (expensesMonthUi.expanded) 180f else 0f),
-                    imageVector = Icons.Outlined.ArrowDropDown,
-                    contentDescription = null
+                    contentDescription = stringResource(R.string.delete)
                 )
             }
 
@@ -625,190 +583,27 @@ private fun MonthCard(
                     color = MaterialTheme.colorScheme.tertiary
                 )
 
-                MonthlyAllocationGraph(
-                    showAllocationForExpenses = showAllocationForExpenses,
-                    expensesMonthUi = expensesMonthUi,
-                    currencySymbol = currencySymbol
-                )
-
-                Spacer(modifier = Modifier.height(HalfPadding))
-
-                AnimatedVisibility(
-                    visible = expensesMonthUi.expanded
-                ) {
-                    Spacer(modifier = Modifier.height(HalfPadding))
-
-                    CategoriesCard(
-                        expensesCategories = expensesMonthUi.categoryExpenses,
-                        showAllocationForExpenses = showAllocationForExpenses,
-                        onSelectCategory = onSelectCategory,
-                        currencySymbol = currencySymbol,
-                        onEditExpense = onEditExpense
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun CategoriesCard(
-    expensesCategories: List<ExpensesCategoryUi>,
-    showAllocationForExpenses: Boolean,
-    currencySymbol: String,
-    onSelectCategory: (ExpensesCategoryUi) -> Unit,
-    onEditExpense: (ExpensesDetailedUi) -> Unit
-) {
-    Column {
-        expensesCategories.forEach { category ->
-            val mathOperatorString = when (category.categoryType.operator) {
-                MathOperator.ADDITION -> "+"
-                MathOperator.SUBTRACTION -> ""
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .clickable { onSelectCategory(category) },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = category.categoryType.iconRes),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp)
-                )
-
-                Spacer(modifier = Modifier.width(QuarterPadding))
-
-                TabbedDataOverview(
-                    icon = {
-                        Icon(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .rotate(if (category.expanded) 180f else 0f),
-                            imageVector = Icons.Outlined.ArrowDropDown,
-                            contentDescription = null
-                        )
-                    },
-                    label = stringResource(category.categoryType.categoryRes),
-                    text = "$mathOperatorString${category.spent.forceTwoDecimalsPlaces()}$currencySymbol"
-                )
-
-            }
-
-            AnimatedVisibility(
-                visible = category.expanded
-            ) {
-                DetailsCard(
-                    expensesDetailed = category.expensesDetailedUi,
-                    showAllocationForExpenses = showAllocationForExpenses,
-                    mathOperatorString = mathOperatorString,
-                    currencySymbol = currencySymbol,
-                    onEditExpense = onEditExpense
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun DetailsCard(
-    expensesDetailed: List<ExpensesDetailedUi>,
-    showAllocationForExpenses: Boolean,
-    mathOperatorString: String,
-    currencySymbol: String,
-    onEditExpense: (ExpensesDetailedUi) -> Unit
-) {
-    Column {
-        expensesDetailed.forEach { detail ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(32.dp)
-                    .clickable { onEditExpense(detail) },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.height(HalfPadding))
-
-                TabbedDataOverview(
-                    startPadding = DefaultAndAHalfPadding,
-                    textStyle = MaterialTheme.typography.bodySmall,
-                    labelStyle = MaterialTheme.typography.bodySmall,
-                    labelColour = MaterialTheme.colorScheme.onSurface,
-                    textColour = MaterialTheme.colorScheme.tertiary,
-                    label = detail.expenseName,
-                    icon = {
-                        Row {
-                            if (showAllocationForExpenses) {
-                                Spacer(
-                                    modifier = Modifier.width(QuarterPadding)
-                                )
-
-                                Icon(
-                                    modifier = Modifier.size(16.dp),
-                                    painter = painterResource(id = detail.allocationTypeUi.iconRes),
-                                    contentDescription = stringResource(id = detail.allocationTypeUi.labelRes)
-                                )
-                            }
-
-                            Spacer(
-                                modifier = Modifier.width(QuarterPadding)
-                            )
-
-                            Icon(
-                                modifier = Modifier.size(16.dp),
-                                painter = painterResource(id = R.drawable.ic_arrow_next),
-                                contentDescription = stringResource(id = R.string.edit)
-                            )
-                        }
-                    },
-                    text = "$mathOperatorString${detail.expenseAmount.forceTwoDecimalsPlaces()}$currencySymbol"
-                )
-
-                Spacer(modifier = Modifier.width(HalfPadding))
-            }
-        }
-    }
-}
-
-@Composable
-private fun MonthlyAllocationGraph(
-    showAllocationForExpenses: Boolean,
-    expensesMonthUi: ExpensesMonthUi,
-    currencySymbol: String
-) {
-    BoxWithConstraints {
-        val boxWithConstraintsScope = this
-
-        Column(
-            verticalArrangement = Arrangement.spacedBy(HalfPadding)
-        ) {
-            if (showAllocationForExpenses && expensesMonthUi.snapshotAllocations.isNotEmpty()) {
-                expensesMonthUi.snapshotAllocations.forEach { allocation ->
-                    AllocationItem(
-                        availableWidth = boxWithConstraintsScope.maxWidth,
-                        iconRes = allocation.iconRes,
-                        labelRes = allocation.labelRes,
-                        spent = allocation.spent,
-                        allocated = allocation.allocated,
-                        percentage = allocation.percentage,
+                if (showAllocationForExpenses) {
+                    MonthlyAllocationGraph(
+                        expensesMonthUi = expensesMonthUi,
                         currencySymbol = currencySymbol
                     )
                 }
 
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = HalfPadding)
-                )
+                if (expensesMonthUi.snapshotAllocations.isNotEmpty() && showAllocationForExpenses) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = DefaultPadding)
+                    )
+                }
 
                 SpentVersusRemainder(
                     expensesMonthUi = expensesMonthUi,
                     currencySymbol = currencySymbol
                 )
-            } else {
-                SpentVersusRemainder(
-                    expensesMonthUi = expensesMonthUi,
-                    currencySymbol = currencySymbol
+
+                MovementSetting(
+                    modifier = Modifier.padding(top = DefaultPadding),
+                    label = stringResource(id = R.string.breakdown_tap_to_view_more)
                 )
             }
         }
@@ -820,106 +615,42 @@ private fun ColumnScope.SpentVersusRemainder(
     expensesMonthUi: ExpensesMonthUi,
     currencySymbol: String
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        verticalArrangement = Arrangement.spacedBy(HalfPadding)
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_payments),
-            contentDescription = null,
-            modifier = Modifier.size(16.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_payments),
+                contentDescription = null,
+                modifier = Modifier.size(16.dp)
+            )
 
-        Spacer(modifier = Modifier.width(HalfPadding))
+            Spacer(modifier = Modifier.width(HalfPadding))
 
-        TabbedDataOverview(
-            label = stringResource(id = R.string.spent),
-            text = "${expensesMonthUi.spent.forceTwoDecimalsPlaces()}$currencySymbol"
-        )
-    }
+            TabbedDataOverview(
+                label = stringResource(id = R.string.spent),
+                text = "${expensesMonthUi.spent.forceTwoDecimalsPlaces()}$currencySymbol"
+            )
+        }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_savings),
-            contentDescription = null,
-            modifier = Modifier.size(16.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_savings),
+                contentDescription = null,
+                modifier = Modifier.size(16.dp)
+            )
 
-        Spacer(modifier = Modifier.width(HalfPadding))
+            Spacer(modifier = Modifier.width(HalfPadding))
 
-        TabbedDataOverview(
-            label = stringResource(id = R.string.remainder),
-            text = "${expensesMonthUi.remainder.forceTwoDecimalsPlaces()}$currencySymbol"
-        )
-    }
-}
-
-@Composable
-private fun AllocationItem(
-    availableWidth: Dp,
-    @DrawableRes iconRes: Int,
-    @StringRes labelRes: Int,
-    spent: Float,
-    allocated: Float,
-    percentage: Float,
-    currencySymbol: String
-) {
-    val labelWidth = availableWidth * 0.22f
-    val progressWidth = availableWidth * 0.17f
-    val textWidth = availableWidth * 0.60f
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Icon(
-            painter = painterResource(id = iconRes),
-            contentDescription = null,
-            modifier = Modifier
-                .size(16.dp)
-                .align(Alignment.CenterVertically)
-        )
-
-        Spacer(modifier = Modifier.width(HalfPadding))
-
-        Text(
-            modifier = Modifier
-                .width(labelWidth),
-            text = stringResource(id = labelRes),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.secondary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Start
-        )
-
-        Spacer(modifier = Modifier.width(HalfPadding))
-
-        LineProgressIndicator(
-            modifier = Modifier
-                .height(8.dp)
-                .align(Alignment.CenterVertically)
-                .width(progressWidth),
-            progressColor = if (percentage > 1.0f) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-            progress = percentage
-        )
-
-        Spacer(modifier = Modifier.width(HalfPadding))
-
-        Text(
-            modifier = Modifier
-                .width(textWidth),
-            text = stringResource(
-                id = R.string.expenses_spent_versus_allocated,
-                "${spent.forceTwoDecimalsPlaces()}$currencySymbol",
-                "${allocated.forceTwoDecimalsPlaces()}$currencySymbol"
-            ),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
-            textAlign = TextAlign.End,
-            overflow = TextOverflow.Ellipsis
-        )
+            TabbedDataOverview(
+                label = stringResource(id = R.string.remainder),
+                text = "${expensesMonthUi.remainder.forceTwoDecimalsPlaces()}$currencySymbol"
+            )
+        }
     }
 }
 
@@ -1057,7 +788,7 @@ private fun NoExpenses(navController: NavHostController) {
             text = stringResource(id = R.string.expenses_overview_no_expenses),
             buttonText = stringResource(id = R.string.expenses_overview_add_expense),
             onButtonClick = {
-                navController.navigateTo(ExpensesNavigationItem.AddExpense)
+                navController.navigateToWithArgs(ExpensesNavigationItem.AddExpense, -1, -1)
             }
         )
     }
@@ -1066,25 +797,25 @@ private fun NoExpenses(navController: NavHostController) {
 @Composable
 private fun ShowConfirmationDialog(
     expensesMonthUi: ExpensesMonthUi?,
-    selectedMonth: MutableState<ExpensesMonthUi?>,
+    monthToDelete: MutableState<ExpensesMonthUi?>,
     onDeleteExpense: (ExpensesMonthUi) -> Unit
 ) {
     if (expensesMonthUi != null) {
         AlertDialog(
-            onDismissRequest = { selectedMonth.value = null },
+            onDismissRequest = { monthToDelete.value = null },
             confirmButton = {
                 LumbridgeButton(
                     label = stringResource(id = R.string.yes),
                     onClick = {
                         onDeleteExpense(expensesMonthUi)
-                        selectedMonth.value = null
+                        monthToDelete.value = null
                     }
                 )
             },
             dismissButton = {
                 LumbridgeButton(
                     label = stringResource(id = R.string.no),
-                    onClick = { selectedMonth.value = null }
+                    onClick = { monthToDelete.value = null }
                 )
             },
             title = {
@@ -1289,7 +1020,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateTo(ExpensesNavigationItem.AddExpense)
+            navController.navigateToWithArgs(ExpensesNavigationItem.AddExpense, -1, -1)
         }
     ) {
         Icon(

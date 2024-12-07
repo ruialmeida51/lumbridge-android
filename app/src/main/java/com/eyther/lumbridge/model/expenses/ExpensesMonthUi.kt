@@ -7,6 +7,7 @@ import java.time.Month
 import java.time.Year
 
 data class ExpensesMonthUi(
+    val id: Long = -1,
     val categoryExpenses: List<ExpensesCategoryUi>,
     val snapshotMonthlyNetSalary: Float = 0f,
     val snapshotAllocations: List<ExpensesMonthAllocationUi>,
@@ -14,8 +15,7 @@ data class ExpensesMonthUi(
     val year: Year,
     val spent: Float = -1f,
     val gained: Float = -1f,
-    val remainder: Float = -1f,
-    val expanded: Boolean = false
+    val remainder: Float = -1f
 ) {
     fun getDateWithLocale(): String {
         return (year to month).toLocalDate().toMonthYearDateString().capitalise()

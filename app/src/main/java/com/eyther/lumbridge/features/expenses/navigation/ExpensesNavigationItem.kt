@@ -13,6 +13,8 @@ sealed class ExpensesNavigationItem(
 
     companion object {
         const val ARG_EXPENSE_ID = "expenseId"
+        const val ARG_MONTH = "month"
+        const val ARG_YEAR = "year"
     }
 
     @Serializable
@@ -23,7 +25,7 @@ sealed class ExpensesNavigationItem(
 
     @Serializable
     data object AddExpense : ExpensesNavigationItem(
-        route = "add_expense",
+        route = "add_expense/{$ARG_MONTH}/{$ARG_YEAR}",
         label = R.string.expenses_overview_add_expense
     )
 
@@ -37,5 +39,11 @@ sealed class ExpensesNavigationItem(
     data object EditExpense : ExpensesNavigationItem(
         route = "edit_expense/{$ARG_EXPENSE_ID}",
         label = R.string.expenses_overview_edit_expense
+    )
+
+    @Serializable
+    data object ExpensesMonthDetail : ExpensesNavigationItem(
+        route = "expenses_month_detail/{$ARG_MONTH}/{$ARG_YEAR}",
+        label = R.string.expenses_month_detail
     )
 }
