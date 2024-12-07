@@ -124,6 +124,8 @@ class GroupExpensesUseCase @Inject constructor(
             .groupBy { it.allocationTypeUi }
 
         snapshotAllocations.forEach { allocationType ->
+            val addFoodCardToNecessities = allocationType.isNecessities() && shouldAddFoodCardToNecessitiesAllocation
+
             val spentForAllocationType = detailedExpensesByAllocation.entries
                 .find { it.key.ordinal == allocationType.ordinal }
                 ?.value
@@ -136,18 +138,11 @@ class GroupExpensesUseCase @Inject constructor(
                 ?.sumOf { it.expenseAmount.toInt() } // Convert to int to speed up calculations
                 ?.toFloat()
 
-            val allocationTypeWithFoodCard = if (allocationType.isNecessities() && shouldAddFoodCardToNecessitiesAllocation) {
-                val necessitiesType = allocationType.asNecessities()
-                necessitiesType.copy(allocated = necessitiesType.allocated + foodCardAmount)
-            } else {
-                allocationType
-            }
-
             allocations.add(
                 ExpensesMonthAllocationUi(
-                    type = allocationTypeWithFoodCard,
+                    type = allocationType,
                     spent = spentForAllocationType ?: 0f,
-                    gained = gainedForAllocationType ?: 0f
+                    gained = (gainedForAllocationType ?: 0f) + if (addFoodCardToNecessities) foodCardAmount else 0f
                 )
             )
         }

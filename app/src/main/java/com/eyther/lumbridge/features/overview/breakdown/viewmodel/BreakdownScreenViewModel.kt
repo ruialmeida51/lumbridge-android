@@ -3,6 +3,7 @@ package com.eyther.lumbridge.features.overview.breakdown.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eyther.lumbridge.domain.model.preferences.Preferences
 import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenViewState
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.loan.LoanCalculationUi
@@ -14,6 +15,7 @@ import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
 import com.eyther.lumbridge.usecase.loan.DeleteLoanUseCase
 import com.eyther.lumbridge.usecase.loan.GetLoansFlowUseCase
+import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
 import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
@@ -36,7 +38,8 @@ class BreakdownScreenViewModel @Inject constructor(
     private val getBalanceSheetUseCase: GetBalanceSheetUseCase,
     private val getUserFinancialsFlow: GetUserFinancialsFlow,
     private val getNetSalaryUseCase: GetNetSalaryUseCase,
-    private val deleteLoanUseCase: DeleteLoanUseCase
+    private val deleteLoanUseCase: DeleteLoanUseCase,
+    private val getPreferencesStream: GetPreferencesStream
 ) : ViewModel(),
     IBreakdownScreenViewModel {
 
@@ -47,7 +50,8 @@ class BreakdownScreenViewModel @Inject constructor(
             val expenses: List<ExpenseUi>,
             val snapshotSalaries: List<SnapshotNetSalaryUi>,
             val loans: List<Pair<LoanUi, LoanCalculationUi>>,
-            val userFinancials: UserFinancialsUi?
+            val userFinancials: UserFinancialsUi?,
+            val preferences: Preferences?
         )
     }
 
@@ -70,16 +74,18 @@ class BreakdownScreenViewModel @Inject constructor(
                 getExpensesStreamUseCase(),
                 getSnapshotNetSalariesFlowUseCase(),
                 getLoansFlowUseCase(locale),
-                getUserFinancialsFlow()
-            ) { expenses, snapshotSalaries, loanInfo, userFinancials ->
+                getUserFinancialsFlow(),
+                getPreferencesStream()
+            ) { expenses, snapshotSalaries, loanInfo, userFinancials, preferences ->
                 DataStream(
                     expenses = expenses,
                     snapshotSalaries = snapshotSalaries,
                     loans = loanInfo,
-                    userFinancials = userFinancials
+                    userFinancials = userFinancials,
+                    preferences = preferences
                 )
             }
-                .onEach { (expenses, snapshotSalaries, loans, userFinancials) ->
+                .onEach { (expenses, snapshotSalaries, loans, userFinancials, preferences) ->
                     val currentNetSalary = userFinancials?.let { getNetSalaryUseCase(it) }
 
                     viewState.update {
@@ -91,7 +97,8 @@ class BreakdownScreenViewModel @Inject constructor(
                             balanceSheetNet = getBalanceSheetUseCase(
                                 currentNetSalary = currentNetSalary?.monthlyNetSalary,
                                 expenses = expenses,
-                                snapshotSalaries = snapshotSalaries
+                                snapshotSalaries = snapshotSalaries,
+                                addFoodCardToNecessitiesAllocation = preferences?.addFoodCardToNecessitiesAllocation == true
                             )
                         )
                     }

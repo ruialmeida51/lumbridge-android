@@ -103,9 +103,10 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
                 ).firstOrNull() ?: throw IllegalStateException("\uD83D\uDCA5 No expenses found for year $year and month $month")
 
                 val balanceSheet = getBalanceSheetUseCase(
-                    snapshotSalary?.netSalary,
-                    data.snapshotNetSalaries,
-                    data.expenses
+                    currentNetSalary = snapshotSalary?.netSalary,
+                    snapshotSalaries = data.snapshotNetSalaries,
+                    expenses = data.expenses,
+                    addFoodCardToNecessitiesAllocation = data.preferences?.addFoodCardToNecessitiesAllocation == true
                 ) ?: throw IllegalStateException("\uD83D\uDCA5 Couldn't calculate balance sheet for year $year and month $month")
 
                 viewState.update {

@@ -16,19 +16,22 @@ class GetBalanceSheetUseCase @Inject constructor(
     suspend operator fun invoke(
         currentNetSalary: Float?,
         snapshotSalaries: List<SnapshotNetSalaryUi>,
-        expenses: List<ExpenseUi>
+        expenses: List<ExpenseUi>,
+        addFoodCardToNecessitiesAllocation: Boolean
     ) = withContext(schedulers.cpu) {
         return@withContext getBalanceSheetNet(
             currentNetSalary = currentNetSalary,
             snapshotSalaries = snapshotSalaries,
-            expenses = expenses
+            expenses = expenses,
+            addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation
         )
     }
 
     private fun getBalanceSheetNet(
         currentNetSalary: Float?,
         snapshotSalaries: List<SnapshotNetSalaryUi>,
-        expenses: List<ExpenseUi>
+        expenses: List<ExpenseUi>,
+        addFoodCardToNecessitiesAllocation: Boolean
     ): BalanceSheetNetUi? {
         if (expenses.isEmpty() || currentNetSalary == null) return null
 
@@ -50,8 +53,10 @@ class GetBalanceSheetUseCase @Inject constructor(
                 )
 
                 val snapshotNetSalary = snapshotSalary?.netSalary ?: 0f
+                val foodCardAmount = snapshotSalary?.foodCardAmount ?: 0f
+                val income = snapshotNetSalary + gained + if (addFoodCardToNecessitiesAllocation) foodCardAmount else 0f
 
-                return@map (snapshotNetSalary + gained).toInt() to spent
+                return@map income to spent
             }.reduce { acc, (moneyIn, moneyOut) ->
                 acc.copy(
                     first = acc.first + moneyIn,
