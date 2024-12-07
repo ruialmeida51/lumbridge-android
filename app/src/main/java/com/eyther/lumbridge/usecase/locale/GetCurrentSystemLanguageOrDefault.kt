@@ -3,14 +3,14 @@ package com.eyther.lumbridge.usecase.locale
 import androidx.appcompat.app.AppCompatDelegate
 import com.eyther.lumbridge.domain.model.locale.SupportedLanguages
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
+import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import javax.inject.Inject
 
 class GetCurrentSystemLanguageOrDefault @Inject constructor(
-    private val getPreferencesFlow: GetPreferencesFlow,
+    private val getPreferencesFlow: GetPreferencesStream,
     private val schedulers: Schedulers
 ) {
     suspend operator fun invoke(): SupportedLanguages {

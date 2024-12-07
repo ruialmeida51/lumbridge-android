@@ -9,5 +9,6 @@ fun SnapshotNetSalaryDomain.toUi() = SnapshotNetSalaryUi(
     year = year,
     month = month,
     netSalary = netSalary,
-    moneyAllocations = moneyAllocations.map { it.toUi() }
+    moneyAllocations = moneyAllocations.map { it.toUi() },
+    foodCardAmount = foodCardAmount ?: 0f
 )

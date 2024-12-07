@@ -6,7 +6,7 @@ import com.eyther.lumbridge.domain.model.locale.SupportedLanguages
 import com.eyther.lumbridge.launcher.model.MainScreenViewState
 import com.eyther.lumbridge.launcher.model.UiMode
 import com.eyther.lumbridge.usecase.locale.GetCurrentSystemLanguageOrDefault
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
+import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
 import com.eyther.lumbridge.usecase.preferences.SavePreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val getPreferencesFlow: GetPreferencesFlow,
+    private val getPreferencesFlow: GetPreferencesStream,
     private val savePreferences: SavePreferences,
     private val getCurrentSystemLanguageOrDefault: GetCurrentSystemLanguageOrDefault
 ) : ViewModel(), IMainActivityViewModel {
@@ -52,16 +52,19 @@ class MainActivityViewModel @Inject constructor(
     override suspend fun updateSettings(
         isDarkMode: Boolean?,
         appLanguageCountryCode: String?,
-        showAllocationsOnExpenses: Boolean?
+        showAllocationsOnExpenses: Boolean?,
+        addFoodCardToNecessitiesAllocation: Boolean?
     ) {
         val newDarkMode = (isDarkMode ?: getPreferencesFlow().firstOrNull()?.isDarkMode) == true
         val newAppLanguage = SupportedLanguages.getOrNull(appLanguageCountryCode) ?: getCurrentSystemLanguageOrDefault()
-        val newShowAllocationsOnExpenses = showAllocationsOnExpenses ?: getPreferencesFlow().firstOrNull()?.showAllocationsOnExpenses ?: true
+        val newShowAllocationsOnExpenses = (showAllocationsOnExpenses ?: getPreferencesFlow().firstOrNull()?.showAllocationsOnExpenses) != false
+        val newAddFoodCardToNecessitiesAllocation = (addFoodCardToNecessitiesAllocation ?: getPreferencesFlow().firstOrNull()?.addFoodCardToNecessitiesAllocation) != false
 
         savePreferences(
             isDarkMode = newDarkMode,
             appLanguages = newAppLanguage,
-            showAllocationsOnExpenses = newShowAllocationsOnExpenses
+            showAllocationsOnExpenses = newShowAllocationsOnExpenses,
+            addFoodCardToNecessitiesAllocation = newAddFoodCardToNecessitiesAllocation
         )
     }
 }

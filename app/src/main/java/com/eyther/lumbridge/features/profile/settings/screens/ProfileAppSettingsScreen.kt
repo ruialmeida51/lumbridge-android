@@ -110,6 +110,7 @@ fun ProfileSettingsScreen(
                     onDarkModeChange = viewModel::onDarkModeChanged,
                     onLanguageChanged = viewModel::onAppLanguageChanged,
                     onShowAllocationsOnExpensesChanged = viewModel::onShowAllocationsOnExpensesChanged,
+                    onAddFoodCardToNecessitiesAllocationChanged = viewModel::onAddFoodCardToNecessitiesAllocationChanged,
                     neededPermission = neededPermission,
                     notificationsPermissionState = notificationsPermissionState,
                     askForNotificationsPermission = askForNotificationsPermission
@@ -129,7 +130,8 @@ private fun ColumnScope.Content(
     askForNotificationsPermission: MutableState<Boolean>,
     onDarkModeChange: (Boolean) -> Unit,
     onLanguageChanged: (String) -> Unit,
-    onShowAllocationsOnExpensesChanged: (Boolean) -> Unit
+    onShowAllocationsOnExpensesChanged: (Boolean) -> Unit,
+    onAddFoodCardToNecessitiesAllocationChanged: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -172,10 +174,17 @@ private fun ColumnScope.Content(
         HorizontalDivider()
 
         SwitchSetting(
-            icon = R.drawable.ic_allocation_necessities,
+            icon = R.drawable.ic_payments,
             label = stringResource(id = R.string.expenses_profile_setting_show_allocations),
             isChecked = state.inputState.showAllocationsOnExpenses,
             onCheckedChange = { onShowAllocationsOnExpensesChanged(it) }
+        )
+
+        SwitchSetting(
+            icon = R.drawable.ic_allocation_necessities,
+            label = stringResource(id = R.string.expenses_profile_setting_add_food_card_to_necessities_allocation),
+            isChecked = state.inputState.addFoodCardToNecessitiesAllocation,
+            onCheckedChange = { onAddFoodCardToNecessitiesAllocationChanged(it) }
         )
     }
 

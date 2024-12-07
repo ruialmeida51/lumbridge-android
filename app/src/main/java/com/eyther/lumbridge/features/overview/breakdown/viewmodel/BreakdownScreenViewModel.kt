@@ -80,8 +80,8 @@ class BreakdownScreenViewModel @Inject constructor(
                 )
             }
                 .onEach { (expenses, snapshotSalaries, loans, userFinancials) ->
-
                     val currentNetSalary = userFinancials?.let { getNetSalaryUseCase(it) }
+
                     viewState.update {
                         BreakdownScreenViewState.Content(
                             locale = locale,

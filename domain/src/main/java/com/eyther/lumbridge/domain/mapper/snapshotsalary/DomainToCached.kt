@@ -11,5 +11,6 @@ fun SnapshotNetSalaryDomain.toCached() = SnapshotNetSalaryCached(
     amount = netSalary,
     savingsPercentage = moneyAllocations.find { it.type == MoneyAllocationType.Savings }?.percentage,
     necessitiesPercentage = moneyAllocations.find { it.type == MoneyAllocationType.Necessities }?.percentage,
-    luxuriesPercentage = moneyAllocations.find { it.type == MoneyAllocationType.Luxuries }?.percentage
+    luxuriesPercentage = moneyAllocations.find { it.type == MoneyAllocationType.Luxuries }?.percentage,
+    foodCardAmount = foodCardAmount
 )

@@ -100,7 +100,19 @@ fun ExpensesNavHost(
             exitTransition = {
                 slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End)
             },
-            route = ExpensesNavigationItem.AddExpense.route
+            route = ExpensesNavigationItem.AddExpense.route,
+            arguments = listOf(
+                navArgument(ARG_MONTH) {
+                    type = NavType.IntType
+                    nullable = false
+                    defaultValue = -1
+                },
+                navArgument(ARG_YEAR) {
+                    type = NavType.IntType
+                    nullable = false
+                    defaultValue = -1
+                }
+            )
         ) {
             ExpensesAddScreen(
                 navController = navController,

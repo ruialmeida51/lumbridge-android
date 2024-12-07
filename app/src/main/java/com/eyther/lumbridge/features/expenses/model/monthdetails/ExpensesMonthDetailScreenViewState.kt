@@ -12,6 +12,8 @@ sealed interface ExpensesMonthDetailScreenViewState {
         val monthExpenses: ExpensesMonthUi,
         val showAllocations: Boolean,
         val balanceSheetNetUi: BalanceSheetNetUi,
+        val month: Int,
+        val year: Int,
         val locale: SupportedLocales
     ) : ExpensesMonthDetailScreenViewState
 

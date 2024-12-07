@@ -7,5 +7,6 @@ data class SnapshotNetSalaryUi(
     val year: Int,
     val month: Int,
     val moneyAllocations: List<MoneyAllocationTypeUi>,
-    val netSalary: Float
+    val netSalary: Float,
+    val foodCardAmount: Float
 )

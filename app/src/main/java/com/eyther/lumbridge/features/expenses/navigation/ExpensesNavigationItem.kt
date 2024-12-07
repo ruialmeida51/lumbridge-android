@@ -25,7 +25,7 @@ sealed class ExpensesNavigationItem(
 
     @Serializable
     data object AddExpense : ExpensesNavigationItem(
-        route = "add_expense",
+        route = "add_expense/{$ARG_MONTH}/{$ARG_YEAR}",
         label = R.string.expenses_overview_add_expense
     )
 

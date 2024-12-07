@@ -91,7 +91,7 @@ class LumbridgeApplication : Application(), Configuration.Provider {
         MainScope().launch {
             dataStoreMigrationHelper.tryMigrateMortgage()
             dataStoreMigrationHelper.tryMigrateUserFinancialsSalaryPercentage()
-            dataStoreMigrationHelper.tryMigrateFirstSnapshotSalaryAndAllocations()
+            dataStoreMigrationHelper.tryMigrateSnapshotSalaryAndAllocations()
         }
     }
 

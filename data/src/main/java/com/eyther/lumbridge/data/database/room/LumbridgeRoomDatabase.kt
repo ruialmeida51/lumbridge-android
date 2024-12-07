@@ -34,7 +34,7 @@ import com.eyther.lumbridge.data.model.snapshotsalary.entity.SnapshotNetSalaryEn
         RecurringPaymentEntity::class,
         ReminderEntity::class
     ],
-    version = 11,
+    version = 12,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 2, to = 3),
@@ -42,7 +42,8 @@ import com.eyther.lumbridge.data.model.snapshotsalary.entity.SnapshotNetSalaryEn
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 6, to = 7),
         AutoMigration(from = 9, to = 10),
-        AutoMigration(from = 10, to = 11)
+        AutoMigration(from = 10, to = 11),
+        AutoMigration(from = 11, to = 12)
     ]
 )
 @TypeConverters(RoomConverters::class)

@@ -239,6 +239,7 @@
     <string name="expenses_overview_no_expenses">You don\'t seem to have any expenses yet.\nTap the button below to add some.</string>
     <string name="expenses_spent_versus_allocated">%1$s of %2$s</string>
     <string name="expenses_profile_setting_show_allocations">Show Allocations on Expenses</string>
+    <string name="expenses_profile_setting_add_food_card_to_necessities_allocation">Include Food Card in Necessities Allocation</string>
 
     <string name="expenses_month_detail">Month Expenses</string>
     <string name="expenses_month_detail_allocations_spending">Spending by Allocation</string>

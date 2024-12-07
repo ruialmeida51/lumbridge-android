@@ -1,10 +1,13 @@
 package com.eyther.lumbridge.features.expenses.viewmodel.add
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddScreenViewState
+import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_MONTH
+import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_YEAR
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.ExpensesAddScreenInputHandler
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.IExpensesAddScreenInputHandler
 import com.eyther.lumbridge.model.expenses.ExpenseUi
@@ -19,13 +22,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.Year
 import javax.inject.Inject
 
 @HiltViewModel
 class ExpensesAddScreenViewModel @Inject constructor(
     private val expensesAddScreenInputHandler: ExpensesAddScreenInputHandler,
-    private val saveExpenseUseCase: SaveExpenseUseCase
+    private val saveExpenseUseCase: SaveExpenseUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel(),
     IExpensesAddScreenViewModel,
     IExpensesAddScreenInputHandler by expensesAddScreenInputHandler {
@@ -42,6 +47,9 @@ class ExpensesAddScreenViewModel @Inject constructor(
     override val viewEffects: MutableSharedFlow<ExpensesAddScreenViewEffect> =
         MutableSharedFlow()
 
+    private val year: Int = checkNotNull(savedStateHandle.get<Int>(ARG_YEAR)) { "\uD83D\uDCA5 Year is required" }
+    private val month: Int = checkNotNull(savedStateHandle.get<Int>(ARG_MONTH)) { "\uD83D\uDCA5 Month is required" }
+
     init {
         viewModelScope.launch {
             viewState.update {
@@ -51,6 +59,20 @@ class ExpensesAddScreenViewModel @Inject constructor(
                     availableMoneyAllocations = MoneyAllocationTypeUi.get(),
                     shouldEnableSaveButton = false
                 )
+            }
+
+            if (year != -1 && month != -1) {
+                val currentDate = LocalDate.now()
+
+                updateInput { inputState ->
+                    inputState.copy(
+                        dateInput = inputState.dateInput.copy(
+                            date = Year.of(year).atMonth(month).atDay(
+                                if (currentDate.year == year && currentDate.monthValue == month) currentDate.dayOfMonth else 1
+                            )
+                        )
+                    )
+                }
             }
 
             inputState

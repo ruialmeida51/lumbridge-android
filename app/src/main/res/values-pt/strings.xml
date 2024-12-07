@@ -233,6 +233,7 @@
     <string name="expenses_overview_no_expenses">Parece que ainda não tens nenhuma despesa. Carrega no botão para começar a adicionar.</string>
     <string name="expenses_spent_versus_allocated">%1$s de %2$s</string>
     <string name="expenses_profile_setting_show_allocations">Mostrar Alocações nas Despesas</string>
+    <string name="expenses_profile_setting_add_food_card_to_necessities_allocation">Incluir Cartão de Refeição na alocação de Necessidades</string>
 
     <string name="expenses_month_detail">Despesas do Mês</string>
     <string name="expenses_month_detail_allocations_spending">Despesas por Alocação</string>

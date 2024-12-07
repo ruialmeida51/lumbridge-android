@@ -15,7 +15,6 @@ import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.Expens
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenFilterDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenSortByDelegate
 import com.eyther.lumbridge.model.expenses.ExpenseUi
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
@@ -24,7 +23,7 @@ import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.expenses.GroupExpensesUseCase
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
+import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
 import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
@@ -49,7 +48,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
     private val getNetSalaryUseCase: GetNetSalaryUseCase,
     private val getUserFinancialsStreamUseCase: GetUserFinancialsFlow,
     private val groupExpensesUseCase: GroupExpensesUseCase,
-    private val getPreferencesFlow: GetPreferencesFlow,
+    private val getPreferencesFlow: GetPreferencesStream,
     private val getSnapshotNetSalariesFlowUseCase: GetSnapshotNetSalariesFlowUseCase,
     private val sortByDelegate: ExpensesOverviewScreenSortByDelegate,
     private val filterDelegate: ExpensesOverviewScreenFilterDelegate,
@@ -69,7 +68,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             val expensesData: ExpensesData,
             val sortBy: ExpensesOverviewSortBy,
             val filter: ExpensesOverviewFilter,
-            val showAllocationsOnExpenses: Boolean
+            val showAllocationsOnExpenses: Boolean,
+            val shouldAddFoodCardToNecessitiesAllocation: Boolean
         )
 
         private data class ExpensesData(
@@ -126,7 +126,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                 expensesData = expensesData,
                 sortBy = sortBy,
                 filter = filter,
-                showAllocationsOnExpenses = preferences?.showAllocationsOnExpenses == true
+                showAllocationsOnExpenses = preferences?.showAllocationsOnExpenses == true,
+                shouldAddFoodCardToNecessitiesAllocation = preferences?.addFoodCardToNecessitiesAllocation == true
             )
         }
             .flowOn(schedulers.io)
@@ -145,7 +146,8 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                             monthlyExpenses = groupExpensesUseCase(
                                 expenses = streamData.expensesData.expenses,
                                 snapshotNetSalaries = streamData.expensesData.snapshotNetSalaries,
-                                showAllocationsOnExpenses = streamData.showAllocationsOnExpenses
+                                showAllocationsOnExpenses = streamData.showAllocationsOnExpenses,
+                                shouldAddFoodCardToNecessitiesAllocation = streamData.shouldAddFoodCardToNecessitiesAllocation
                             ),
                             netSalaryUi = streamData.expensesData.netSalaryUi,
                             locale = streamData.expensesData.locale,

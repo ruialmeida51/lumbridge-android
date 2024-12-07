@@ -7,5 +7,6 @@ data class SnapshotNetSalaryCached(
     val amount: Float,
     val savingsPercentage: Float?,
     val necessitiesPercentage: Float?,
-    val luxuriesPercentage: Float?
+    val luxuriesPercentage: Float?,
+    val foodCardAmount: Float?
 )

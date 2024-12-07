@@ -9,5 +9,6 @@ fun SnapshotNetSalaryCached.toEntity() = SnapshotNetSalaryEntity(
     amount = amount,
     savingsPercentage = savingsPercentage,
     necessitiesPercentage = necessitiesPercentage,
-    luxuriesPercentage = luxuriesPercentage
+    luxuriesPercentage = luxuriesPercentage,
+    foodCardAmount = foodCardAmount
 )

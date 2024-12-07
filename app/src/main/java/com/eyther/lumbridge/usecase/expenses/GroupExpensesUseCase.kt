@@ -26,11 +26,17 @@ class GroupExpensesUseCase @Inject constructor(
     suspend operator fun invoke(
         expenses: List<ExpenseUi>,
         snapshotNetSalaries: List<SnapshotNetSalaryUi>,
-        showAllocationsOnExpenses: Boolean
-    ): List<ExpensesMonthUi> = expenses.createExpensesPerMonth(showAllocationsOnExpenses, snapshotNetSalaries)
+        showAllocationsOnExpenses: Boolean,
+        shouldAddFoodCardToNecessitiesAllocation: Boolean
+    ): List<ExpensesMonthUi> = expenses.createExpensesPerMonth(
+        showAllocationsOnExpenses = showAllocationsOnExpenses,
+        shouldAddFoodCardToNecessitiesAllocation = shouldAddFoodCardToNecessitiesAllocation,
+        snapshotNetSalaries = snapshotNetSalaries
+    )
 
     private suspend fun List<ExpenseUi>.createExpensesPerMonth(
         showAllocationsOnExpenses: Boolean,
+        shouldAddFoodCardToNecessitiesAllocation: Boolean,
         snapshotNetSalaries: List<SnapshotNetSalaryUi>
     ): List<ExpensesMonthUi> {
         return groupBy { it.date.year to it.date.month }
@@ -50,6 +56,7 @@ class GroupExpensesUseCase @Inject constructor(
                 )
 
                 val snapshotNetSalary = snapshotSalary?.netSalary ?: 0f
+                val snapshotFoodCardAmount = snapshotSalary?.foodCardAmount ?: 0f
                 val snapshotAllocations = snapshotSalary?.moneyAllocations ?: emptyList()
                 val expensesByCategory = expenses.toCategoryExpenses()
 
@@ -61,7 +68,12 @@ class GroupExpensesUseCase @Inject constructor(
                     remainder = snapshotNetSalary - spent + gained,
                     snapshotMonthlyNetSalary = snapshotNetSalary,
                     snapshotAllocations = if (showAllocationsOnExpenses) {
-                        getMoneyAllocations(snapshotAllocations, expensesByCategory)
+                        getMoneyAllocations(
+                            snapshotAllocations = snapshotAllocations,
+                            expensesByCategory = expensesByCategory,
+                            foodCardAmount = snapshotFoodCardAmount,
+                            shouldAddFoodCardToNecessitiesAllocation = shouldAddFoodCardToNecessitiesAllocation
+                        )
                     } else {
                         emptyList()
                     },
@@ -95,7 +107,9 @@ class GroupExpensesUseCase @Inject constructor(
 
     private suspend fun getMoneyAllocations(
         snapshotAllocations: List<MoneyAllocationTypeUi>,
-        expensesByCategory: List<ExpensesCategoryUi>
+        expensesByCategory: List<ExpensesCategoryUi>,
+        foodCardAmount: Float,
+        shouldAddFoodCardToNecessitiesAllocation: Boolean
     ): List<ExpensesMonthAllocationUi> = withContext(schedulers.cpu) {
         val allocations = mutableListOf<ExpensesMonthAllocationUi>()
 
@@ -122,9 +136,16 @@ class GroupExpensesUseCase @Inject constructor(
                 ?.sumOf { it.expenseAmount.toInt() } // Convert to int to speed up calculations
                 ?.toFloat()
 
+            val allocationTypeWithFoodCard = if (allocationType.isNecessities() && shouldAddFoodCardToNecessitiesAllocation) {
+                val necessitiesType = allocationType.asNecessities()
+                necessitiesType.copy(allocated = necessitiesType.allocated + foodCardAmount)
+            } else {
+                allocationType
+            }
+
             allocations.add(
                 ExpensesMonthAllocationUi(
-                    type = allocationType,
+                    type = allocationTypeWithFoodCard,
                     spent = spentForAllocationType ?: 0f,
                     gained = gainedForAllocationType ?: 0f
                 )

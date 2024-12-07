@@ -8,6 +8,7 @@ fun AppSettings.toDomain(): Preferences {
     return Preferences(
         isDarkMode = isDarkMode,
         appLanguage = SupportedLanguages.get(appLanguageCountryCode),
-        showAllocationsOnExpenses = showAllocationsOnExpenses
+        showAllocationsOnExpenses = showAllocationsOnExpenses,
+        addFoodCardToNecessitiesAllocation = addFoodCardToNecessitiesAllocation
     )
 }

@@ -2,7 +2,6 @@ package com.eyther.lumbridge.features.expenses.screens
 
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -19,9 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -59,7 +55,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.extensions.platform.navigateTo
 import com.eyther.lumbridge.extensions.platform.navigateToWithArgs
 import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDetailScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDetailScreenViewState.Content
@@ -88,7 +83,6 @@ import com.eyther.lumbridge.ui.theme.HalfPadding
 import com.eyther.lumbridge.ui.theme.QuarterPadding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import kotlin.math.exp
 
 @Composable
 fun ExpensesMonthDetailScreen(
@@ -131,28 +125,7 @@ fun ExpensesMonthDetailScreen(
                 topAppBarVariation = TopAppBarVariation.TitleAndIcon(
                     title = stringResource(id = label),
                     onIconClick = { navController.popBackStack() }
-                ),
-                actions = {
-                    Icon(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(bounded = false),
-                            onClick = viewModel::collapseAll
-                        ),
-                        painter = painterResource(R.drawable.ic_unfold_less),
-                        contentDescription = stringResource(id = R.string.collapse)
-                    )
-
-                    Icon(
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple(bounded = false),
-                            onClick = viewModel::expandAll
-                        ),
-                        painter = painterResource(R.drawable.ic_unfold_more),
-                        contentDescription = stringResource(id = R.string.expand)
-                    )
-                }
+                )
             )
         },
         snackbarHost = {
@@ -182,6 +155,8 @@ fun ExpensesMonthDetailScreen(
                             state = state,
                             monthToDelete = monthToDelete,
                             onSelectCategory = viewModel::expandCategory,
+                            collapseAll = viewModel::collapseAll,
+                            expandAll = viewModel::expandAll,
                             onEditExpense = { navController.navigateToWithArgs(ExpensesNavigationItem.EditExpense, it.id) }
                         )
 
@@ -193,7 +168,9 @@ fun ExpensesMonthDetailScreen(
 
                         AddFab(
                             modifier = Modifier.align(Alignment.BottomEnd),
-                            navController = navController
+                            navController = navController,
+                            month = state.month,
+                            year = state.year
                         )
                     }
                 }
@@ -207,7 +184,9 @@ private fun Content(
     state: Content,
     monthToDelete: MutableState<ExpensesMonthUi?>,
     onSelectCategory: (category: ExpensesCategoryUi) -> Unit,
-    onEditExpense: (expense: ExpensesDetailedUi) -> Unit
+    onEditExpense: (expense: ExpensesDetailedUi) -> Unit,
+    collapseAll: () -> Unit,
+    expandAll: () -> Unit
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(HalfPadding)
@@ -269,12 +248,36 @@ private fun Content(
 
         item {
             ColumnCardWrapper {
-                Text(
-                    modifier = Modifier.padding(bottom = DefaultPadding),
-                    text = stringResource(id = R.string.expenses_month_detail_categories_spending),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.tertiary
-                )
+                Row {
+                    Text(
+                        modifier = Modifier.padding(bottom = DefaultPadding),
+                        text = stringResource(id = R.string.expenses_month_detail_categories_spending),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Icon(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(bounded = false),
+                            onClick = collapseAll
+                        ),
+                        painter = painterResource(R.drawable.ic_unfold_less),
+                        contentDescription = stringResource(id = R.string.collapse)
+                    )
+
+                    Icon(
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple(bounded = false),
+                            onClick = expandAll
+                        ),
+                        painter = painterResource(R.drawable.ic_unfold_more),
+                        contentDescription = stringResource(id = R.string.expand)
+                    )
+                }
 
                 state.monthExpenses.categoryExpenses.forEach { category ->
                     CategoryItem(
@@ -559,14 +562,16 @@ private fun EmptyScreen(
 @Composable
 private fun AddFab(
     modifier: Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    month: Int,
+    year: Int
 ) {
     FloatingActionButton(
         modifier = modifier.then(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateTo(ExpensesNavigationItem.AddExpense)
+            navController.navigateToWithArgs(ExpensesNavigationItem.AddExpense, month, year)
         }
     ) {
         Icon(

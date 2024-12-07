@@ -16,25 +16,22 @@ import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.usecase.expenses.DeleteExpenseUseCase
 import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetBalanceSheetUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamByDateUseCase
 import com.eyther.lumbridge.usecase.expenses.GroupExpensesUseCase
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesFlow
+import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
 import com.eyther.lumbridge.usecase.snapshotsalary.GetMostRecentSnapshotSalaryForDateUseCase
 import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -44,7 +41,7 @@ import javax.inject.Inject
 class ExpensesMonthDetailScreenViewModel @Inject constructor(
     private val getExpensesStreamByDateUseCase: GetExpensesStreamByDateUseCase,
     private val groupExpensesUseCase: GroupExpensesUseCase,
-    private val getPreferencesFlow: GetPreferencesFlow,
+    private val getPreferencesFlow: GetPreferencesStream,
     private val getSnapshotNetSalariesFlowUseCase: GetSnapshotNetSalariesFlowUseCase,
     private val getMostRecentSnapshotSalaryForDateUseCase: GetMostRecentSnapshotSalaryForDateUseCase,
     private val getLocaleOrDefault: GetLocaleOrDefault,
@@ -101,7 +98,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
                 val groupedExpenses = groupExpensesUseCase(
                     expenses = data.expenses,
                     snapshotNetSalaries = data.snapshotNetSalaries,
-                    showAllocationsOnExpenses = data.preferences?.showAllocationsOnExpenses == true
+                    showAllocationsOnExpenses = data.preferences?.showAllocationsOnExpenses == true,
+                    shouldAddFoodCardToNecessitiesAllocation = data.preferences?.addFoodCardToNecessitiesAllocation == true
                 ).firstOrNull() ?: throw IllegalStateException("\uD83D\uDCA5 No expenses found for year $year and month $month")
 
                 val balanceSheet = getBalanceSheetUseCase(
@@ -115,6 +113,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
                         monthExpenses = groupedExpenses,
                         showAllocations = data.preferences?.showAllocationsOnExpenses == true,
                         locale = getLocaleOrDefault(),
+                        month = month,
+                        year = year,
                         balanceSheetNetUi = balanceSheet
                     )
                 }
@@ -222,6 +222,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
         monthExpenses = monthlyExpenses,
         showAllocations = showAllocations,
         locale = locale,
+        month = month,
+        year = year,
         balanceSheetNetUi = balanceSheetNetUi
     )
 }

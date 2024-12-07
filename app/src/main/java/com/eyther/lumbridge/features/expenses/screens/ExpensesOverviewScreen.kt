@@ -788,7 +788,7 @@ private fun NoExpenses(navController: NavHostController) {
             text = stringResource(id = R.string.expenses_overview_no_expenses),
             buttonText = stringResource(id = R.string.expenses_overview_add_expense),
             onButtonClick = {
-                navController.navigateTo(ExpensesNavigationItem.AddExpense)
+                navController.navigateToWithArgs(ExpensesNavigationItem.AddExpense, -1, -1)
             }
         )
     }
@@ -1020,7 +1020,7 @@ private fun AddFab(
             Modifier.padding(DefaultPadding)
         ),
         onClick = {
-            navController.navigateTo(ExpensesNavigationItem.AddExpense)
+            navController.navigateToWithArgs(ExpensesNavigationItem.AddExpense, -1, -1)
         }
     ) {
         Icon(
