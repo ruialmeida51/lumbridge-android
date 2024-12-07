@@ -268,6 +268,10 @@ private fun Content(
                         contentDescription = stringResource(id = R.string.collapse)
                     )
 
+                    Spacer(
+                        modifier = Modifier.width(HalfPadding)
+                    )
+
                     Icon(
                         modifier = Modifier.clickable(
                             interactionSource = remember { MutableInteractionSource() },
