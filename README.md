@@ -18,8 +18,6 @@ As stated before, it started a playground for me to learn and experiment with **
 
 ## 💡 Some notable features
 
----
-
 ### Feed
 * 🗞️ Dynamic RSS Feed, customizable with your links
 
