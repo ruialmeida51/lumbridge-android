@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.feed.model.bottomsheet.FeedAddOrEditBottomSheetViewState
 import com.eyther.lumbridge.features.feed.viewmodel.delegate.FeedAddOrEditBottomSheetInputHandler
 import com.eyther.lumbridge.features.feed.viewmodel.delegate.IFeedAddOrEditBottomSheetInputHandler
-import com.eyther.lumbridge.model.news.RssFeedUi
-import com.eyther.lumbridge.usecase.news.DeleteRssFeedUseCase
-import com.eyther.lumbridge.usecase.news.SaveRssFeedUseCase
+import com.eyther.lumbridge.domain.model.news.RssFeedUi
+import com.eyther.lumbridge.domain.usecase.news.DeleteRssFeedUseCase
+import com.eyther.lumbridge.domain.usecase.news.SaveRssFeedUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel

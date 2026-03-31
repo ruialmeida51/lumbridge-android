@@ -2,8 +2,8 @@ package com.eyther.lumbridge.features.expenses.viewmodel.monthdetails
 
 import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDetailScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDetailScreenViewState
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthUi
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 

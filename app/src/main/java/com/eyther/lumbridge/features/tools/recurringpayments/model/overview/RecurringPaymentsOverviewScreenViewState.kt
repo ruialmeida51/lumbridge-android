@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.tools.recurringpayments.model.overview
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
+import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentUi
 
 sealed interface RecurringPaymentsOverviewScreenViewState {
     data object Loading : RecurringPaymentsOverviewScreenViewState

@@ -46,8 +46,8 @@ import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenVie
 import com.eyther.lumbridge.features.overview.breakdown.viewmodel.BreakdownScreenViewModel
 import com.eyther.lumbridge.features.overview.breakdown.viewmodel.IBreakdownScreenViewModel
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem
-import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.loan.LoanUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyComponentWithButton

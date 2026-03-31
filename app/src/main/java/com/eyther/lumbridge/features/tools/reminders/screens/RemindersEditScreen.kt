@@ -46,7 +46,7 @@ import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScr
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.edit.IRemindersEditScreenViewModel
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.edit.RemindersEditScreenViewModel
 import com.eyther.lumbridge.launcher.model.permissions.NeededPermission
-import com.eyther.lumbridge.model.time.RemindMeInUi
+import com.eyther.lumbridge.domain.model.time.RemindMeInUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper

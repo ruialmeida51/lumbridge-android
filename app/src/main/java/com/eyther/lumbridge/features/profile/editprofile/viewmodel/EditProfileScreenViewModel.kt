@@ -9,9 +9,9 @@ import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreen
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewState.Loading
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.delegate.EditProfileScreenInputHandler
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.delegate.IEditProfileScreenInputHandler
-import com.eyther.lumbridge.model.user.UserProfileUi
-import com.eyther.lumbridge.usecase.user.profile.GetUserProfile
-import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile
+import com.eyther.lumbridge.domain.model.user.UserProfileUi
+import com.eyther.lumbridge.domain.usecase.user.profile.GetUserProfile
+import com.eyther.lumbridge.domain.usecase.user.profile.SaveUserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

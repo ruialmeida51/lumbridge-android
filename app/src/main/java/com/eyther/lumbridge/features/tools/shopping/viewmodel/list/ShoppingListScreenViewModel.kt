@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.shopping.model.list.ShoppingListScreenViewState
-import com.eyther.lumbridge.model.shopping.ShoppingListUi
-import com.eyther.lumbridge.usecase.shopping.DeleteShoppingListUseCase
-import com.eyther.lumbridge.usecase.shopping.GetAllShoppingListFlowUseCase
+import com.eyther.lumbridge.domain.model.shopping.ShoppingListUi
+import com.eyther.lumbridge.domain.usecase.shopping.DeleteShoppingListUseCase
+import com.eyther.lumbridge.domain.usecase.shopping.GetAllShoppingListFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -9,10 +9,10 @@ import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreen
 import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.notes.viewmodel.details.delegate.INoteDetailsScreenInputHandler
 import com.eyther.lumbridge.features.tools.notes.viewmodel.details.delegate.NoteDetailsScreenInputHandler
-import com.eyther.lumbridge.model.notes.NoteUi
-import com.eyther.lumbridge.usecase.notes.DeleteNoteUseCase
-import com.eyther.lumbridge.usecase.notes.GetNoteUseCase
-import com.eyther.lumbridge.usecase.notes.SaveNoteUseCase
+import com.eyther.lumbridge.domain.model.notes.NoteUi
+import com.eyther.lumbridge.domain.usecase.notes.DeleteNoteUseCase
+import com.eyther.lumbridge.domain.usecase.notes.GetNoteUseCase
+import com.eyther.lumbridge.domain.usecase.notes.SaveNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.FlowPreview

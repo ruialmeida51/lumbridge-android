@@ -10,10 +10,10 @@ import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_YEAR
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.ExpensesAddScreenInputHandler
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.IExpensesAddScreenInputHandler
-import com.eyther.lumbridge.model.expenses.ExpenseUi
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
-import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
+import com.eyther.lumbridge.domain.model.expenses.ExpenseUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.domain.model.finance.MoneyAllocationTypeUi
+import com.eyther.lumbridge.domain.usecase.expenses.SaveExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

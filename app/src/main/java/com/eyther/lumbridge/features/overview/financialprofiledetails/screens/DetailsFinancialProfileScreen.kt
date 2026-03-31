@@ -42,7 +42,7 @@ import com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel.
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem
 import com.eyther.lumbridge.features.overview.shared.components.IncomeOverview
 import com.eyther.lumbridge.features.overview.shared.components.PerCountryBreakdown
-import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
+import com.eyther.lumbridge.domain.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator

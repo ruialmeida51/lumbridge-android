@@ -11,8 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.eyther.lumbridge.R
-import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
-import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
+import com.eyther.lumbridge.domain.model.finance.DuodecimosTypeUi
+import com.eyther.lumbridge.domain.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.ChoiceTab
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.input.DropdownInput

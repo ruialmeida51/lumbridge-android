@@ -8,7 +8,7 @@ import com.eyther.lumbridge.features.tools.currencyconverter.model.CurrencyConve
 import com.eyther.lumbridge.features.tools.currencyconverter.model.CurrencyConverterScreenViewState.Loading
 import com.eyther.lumbridge.features.tools.currencyconverter.viewmodel.delegate.CurrencyConverterInputHandler
 import com.eyther.lumbridge.features.tools.currencyconverter.viewmodel.delegate.ICurrencyConverterInputHandler
-import com.eyther.lumbridge.usecase.currencyexchange.GetCurrencyExchangeRate
+import com.eyther.lumbridge.domain.usecase.currencyexchange.GetCurrencyExchangeRate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay

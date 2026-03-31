@@ -5,7 +5,7 @@ import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewEffects
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.INetSalaryInputScreenInputHandler
-import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 

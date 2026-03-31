@@ -6,7 +6,7 @@ import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialPro
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice
 import com.eyther.lumbridge.features.editloan.model.EditLoanScreenInputState
 import com.eyther.lumbridge.features.editloan.model.EditLoanVariableOrFixedChoice
-import com.eyther.lumbridge.model.loan.LoanCategoryUi
+import com.eyther.lumbridge.domain.model.loan.LoanCategoryUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

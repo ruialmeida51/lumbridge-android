@@ -44,7 +44,7 @@ import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.shopping.model.list.ShoppingListScreenViewState
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.list.IShoppingListScreenViewModel
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.list.ShoppingListScreenViewModel
-import com.eyther.lumbridge.model.shopping.ShoppingListUi
+import com.eyther.lumbridge.domain.model.shopping.ShoppingListUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.PeekContentCard
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton

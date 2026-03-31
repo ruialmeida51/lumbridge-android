@@ -52,8 +52,8 @@ import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewS
 import com.eyther.lumbridge.features.feed.navigation.FeedNavigationItem
 import com.eyther.lumbridge.features.feed.viewmodel.overview.FeedOverviewScreenViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.overview.IFeedOverviewScreenViewModel
-import com.eyther.lumbridge.model.news.FeedItemUi
-import com.eyther.lumbridge.model.news.RssFeedUi
+import com.eyther.lumbridge.domain.model.news.FeedItemUi
+import com.eyther.lumbridge.domain.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator

@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.editloan.model
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.model.loan.LoanCategoryUi
+import com.eyther.lumbridge.domain.model.loan.LoanCategoryUi
 
 sealed interface EditLoanScreenViewState {
     data object Loading : EditLoanScreenViewState

@@ -3,8 +3,8 @@ package com.eyther.lumbridge.features.expenses.model.overview
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter.Companion.DisplayFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy.Companion.DisplaySortBy
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
-import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
 
 sealed interface ExpensesOverviewScreenViewState {
     fun getDefaultDisplaySortBy(): ExpensesOverviewSortBy = ExpensesOverviewSortBy.DateDescending

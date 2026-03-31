@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.profile.editloans.model.EditLoansViewState
-import com.eyther.lumbridge.model.loan.LoanUi
-import com.eyther.lumbridge.usecase.loan.DeleteLoanUseCase
-import com.eyther.lumbridge.usecase.loan.GetLoansFlowUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.model.loan.LoanUi
+import com.eyther.lumbridge.domain.usecase.loan.DeleteLoanUseCase
+import com.eyther.lumbridge.domain.usecase.loan.GetLoansFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow

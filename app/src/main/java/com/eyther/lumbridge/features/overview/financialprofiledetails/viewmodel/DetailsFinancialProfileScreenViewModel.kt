@@ -3,9 +3,9 @@ package com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.overview.financialprofiledetails.model.DetailsFinancialProfileScreenViewState
-import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancialsFlow
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn

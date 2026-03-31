@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.feed.model.edit
 
-import com.eyther.lumbridge.model.news.RssFeedUi
+import com.eyther.lumbridge.domain.model.news.RssFeedUi
 
 sealed interface FeedEditScreenViewEffects {
     data object AddFeed : FeedEditScreenViewEffects

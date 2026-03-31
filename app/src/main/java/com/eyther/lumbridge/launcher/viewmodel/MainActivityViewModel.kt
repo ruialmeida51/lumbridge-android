@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.domain.model.locale.SupportedLanguages
 import com.eyther.lumbridge.launcher.model.MainScreenViewState
 import com.eyther.lumbridge.launcher.model.UiMode
-import com.eyther.lumbridge.usecase.locale.GetCurrentSystemLanguageOrDefault
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
-import com.eyther.lumbridge.usecase.preferences.SavePreferences
+import com.eyther.lumbridge.domain.usecase.locale.GetCurrentSystemLanguageOrDefault
+import com.eyther.lumbridge.domain.usecase.preferences.GetPreferencesStream
+import com.eyther.lumbridge.domain.usecase.preferences.SavePreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull

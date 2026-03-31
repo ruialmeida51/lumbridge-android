@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.tools.netsalary.model.result
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
 
 sealed interface NetSalaryResultScreenViewState {
     data object Loading : NetSalaryResultScreenViewState

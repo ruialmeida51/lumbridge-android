@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.profile.editloans.viewmodel
 
 import com.eyther.lumbridge.features.profile.editloans.model.EditLoansViewState
-import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.domain.model.loan.LoanUi
 import kotlinx.coroutines.flow.StateFlow
 
 interface IEditLoansViewModel {

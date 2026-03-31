@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.editloan.model
 
-import com.eyther.lumbridge.model.loan.LoanCategoryUi
+import com.eyther.lumbridge.domain.model.loan.LoanCategoryUi
 import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState

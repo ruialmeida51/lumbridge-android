@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.tools.notes.viewmodel.list
 
 import com.eyther.lumbridge.features.tools.notes.model.list.NotesListScreenViewState
-import com.eyther.lumbridge.model.notes.NoteUi
+import com.eyther.lumbridge.domain.model.notes.NoteUi
 import kotlinx.coroutines.flow.StateFlow
 
 interface INotesListScreenViewModel {

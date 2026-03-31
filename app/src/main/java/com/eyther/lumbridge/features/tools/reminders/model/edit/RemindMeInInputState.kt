@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.tools.reminders.model.edit
 
-import com.eyther.lumbridge.model.time.RemindMeInUi
+import com.eyther.lumbridge.domain.model.time.RemindMeInUi
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 
 data class RemindMeInInputState(

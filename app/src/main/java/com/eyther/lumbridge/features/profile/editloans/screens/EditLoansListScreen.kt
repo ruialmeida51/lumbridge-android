@@ -36,8 +36,8 @@ import com.eyther.lumbridge.features.profile.editloans.model.EditLoansViewState
 import com.eyther.lumbridge.features.profile.editloans.viewmodel.EditLoansViewModel
 import com.eyther.lumbridge.features.profile.editloans.viewmodel.IEditLoansViewModel
 import com.eyther.lumbridge.features.profile.navigation.ProfileNavigationItem
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
-import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.domain.model.loan.LoanCalculationUi
+import com.eyther.lumbridge.domain.model.loan.LoanUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton
 import com.eyther.lumbridge.ui.common.composables.components.loading.LoadingIndicator

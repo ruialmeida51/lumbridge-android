@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.tools.shopping.viewmodel.list
 
 import com.eyther.lumbridge.features.tools.shopping.model.list.ShoppingListScreenViewState
-import com.eyther.lumbridge.model.shopping.ShoppingListUi
+import com.eyther.lumbridge.domain.model.shopping.ShoppingListUi
 import kotlinx.coroutines.flow.StateFlow
 
 interface IShoppingListScreenViewModel {

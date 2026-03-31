@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate
 
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthUi
 
 interface IExpensesOverviewScreenSortByDelegate {
     /**

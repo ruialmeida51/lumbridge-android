@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.features.feed.viewmodel.bottomsheet.FeedAddOrEditBottomSheetViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.bottomsheet.IFeedAddOrEditBottomSheetViewModel
-import com.eyther.lumbridge.model.news.RssFeedUi
+import com.eyther.lumbridge.domain.model.news.RssFeedUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.input.TextInput
 import com.eyther.lumbridge.ui.theme.DefaultPadding

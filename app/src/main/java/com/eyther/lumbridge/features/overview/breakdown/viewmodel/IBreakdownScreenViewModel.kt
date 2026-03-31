@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.overview.breakdown.viewmodel
 
 import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenViewState
-import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.domain.model.loan.LoanUi
 import kotlinx.coroutines.flow.StateFlow
 
 interface IBreakdownScreenViewModel{

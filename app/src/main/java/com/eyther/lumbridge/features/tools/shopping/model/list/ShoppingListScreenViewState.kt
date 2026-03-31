@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.tools.shopping.model.list
 
-import com.eyther.lumbridge.model.shopping.ShoppingListUi
+import com.eyther.lumbridge.domain.model.shopping.ShoppingListUi
 
 sealed interface ShoppingListScreenViewState {
     data object Loading: ShoppingListScreenViewState

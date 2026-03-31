@@ -4,7 +4,7 @@ object Config {
     const val NAME = "com.eyther.lumbridge"
 
     const val MIN_SDK = 29
-    const val TARGET_SDK = 34
+    const val TARGET_SDK = 36
 
     const val VERSION = 46
     const val VERSION_NAME = "2.2.1"

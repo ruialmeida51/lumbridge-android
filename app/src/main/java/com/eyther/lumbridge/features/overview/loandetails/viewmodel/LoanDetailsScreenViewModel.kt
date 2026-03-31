@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewEffect
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewState
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.Loan.Companion.ARG_LOAN_ID
-import com.eyther.lumbridge.usecase.loan.AddPaymentToLoanUseCase
-import com.eyther.lumbridge.usecase.loan.DeleteLoanUseCase
-import com.eyther.lumbridge.usecase.loan.GetLoanAndCalculationsFlowUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.loan.AddPaymentToLoanUseCase
+import com.eyther.lumbridge.domain.usecase.loan.DeleteLoanUseCase
+import com.eyther.lumbridge.domain.usecase.loan.GetLoanAndCalculationsFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

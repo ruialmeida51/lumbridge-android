@@ -1,8 +1,6 @@
 package com.eyther.lumbridge.domain.repository.news
 
 import android.text.Html
-import com.eyther.lumbridge.data.datasource.news.local.RssFeedLocalDataSource
-import com.eyther.lumbridge.data.datasource.news.remote.NewsFeedRemoteDataSource
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.domain.mapper.feed.toCached
 import com.eyther.lumbridge.domain.mapper.feed.toDomain
@@ -15,54 +13,13 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class NewsFeedRepository @Inject constructor(
-    private val newsFeedRemoteDataSource: NewsFeedRemoteDataSource,
-    private val rssFeedLocalDataSource: RssFeedLocalDataSource,
-    private val schedulers: Schedulers
-) {
-    fun getAvailableFeedsFlow(): Flow<List<RssFeed>> {
-        return rssFeedLocalDataSource
-            .rssFeedFlow
-            .mapNotNull { it.toDomain() }
-    }
-
-    suspend fun saveRssFeed(rssFeed: RssFeed) = withContext(schedulers.io) {
-        val sanitisedFeedToAdd = rssFeed
-            .toCached()
-            .copy(name = rssFeed.name.replace("\\s".toRegex(), ""))
-
-        rssFeedLocalDataSource.saveRssFeed(sanitisedFeedToAdd)
-    }
-
-    suspend fun removeRssFeed(rssFeedId: Long) = withContext(schedulers.io) {
-        rssFeedLocalDataSource.deleteRssFeed(rssFeedId)
-    }
-
-    suspend fun getNewsFeed(rssFeed: RssFeed): Feed = withContext(schedulers.io) {
-        val result = newsFeedRemoteDataSource.getRssFeed(rssFeed.url).orEmpty()
-
-        val parsedRss = RssParserBuilder(charset = Charsets.UTF_8)
-            .build()
-            .parse(result)
-
-        val feedItems = parsedRss.items.map {
-            FeedItem(
-                title = it.title.orEmpty().sanitise(),
-                description = it.description.orEmpty().sanitise(),
-                link = it.link.orEmpty().sanitise(),
-                image = it.image.orEmpty().sanitise(),
-                pubDate = it.pubDate.orEmpty().sanitise()
-            )
-        }
-
-        return@withContext Feed(feedItems)
-    }
-
-    /**
-     * Some RSS feeds have HTML tags in their content. This method sanitizes the content to avoid
-     * any issues with the app. It uses [Html.fromHtml] to remove the tags.
-     */
-    private fun String.sanitise(): String {
-        return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString().trim()
-    }
+interface NewsFeedRepository {
+    val sanitisedFeedToAdd
+    val result
+    val parsedRss
+    val feedItems
+    fun getAvailableFeedsFlow(): Flow<List<RssFeed>>
+    suspend fun saveRssFeed(rssFeed: RssFeed)
+    suspend fun removeRssFeed(rssFeedId: Long)
+    suspend fun getNewsFeed(rssFeed: RssFeed): Feed
 }

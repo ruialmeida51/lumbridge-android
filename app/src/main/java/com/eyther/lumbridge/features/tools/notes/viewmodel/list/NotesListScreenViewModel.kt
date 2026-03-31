@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.notes.model.list.NotesListScreenViewState
-import com.eyther.lumbridge.model.notes.NoteUi
-import com.eyther.lumbridge.usecase.notes.DeleteNoteUseCase
-import com.eyther.lumbridge.usecase.notes.GetAllNotesFlowUseCase
+import com.eyther.lumbridge.domain.model.notes.NoteUi
+import com.eyther.lumbridge.domain.usecase.notes.DeleteNoteUseCase
+import com.eyther.lumbridge.domain.usecase.notes.GetAllNotesFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow

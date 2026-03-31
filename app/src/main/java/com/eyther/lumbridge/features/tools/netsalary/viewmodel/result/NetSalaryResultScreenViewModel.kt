@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
 import com.eyther.lumbridge.features.tools.netsalary.model.result.NetSalaryResultScreenViewState
-import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel

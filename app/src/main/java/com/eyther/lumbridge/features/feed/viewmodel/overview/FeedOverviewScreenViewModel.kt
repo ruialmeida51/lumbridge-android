@@ -8,9 +8,9 @@ import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewS
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Empty
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Error
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Loading
-import com.eyther.lumbridge.model.news.RssFeedUi
-import com.eyther.lumbridge.usecase.news.GetAvailableFeedsFlowUseCase
-import com.eyther.lumbridge.usecase.news.GetNewsFeedUseCase
+import com.eyther.lumbridge.domain.model.news.RssFeedUi
+import com.eyther.lumbridge.domain.usecase.news.GetAvailableFeedsFlowUseCase
+import com.eyther.lumbridge.domain.usecase.news.GetNewsFeedUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

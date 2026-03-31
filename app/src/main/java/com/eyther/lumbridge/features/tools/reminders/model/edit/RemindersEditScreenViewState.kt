@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.tools.reminders.model.edit
 
-import com.eyther.lumbridge.model.time.RemindMeInUi
+import com.eyther.lumbridge.domain.model.time.RemindMeInUi
 
 sealed interface RemindersEditScreenViewState {
     data object Loading : RemindersEditScreenViewState

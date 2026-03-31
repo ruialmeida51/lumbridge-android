@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.tools.reminders.model.overview
 
-import com.eyther.lumbridge.model.reminders.ReminderUi
+import com.eyther.lumbridge.domain.model.reminders.ReminderUi
 
 sealed interface RemindersOverviewScreenViewState {
     data object Loading : RemindersOverviewScreenViewState

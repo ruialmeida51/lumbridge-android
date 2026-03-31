@@ -4,9 +4,9 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice.Surplus
 import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecurringPaymentScreenInputState
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
-import com.eyther.lumbridge.model.time.PeriodicityUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.domain.model.finance.MoneyAllocationTypeUi
+import com.eyther.lumbridge.domain.model.time.PeriodicityUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

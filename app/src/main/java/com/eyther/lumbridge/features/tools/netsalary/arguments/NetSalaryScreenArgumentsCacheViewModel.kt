@@ -2,7 +2,7 @@ package com.eyther.lumbridge.features.tools.netsalary.arguments
 
 import androidx.lifecycle.ViewModel
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

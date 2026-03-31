@@ -53,7 +53,7 @@ import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem
 import com.eyther.lumbridge.features.tools.recurringpayments.model.overview.RecurringPaymentsOverviewScreenViewState
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.overview.IRecurringPaymentsOverviewScreenViewModel
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.overview.RecurringPaymentsOverviewScreenViewModel
-import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
+import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearDateString
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper

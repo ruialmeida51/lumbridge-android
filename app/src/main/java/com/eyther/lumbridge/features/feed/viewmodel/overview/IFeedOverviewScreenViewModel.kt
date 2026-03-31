@@ -2,7 +2,7 @@ package com.eyther.lumbridge.features.feed.viewmodel.overview
 
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState
-import com.eyther.lumbridge.model.news.RssFeedUi
+import com.eyther.lumbridge.domain.model.news.RssFeedUi
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 

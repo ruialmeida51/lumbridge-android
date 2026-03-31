@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.tools.notes.model.list
 
-import com.eyther.lumbridge.model.notes.NoteUi
+import com.eyther.lumbridge.domain.model.notes.NoteUi
 
 sealed interface NotesListScreenViewState {
     data object Loading: NotesListScreenViewState

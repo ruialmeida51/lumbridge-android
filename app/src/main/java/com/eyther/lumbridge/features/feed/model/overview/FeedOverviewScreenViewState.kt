@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.feed.model.overview
 
-import com.eyther.lumbridge.model.news.FeedItemUi
-import com.eyther.lumbridge.model.news.RssFeedUi
+import com.eyther.lumbridge.domain.model.news.FeedItemUi
+import com.eyther.lumbridge.domain.model.news.RssFeedUi
 
 sealed class FeedOverviewScreenViewState(
     open val availableFeeds: List<RssFeedUi>,

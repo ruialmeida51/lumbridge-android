@@ -4,8 +4,8 @@ import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFil
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewSortBy
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthUi
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 

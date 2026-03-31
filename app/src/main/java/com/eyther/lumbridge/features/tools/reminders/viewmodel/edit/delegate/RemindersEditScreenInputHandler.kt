@@ -5,7 +5,7 @@ import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindMeInInputState
 import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScreenInputState
-import com.eyther.lumbridge.model.time.RemindMeInUi
+import com.eyther.lumbridge.domain.model.time.RemindMeInUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDateTime
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 import kotlinx.coroutines.flow.MutableStateFlow

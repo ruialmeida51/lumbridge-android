@@ -66,7 +66,7 @@ android {
 
 dependencies {
     implementation(kotlin("reflect"))
-    implementation(project(":data"))
+
     implementation(project(":shared"))
 
     DomainDependencies.getImplementation().map { implementation(it) }

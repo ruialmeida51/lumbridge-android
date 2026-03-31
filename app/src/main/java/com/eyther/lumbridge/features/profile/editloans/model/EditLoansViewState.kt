@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.profile.editloans.model
 
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
-import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.domain.model.loan.LoanCalculationUi
+import com.eyther.lumbridge.domain.model.loan.LoanUi
 
 sealed interface EditLoansViewState {
     data object Loading : EditLoansViewState

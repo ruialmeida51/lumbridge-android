@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.editfinancialprofile.model
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
+import com.eyther.lumbridge.domain.model.finance.DuodecimosTypeUi
 
 sealed interface EditFinancialProfileScreenViewState {
     data object Loading : EditFinancialProfileScreenViewState

@@ -80,8 +80,8 @@ import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem
 import com.eyther.lumbridge.features.expenses.screens.components.MonthlyAllocationGraph
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.ExpensesOverviewScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.IExpensesOverviewScreenViewModel
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
-import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
 import com.eyther.lumbridge.shared.time.extensions.toMonthYearDateString
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton

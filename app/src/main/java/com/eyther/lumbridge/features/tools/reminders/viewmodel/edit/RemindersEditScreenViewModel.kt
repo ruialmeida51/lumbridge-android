@@ -10,11 +10,11 @@ import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScr
 import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScreenViewState
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.edit.delegate.IRemindersEditScreenInputHandler
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.edit.delegate.RemindersEditScreenInputHandler
-import com.eyther.lumbridge.model.reminders.ReminderUi
-import com.eyther.lumbridge.model.time.RemindMeInUi
+import com.eyther.lumbridge.domain.model.reminders.ReminderUi
+import com.eyther.lumbridge.domain.model.time.RemindMeInUi
 import com.eyther.lumbridge.ui.common.model.text.TextResource
-import com.eyther.lumbridge.usecase.reminders.GetReminderByIdUseCase
-import com.eyther.lumbridge.usecase.reminders.SaveReminderUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.GetReminderByIdUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.SaveReminderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

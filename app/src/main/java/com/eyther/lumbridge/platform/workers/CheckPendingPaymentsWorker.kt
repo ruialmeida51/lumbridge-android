@@ -7,14 +7,14 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
-import com.eyther.lumbridge.model.loan.LoanUi
-import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
+import com.eyther.lumbridge.domain.model.loan.LoanCalculationUi
+import com.eyther.lumbridge.domain.model.loan.LoanUi
+import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationSender
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.usecase.loan.TryPayPendingLoanPaymentsUseCase
-import com.eyther.lumbridge.usecase.recurringpayments.TryPayPendingRecurringPaymentsUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.loan.TryPayPendingLoanPaymentsUseCase
+import com.eyther.lumbridge.domain.usecase.recurringpayments.TryPayPendingRecurringPaymentsUseCase
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 

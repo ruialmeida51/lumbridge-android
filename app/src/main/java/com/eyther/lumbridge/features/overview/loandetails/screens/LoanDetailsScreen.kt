@@ -56,9 +56,9 @@ import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScree
 import com.eyther.lumbridge.features.overview.loandetails.viewmodel.ILoanDetailsScreenViewModel
 import com.eyther.lumbridge.features.overview.loandetails.viewmodel.LoanDetailsScreenViewModel
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem
-import com.eyther.lumbridge.model.loan.LoanAmortizationUi
-import com.eyther.lumbridge.model.loan.LoanInterestRateUi
-import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.domain.model.loan.LoanAmortizationUi
+import com.eyther.lumbridge.domain.model.loan.LoanInterestRateUi
+import com.eyther.lumbridge.domain.model.loan.LoanUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.card.RowCardWrapper

@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.expenses.model.add
 
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
-import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.domain.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState

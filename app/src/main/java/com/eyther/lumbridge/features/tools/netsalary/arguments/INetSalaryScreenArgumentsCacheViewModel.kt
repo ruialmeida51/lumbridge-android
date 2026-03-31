@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.tools.netsalary.arguments
 
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
-import com.eyther.lumbridge.model.finance.NetSalaryUi
+import com.eyther.lumbridge.domain.model.finance.NetSalaryUi
 
 /**
  * Android now recommends that we don't pass objects between composable screens, but instead use a

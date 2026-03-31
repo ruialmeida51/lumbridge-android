@@ -71,6 +71,7 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(project(":domain"))
 
     SdkDependencies.getImplementation().map { implementation(it) }
     SdkDependencies.getKapt().map { kapt(it) }

@@ -65,9 +65,9 @@ import com.eyther.lumbridge.features.expenses.screens.components.MonthlyAllocati
 import com.eyther.lumbridge.features.expenses.viewmodel.monthdetails.ExpensesMonthDetailScreenViewModel
 import com.eyther.lumbridge.features.expenses.viewmodel.monthdetails.IExpensesMonthDetailScreenViewModel
 import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
-import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
-import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
-import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesDetailedUi
+import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper
 import com.eyther.lumbridge.ui.common.composables.components.defaults.EmptyScreenWithButton

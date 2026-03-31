@@ -54,7 +54,7 @@ import com.eyther.lumbridge.features.tools.reminders.model.overview.RemindersOve
 import com.eyther.lumbridge.features.tools.reminders.model.overview.RemindersOverviewScreenViewState
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.overview.IRemindersOverviewScreenViewModel
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.overview.RemindersOverviewScreenViewModel
-import com.eyther.lumbridge.model.reminders.ReminderUi
+import com.eyther.lumbridge.domain.model.reminders.ReminderUi
 import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearHourMinuteString
 import com.eyther.lumbridge.ui.common.composables.components.buttons.LumbridgeButton
 import com.eyther.lumbridge.ui.common.composables.components.card.ColumnCardWrapper

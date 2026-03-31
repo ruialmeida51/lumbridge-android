@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.editfinancialprofile.model
 
-import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
+import com.eyther.lumbridge.domain.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.ui.common.composables.model.input.ChoiceTabState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 
