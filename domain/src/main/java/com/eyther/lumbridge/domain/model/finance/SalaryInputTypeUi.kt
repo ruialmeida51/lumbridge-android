@@ -1,9 +1,8 @@
 package com.eyther.lumbridge.domain.model.finance
 
-import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
 
-sealed class SalaryInputTypeUi(@StringRes val label: Int, val ordinal: Int) {
+sealed class SalaryInputTypeUi( val label: Int, val ordinal: Int) {
     companion object {
         fun entries() = listOf(Monthly, Annually)
 

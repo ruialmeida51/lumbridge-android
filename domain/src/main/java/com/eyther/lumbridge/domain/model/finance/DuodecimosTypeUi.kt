@@ -1,13 +1,12 @@
 package com.eyther.lumbridge.domain.model.finance
 
 import android.os.Parcelable
-import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class DuodecimosTypeUi(
-    @StringRes val label: Int,
+     val label: Int,
     val ordinal: Int
 ): Parcelable {
     companion object {

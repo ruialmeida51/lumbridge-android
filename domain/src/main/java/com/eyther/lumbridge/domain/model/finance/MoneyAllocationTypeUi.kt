@@ -2,13 +2,12 @@ package com.eyther.lumbridge.domain.model.finance
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.eyther.lumbridge.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class MoneyAllocationTypeUi(
-    @StringRes val labelRes: Int,
+     val labelRes: Int,
     @DrawableRes val iconRes: Int,
     val ordinal: Int,
     open val allocated: Float
