@@ -39,9 +39,9 @@ class PreferencesRepositoryImpl @Inject constructor(
         showAllocationsOnExpenses: Boolean,
         addFoodCardToNecessitiesAllocation: Boolean
     ) = withContext(schedulers.io) {
-        override val currentPreferences = getPreferences()
+        val currentPreferences = getPreferences()
 
-        override val newPreferences = currentPreferences?.copy(
+        val newPreferences = currentPreferences?.copy(
             isDarkMode = isDarkMode,
             appLanguage = appLanguage,
             showAllocationsOnExpenses = showAllocationsOnExpenses,

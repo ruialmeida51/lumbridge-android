@@ -12,8 +12,6 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface PreferencesRepository {
-    val currentPreferences
-    val newPreferences
     suspend fun getPreferences(): Preferences?
     fun getPreferencesFlow(): Flow<Preferences?>
     suspend fun updatePreferences( isDarkMode: Boolean, appLanguage: SupportedLanguages, showAllocationsOnExpenses: Boolean, addFoodCardToNecessitiesAllocation: Boolean )
