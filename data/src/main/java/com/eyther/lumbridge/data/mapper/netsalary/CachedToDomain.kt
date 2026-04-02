@@ -3,7 +3,7 @@ package com.eyther.lumbridge.data.mapper.netsalary
 import com.eyther.lumbridge.data.model.netsalary.local.portugal.PortugalIrsBracketTypeCached
 import com.eyther.lumbridge.domain.model.netsalary.percountry.portugal.PortugalIrsTableType
 
-fun PortugalIrsBracketTypeCached.toCached(): PortugalIrsTableType {
+fun PortugalIrsBracketTypeCached.toDomain(): PortugalIrsTableType {
     return when (this) {
         PortugalIrsBracketTypeCached.NotHandicapped.NotMarriedWithoutDependentsOrMarried -> PortugalIrsTableType.NoHandicap.FirstTable
         PortugalIrsBracketTypeCached.NotHandicapped.NotMarriedWithOneOrMoreDependents -> PortugalIrsTableType.NoHandicap.SecondTable
