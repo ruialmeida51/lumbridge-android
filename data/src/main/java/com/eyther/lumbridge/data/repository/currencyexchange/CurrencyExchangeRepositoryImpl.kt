@@ -13,6 +13,10 @@ class CurrencyExchangeRepositoryImpl @Inject constructor(
     private val schedulers: Schedulers
 ) : CurrencyExchangeRepository {
 
+    companion object {
+        const val MAX_REQUEST_AGE_IN_DAYS = 1L
+    }
+
     override suspend fun getCurrencyRates(
         baseCurrency: String,
         toCurrency: String
