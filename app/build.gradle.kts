@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.firebase.crashlytics)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.parcelize)
 }
@@ -95,10 +95,6 @@ android {
         jvmTarget = Config.JAVA_VERSION
     }
 
-    kapt {
-        correctErrorTypes = true
-    }
-
     hilt {
         enableAggregatingTask = true
     }
@@ -154,6 +150,6 @@ dependencies {
 
     debugImplementation(libs.compose.ui.tooling)
 
-    kapt(libs.hilt.compiler)
-    kapt(libs.hilt.compiler.jetpack)
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.compiler.jetpack)
 }

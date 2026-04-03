@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.room)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -81,6 +81,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.rssparser)
 
-    kapt(libs.room.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.room.compiler)
+    ksp(libs.hilt.compiler)
 }
