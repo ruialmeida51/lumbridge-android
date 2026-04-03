@@ -170,7 +170,7 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
                 )
             }
 
-            val recurringPaymentUi = RecurringPaymentDomain(
+            val recurringPaymentDomain = RecurringPaymentDomain(
                 id = recurringPaymentId,
                 startDate = checkNotNull(inputState.paymentStartDate.date),
                 label = checkNotNull(inputState.paymentName.text),
@@ -182,7 +182,7 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
                 allocationType = inputState.allocationTypeUi.toDomain()
             )
 
-            saveRecurringPaymentUseCase(recurringPaymentUi)
+            saveRecurringPaymentUseCase(recurringPaymentDomain)
             viewEffects.emit(EditRecurringPaymentScreenViewEffects.CloseScreen)
         }
     }
