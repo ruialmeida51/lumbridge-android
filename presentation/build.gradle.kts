@@ -1,14 +1,17 @@
-import dependencies.DiDependencies
+import dependencies.PresentationDependencies
 
 plugins {
     id("com.android.library")
+    id("kotlin-parcelize")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
+    kotlin("plugin.serialization")
 }
 
 android {
-    namespace = "com.eyther.lumbridge.di"
+    namespace = "com.eyther.lumbridge.presentation"
 
     defaultConfig {
         minSdk = Config.MIN_SDK
@@ -40,7 +43,7 @@ android {
         }
 
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             isShrinkResources = false
 
             matchingFallbacks.add("release")
@@ -56,19 +59,37 @@ android {
         jvmTarget = Config.JAVA_VERSION
     }
 
+    kapt {
+        correctErrorTypes = true
+    }
+
+    hilt {
+        enableAggregatingTask = true
+    }
+
+    buildFeatures {
+        compose = true
+    }
+
     sourceSets {
         getByName("debug") { java.srcDirs("src/main/java") }
         getByName("release") { java.srcDirs("src/main/java") }
         getByName("qa") { java.srcDirs("src/main/java") }
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":data"))
     implementation(project(":shared"))
-    implementation(project(":presentation"))
 
-    DiDependencies.getImplementation().map { implementation(it) }
-    DiDependencies.getKapt().map { kapt(it) }
+    PresentationDependencies.getPlatformImplementation().map { implementation(platform(it)) }
+    PresentationDependencies.getImplementation().map { implementation(it) }
+    PresentationDependencies.debugImplementation().map { debugImplementation(it) }
+    PresentationDependencies.getKapt().map { kapt(it) }
 }

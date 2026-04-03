@@ -126,6 +126,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":di"))
     implementation(project(":shared"))
+    implementation(project(":presentation"))
 
     AppDependencies.getPlatformImplementation().map { implementation(platform(it)) }
     AppDependencies.getImplementation().map { implementation(it) }
