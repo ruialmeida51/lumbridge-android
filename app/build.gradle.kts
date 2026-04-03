@@ -1,16 +1,14 @@
-import dependencies.AppDependencies
-
 plugins {
-    id("com.android.application")
-    id("kotlin-parcelize")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.google.dagger.hilt.android")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.appdistribution")
-    id("com.google.firebase.crashlytics")
-    kotlin("kapt")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.appdistribution)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -128,8 +126,34 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":presentation"))
 
-    AppDependencies.getPlatformImplementation().map { implementation(platform(it)) }
-    AppDependencies.getImplementation().map { implementation(it) }
-    AppDependencies.debugImplementation().map { debugImplementation(it) }
-    AppDependencies.getKapt().map { kapt(it) }
+    implementation(platform(libs.firebase.bom))
+    implementation(platform(libs.compose.bom))
+
+    implementation(libs.androidx.appcompat)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.compose.ui.text.google.fonts)
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
+    implementation(libs.navigation.runtime.ktx)
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.hilt.work)
+    implementation(libs.firebase.inappmessaging.display)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.analytics)
+    implementation(libs.accompanist.permissions)
+
+    debugImplementation(libs.compose.ui.tooling)
+
+    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.compiler.jetpack)
 }
