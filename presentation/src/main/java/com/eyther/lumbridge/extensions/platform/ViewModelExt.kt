@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavHostController): T {
-    val navGraphRoute = destination.parent?.route ?: return hiltViewModel()
+    val navGraphRoute = destination.parent?.route ?: return hiltViewModel(this)
 
     val parentEntry = remember(this) {
         navController.getBackStackEntry(navGraphRoute)
