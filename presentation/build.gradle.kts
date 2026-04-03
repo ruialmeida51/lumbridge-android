@@ -1,13 +1,11 @@
-import dependencies.PresentationDependencies
-
 plugins {
-    id("com.android.library")
-    id("kotlin-parcelize")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("com.google.dagger.hilt.android")
-    kotlin("kapt")
-    kotlin("plugin.serialization")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -88,8 +86,28 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":shared"))
 
-    PresentationDependencies.getPlatformImplementation().map { implementation(platform(it)) }
-    PresentationDependencies.getImplementation().map { implementation(it) }
-    PresentationDependencies.debugImplementation().map { debugImplementation(it) }
-    PresentationDependencies.getKapt().map { kapt(it) }
+    implementation(platform(libs.compose.bom))
+
+    implementation(libs.androidx.appcompat)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.compose.ui.text.google.fonts)
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
+    implementation(libs.navigation.runtime.ktx)
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    implementation(libs.accompanist.permissions)
+
+    debugImplementation(libs.compose.ui.tooling)
+
+    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.compiler.jetpack)
 }

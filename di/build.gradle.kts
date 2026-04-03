@@ -1,10 +1,8 @@
-import dependencies.DiDependencies
-
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
-    kotlin("kapt")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -69,6 +67,13 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":presentation"))
 
-    DiDependencies.getImplementation().map { implementation(it) }
-    DiDependencies.getKapt().map { kapt(it) }
+    implementation(libs.datastore.preferences)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.hilt.android)
+    implementation(libs.gson)
+
+    kapt(libs.hilt.compiler)
 }
