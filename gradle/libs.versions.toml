@@ -61,6 +61,7 @@ kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotli
 # Compose (BOM-managed)
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts" }
