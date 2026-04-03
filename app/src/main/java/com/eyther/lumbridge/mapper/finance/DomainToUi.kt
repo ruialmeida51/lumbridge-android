@@ -1,6 +1,7 @@
 package com.eyther.lumbridge.mapper.finance
 
 import com.eyther.lumbridge.R
+import com.eyther.lumbridge.domain.model.finance.BalanceSheetDomain
 import com.eyther.lumbridge.domain.model.netsalary.NetSalary
 import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocation
 import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocationType
@@ -8,6 +9,7 @@ import com.eyther.lumbridge.domain.model.netsalary.deduction.Deduction
 import com.eyther.lumbridge.domain.model.netsalary.deduction.DeductionType
 import com.eyther.lumbridge.domain.model.netsalary.deduction.DuodecimosType
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
+import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
 import com.eyther.lumbridge.model.finance.DeductionUi
 import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
@@ -63,3 +65,9 @@ fun MoneyAllocation.toUi(): MoneyAllocationTypeUi = when (type) {
     is MoneyAllocationType.Necessities -> MoneyAllocationTypeUi.Necessities(amount)
     is MoneyAllocationType.Savings -> MoneyAllocationTypeUi.Savings(amount)
 }
+
+fun BalanceSheetDomain.toUi() = BalanceSheetNetUi(
+    moneyIn = moneyIn,
+    moneyOut = moneyOut,
+    net = net
+)

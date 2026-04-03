@@ -13,18 +13,20 @@ import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDe
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_MONTH
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_YEAR
 import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
+import com.eyther.lumbridge.mapper.expenses.toUi
+import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
-import com.eyther.lumbridge.usecase.expenses.GetBalanceSheetUseCase
-import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamByDateUseCase
-import com.eyther.lumbridge.usecase.expenses.GroupExpensesUseCase
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
-import com.eyther.lumbridge.usecase.snapshotsalary.GetMostRecentSnapshotSalaryForDateUseCase
-import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.expenses.DeleteExpensesListUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GetBalanceSheetUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GetExpensesStreamByDateUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GroupExpensesUseCase
+import com.eyther.lumbridge.domain.usecase.preferences.GetPreferencesStream
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.GetMostRecentSnapshotSalaryForDateUseCase
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -101,14 +103,14 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
                     snapshotNetSalaries = data.snapshotNetSalaries,
                     showAllocationsOnExpenses = data.preferences?.showAllocationsOnExpenses == true,
                     shouldAddFoodCardToNecessitiesAllocation = data.preferences?.addFoodCardToNecessitiesAllocation == true
-                ).firstOrNull() ?: throw IllegalStateException("\uD83D\uDCA5 No expenses found for year $year and month $month")
+                ).firstOrNull()?.toUi() ?: throw IllegalStateException("\uD83D\uDCA5 No expenses found for year $year and month $month")
 
                 val balanceSheet = getBalanceSheetUseCase(
                     currentNetSalary = snapshotSalary?.netSalary,
                     snapshotSalaries = data.snapshotNetSalaries,
                     expenses = data.expenses,
                     addFoodCardToNecessitiesAllocation = data.preferences?.addFoodCardToNecessitiesAllocation == true
-                ) ?: throw IllegalStateException("\uD83D\uDCA5 Couldn't calculate balance sheet for year $year and month $month")
+                )?.toUi() ?: throw IllegalStateException("\uD83D\uDCA5 Couldn't calculate balance sheet for year $year and month $month")
 
                 viewState.update {
                     ExpensesMonthDetailScreenViewState.Content(

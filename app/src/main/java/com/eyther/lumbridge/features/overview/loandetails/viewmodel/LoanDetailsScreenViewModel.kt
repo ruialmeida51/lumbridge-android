@@ -10,10 +10,10 @@ import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.
 import com.eyther.lumbridge.domain.model.loan.LoanCalculation
 import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.mapper.loan.toUi
-import com.eyther.lumbridge.usecase.loan.AddPaymentToLoanUseCase
-import com.eyther.lumbridge.usecase.loan.DeleteLoanUseCase
-import com.eyther.lumbridge.usecase.loan.GetLoanAndCalculationsFlowUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.loan.AddPaymentToLoanUseCase
+import com.eyther.lumbridge.domain.usecase.loan.DeleteLoanUseCase
+import com.eyther.lumbridge.domain.usecase.loan.GetLoanAndCalculationsFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

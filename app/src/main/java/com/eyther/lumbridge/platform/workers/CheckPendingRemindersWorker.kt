@@ -10,8 +10,8 @@ import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationSender
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.shared.time.extensions.isBeforeOrEqual
 import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearHourMinuteString
-import com.eyther.lumbridge.usecase.reminders.GetRemindersUseCase
-import com.eyther.lumbridge.usecase.reminders.SetReminderAsNotifiedUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.GetRemindersUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.SetReminderAsNotifiedUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.LocalDateTime

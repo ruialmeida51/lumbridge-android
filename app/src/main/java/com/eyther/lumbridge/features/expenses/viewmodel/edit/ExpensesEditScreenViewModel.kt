@@ -16,9 +16,9 @@ import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
 import com.eyther.lumbridge.mapper.expenses.toDomain
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
-import com.eyther.lumbridge.usecase.expenses.DeleteExpenseUseCase
-import com.eyther.lumbridge.usecase.expenses.GetExpenseByIdUseCase
-import com.eyther.lumbridge.usecase.expenses.UpdateExpenseUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.DeleteExpenseUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GetExpenseByIdUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.UpdateExpenseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

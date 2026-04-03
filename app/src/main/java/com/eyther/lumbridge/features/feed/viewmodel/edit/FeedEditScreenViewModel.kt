@@ -6,7 +6,7 @@ import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewState
 import com.eyther.lumbridge.mapper.feed.toUi
 import com.eyther.lumbridge.model.news.RssFeedUi
-import com.eyther.lumbridge.usecase.news.GetAvailableFeedsFlowUseCase
+import com.eyther.lumbridge.domain.usecase.news.GetAvailableFeedsFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

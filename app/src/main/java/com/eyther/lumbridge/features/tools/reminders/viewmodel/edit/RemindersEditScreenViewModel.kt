@@ -16,8 +16,8 @@ import com.eyther.lumbridge.mapper.reminders.toUi
 import com.eyther.lumbridge.model.time.RemindMeInUi
 import com.eyther.lumbridge.shared.time.model.RemindMeIn
 import com.eyther.lumbridge.ui.common.model.text.TextResource
-import com.eyther.lumbridge.usecase.reminders.GetReminderByIdUseCase
-import com.eyther.lumbridge.usecase.reminders.SaveReminderUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.GetReminderByIdUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.SaveReminderUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

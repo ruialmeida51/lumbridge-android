@@ -13,9 +13,9 @@ import coil.request.ImageRequest
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
 import com.eyther.lumbridge.domain.model.user.UserProfileDomain
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
-import com.eyther.lumbridge.usecase.user.profile.GetUserProfileStream
-import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.user.profile.GetUserProfileStream
+import com.eyther.lumbridge.domain.usecase.user.profile.SaveUserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow

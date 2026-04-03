@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.recurringpayments.model.overview.RecurringPaymentsOverviewScreenViewEffects
 import com.eyther.lumbridge.features.tools.recurringpayments.model.overview.RecurringPaymentsOverviewScreenViewState
 import com.eyther.lumbridge.mapper.recurringpayments.toUi
-import com.eyther.lumbridge.usecase.recurringpayments.DeleteRecurringPaymentUseCase
-import com.eyther.lumbridge.usecase.recurringpayments.GetRecurringPaymentsFlowUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
+import com.eyther.lumbridge.domain.usecase.recurringpayments.DeleteRecurringPaymentUseCase
+import com.eyther.lumbridge.domain.usecase.recurringpayments.GetRecurringPaymentsFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefaultStream
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
