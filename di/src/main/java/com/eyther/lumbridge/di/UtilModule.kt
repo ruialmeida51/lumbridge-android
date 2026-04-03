@@ -1,6 +1,9 @@
-package com.eyther.lumbridge.data.di
+package com.eyther.lumbridge.di
 
 import android.content.Context
+import com.eyther.lumbridge.data.di.AndroidFileReader
+import com.eyther.lumbridge.data.di.ComplexGson
+import com.eyther.lumbridge.data.di.DefaultGson
 import com.eyther.lumbridge.data.input.IFileReader
 import com.eyther.lumbridge.data.input.platform.AndroidFileReaderImpl
 import com.google.gson.Gson
@@ -10,11 +13,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Qualifier
 
 @Module
 @InstallIn(SingletonComponent::class)
 object UtilModule {
+
     @Provides
     @DefaultGson
     fun provideGson(): Gson {
@@ -36,16 +39,4 @@ object UtilModule {
     ): IFileReader {
         return AndroidFileReaderImpl(context)
     }
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class DefaultGson
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class ComplexGson
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class AndroidFileReader
 }

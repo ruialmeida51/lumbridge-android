@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.eyther.lumbridge.data.di.LocalDataModule.UserMortgageDataStore
+import com.eyther.lumbridge.data.di.UserMortgageDataStore
 import com.eyther.lumbridge.data.model.user.local.UserMortgageCached
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

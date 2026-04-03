@@ -85,7 +85,7 @@ All Hilt modules that exist (or will exist) in the project, and their target hom
 
 | File | Current Location | Target Module |
 |---|---|---|
-| `LocaleModule.kt` | `app/src/main/java/com/eyther/lumbridge/di/` | `:di` |
+| `LocaleModule.kt` | `app/src/main/java/com/eyther/lumbridge/di/` | `:app` (intentional — binds `LocaleRepositoryImpl` which uses `AppCompatDelegate`) |
 | `LocalDataModule.kt` | `data/src/main/java/com/eyther/lumbridge/data/di/` | `:di` |
 | `RemoteDataModule.kt` | `data/src/main/java/com/eyther/lumbridge/data/di/` | `:di` |
 | `RepositoryModule.kt` | `data/src/main/java/com/eyther/lumbridge/data/di/` | `:di` |
@@ -117,11 +117,11 @@ The qualifier annotations used in DI modules are currently co-located with their
 ## Current vs Target State (as of last update)
 
 ### Currently active modules (registered in `settings.gradle.kts`)
-- `:app`, `:data`, `:domain`, `:shared` — **`:di` does not yet exist**
+- `:app`, `:data`, `:di`, `:domain`, `:shared` — **`:di` exists as of this update**
 
 ### Current dependency graph (actual)
 ```
-:app --> :domain, :data, :shared
+:app --> :di --> :domain, :data, :shared
 :data --> :domain, :shared
 :domain --> :shared
 ```
@@ -134,9 +134,8 @@ The qualifier annotations used in DI modules are currently co-located with their
 ```
 
 ### Open gap
-- `:di` module has not been created yet
-- DI configuration is currently scattered: `LocaleModule` in `:app`, `LocalDataModule / RemoteDataModule / RepositoryModule / UtilModule` in `:data`, `SchedulersModule` in `:shared`
-- Once `:di` is created, all the above must move there and `:app` must drop its direct `:data` dependency
+- None — `:di` module has been created and all DI modules have been moved into it
+- `LocaleModule` remains in `:app` intentionally: its sole binding (`LocaleRepositoryImpl`) uses `AppCompatDelegate` (an AppCompat/UI-layer dependency) which cannot live in `:data` or `:di` without introducing an inappropriate platform coupling
 
 ---
 

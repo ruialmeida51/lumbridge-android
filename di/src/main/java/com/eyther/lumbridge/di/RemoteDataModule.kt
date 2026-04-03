@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.data.di
+package com.eyther.lumbridge.di
 
 import com.eyther.lumbridge.data.datasource.currencyexchange.interceptor.CurrencyExchangeCacheInterceptor
 import com.eyther.lumbridge.data.datasource.currencyexchange.service.CurrencyExchangeClient
