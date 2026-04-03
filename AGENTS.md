@@ -10,30 +10,34 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 
 - **:app**
   - Android main app code (activities, fragments, screens, ViewModels, UI logic)
-  - Contains only platform/UI code and DI entry point
+  - Contains only platform/UI code and DI entry point (`@HiltAndroidApp` on `LumbridgeApplication`)
   - Must not contain business logic, data access, or domain entities
+  - Depends on `:di` (not directly on `:data`)
 
 - **:domain**
-  - All business logic (use cases/interactors)
-  - Defines repository interfaces (not implementations)
+  - All business logic (use cases/interactors) — 62 use cases under `domain/usecase/`
+  - Defines repository interfaces (not implementations) — interfaces under `domain/repository/`
   - Owns all domain models/entities
   - No reference to Android APIs or data implementation
+  - Depends on `:shared` only
 
 - **:data**
   - Implements the repository interfaces from `:domain`
-  - Contains all data sources, network/service clients, and local DB access
+  - Contains all data sources, network/service clients, and local DB access (Room, Retrofit, DataStore)
   - Owns data entities and mappers (data <-> domain)
   - May depend on 3rd-party libs (e.g., Room, Retrofit)
+  - Depends on `:domain` and `:shared`
 
-- **:di** *(planned module — not yet created)*
-  - Dependency Injection modules (Hilt/Koin)
+- **:di**
+  - Dependency Injection modules (Hilt)
   - Wires everything together, binds all interfaces/implementations
-  - The only module aware of all other modules
-  - Until `:di` is extracted, DI configuration lives in `:app` as an interim measure; all new DI code should be written with extraction in mind
+  - The only module aware of both `:domain` and `:data`
+  - Depends on `:app`, `:domain`, `:data`, and `:shared`
 
 - **:shared**
-  - Pure stateless utility code
+  - Pure stateless utility code (coroutine dispatchers, schedulers model, etc.)
   - No app state or business/domain objects
+  - No dependencies on any other project module
 
 ---
 
@@ -71,7 +75,33 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 | Mappers (data <-> domain) | `:data` |
 | ViewModels | `:app` |
 | DI Configuration | `:di` |
-| Pure Utils | `:shared` |
+| Pure Utils / Schedulers model | `:shared` |
+
+---
+
+## DI Files Inventory
+
+All Hilt modules that exist (or will exist) in the project, and their target home in `:di`:
+
+| File | Current Location | Target Module |
+|---|---|---|
+| `LocaleModule.kt` | `app/src/main/java/com/eyther/lumbridge/di/` | `:di` |
+| `LocalDataModule.kt` | `data/src/main/java/com/eyther/lumbridge/data/di/` | `:di` |
+| `RemoteDataModule.kt` | `data/src/main/java/com/eyther/lumbridge/data/di/` | `:di` |
+| `RepositoryModule.kt` | `data/src/main/java/com/eyther/lumbridge/data/di/` | `:di` |
+| `UtilModule.kt` | `data/src/main/java/com/eyther/lumbridge/data/di/` | `:di` |
+| `SchedulersModule.kt` | `shared/src/main/java/com/eyther/lumbridge/shared/di/` | `:di` |
+
+### Qualifier Annotations
+
+The qualifier annotations used in DI modules are currently co-located with their respective modules. When DI modules are moved to `:di`, the qualifiers move with them. Note: `SchedulersModule` provides the `Schedulers` data class (defined in `shared/di/model/Schedulers.kt`) which stays in `:shared` and is injected throughout `:domain`, `:data`, and `:app`.
+
+| Qualifier | Defined In | Used In |
+|---|---|---|
+| `@UserProfileDataSource`, `@UserFinancialsDataStore`, `@UserMortgageDataStore`, `@CurrencyRatesDataStore`, `@AppSettingsDataStore` | `LocalDataModule` | `:data` datasources |
+| `@AppRetrofitClient`, `@CurrencyExchangeRetrofitClient` | `RemoteDataModule` | `:data` datasources |
+| `@DefaultGson`, `@ComplexGson`, `@AndroidFileReader` | `UtilModule` | `:data` datasources |
+| `@IoDispatcher`, `@CpuDispatcher`, `@MainDispatcher` | `SchedulersModule` | Only inside `SchedulersModule` itself |
 
 ---
 
@@ -80,6 +110,33 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 - UI models/DTOs stay in `:app`
 - Domain models have no Android/infra/data dependencies; used in business logic layer
 - Data entities are only used in `:data`
+- `Schedulers` data class lives in `shared/di/model/Schedulers.kt` (`:shared`) and is injected into repositories/use cases
+
+---
+
+## Current vs Target State (as of last update)
+
+### Currently active modules (registered in `settings.gradle.kts`)
+- `:app`, `:data`, `:domain`, `:shared` — **`:di` does not yet exist**
+
+### Current dependency graph (actual)
+```
+:app --> :domain, :data, :shared
+:data --> :domain, :shared
+:domain --> :shared
+```
+
+### Target dependency graph
+```
+:app --> :di --> :domain, :data, :shared
+:data --> :domain, :shared
+:domain --> :shared
+```
+
+### Open gap
+- `:di` module has not been created yet
+- DI configuration is currently scattered: `LocaleModule` in `:app`, `LocalDataModule / RemoteDataModule / RepositoryModule / UtilModule` in `:data`, `SchedulersModule` in `:shared`
+- Once `:di` is created, all the above must move there and `:app` must drop its direct `:data` dependency
 
 ---
 
