@@ -10,7 +10,7 @@ import com.eyther.lumbridge.data.datasource.appSettings.local.AppSettingsLocalDa
 import com.eyther.lumbridge.data.datasource.appSettings.local.AppSettingsLocalDataSource.PreferencesKeys.APP_LANGUAGE_COUNTRY_CODE
 import com.eyther.lumbridge.data.datasource.appSettings.local.AppSettingsLocalDataSource.PreferencesKeys.IS_DARK_MODE
 import com.eyther.lumbridge.data.datasource.appSettings.local.AppSettingsLocalDataSource.PreferencesKeys.SHOW_ALLOCATIONS_ON_EXPENSES
-import com.eyther.lumbridge.data.di.LocalDataModule.AppSettingsDataStore
+import com.eyther.lumbridge.data.di.AppSettingsDataStore
 import com.eyther.lumbridge.data.model.appSettings.AppSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

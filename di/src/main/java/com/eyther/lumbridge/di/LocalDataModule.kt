@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.data.di
+package com.eyther.lumbridge.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -10,12 +10,16 @@ import com.eyther.lumbridge.data.database.migration.V5ToV6Migration
 import com.eyther.lumbridge.data.database.migration.V7ToV8Migration
 import com.eyther.lumbridge.data.database.migration.V8ToV9Migration
 import com.eyther.lumbridge.data.database.room.LumbridgeRoomDatabase
+import com.eyther.lumbridge.data.di.AppSettingsDataStore
+import com.eyther.lumbridge.data.di.CurrencyRatesDataStore
+import com.eyther.lumbridge.data.di.UserFinancialsDataStore
+import com.eyther.lumbridge.data.di.UserMortgageDataStore
+import com.eyther.lumbridge.data.di.UserProfileDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -156,25 +160,4 @@ object LocalDataModule {
             }
         )
     }
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class UserProfileDataSource
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class UserFinancialsDataStore
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    @Deprecated("Use Room instead. This will be removed in the future, for now it is only maintained for migration purposes.")
-    annotation class UserMortgageDataStore
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class CurrencyRatesDataStore
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class AppSettingsDataStore
 }

@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.data.di
+package com.eyther.lumbridge.di
 
 import com.eyther.lumbridge.data.repository.currencyexchange.CurrencyExchangeRepositoryImpl
 import com.eyther.lumbridge.data.repository.expenses.ExpensesRepositoryImpl

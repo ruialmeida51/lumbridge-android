@@ -1,4 +1,4 @@
-package com.eyther.lumbridge.shared.di
+package com.eyther.lumbridge.di
 
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import dagger.Module
