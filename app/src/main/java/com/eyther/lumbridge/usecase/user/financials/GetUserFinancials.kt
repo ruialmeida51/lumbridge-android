@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.usecase.user.financials
 
+import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.user.UserRepository
-import com.eyther.lumbridge.mapper.user.toUi
 import javax.inject.Inject
 
 class GetUserFinancials @Inject constructor(
@@ -12,5 +12,5 @@ class GetUserFinancials @Inject constructor(
      *
      * @return the user financials.
      */
-    suspend operator fun invoke() = userRepository.getUserFinancials()?.toUi()
+    suspend operator fun invoke(): UserFinancialsDomain? = userRepository.getUserFinancials()
 }

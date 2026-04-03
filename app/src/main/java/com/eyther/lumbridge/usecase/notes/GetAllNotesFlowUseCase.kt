@@ -1,14 +1,12 @@
 package com.eyther.lumbridge.usecase.notes
 
+import com.eyther.lumbridge.domain.model.notes.Note
 import com.eyther.lumbridge.domain.repository.notes.NotesRepository
-import com.eyther.lumbridge.mapper.notes.toUi
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAllNotesFlowUseCase @Inject constructor(
     private val notesRepository: NotesRepository
 ) {
-    operator fun invoke() = notesRepository
-        .notesListFLow
-        .map { it.toUi() }
+    operator fun invoke(): Flow<List<Note>> = notesRepository.notesListFLow
 }

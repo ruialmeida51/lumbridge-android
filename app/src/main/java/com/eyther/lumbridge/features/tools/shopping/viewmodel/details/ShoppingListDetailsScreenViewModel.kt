@@ -10,8 +10,8 @@ import com.eyther.lumbridge.features.tools.shopping.model.details.ShoppingListDe
 import com.eyther.lumbridge.features.tools.shopping.model.details.StableShoppingListItem
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.details.delegate.IShoppingListDetailsScreenInputHandler
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.details.delegate.ShoppingListDetailsScreenInputHandler
-import com.eyther.lumbridge.model.shopping.ShoppingListEntryUi
-import com.eyther.lumbridge.model.shopping.ShoppingListUi
+import com.eyther.lumbridge.domain.model.shopping.ShoppingList
+import com.eyther.lumbridge.domain.model.shopping.ShoppingListEntry
 import com.eyther.lumbridge.ui.common.composables.model.input.CheckboxInputState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
 import com.eyther.lumbridge.usecase.shopping.DeleteShoppingListUseCase
@@ -106,8 +106,7 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
                         )
                     }
                 )
-            }
-        }
+            }        }
     }
 
     override fun setDefaultTitle(defaultTitle: String) {
@@ -123,12 +122,12 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            val shoppingListUi = ShoppingListUi(
+            val shoppingList = ShoppingList(
                 id = shoppingListId,
                 showTickedItems = inputState.value.showTickedItems,
                 title = inputState.value.title.text.orEmpty().ifEmpty { cachedDefaultTitle.orEmpty() },
                 entries = inputState.value.items.mapIndexed { index, stableShoppingListItem ->
-                    ShoppingListEntryUi(
+                    ShoppingListEntry(
                         index = index,
                         text = stableShoppingListItem.textInputState.text.orEmpty(),
                         selected = stableShoppingListItem.checkboxState.checked
@@ -140,7 +139,7 @@ class ShoppingListDetailsScreenViewModel @Inject constructor(
             // it means that it's a new list and we need to update the ID with the one returned by
             // the database. This is necessary to avoid saving notes multiple times, as a -1L ID is
             // used to indicate a new list.
-            shoppingListId = saveShoppingListUseCase(shoppingListUi)
+            shoppingListId = saveShoppingListUseCase(shoppingList)
 
             if (finish) {
                 viewEffects.emit(ShoppingListDetailsScreenViewEffect.NavigateBack)

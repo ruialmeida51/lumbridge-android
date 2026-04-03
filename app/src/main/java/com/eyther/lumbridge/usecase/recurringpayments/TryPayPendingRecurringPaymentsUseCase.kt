@@ -1,9 +1,7 @@
 package com.eyther.lumbridge.usecase.recurringpayments
 
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
 import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
-import com.eyther.lumbridge.mapper.recurringpayments.toDomain
-import com.eyther.lumbridge.model.expenses.ExpenseUi
-import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.shared.time.extensions.isAfterOrEqual
 import com.eyther.lumbridge.shared.time.extensions.isBeforeOrEqual
 import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
@@ -23,17 +21,17 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
      *
      * @return the list of payments that were paid to notify the user, empty if the flag to notify the user is false.
      */
-    suspend operator fun invoke(): List<RecurringPaymentUi> {
-        val recurringPaymentsPaid = mutableListOf<RecurringPaymentUi>()
+    suspend operator fun invoke(): List<RecurringPaymentDomain> {
+        val recurringPaymentsPaid = mutableListOf<RecurringPaymentDomain>()
         val recurringPayments = getRecurringPaymentsUseCase()
 
-        recurringPayments.forEach { paymentUi ->
-            if (paymentUi.shouldPay()) {
-                payRecurringPayment(paymentUi)
-                updateRecurringPaymentLastPaymentDate(paymentUi)
+        recurringPayments.forEach { paymentDomain ->
+            if (paymentDomain.shouldPay()) {
+                payRecurringPayment(paymentDomain)
+                updateRecurringPaymentLastPaymentDate(paymentDomain)
 
-                if (paymentUi.shouldNotifyWhenPaid) {
-                    recurringPaymentsPaid.add(paymentUi)
+                if (paymentDomain.shouldNotifyWhenPaid) {
+                    recurringPaymentsPaid.add(paymentDomain)
                 }
             }
         }
@@ -44,12 +42,12 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
     /**
      * Create a new expense from a recurring payment and save it.
      */
-    private suspend fun payRecurringPayment(recurringPaymentUi: RecurringPaymentUi) {
-        val expense = ExpenseUi(
-            categoryType = recurringPaymentUi.categoryTypesUi,
-            expenseName = recurringPaymentUi.label,
-            expenseAmount = recurringPaymentUi.amountToPay,
-            allocationTypeUi = recurringPaymentUi.allocationTypeUi,
+    private suspend fun payRecurringPayment(paymentDomain: RecurringPaymentDomain) {
+        val expense = ExpenseDomain(
+            categoryType = paymentDomain.categoryTypes,
+            expenseName = paymentDomain.label,
+            expenseAmount = paymentDomain.amountToPay,
+            allocation = paymentDomain.allocationType,
             date = LocalDate.now(),
         )
 
@@ -59,12 +57,12 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
     /**
      * Update the last payment date of a recurring payment to the current date.
      *
-     * @param recurringPaymentUi The recurring payment to update.
+     * @param paymentDomain The recurring payment to update.
      */
-    private suspend fun updateRecurringPaymentLastPaymentDate(recurringPaymentUi: RecurringPaymentUi) {
+    private suspend fun updateRecurringPaymentLastPaymentDate(paymentDomain: RecurringPaymentDomain) {
         saveRecurringPaymentUseCase(
-            recurringPaymentUi.copy(
-                mostRecentPaymentDate = LocalDate.now()
+            paymentDomain.copy(
+                lastPaymentDate = LocalDate.now()
             )
         )
     }
@@ -75,10 +73,8 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
      *
      * @return True if the recurring payment should be paid, false otherwise.
      */
-    private fun RecurringPaymentUi.shouldPay(): Boolean {
-        val paymentDomain = toDomain()
-
-        return isWithinPaymentDate(paymentDomain) && !hasAlreadyBeenPaid(paymentDomain)
+    private fun RecurringPaymentDomain.shouldPay(): Boolean {
+        return isWithinPaymentDate(this) && !hasAlreadyBeenPaid(this)
     }
 
     /**

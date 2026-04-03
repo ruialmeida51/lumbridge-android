@@ -9,6 +9,9 @@ import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputS
 import com.eyther.lumbridge.features.tools.netsalary.model.input.NetSalaryInputScreenViewState
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.INetSalaryInputScreenInputHandler
 import com.eyther.lumbridge.features.tools.netsalary.viewmodel.input.delegate.NetSalaryInputScreenInputHandler
+import com.eyther.lumbridge.mapper.finance.toUi
+import com.eyther.lumbridge.mapper.user.toDomain
+import com.eyther.lumbridge.mapper.user.toUi
 import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
@@ -78,7 +81,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
     private suspend fun resetInput() {
         val inputState = inputState.value
         val initialLocale = getLocaleOrDefault()
-        val initialUserFinancials = cachedUserFinancials ?: getUserFinancials()
+        val initialUserFinancials = cachedUserFinancials ?: getUserFinancials()?.toUi()
         val initialAnnualGrossSalary = initialUserFinancials?.annualGrossSalary
         val initialMonthlyGrossSalary = initialAnnualGrossSalary?.let { getMonthlySalaryUseCase(it) }
         val currencySymbol = initialLocale.getCurrencySymbol()
@@ -159,7 +162,7 @@ class NetSalaryInputScreenViewModel @Inject constructor(
 
             cachedUserFinancials = userFinancials
 
-            val netSalary = getNetSalaryUseCase(userFinancials)
+            val netSalary = getNetSalaryUseCase(userFinancials.toDomain()).toUi()
 
             // Cache arguments for the result screen
             cacheArguments(netSalary, inputState.locale)

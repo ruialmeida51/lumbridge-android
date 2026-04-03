@@ -3,13 +3,16 @@ package com.eyther.lumbridge.features.overview.breakdown.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.domain.model.loan.LoanCalculation
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.preferences.Preferences
+import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
+import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenViewState
-import com.eyther.lumbridge.model.expenses.ExpenseUi
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
+import com.eyther.lumbridge.mapper.finance.toUi
+import com.eyther.lumbridge.mapper.loan.toUi
 import com.eyther.lumbridge.model.loan.LoanUi
-import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
-import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.expenses.GetBalanceSheetUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
@@ -47,10 +50,10 @@ class BreakdownScreenViewModel @Inject constructor(
         private const val TAG = "BreakdownScreenViewModel"
 
         private data class DataStream(
-            val expenses: List<ExpenseUi>,
-            val snapshotSalaries: List<SnapshotNetSalaryUi>,
-            val loans: List<Pair<LoanUi, LoanCalculationUi>>,
-            val userFinancials: UserFinancialsUi?,
+            val expenses: List<ExpenseDomain>,
+            val snapshotSalaries: List<SnapshotNetSalaryDomain>,
+            val loans: List<Pair<LoanDomain, LoanCalculation>>,
+            val userFinancials: UserFinancialsDomain?,
             val preferences: Preferences?
         )
     }
@@ -86,13 +89,13 @@ class BreakdownScreenViewModel @Inject constructor(
                 )
             }
                 .onEach { (expenses, snapshotSalaries, loans, userFinancials, preferences) ->
-                    val currentNetSalary = userFinancials?.let { getNetSalaryUseCase(it) }
+                    val currentNetSalary = userFinancials?.let { getNetSalaryUseCase(it).toUi() }
 
                     viewState.update {
                         BreakdownScreenViewState.Content(
                             locale = locale,
                             netSalary = currentNetSalary,
-                            loans = loans,
+                            loans = loans.map { (loan, calc) -> loan.toUi() to calc.toUi() },
                             currencySymbol = locale.getCurrencySymbol(),
                             balanceSheetNet = getBalanceSheetUseCase(
                                 currentNetSalary = currentNetSalary?.monthlyNetSalary,

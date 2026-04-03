@@ -8,6 +8,8 @@ import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewS
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Empty
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Error
 import com.eyther.lumbridge.features.feed.model.overview.FeedOverviewScreenViewState.Loading
+import com.eyther.lumbridge.domain.model.news.RssFeed
+import com.eyther.lumbridge.mapper.feed.toUi
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.usecase.news.GetAvailableFeedsFlowUseCase
 import com.eyther.lumbridge.usecase.news.GetNewsFeedUseCase
@@ -28,7 +30,7 @@ class FeedOverviewScreenViewModel @Inject constructor(
 ) : ViewModel(),
     IFeedOverviewScreenViewModel {
 
-    private var cachedAvailableFeeds = emptyList<RssFeedUi>()
+    private var cachedAvailableFeeds = emptyList<RssFeed>()
 
     override val viewState: MutableStateFlow<FeedOverviewScreenViewState> =
         MutableStateFlow(Loading())
@@ -54,7 +56,7 @@ class FeedOverviewScreenViewModel @Inject constructor(
                     }
 
                     cachedAvailableFeeds = availableFeeds
-                    viewState.update { Loading(availableFeeds, firstFeedResult.firstOrNull()) }
+                    viewState.update { Loading(availableFeeds.toUi(), firstFeedResult.firstOrNull()?.toUi()) }
 
                     // Select the first feed by default.
                     val selectedFeed = availableFeeds.first()
@@ -75,7 +77,9 @@ class FeedOverviewScreenViewModel @Inject constructor(
             }
 
             // If everything goes well, the selected feed will be the one passed in. Otherwise, it will be the first available feed.
-            val selectedFeed = rssFeedUi ?: cachedAvailableFeeds.first()
+            val selectedFeed = rssFeedUi?.let { ui ->
+                cachedAvailableFeeds.find { it.id == ui.id }
+            } ?: cachedAvailableFeeds.first()
 
             updateNewsFeed(selectedFeed)
 
@@ -93,20 +97,21 @@ class FeedOverviewScreenViewModel @Inject constructor(
      *
      * @param selectedFeed The selected feed to fetch the news feed for.
      */
-    private suspend fun updateNewsFeed(selectedFeed: RssFeedUi) {
+    private suspend fun updateNewsFeed(selectedFeed: RssFeed) {
         val newsFeed = kotlin.runCatching { getNewsFeed(selectedFeed) }.getOrNull()
+        val selectedFeedUi = selectedFeed.toUi()
 
         viewState.update {
-            if (newsFeed.isNullOrEmpty()) {
+            if (newsFeed == null || newsFeed.items.isEmpty()) {
                 Error(
-                    availableFeeds = cachedAvailableFeeds,
-                    selectedFeed = selectedFeed
+                    availableFeeds = cachedAvailableFeeds.toUi(),
+                    selectedFeed = selectedFeedUi
                 )
             } else {
                 Content(
-                    feedItems = newsFeed,
-                    availableFeeds = cachedAvailableFeeds,
-                    selectedFeed = selectedFeed
+                    feedItems = newsFeed.toUi(),
+                    availableFeeds = cachedAvailableFeeds.toUi(),
+                    selectedFeed = selectedFeedUi
                 )
             }
         }

@@ -4,8 +4,6 @@ import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocation
 import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocationType
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.snapshotsalary.SnapshotSalaryRepository
-import com.eyther.lumbridge.mapper.user.toDomain
-import com.eyther.lumbridge.model.user.UserFinancialsUi
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -13,14 +11,13 @@ class UpdateSnapshotSalaryWithAllocation @Inject constructor(
     private val snapshotSalaryRepository: SnapshotSalaryRepository
 ) {
     suspend operator fun invoke(
-        userFinancialsUi: UserFinancialsUi,
+        userFinancialsDomain: UserFinancialsDomain,
         monthlyNetSalary: Float,
         foodCardAmount: Float,
         snapshotYear: Int?,
         snapshotMonth: Int?
     ) {
         val now = LocalDate.now()
-        val userFinancials = userFinancialsUi.toDomain()
         val currentSnapshotSalaryForDate = snapshotSalaryRepository.getSnapshotNetSalaryByYearMonth(
             year = snapshotYear ?: now.year,
             month = snapshotMonth ?: now.monthValue
@@ -29,7 +26,7 @@ class UpdateSnapshotSalaryWithAllocation @Inject constructor(
         snapshotSalaryRepository.saveSnapshotNetSalary(
             currentSnapshotSalaryForDate.copy(
                 netSalary = monthlyNetSalary,
-                moneyAllocations = getMoneyAllocations(userFinancials, monthlyNetSalary),
+                moneyAllocations = getMoneyAllocations(userFinancialsDomain, monthlyNetSalary),
                 foodCardAmount = foodCardAmount
             )
         )

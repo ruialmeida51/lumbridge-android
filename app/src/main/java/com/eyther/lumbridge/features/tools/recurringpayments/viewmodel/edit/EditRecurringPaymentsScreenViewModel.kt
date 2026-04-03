@@ -10,9 +10,11 @@ import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecu
 import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecurringPaymentsScreenViewState
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.EditRecurringPaymentInputHandler
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.IEditRecurringPaymentInputHandler
+import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
+import com.eyther.lumbridge.mapper.recurringpayments.toDomain
+import com.eyther.lumbridge.mapper.recurringpayments.toUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
-import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
 import com.eyther.lumbridge.model.time.PeriodicityUi
 import com.eyther.lumbridge.usecase.recurringpayments.DeleteRecurringPaymentUseCase
 import com.eyther.lumbridge.usecase.recurringpayments.GetRecurringPaymentByIdUseCase
@@ -55,7 +57,7 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
         "Recurring payment ID must be provided or defaulted to -1"
     }
 
-    private var cachedRecurringPayment: RecurringPaymentUi? = null
+    private var cachedRecurringPayment: RecurringPaymentDomain? = null
 
     init {
         fetchRecurringPayment()
@@ -63,8 +65,9 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
 
     private fun fetchRecurringPayment() {
         viewModelScope.launch {
-            val recurringPaymentUi = getRecurringPaymentByIdUseCase(recurringPaymentId)
-            cachedRecurringPayment = recurringPaymentUi
+            val recurringPaymentDomain = getRecurringPaymentByIdUseCase(recurringPaymentId)
+            val recurringPaymentUi = recurringPaymentDomain?.toUi()
+            cachedRecurringPayment = recurringPaymentDomain
 
             updateInput { state ->
                 state.copy(
@@ -146,38 +149,40 @@ class EditRecurringPaymentsScreenViewModel @Inject constructor(
         viewModelScope.launch(coroutineExceptionHandler) {
             val inputState = inputState.value
 
-            val recurringPayment = RecurringPaymentUi(
+            val periodicityUi = when (inputState.periodicityUi) {
+                is PeriodicityUi.EveryXDays -> PeriodicityUi.EveryXDays(
+                    numOfDays = checkNotNull(inputState.numOfDays.text?.toIntOrNull())
+                )
+
+                is PeriodicityUi.EveryXWeeks -> PeriodicityUi.EveryXWeeks(
+                    numOfWeeks = checkNotNull(inputState.numOfWeeks.text?.toIntOrNull()),
+                    dayOfWeek = inputState.dayOfWeek
+                )
+
+                is PeriodicityUi.EveryXMonths -> PeriodicityUi.EveryXMonths(
+                    numOfMonth = checkNotNull(inputState.numOfMonths.text?.toIntOrNull()),
+                    dayOfMonth = checkNotNull(inputState.dayOfMonth.text?.toIntOrNull())
+                )
+
+                is PeriodicityUi.EveryXYears -> PeriodicityUi.EveryXYears(
+                    numOfYear = checkNotNull(inputState.numOfYears.text?.toIntOrNull()),
+                    month = inputState.monthOfYear
+                )
+            }
+
+            val recurringPaymentDomain = RecurringPaymentDomain(
                 id = recurringPaymentId,
                 startDate = checkNotNull(inputState.paymentStartDate.date),
                 label = checkNotNull(inputState.paymentName.text),
                 amountToPay = checkNotNull(inputState.paymentAmount.text).toFloat(),
-                mostRecentPaymentDate = cachedRecurringPayment?.mostRecentPaymentDate,
-                periodicity = when (inputState.periodicityUi) {
-                    is PeriodicityUi.EveryXDays -> PeriodicityUi.EveryXDays(
-                        numOfDays = checkNotNull(inputState.numOfDays.text?.toIntOrNull())
-                    )
-
-                    is PeriodicityUi.EveryXWeeks -> PeriodicityUi.EveryXWeeks(
-                        numOfWeeks = checkNotNull(inputState.numOfWeeks.text?.toIntOrNull()),
-                        dayOfWeek = inputState.dayOfWeek
-                    )
-
-                    is PeriodicityUi.EveryXMonths -> PeriodicityUi.EveryXMonths(
-                        numOfMonth = checkNotNull(inputState.numOfMonths.text?.toIntOrNull()),
-                        dayOfMonth = checkNotNull(inputState.dayOfMonth.text?.toIntOrNull())
-                    )
-
-                    is PeriodicityUi.EveryXYears -> PeriodicityUi.EveryXYears(
-                        numOfYear = checkNotNull(inputState.numOfYears.text?.toIntOrNull()),
-                        month = inputState.monthOfYear
-                    )
-                },
+                lastPaymentDate = cachedRecurringPayment?.lastPaymentDate,
+                periodicity = periodicityUi.toDomain(),
                 shouldNotifyWhenPaid = inputState.shouldNotifyWhenPaid,
-                categoryTypesUi = inputState.categoryType,
-                allocationTypeUi = inputState.allocationTypeUi
+                categoryTypes = inputState.categoryType.toDomain(),
+                allocationType = inputState.allocationTypeUi.toDomain()
             )
 
-            saveRecurringPaymentUseCase(recurringPayment)
+            saveRecurringPaymentUseCase(recurringPaymentDomain)
             viewEffects.emit(EditRecurringPaymentScreenViewEffects.CloseScreen)
         }
     }

@@ -3,7 +3,9 @@ package com.eyther.lumbridge.features.expenses.viewmodel.overview
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewFilter
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.overview.ExpensesOverviewScreenViewState
@@ -14,10 +16,9 @@ import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.Expens
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.ExpensesOverviewScreenSortByDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenFilterDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenSortByDelegate
-import com.eyther.lumbridge.model.expenses.ExpenseUi
+import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
-import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
@@ -73,10 +74,10 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         )
 
         private data class ExpensesData(
-            val expenses: List<ExpenseUi>,
+            val expenses: List<ExpenseDomain>,
             val locale: SupportedLocales,
             val netSalaryUi: NetSalaryUi?,
-            val snapshotNetSalaries: List<SnapshotNetSalaryUi>
+            val snapshotNetSalaries: List<SnapshotNetSalaryDomain>
         )
     }
 
@@ -93,7 +94,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
         MutableStateFlow(viewState.value.getDefaultDisplayFilter())
 
     private var cachedNetSalaryUi: NetSalaryUi? = null
-    private var cachedSnapshotNetSalaries: List<SnapshotNetSalaryUi> = emptyList()
+    private var cachedSnapshotNetSalaries: List<SnapshotNetSalaryDomain> = emptyList()
 
     init {
         viewModelScope.launch {
@@ -111,7 +112,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
             ExpensesData(
                 expenses = expenses,
                 locale = locale,
-                netSalaryUi = userFinancials?.let { getNetSalaryUseCase(it) },
+                netSalaryUi = userFinancials?.let { getNetSalaryUseCase(it).toUi() },
                 snapshotNetSalaries = snapshotNetSalaries
             )
         }

@@ -9,6 +9,8 @@ import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialPro
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Loading
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.EditFinancialProfileInputHandler
 import com.eyther.lumbridge.features.editfinancialprofile.viewmodel.delegate.IEditFinancialProfileInputHandler
+import com.eyther.lumbridge.mapper.user.toDomain
+import com.eyther.lumbridge.mapper.user.toUi
 import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
@@ -52,7 +54,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
 
     private fun observeUserFinancials() {
         viewModelScope.launch {
-            val initialUserFinancials = getUserFinancials()
+            val initialUserFinancials = getUserFinancials()?.toUi()
             val locale = getLocaleOrDefault()
             val annualGrossSalary = initialUserFinancials?.annualGrossSalary
             val monthlyGrossSalary = annualGrossSalary?.let { getMonthlySalaryUseCase(it) }
@@ -147,7 +149,7 @@ class EditFinancialProfileScreenViewModel @Inject constructor(
                 duodecimosTypeUi = inputState.duodecimosTypeUi
             )
 
-            saveUserFinancials(userFinancials)
+            saveUserFinancials(userFinancials.toDomain())
 
             viewEffects.emit(EditFinancialProfileScreenViewEffect.CloseScreen)
         }

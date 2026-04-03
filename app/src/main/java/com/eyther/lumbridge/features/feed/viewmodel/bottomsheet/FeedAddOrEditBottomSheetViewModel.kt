@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.feed.model.bottomsheet.FeedAddOrEditBottomSheetViewState
 import com.eyther.lumbridge.features.feed.viewmodel.delegate.FeedAddOrEditBottomSheetInputHandler
 import com.eyther.lumbridge.features.feed.viewmodel.delegate.IFeedAddOrEditBottomSheetInputHandler
+import com.eyther.lumbridge.domain.model.news.RssFeed
+import com.eyther.lumbridge.mapper.feed.toDomain
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.usecase.news.DeleteRssFeedUseCase
 import com.eyther.lumbridge.usecase.news.SaveRssFeedUseCase
@@ -71,8 +73,8 @@ class FeedAddOrEditBottomSheetViewModel @AssistedInject constructor(
                 selectedFeedUi?.copy(
                     label = name,
                     url = url
-                ) ?: RssFeedUi(
-                    label = name,
+                )?.toDomain() ?: RssFeed(
+                    name = name,
                     url = url
                 )
             )

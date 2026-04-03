@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewEffect
 import com.eyther.lumbridge.features.overview.loandetails.model.LoanDetailsScreenViewState
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.Loan.Companion.ARG_LOAN_ID
+import com.eyther.lumbridge.domain.model.loan.LoanCalculation
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
+import com.eyther.lumbridge.mapper.loan.toUi
 import com.eyther.lumbridge.usecase.loan.AddPaymentToLoanUseCase
 import com.eyther.lumbridge.usecase.loan.DeleteLoanUseCase
 import com.eyther.lumbridge.usecase.loan.GetLoanAndCalculationsFlowUseCase
@@ -42,6 +45,9 @@ class LoanDetailsScreenViewModel @Inject constructor(
     override val viewEffects: MutableSharedFlow<LoanDetailsScreenViewEffect> =
         MutableSharedFlow()
 
+    private var cachedLoanDomain: LoanDomain? = null
+    private var cachedLoanCalculation: LoanCalculation? = null
+
     private val loanId = requireNotNull(savedStateHandle.get<Long>(ARG_LOAN_ID)) {
         "Loan ID must be provided or defaulted to -1"
     }
@@ -60,10 +66,13 @@ class LoanDetailsScreenViewModel @Inject constructor(
 
             getLoanAndCalculationsFlowUseCase(loanId)
                 .onEach { (loan, loanCalculation) ->
+                    cachedLoanDomain = loan
+                    cachedLoanCalculation = loanCalculation
+
                     viewState.update {
                         LoanDetailsScreenViewState.Content(
-                            loanUi = loan,
-                            loanCalculationUi = loanCalculation,
+                            loanUi = loan.toUi(),
+                            loanCalculationUi = loanCalculation.toUi(),
                             currencySymbol = locale.getCurrencySymbol()
                         )
                     }
@@ -95,11 +104,9 @@ class LoanDetailsScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            val currentState = viewState.value
-
-            if (currentState is LoanDetailsScreenViewState.Content) {
-                addPaymentToLoanUseCase(currentState.loanUi, currentState.loanCalculationUi)
-            }
+            val loanDomain = cachedLoanDomain ?: return@launch
+            val loanCalculation = cachedLoanCalculation ?: return@launch
+            addPaymentToLoanUseCase(loanDomain, loanCalculation)
         }
     }
 }

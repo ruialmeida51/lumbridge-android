@@ -5,7 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.domain.model.locale.SupportedLocales
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
 import com.eyther.lumbridge.domain.model.preferences.Preferences
+import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
 import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDetailScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.monthdetails.ExpensesMonthDetailScreenViewState
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_MONTH
@@ -14,7 +16,6 @@ import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
-import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
 import com.eyther.lumbridge.usecase.expenses.GetBalanceSheetUseCase
@@ -57,8 +58,8 @@ class ExpensesMonthDetailScreenViewModel @Inject constructor(
 
         private data class StreamData(
             val preferences: Preferences?,
-            val snapshotNetSalaries: List<SnapshotNetSalaryUi>,
-            val expenses: List<ExpenseUi>
+            val snapshotNetSalaries: List<SnapshotNetSalaryDomain>,
+            val expenses: List<ExpenseDomain>
         )
     }
 

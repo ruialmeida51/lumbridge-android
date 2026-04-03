@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.profile.editloans.model.EditLoansViewState
+import com.eyther.lumbridge.mapper.loan.toUi
 import com.eyther.lumbridge.model.loan.LoanUi
 import com.eyther.lumbridge.usecase.loan.DeleteLoanUseCase
 import com.eyther.lumbridge.usecase.loan.GetLoansFlowUseCase
@@ -49,7 +50,7 @@ class EditLoansViewModel @Inject constructor(
                             }
                             else -> {
                                 EditLoansViewState.Content(
-                                    loansUi = loans,
+                                    loansUi = loans.map { (loan, calc) -> loan.toUi() to calc.toUi() },
                                     currencySymbol = locale.getCurrencySymbol()
                                 )
                             }

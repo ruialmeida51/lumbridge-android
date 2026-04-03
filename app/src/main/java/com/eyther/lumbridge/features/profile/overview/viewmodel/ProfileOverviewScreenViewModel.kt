@@ -11,7 +11,7 @@ import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.eyther.lumbridge.features.profile.overview.model.ProfileOverviewScreenViewState
-import com.eyther.lumbridge.model.user.UserProfileUi
+import com.eyther.lumbridge.domain.model.user.UserProfileDomain
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
 import com.eyther.lumbridge.usecase.user.profile.GetUserProfileStream
@@ -68,7 +68,7 @@ class ProfileOverviewScreenViewModel @Inject constructor(
             if (currentUser != null) {
                 saveUserProfile(currentUser.copy(imageBitmap = image))
             } else {
-                saveUserProfile(UserProfileUi(imageBitmap = image, locale = getLocaleOrDefault()))
+                saveUserProfile(UserProfileDomain(imageBitmap = image, locale = getLocaleOrDefault(), name = "", email = ""))
             }
         }
     }

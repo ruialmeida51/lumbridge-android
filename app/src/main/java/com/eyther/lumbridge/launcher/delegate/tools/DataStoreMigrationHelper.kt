@@ -162,7 +162,7 @@ class DataStoreMigrationHelper @Inject constructor(
                     .filter { it.moneyAllocations.isEmpty() }
                     .forEach { snapshot ->
                         updateSnapshotSalaryWithAllocation(
-                            userFinancialsUi = userFinancials,
+                            userFinancialsDomain = userFinancials,
                             monthlyNetSalary = snapshot.netSalary,
                             foodCardAmount = snapshot.foodCardAmount ?: 0f,
                             snapshotYear = snapshot.year,
@@ -187,7 +187,7 @@ class DataStoreMigrationHelper @Inject constructor(
                     .forEach { snapshot ->
                         Log.d(TAG, "⏩ Updating snapshot salary with food card amount for ${snapshot.year}/${snapshot.month} - $snapshot")
                         updateSnapshotSalaryWithAllocation(
-                            userFinancialsUi = userFinancials,
+                            userFinancialsDomain = userFinancials,
                             monthlyNetSalary = snapshot.netSalary,
                             foodCardAmount = netSalary.monthlyFoodCard,
                             snapshotYear = snapshot.year,
