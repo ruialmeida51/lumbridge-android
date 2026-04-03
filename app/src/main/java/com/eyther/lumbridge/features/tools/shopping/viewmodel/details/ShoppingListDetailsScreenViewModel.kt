@@ -14,9 +14,9 @@ import com.eyther.lumbridge.domain.model.shopping.ShoppingList
 import com.eyther.lumbridge.domain.model.shopping.ShoppingListEntry
 import com.eyther.lumbridge.ui.common.composables.model.input.CheckboxInputState
 import com.eyther.lumbridge.ui.common.composables.model.input.TextInputState
-import com.eyther.lumbridge.usecase.shopping.DeleteShoppingListUseCase
-import com.eyther.lumbridge.usecase.shopping.GetShoppingListUseCase
-import com.eyther.lumbridge.usecase.shopping.SaveShoppingListUseCase
+import com.eyther.lumbridge.domain.usecase.shopping.DeleteShoppingListUseCase
+import com.eyther.lumbridge.domain.usecase.shopping.GetShoppingListUseCase
+import com.eyther.lumbridge.domain.usecase.shopping.SaveShoppingListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.FlowPreview

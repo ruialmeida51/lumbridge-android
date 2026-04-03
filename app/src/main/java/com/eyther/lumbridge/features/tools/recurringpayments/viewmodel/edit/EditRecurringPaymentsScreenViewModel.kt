@@ -17,9 +17,9 @@ import com.eyther.lumbridge.mapper.recurringpayments.toUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.model.time.PeriodicityUi
-import com.eyther.lumbridge.usecase.recurringpayments.DeleteRecurringPaymentUseCase
-import com.eyther.lumbridge.usecase.recurringpayments.GetRecurringPaymentByIdUseCase
-import com.eyther.lumbridge.usecase.recurringpayments.SaveRecurringPaymentUseCase
+import com.eyther.lumbridge.domain.usecase.recurringpayments.DeleteRecurringPaymentUseCase
+import com.eyther.lumbridge.domain.usecase.recurringpayments.GetRecurringPaymentByIdUseCase
+import com.eyther.lumbridge.domain.usecase.recurringpayments.SaveRecurringPaymentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

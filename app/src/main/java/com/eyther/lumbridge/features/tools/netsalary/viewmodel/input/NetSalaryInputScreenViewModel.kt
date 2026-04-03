@@ -16,11 +16,11 @@ import com.eyther.lumbridge.model.finance.DuodecimosTypeUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.model.finance.SalaryInputTypeUi
 import com.eyther.lumbridge.model.user.UserFinancialsUi
-import com.eyther.lumbridge.usecase.finance.GetAnnualSalaryUseCase
-import com.eyther.lumbridge.usecase.finance.GetMonthlySalaryUseCase
-import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.finance.GetAnnualSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.finance.GetMonthlySalaryUseCase
+import com.eyther.lumbridge.domain.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancials
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

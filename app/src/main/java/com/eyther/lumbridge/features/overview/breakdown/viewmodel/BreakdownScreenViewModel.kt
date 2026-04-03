@@ -13,15 +13,15 @@ import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenVie
 import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.mapper.loan.toUi
 import com.eyther.lumbridge.model.loan.LoanUi
-import com.eyther.lumbridge.usecase.expenses.GetBalanceSheetUseCase
-import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
-import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.loan.DeleteLoanUseCase
-import com.eyther.lumbridge.usecase.loan.GetLoansFlowUseCase
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
-import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.expenses.GetBalanceSheetUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GetExpensesStreamUseCase
+import com.eyther.lumbridge.domain.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.loan.DeleteLoanUseCase
+import com.eyther.lumbridge.domain.usecase.loan.GetLoansFlowUseCase
+import com.eyther.lumbridge.domain.usecase.preferences.GetPreferencesStream
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancialsFlow
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -102,7 +102,7 @@ class BreakdownScreenViewModel @Inject constructor(
                                 expenses = expenses,
                                 snapshotSalaries = snapshotSalaries,
                                 addFoodCardToNecessitiesAllocation = preferences?.addFoodCardToNecessitiesAllocation == true
-                            )
+                            )?.toUi()
                         )
                     }
                 }

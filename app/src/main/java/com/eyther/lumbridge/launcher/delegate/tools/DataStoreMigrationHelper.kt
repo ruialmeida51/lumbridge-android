@@ -10,11 +10,11 @@ import com.eyther.lumbridge.domain.model.loan.LoanType
 import com.eyther.lumbridge.domain.repository.loan.LoanRepository
 import com.eyther.lumbridge.domain.repository.preferences.PreferencesRepository
 import com.eyther.lumbridge.domain.repository.snapshotsalary.SnapshotSalaryRepository
-import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.snapshotsalary.SaveSnapshotNetSalaryUseCase
-import com.eyther.lumbridge.usecase.snapshotsalary.UpdateSnapshotSalaryWithAllocation
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
-import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
+import com.eyther.lumbridge.domain.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.SaveSnapshotNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.UpdateSnapshotSalaryWithAllocation
+import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancials
+import com.eyther.lumbridge.domain.usecase.user.financials.SaveUserFinancials
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

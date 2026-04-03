@@ -1,10 +1,17 @@
 package com.eyther.lumbridge.mapper.expenses
 
-import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryDomain
 import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.domain.model.expenses.ExpensesMonthDomain
+import com.eyther.lumbridge.domain.model.expenses.MonthAllocationDomain
 import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocationType
 import com.eyther.lumbridge.model.expenses.ExpenseUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
+import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
+import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
+import com.eyther.lumbridge.model.expenses.ExpensesMonthAllocationUi
+import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 
 fun ExpenseDomain.toUi() = ExpenseUi(
@@ -31,8 +38,39 @@ fun ExpensesCategoryTypes.toUi() = when (this) {
     is ExpensesCategoryTypes.Investments -> ExpensesCategoryTypesUi.Investments
 }
 
-fun MoneyAllocationType.toUi() = when (this) {
-    is MoneyAllocationType.Luxuries -> MoneyAllocationTypeUi.Luxuries()
-    is MoneyAllocationType.Necessities -> MoneyAllocationTypeUi.Necessities()
-    is MoneyAllocationType.Savings -> MoneyAllocationTypeUi.Savings()
+fun MoneyAllocationType.toUi(allocated: Float = 0f) = when (this) {
+    is MoneyAllocationType.Luxuries -> MoneyAllocationTypeUi.Luxuries(allocated)
+    is MoneyAllocationType.Necessities -> MoneyAllocationTypeUi.Necessities(allocated)
+    is MoneyAllocationType.Savings -> MoneyAllocationTypeUi.Savings(allocated)
 }
+
+fun ExpensesMonthDomain.toUi() = ExpensesMonthUi(
+    month = month,
+    year = year,
+    spent = spent,
+    gained = gained,
+    remainder = remainder,
+    snapshotMonthlyNetSalary = snapshotMonthlyNetSalary,
+    snapshotAllocations = snapshotAllocations.map { it.toUi() },
+    categoryExpenses = categoryExpenses.map { it.toUi() }.sortedBy { it.categoryType.orderOfAppearance }
+)
+
+fun ExpensesCategoryDomain.toUi() = ExpensesCategoryUi(
+    categoryType = categoryType.toUi(),
+    spent = spent,
+    expensesDetailedUi = expenses.map { it.toDetailedUi() }
+)
+
+fun ExpenseDomain.toDetailedUi() = ExpensesDetailedUi(
+    id = id,
+    date = date,
+    expenseAmount = expenseAmount,
+    expenseName = expenseName,
+    allocationTypeUi = allocation.toUi()
+)
+
+fun MonthAllocationDomain.toUi() = ExpensesMonthAllocationUi(
+    type = type.toUi(allocated),
+    spent = spent,
+    gained = gained
+)

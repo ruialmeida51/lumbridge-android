@@ -9,8 +9,8 @@ import com.eyther.lumbridge.features.feed.viewmodel.delegate.IFeedAddOrEditBotto
 import com.eyther.lumbridge.domain.model.news.RssFeed
 import com.eyther.lumbridge.mapper.feed.toDomain
 import com.eyther.lumbridge.model.news.RssFeedUi
-import com.eyther.lumbridge.usecase.news.DeleteRssFeedUseCase
-import com.eyther.lumbridge.usecase.news.SaveRssFeedUseCase
+import com.eyther.lumbridge.domain.usecase.news.DeleteRssFeedUseCase
+import com.eyther.lumbridge.domain.usecase.news.SaveRssFeedUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel

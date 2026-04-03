@@ -16,18 +16,19 @@ import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.Expens
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.ExpensesOverviewScreenSortByDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenFilterDelegate
 import com.eyther.lumbridge.features.expenses.viewmodel.overview.delegate.IExpensesOverviewScreenSortByDelegate
+import com.eyther.lumbridge.mapper.expenses.toUi
 import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
 import com.eyther.lumbridge.model.finance.NetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.usecase.expenses.DeleteExpensesListUseCase
-import com.eyther.lumbridge.usecase.expenses.GetExpensesStreamUseCase
-import com.eyther.lumbridge.usecase.expenses.GroupExpensesUseCase
-import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
-import com.eyther.lumbridge.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
+import com.eyther.lumbridge.domain.usecase.expenses.DeleteExpensesListUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GetExpensesStreamUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GroupExpensesUseCase
+import com.eyther.lumbridge.domain.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.preferences.GetPreferencesStream
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancialsFlow
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefaultStream
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -149,7 +150,7 @@ class ExpensesOverviewScreenViewModel @Inject constructor(
                                 snapshotNetSalaries = streamData.expensesData.snapshotNetSalaries,
                                 showAllocationsOnExpenses = streamData.showAllocationsOnExpenses,
                                 shouldAddFoodCardToNecessitiesAllocation = streamData.shouldAddFoodCardToNecessitiesAllocation
-                            ),
+                            ).map { it.toUi() },
                             netSalaryUi = streamData.expensesData.netSalaryUi,
                             locale = streamData.expensesData.locale,
                             sortBy = streamData.sortBy,

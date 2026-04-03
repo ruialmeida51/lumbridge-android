@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.reminders.model.overview.RemindersOverviewScreenViewEffects
 import com.eyther.lumbridge.features.tools.reminders.model.overview.RemindersOverviewScreenViewState
 import com.eyther.lumbridge.mapper.reminders.toUi
-import com.eyther.lumbridge.usecase.reminders.DeleteReminderUseCase
-import com.eyther.lumbridge.usecase.reminders.GetRemindersFlowUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.DeleteReminderUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.GetRemindersFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow

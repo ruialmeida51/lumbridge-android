@@ -8,9 +8,9 @@ import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsSc
 import com.eyther.lumbridge.features.profile.settings.model.ProfileAppSettingsScreenViewState
 import com.eyther.lumbridge.features.profile.settings.viewmodel.delegate.IProfileAppSettingsScreenInputHandler
 import com.eyther.lumbridge.features.profile.settings.viewmodel.delegate.ProfileAppSettingsScreenInputHandler
-import com.eyther.lumbridge.usecase.locale.GetSupportedLanguages
-import com.eyther.lumbridge.usecase.preferences.GetPreferencesStream
-import com.eyther.lumbridge.usecase.preferences.SavePreferences
+import com.eyther.lumbridge.domain.usecase.locale.GetSupportedLanguages
+import com.eyther.lumbridge.domain.usecase.preferences.GetPreferencesStream
+import com.eyther.lumbridge.domain.usecase.preferences.SavePreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

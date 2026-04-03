@@ -21,9 +21,9 @@ import com.eyther.lumbridge.model.loan.LoanInterestRateUi
 import com.eyther.lumbridge.model.loan.LoanUi
 import com.eyther.lumbridge.shared.time.extensions.monthsUntil
 import com.eyther.lumbridge.shared.time.extensions.toLocalDate
-import com.eyther.lumbridge.usecase.loan.GetLoanAndCalculationsUseCase
-import com.eyther.lumbridge.usecase.loan.SaveLoanUseCase
-import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
+import com.eyther.lumbridge.domain.usecase.loan.GetLoanAndCalculationsUseCase
+import com.eyther.lumbridge.domain.usecase.loan.SaveLoanUseCase
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
