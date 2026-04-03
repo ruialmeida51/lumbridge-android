@@ -9,7 +9,7 @@ import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreen
 import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.notes.viewmodel.details.delegate.INoteDetailsScreenInputHandler
 import com.eyther.lumbridge.features.tools.notes.viewmodel.details.delegate.NoteDetailsScreenInputHandler
-import com.eyther.lumbridge.model.notes.NoteUi
+import com.eyther.lumbridge.domain.model.notes.Note
 import com.eyther.lumbridge.usecase.notes.DeleteNoteUseCase
 import com.eyther.lumbridge.usecase.notes.GetNoteUseCase
 import com.eyther.lumbridge.usecase.notes.SaveNoteUseCase
@@ -94,8 +94,7 @@ class NoteDetailsScreenViewModel @Inject constructor(
                     title = it.title.copy(text = note.title),
                     text = it.text.copy(text = note.text)
                 )
-            }
-        }
+            }        }
     }
 
     override fun setDefaultTitle(defaultTitle: String) {
@@ -111,7 +110,7 @@ class NoteDetailsScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch(coroutineExceptionHandler) {
-            val noteUi = NoteUi(
+            val note = Note(
                 id = noteId,
                 title = inputState.value.title.text.orEmpty().ifEmpty { cachedDefaultTitle.orEmpty() },
                 text = inputState.value.text.text.orEmpty()
@@ -121,7 +120,7 @@ class NoteDetailsScreenViewModel @Inject constructor(
             // it means that it's a new note and we need to update the ID with the one returned by
             // the database. This is necessary to avoid saving notes multiple times, as a -1L ID is
             // used to indicate a new note.
-            noteId = saveNoteUseCase(noteUi)
+            noteId = saveNoteUseCase(note)
 
             if (finish) {
                 viewEffects.emit(NoteDetailsScreenViewEffect.NavigateBack)

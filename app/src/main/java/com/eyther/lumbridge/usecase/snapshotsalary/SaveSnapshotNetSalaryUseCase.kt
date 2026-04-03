@@ -5,8 +5,6 @@ import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocationTyp
 import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
 import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.snapshotsalary.SnapshotSalaryRepository
-import com.eyther.lumbridge.mapper.user.toDomain
-import com.eyther.lumbridge.model.user.UserFinancialsUi
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
 import java.time.LocalDate
 import javax.inject.Inject
@@ -16,12 +14,11 @@ class SaveSnapshotNetSalaryUseCase @Inject constructor(
     private val getNetSalaryUseCase: GetNetSalaryUseCase
 ) {
     suspend operator fun invoke(
-        userFinancialsUi: UserFinancialsUi
+        userFinancialsDomain: UserFinancialsDomain
     ) {
         val now = LocalDate.now()
 
-        val netSalary = getNetSalaryUseCase(userFinancialsUi)
-        val userFinancials = userFinancialsUi.toDomain()
+        val netSalary = getNetSalaryUseCase(userFinancialsDomain)
 
         val currentSnapshotSalaryForDate =
             snapshotSalaryRepository.getSnapshotNetSalaryByYearMonth(now.year, now.monthValue)
@@ -30,7 +27,7 @@ class SaveSnapshotNetSalaryUseCase @Inject constructor(
             snapshotSalaryRepository.saveSnapshotNetSalary(
                 currentSnapshotSalaryForDate.copy(
                     netSalary = netSalary.monthlyNetSalary,
-                    moneyAllocations = getMoneyAllocations(userFinancials, netSalary.monthlyNetSalary),
+                    moneyAllocations = getMoneyAllocations(userFinancialsDomain, netSalary.monthlyNetSalary),
                     foodCardAmount = netSalary.monthlyFoodCard
                 )
             )
@@ -39,7 +36,7 @@ class SaveSnapshotNetSalaryUseCase @Inject constructor(
                 year = now.year,
                 month = now.monthValue,
                 netSalary = netSalary.monthlyNetSalary,
-                moneyAllocations = getMoneyAllocations(userFinancials, netSalary.monthlyNetSalary),
+                moneyAllocations = getMoneyAllocations(userFinancialsDomain, netSalary.monthlyNetSalary),
                 foodCardAmount = netSalary.monthlyFoodCard
             )
 

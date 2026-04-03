@@ -1,9 +1,8 @@
 package com.eyther.lumbridge.usecase.loan
 
+import com.eyther.lumbridge.domain.model.loan.LoanCalculation
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.repository.loan.LoanRepository
-import com.eyther.lumbridge.mapper.loan.toDomain
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
-import com.eyther.lumbridge.model.loan.LoanUi
 import javax.inject.Inject
 
 class AddPaymentToLoanUseCase @Inject constructor(
@@ -14,15 +13,14 @@ class AddPaymentToLoanUseCase @Inject constructor(
      * subtracting the monthly payment capital from the loan amount and incrementing
      * the start date by one month.
      *
-     * @param loanUi The loan UI to add the amortization to.
+     * @param loanDomain The loan to add the payment to.
      */
-    suspend operator fun invoke(loanUi: LoanUi, loanCalculationUi: LoanCalculationUi) {
-        val loan = loanUi.toDomain()
-        val newAmount = loan.currentAmount - loanCalculationUi.monthlyPaymentCapital
-        val newStartDate = loan.currentPaymentDate.plusMonths(1)
+    suspend operator fun invoke(loanDomain: LoanDomain, loanCalculation: LoanCalculation) {
+        val newAmount = loanDomain.currentAmount - loanCalculation.monthlyPaymentCapital
+        val newStartDate = loanDomain.currentPaymentDate.plusMonths(1)
 
         loanRepository.saveLoan(
-            loan.copy(
+            loanDomain.copy(
                 currentAmount = newAmount,
                 currentPaymentDate = newStartDate
             )

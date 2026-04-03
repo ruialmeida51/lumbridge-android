@@ -9,7 +9,7 @@ import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreen
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewState.Loading
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.delegate.EditProfileScreenInputHandler
 import com.eyther.lumbridge.features.profile.editprofile.viewmodel.delegate.IEditProfileScreenInputHandler
-import com.eyther.lumbridge.model.user.UserProfileUi
+import com.eyther.lumbridge.domain.model.user.UserProfileDomain
 import com.eyther.lumbridge.usecase.user.profile.GetUserProfile
 import com.eyther.lumbridge.usecase.user.profile.SaveUserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +33,7 @@ class EditProfileScreenViewModel @Inject constructor(
     override val viewState = MutableStateFlow<EditProfileScreenViewState>(Loading)
     override val viewEffects = MutableSharedFlow<EditProfileScreenViewEffects>()
 
-    private var initialProfile: UserProfileUi? = null
+    private var initialProfile: UserProfileDomain? = null
 
     init {
         observeUserProfile()
@@ -42,7 +42,6 @@ class EditProfileScreenViewModel @Inject constructor(
     private fun observeUserProfile() {
         viewModelScope.launch {
             val userProfile = getUserProfile().also { initialProfile = it }
-
             updateInput {
                 it.copy(
                     name = it.name.copy(text = userProfile?.name),
@@ -79,7 +78,7 @@ class EditProfileScreenViewModel @Inject constructor(
             val input = inputState.value
 
             saveUserProfile(
-                UserProfileUi(
+                UserProfileDomain(
                     name = checkNotNull(input.name.text),
                     email = checkNotNull(input.email.text),
                     locale = input.locale,

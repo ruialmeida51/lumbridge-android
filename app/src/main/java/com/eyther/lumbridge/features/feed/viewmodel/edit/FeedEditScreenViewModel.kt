@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewEffects
 import com.eyther.lumbridge.features.feed.model.edit.FeedEditScreenViewState
+import com.eyther.lumbridge.mapper.feed.toUi
 import com.eyther.lumbridge.model.news.RssFeedUi
 import com.eyther.lumbridge.usecase.news.GetAvailableFeedsFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,7 +44,7 @@ class FeedEditScreenViewModel @Inject constructor(
                         if (feeds.isEmpty()) {
                             FeedEditScreenViewState.NoFeeds
                         } else {
-                            FeedEditScreenViewState.HasFeeds(feeds)
+                            FeedEditScreenViewState.HasFeeds(feeds.toUi())
                         }
                     }
                 }

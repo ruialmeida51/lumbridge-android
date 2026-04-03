@@ -1,8 +1,8 @@
 package com.eyther.lumbridge.usecase.user.financials
 
+import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
 import com.eyther.lumbridge.domain.repository.user.UserRepository
-import com.eyther.lumbridge.mapper.user.toUi
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetUserFinancialsFlow @Inject constructor(
@@ -13,5 +13,5 @@ class GetUserFinancialsFlow @Inject constructor(
      *
      * @return the user financials.
      */
-    operator fun invoke() = userRepository.getUserFinancialsFlow().map { it?.toUi() }
+    operator fun invoke(): Flow<UserFinancialsDomain?> = userRepository.getUserFinancialsFlow()
 }

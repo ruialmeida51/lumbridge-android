@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.reminders.model.overview.RemindersOverviewScreenViewEffects
 import com.eyther.lumbridge.features.tools.reminders.model.overview.RemindersOverviewScreenViewState
+import com.eyther.lumbridge.mapper.reminders.toUi
 import com.eyther.lumbridge.usecase.reminders.DeleteReminderUseCase
 import com.eyther.lumbridge.usecase.reminders.GetRemindersFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,8 +49,16 @@ class RemindersOverviewScreenViewModel @Inject constructor(
                         return@onEach
                     }
 
+                    val remindersUi = reminders
+                        .toUi()
+                        .sortedBy { it.dueDate }
+                        .let { sorted ->
+                            val (noLongerRelevant, relevant) = sorted.partition { it.noLongerRelevant() }
+                            relevant + noLongerRelevant
+                        }
+
                     viewState.update {
-                        RemindersOverviewScreenViewState.Content(reminders)
+                        RemindersOverviewScreenViewState.Content(remindersUi)
                     }
                 }
                 .catch {

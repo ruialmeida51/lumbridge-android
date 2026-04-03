@@ -10,7 +10,8 @@ import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.
 import com.eyther.lumbridge.features.expenses.navigation.ExpensesNavigationItem.Companion.ARG_YEAR
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.ExpensesAddScreenInputHandler
 import com.eyther.lumbridge.features.expenses.viewmodel.add.delegate.IExpensesAddScreenInputHandler
-import com.eyther.lumbridge.model.expenses.ExpenseUi
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.mapper.expenses.toDomain
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
 import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
 import com.eyther.lumbridge.usecase.expenses.SaveExpenseUseCase
@@ -111,9 +112,10 @@ class ExpensesAddScreenViewModel @Inject constructor(
             val inputState = viewState.value.asContent().inputState
 
             saveExpenseUseCase(
-                ExpenseUi(
-                    categoryType = inputState.categoryType,
-                    allocationTypeUi = inputState.allocationTypeUi,
+                ExpenseDomain(
+                    id = -1,
+                    categoryType = inputState.categoryType.toDomain(),
+                    allocation = inputState.allocationTypeUi.toDomain(),
                     expenseAmount = checkNotNull(inputState.amountInput.text?.toFloat()),
                     expenseName = checkNotNull(inputState.nameInput.text),
                     date = checkNotNull(inputState.dateInput.date)

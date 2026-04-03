@@ -1,10 +1,10 @@
 package com.eyther.lumbridge.usecase.expenses
 
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
+import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
 import com.eyther.lumbridge.features.overview.breakdown.model.BalanceSheetNetUi
-import com.eyther.lumbridge.model.expenses.ExpenseUi
-import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import com.eyther.lumbridge.ui.common.model.math.MathOperator
 import com.eyther.lumbridge.usecase.snapshotsalary.GetMostRecentSnapshotSalaryForDateUseCase
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -15,8 +15,8 @@ class GetBalanceSheetUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         currentNetSalary: Float?,
-        snapshotSalaries: List<SnapshotNetSalaryUi>,
-        expenses: List<ExpenseUi>,
+        snapshotSalaries: List<SnapshotNetSalaryDomain>,
+        expenses: List<ExpenseDomain>,
         addFoodCardToNecessitiesAllocation: Boolean
     ) = withContext(schedulers.cpu) {
         return@withContext getBalanceSheetNet(
@@ -29,27 +29,27 @@ class GetBalanceSheetUseCase @Inject constructor(
 
     private fun getBalanceSheetNet(
         currentNetSalary: Float?,
-        snapshotSalaries: List<SnapshotNetSalaryUi>,
-        expenses: List<ExpenseUi>,
+        snapshotSalaries: List<SnapshotNetSalaryDomain>,
+        expenses: List<ExpenseDomain>,
         addFoodCardToNecessitiesAllocation: Boolean
     ): BalanceSheetNetUi? {
         if (expenses.isEmpty() || currentNetSalary == null) return null
 
         val (moneyIn, moneyOut) = expenses
-            .groupBy { it.date.year to it.date.month }
+            .groupBy { it.date.year to it.date.monthValue }
             .map { (yearMonth, expenses) ->
                 val spent = expenses
-                    .filter { it.categoryType.operator == MathOperator.SUBTRACTION }
+                    .filter { it.categoryType !is ExpensesCategoryTypes.Surplus }
                     .sumOf { it.expenseAmount.toDouble() }.toFloat()
 
                 val gained = expenses
-                    .filter { it.categoryType.operator == MathOperator.ADDITION }
+                    .filter { it.categoryType is ExpensesCategoryTypes.Surplus }
                     .sumOf { it.expenseAmount.toDouble() }.toFloat()
 
                 val snapshotSalary = getMostRecentSnapshotSalaryForDateUseCase(
                     snapshotNetSalaries = snapshotSalaries,
                     year = yearMonth.first,
-                    month = yearMonth.second.value
+                    month = yearMonth.second
                 )
 
                 val snapshotNetSalary = snapshotSalary?.netSalary ?: 0f

@@ -3,6 +3,7 @@ package com.eyther.lumbridge.features.overview.financialprofiledetails.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.overview.financialprofiledetails.model.DetailsFinancialProfileScreenViewState
+import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
 import com.eyther.lumbridge.usecase.user.financials.GetUserFinancialsFlow
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefault
@@ -30,15 +31,15 @@ class DetailsFinancialProfileScreenViewModel @Inject constructor(
             val userFinancialsFlow = getUserFinancialsFlow()
 
             userFinancialsFlow
-                .onEach { userFinancialsUi ->
-                    if (userFinancialsUi == null) {
+                .onEach { userFinancialsDomain ->
+                    if (userFinancialsDomain == null) {
                         viewState.update { DetailsFinancialProfileScreenViewState.Empty }
                         return@onEach
                     }
 
                     viewState.update {
                         DetailsFinancialProfileScreenViewState.Content(
-                            salaryDetails = getNetSalaryUseCase(userFinancialsUi),
+                            salaryDetails = getNetSalaryUseCase(userFinancialsDomain).toUi(),
                             locale = getLocaleOrDefault()
                         )
                     }

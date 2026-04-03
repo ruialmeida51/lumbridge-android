@@ -14,6 +14,8 @@ import com.eyther.lumbridge.features.editloan.viewmodel.IEditLoanScreenViewModel
 import com.eyther.lumbridge.features.editloan.viewmodel.delegate.EditLoanScreenInputHandler
 import com.eyther.lumbridge.features.editloan.viewmodel.delegate.IEditLoanScreenInputHandler
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.Loan.Companion.ARG_LOAN_ID
+import com.eyther.lumbridge.mapper.loan.toUi
+import com.eyther.lumbridge.mapper.loan.toDomain
 import com.eyther.lumbridge.model.loan.LoanCategoryUi
 import com.eyther.lumbridge.model.loan.LoanInterestRateUi
 import com.eyther.lumbridge.model.loan.LoanUi
@@ -59,7 +61,8 @@ class EditLoanScreenViewModel @Inject constructor(
 
     private fun fetchLoan() {
         viewModelScope.launch {
-            val (initialLoanUi, _) = getLoanAndCalculationsUseCase(loanId)
+            val (initialLoanDomain, _) = getLoanAndCalculationsUseCase(loanId)
+            val initialLoanUi = initialLoanDomain?.toUi()
             val locale = getLocaleOrDefault()
             cachedLoanUi = initialLoanUi
 
@@ -153,7 +156,7 @@ class EditLoanScreenViewModel @Inject constructor(
                 currentPaymentDate = getCurrentPaymentDate(newStartDate)
             )
 
-            saveLoanUseCase(loanUi)
+            saveLoanUseCase(loanUi.toDomain())
             viewEffects.emit(EditLoanScreenViewEffect.NavigateBack)
         }
     }

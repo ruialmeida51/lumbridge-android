@@ -7,9 +7,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.eyther.lumbridge.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
-import com.eyther.lumbridge.model.loan.LoanCalculationUi
-import com.eyther.lumbridge.model.loan.LoanUi
-import com.eyther.lumbridge.model.recurringpayments.RecurringPaymentUi
+import com.eyther.lumbridge.domain.model.loan.LoanCalculation
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
+import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationSender
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.usecase.loan.TryPayPendingLoanPaymentsUseCase
@@ -50,8 +50,8 @@ class CheckPendingPaymentsWorker @AssistedInject constructor(
     }
 
     private fun notifyUsers(
-        paidRecurringPayments: List<RecurringPaymentUi>,
-        paidLoans: List<Pair<LoanUi, LoanCalculationUi>>,
+        paidRecurringPayments: List<RecurringPaymentDomain>,
+        paidLoans: List<Pair<LoanDomain, LoanCalculation>>,
         currencySymbol: String
     ) {
         if (paidRecurringPayments.isEmpty() && paidLoans.isEmpty()) {

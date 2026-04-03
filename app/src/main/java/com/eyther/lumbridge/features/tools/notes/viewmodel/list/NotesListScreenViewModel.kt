@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.notes.model.list.NotesListScreenViewState
+import com.eyther.lumbridge.mapper.notes.toUi
 import com.eyther.lumbridge.model.notes.NoteUi
 import com.eyther.lumbridge.usecase.notes.DeleteNoteUseCase
 import com.eyther.lumbridge.usecase.notes.GetAllNotesFlowUseCase
@@ -46,7 +47,7 @@ class NotesListScreenViewModel @Inject constructor(
                         }
 
                         NotesListScreenViewState.Content(
-                            notesList = notes
+                            notesList = notes.toUi()
                         )
                     }
                 }

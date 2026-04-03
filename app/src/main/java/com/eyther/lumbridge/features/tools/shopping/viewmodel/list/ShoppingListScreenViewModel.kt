@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.shopping.model.list.ShoppingListScreenViewState
+import com.eyther.lumbridge.mapper.shopping.toUi
 import com.eyther.lumbridge.model.shopping.ShoppingListUi
 import com.eyther.lumbridge.usecase.shopping.DeleteShoppingListUseCase
 import com.eyther.lumbridge.usecase.shopping.GetAllShoppingListFlowUseCase
@@ -47,11 +48,7 @@ class ShoppingListScreenViewModel @Inject constructor(
 
                     viewState.update {
                         ShoppingListScreenViewState.Content(
-                            shoppingLists = shoppingLists.map { list ->
-                                list.copy(
-                                    entries = list.entries
-                                )
-                            }
+                            shoppingLists = shoppingLists.toUi()
                         )
                     }
                 }

@@ -10,8 +10,11 @@ import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScr
 import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScreenViewState
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.edit.delegate.IRemindersEditScreenInputHandler
 import com.eyther.lumbridge.features.tools.reminders.viewmodel.edit.delegate.RemindersEditScreenInputHandler
-import com.eyther.lumbridge.model.reminders.ReminderUi
+import com.eyther.lumbridge.domain.model.reminders.ReminderDomain
+import com.eyther.lumbridge.mapper.reminders.toDomain
+import com.eyther.lumbridge.mapper.reminders.toUi
 import com.eyther.lumbridge.model.time.RemindMeInUi
+import com.eyther.lumbridge.shared.time.model.RemindMeIn
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 import com.eyther.lumbridge.usecase.reminders.GetReminderByIdUseCase
 import com.eyther.lumbridge.usecase.reminders.SaveReminderUseCase
@@ -55,27 +58,29 @@ class RemindersEditScreenViewModel @Inject constructor(
 
     private fun fetchReminder() {
         viewModelScope.launch {
-            val reminderUi = getReminderByIdUseCase(reminderId)
+            val reminderDomain = getReminderByIdUseCase(reminderId)
 
             updateInput { state ->
                 state.copy(
                     name = state.name.copy(
-                        text = reminderUi?.label
+                        text = reminderDomain?.label
                     ),
                     dueDate = state.dueDate.copy(
-                        dateTime = reminderUi?.dueDate
+                        dateTime = reminderDomain?.dueDate
                     ),
                     remindMeInputState = state.remindMeInputState.copy(
-                        remindMeInUi = reminderUi?.remindMeIn ?: RemindMeInUi.defaultFromOrdinal(0)
+                        remindMeInUi = reminderDomain?.remindMeIn?.toUi(
+                            checkNotNull(reminderDomain.dueDate) { "dueDate must be set" }
+                        ) ?: RemindMeInUi.defaultFromOrdinal(0)
                     ),
                     nDaysBeforeInput = state.nDaysBeforeInput.copy(
-                        text = (reminderUi?.remindMeIn as? RemindMeInUi.XDaysBefore)?.days?.toString()
+                        text = (reminderDomain?.remindMeIn as? RemindMeIn.XDaysBefore)?.days?.toString()
                     ),
                     nHoursBeforeInput = state.nHoursBeforeInput.copy(
-                        text = (reminderUi?.remindMeIn as? RemindMeInUi.XHoursBefore)?.hours?.toString()
+                        text = (reminderDomain?.remindMeIn as? RemindMeIn.XHoursBefore)?.hours?.toString()
                     ),
                     nMinutesBeforeInput = state.nMinutesBeforeInput.copy(
-                        text = (reminderUi?.remindMeIn as? RemindMeInUi.XMinutesBefore)?.minutes?.toString()
+                        text = (reminderDomain?.remindMeIn as? RemindMeIn.XMinutesBefore)?.minutes?.toString()
                     )
                 )
             }
@@ -111,29 +116,29 @@ class RemindersEditScreenViewModel @Inject constructor(
         viewModelScope.launch(coroutineExceptionHandler) {
             val inputState = inputState.value
 
-            val reminderUi = ReminderUi(
+            val reminderDomain = ReminderDomain(
                 reminderId = reminderId,
                 label = checkNotNull(inputState.name.text),
                 dueDate = checkNotNull(inputState.dueDate.dateTime),
                 remindMeIn = when (val remindMeInUi = inputState.remindMeInputState.remindMeInUi) {
-                    is RemindMeInUi.XDaysBefore -> RemindMeInUi.XDaysBefore(
+                    is RemindMeInUi.XDaysBefore -> RemindMeIn.XDaysBefore(
                         days = checkNotNull(inputState.nDaysBeforeInput.text?.toIntOrNull())
                     )
 
-                    is RemindMeInUi.XHoursBefore -> RemindMeInUi.XHoursBefore(
+                    is RemindMeInUi.XHoursBefore -> RemindMeIn.XHoursBefore(
                         hours = checkNotNull(inputState.nHoursBeforeInput.text?.toIntOrNull())
                     )
 
-                    is RemindMeInUi.XMinutesBefore -> RemindMeInUi.XMinutesBefore(
+                    is RemindMeInUi.XMinutesBefore -> RemindMeIn.XMinutesBefore(
                         minutes = checkNotNull(inputState.nMinutesBeforeInput.text?.toIntOrNull())
                     )
 
-                    else -> remindMeInUi
+                    else -> remindMeInUi.toDomain()
                 },
                 alreadyNotified = false
             )
 
-            saveReminderUseCase(reminderUi)
+            saveReminderUseCase(reminderDomain)
             viewEffects.emit(RemindersEditScreenViewEffects.CloseScreen)
         }
     }

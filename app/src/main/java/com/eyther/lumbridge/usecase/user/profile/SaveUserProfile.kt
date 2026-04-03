@@ -1,8 +1,7 @@
 package com.eyther.lumbridge.usecase.user.profile
 
+import com.eyther.lumbridge.domain.model.user.UserProfileDomain
 import com.eyther.lumbridge.domain.repository.user.UserRepository
-import com.eyther.lumbridge.mapper.user.toDomain
-import com.eyther.lumbridge.model.user.UserProfileUi
 import javax.inject.Inject
 
 class SaveUserProfile @Inject constructor(private val userRepository: UserRepository) {
@@ -10,9 +9,9 @@ class SaveUserProfile @Inject constructor(private val userRepository: UserReposi
     /**
      * Attempts to save the user profile.
      *
-     * @param userUi the user profile to save.
+     * @param userProfileDomain the user profile to save.
      */
-    suspend operator fun invoke(userUi: UserProfileUi) {
-        return userRepository.saveUserProfile(userUi.toDomain())
+    suspend operator fun invoke(userProfileDomain: UserProfileDomain) {
+        return userRepository.saveUserProfile(userProfileDomain)
     }
 }

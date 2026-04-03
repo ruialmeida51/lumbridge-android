@@ -1,12 +1,16 @@
 package com.eyther.lumbridge.usecase.expenses
 
-import com.eyther.lumbridge.model.expenses.ExpenseUi
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.domain.model.expenses.ExpensesCategoryTypes
+import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocation
+import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocationType
+import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
+import com.eyther.lumbridge.mapper.expenses.toUi
+import com.eyther.lumbridge.mapper.finance.toUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryUi
 import com.eyther.lumbridge.model.expenses.ExpensesDetailedUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthAllocationUi
 import com.eyther.lumbridge.model.expenses.ExpensesMonthUi
-import com.eyther.lumbridge.model.finance.MoneyAllocationTypeUi
-import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.ui.common.model.math.MathOperator
 import com.eyther.lumbridge.usecase.snapshotsalary.GetMostRecentSnapshotSalaryForDateUseCase
@@ -24,8 +28,8 @@ class GroupExpensesUseCase @Inject constructor(
     private val schedulers: Schedulers
 ) {
     suspend operator fun invoke(
-        expenses: List<ExpenseUi>,
-        snapshotNetSalaries: List<SnapshotNetSalaryUi>,
+        expenses: List<ExpenseDomain>,
+        snapshotNetSalaries: List<SnapshotNetSalaryDomain>,
         showAllocationsOnExpenses: Boolean,
         shouldAddFoodCardToNecessitiesAllocation: Boolean
     ): List<ExpensesMonthUi> = expenses.createExpensesPerMonth(
@@ -34,25 +38,25 @@ class GroupExpensesUseCase @Inject constructor(
         snapshotNetSalaries = snapshotNetSalaries
     )
 
-    private suspend fun List<ExpenseUi>.createExpensesPerMonth(
+    private suspend fun List<ExpenseDomain>.createExpensesPerMonth(
         showAllocationsOnExpenses: Boolean,
         shouldAddFoodCardToNecessitiesAllocation: Boolean,
-        snapshotNetSalaries: List<SnapshotNetSalaryUi>
+        snapshotNetSalaries: List<SnapshotNetSalaryDomain>
     ): List<ExpensesMonthUi> {
-        return groupBy { it.date.year to it.date.month }
+        return groupBy { it.date.year to it.date.monthValue }
             .map { (yearMonth, expenses) ->
                 val spent = expenses
-                    .filter { it.categoryType.operator == MathOperator.SUBTRACTION }
+                    .filter { it.categoryType !is ExpensesCategoryTypes.Surplus }
                     .sumOf { it.expenseAmount.toDouble() }.toFloat()
 
                 val gained = expenses
-                    .filter { it.categoryType.operator == MathOperator.ADDITION }
+                    .filter { it.categoryType is ExpensesCategoryTypes.Surplus }
                     .sumOf { it.expenseAmount.toDouble() }.toFloat()
 
                 val snapshotSalary = getMostRecentSnapshotSalaryForDateUseCase(
                     snapshotNetSalaries = snapshotNetSalaries,
                     year = yearMonth.first,
-                    month = yearMonth.second.value
+                    month = yearMonth.second
                 )
 
                 val snapshotNetSalary = snapshotSalary?.netSalary ?: 0f
@@ -61,7 +65,7 @@ class GroupExpensesUseCase @Inject constructor(
                 val expensesByCategory = expenses.toCategoryExpenses()
 
                 ExpensesMonthUi(
-                    month = yearMonth.second,
+                    month = yearMonth.second.let { java.time.Month.of(it) },
                     year = Year.of(yearMonth.first),
                     spent = spent,
                     gained = gained,
@@ -82,31 +86,31 @@ class GroupExpensesUseCase @Inject constructor(
             }
     }
 
-    private fun List<ExpenseUi>.toCategoryExpenses() =
+    private fun List<ExpenseDomain>.toCategoryExpenses() =
         groupBy { it.categoryType }
             .map { (type, expenses) ->
                 val categoryExpenseSpent = expenses.sumOf { it.expenseAmount.toDouble() }.toFloat()
 
                 ExpensesCategoryUi(
-                    categoryType = type,
+                    categoryType = type.toUi(),
                     spent = categoryExpenseSpent,
                     expensesDetailedUi = expenses.toDetailedExpense(),
                 )
             }
             .sortedBy { it.categoryType.orderOfAppearance }
 
-    private fun List<ExpenseUi>.toDetailedExpense() = map {
+    private fun List<ExpenseDomain>.toDetailedExpense() = map {
         ExpensesDetailedUi(
             id = it.id,
             date = it.date,
             expenseAmount = it.expenseAmount,
             expenseName = it.expenseName,
-            allocationTypeUi = it.allocationTypeUi
+            allocationTypeUi = it.allocation.toUi()
         )
     }
 
     private suspend fun getMoneyAllocations(
-        snapshotAllocations: List<MoneyAllocationTypeUi>,
+        snapshotAllocations: List<MoneyAllocation>,
         expensesByCategory: List<ExpensesCategoryUi>,
         foodCardAmount: Float,
         shouldAddFoodCardToNecessitiesAllocation: Boolean
@@ -123,24 +127,25 @@ class GroupExpensesUseCase @Inject constructor(
             .flatMap { it.expensesDetailedUi }
             .groupBy { it.allocationTypeUi }
 
-        snapshotAllocations.forEach { allocationType ->
-            val addFoodCardToNecessities = allocationType.isNecessities() && shouldAddFoodCardToNecessitiesAllocation
+        snapshotAllocations.forEach { allocation ->
+            val allocationTypeUi = allocation.toUi()
+            val addFoodCardToNecessities = allocation.type is MoneyAllocationType.Necessities && shouldAddFoodCardToNecessitiesAllocation
 
             val spentForAllocationType = detailedExpensesByAllocation.entries
-                .find { it.key.ordinal == allocationType.ordinal }
+                .find { it.key.ordinal == allocationTypeUi.ordinal }
                 ?.value
                 ?.sumOf { it.expenseAmount.toInt() } // Convert to int to speed up calculations
                 ?.toFloat()
 
             val gainedForAllocationType = detailedGainByAllocation.entries
-                .find { it.key.ordinal == allocationType.ordinal }
+                .find { it.key.ordinal == allocationTypeUi.ordinal }
                 ?.value
                 ?.sumOf { it.expenseAmount.toInt() } // Convert to int to speed up calculations
                 ?.toFloat()
 
             allocations.add(
                 ExpensesMonthAllocationUi(
-                    type = allocationType,
+                    type = allocationTypeUi,
                     spent = spentForAllocationType ?: 0f,
                     gained = (gainedForAllocationType ?: 0f) + if (addFoodCardToNecessities) foodCardAmount else 0f
                 )

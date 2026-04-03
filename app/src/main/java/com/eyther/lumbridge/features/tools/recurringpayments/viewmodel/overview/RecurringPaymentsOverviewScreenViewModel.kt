@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eyther.lumbridge.features.tools.recurringpayments.model.overview.RecurringPaymentsOverviewScreenViewEffects
 import com.eyther.lumbridge.features.tools.recurringpayments.model.overview.RecurringPaymentsOverviewScreenViewState
+import com.eyther.lumbridge.mapper.recurringpayments.toUi
 import com.eyther.lumbridge.usecase.recurringpayments.DeleteRecurringPaymentUseCase
 import com.eyther.lumbridge.usecase.recurringpayments.GetRecurringPaymentsFlowUseCase
 import com.eyther.lumbridge.usecase.user.profile.GetLocaleOrDefaultStream
@@ -47,14 +48,18 @@ class RecurringPaymentsOverviewScreenViewModel @Inject constructor(
             combine(
                 getRecurringPaymentsFlowUseCase(),
                 getLocaleOrDefaultStream()
-            ) { recurringPaymentsUi, locale ->
-                recurringPaymentsUi to locale
+            ) { recurringPayments, locale ->
+                recurringPayments to locale
             }
-                .onEach { (recurringPaymentsUi, locale) ->
-                    if (recurringPaymentsUi.isEmpty()) {
+                .onEach { (recurringPayments, locale) ->
+                    if (recurringPayments.isEmpty()) {
                         viewState.update { RecurringPaymentsOverviewScreenViewState.Empty }
                         return@onEach
                     }
+
+                    val recurringPaymentsUi = recurringPayments
+                        .toUi()
+                        .sortedBy { it.periodicity }
 
                     viewState.update {
                         RecurringPaymentsOverviewScreenViewState.Content(

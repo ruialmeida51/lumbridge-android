@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.usecase.snapshotsalary
 
-import com.eyther.lumbridge.model.snapshotsalary.SnapshotNetSalaryUi
+import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
 import javax.inject.Inject
 
 /**
@@ -8,10 +8,10 @@ import javax.inject.Inject
  */
 class GetMostRecentSnapshotSalaryForDateUseCase @Inject constructor() {
     operator fun invoke(
-        snapshotNetSalaries: List<SnapshotNetSalaryUi>,
+        snapshotNetSalaries: List<SnapshotNetSalaryDomain>,
         year: Int,
         month: Int
-    ): SnapshotNetSalaryUi? {
+    ): SnapshotNetSalaryDomain? {
         return snapshotNetSalaries
             .filter { it.year < year || (it.year <= year && it.month <= month) }
             .maxWithOrNull(compareBy({ it.year }, { it.month }))
