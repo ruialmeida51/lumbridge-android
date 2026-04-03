@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.extensions.kotlin.forceTwoDecimalsPlaces
 import com.eyther.lumbridge.domain.model.loan.LoanCalculation
 import com.eyther.lumbridge.domain.model.loan.LoanDomain

@@ -9,10 +9,19 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 ## Modules and Their Responsibilities
 
 - **:app**
-  - Android main app code (activities, fragments, screens, ViewModels, UI logic)
-  - Contains only platform/UI code and DI entry point (`@HiltAndroidApp` on `LumbridgeApplication`)
-  - Must not contain business logic, data access, or domain entities
-  - Depends on `:di` (not directly on `:data`)
+  - App entry point only: `LumbridgeApplication` (`@HiltAndroidApp`), `MainActivity`, `AndroidManifest.xml`
+  - Platform code: notification receivers/senders, background workers, locale implementation
+  - App icon/mipmap resources and build configuration (flavours, signing, Firebase distribution)
+  - Must not contain UI feature screens, ViewModels, or UI models
+  - Depends on `:presentation`, `:di`, `:domain`, and `:shared`
+
+- **:presentation**
+  - All UI feature screens and ViewModels
+  - UI models (`model/` package) and domain→UI mappers (`mapper/` package)
+  - Navigation (`ui/navigation/`), Compose theme, and reusable UI composables (`ui/`)
+  - String and drawable resources (except app name/icon)
+  - Platform UI extensions (`extensions/`)
+  - Depends on `:domain` and `:shared`
 
 - **:domain**
   - All business logic (use cases/interactors) — 62 use cases under `domain/usecase/`
@@ -31,8 +40,7 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 - **:di**
   - Dependency Injection modules (Hilt)
   - Wires everything together, binds all interfaces/implementations
-  - The only module aware of both `:domain` and `:data`
-  - Depends on `:app`, `:domain`, `:data`, and `:shared`
+  - Depends on `:domain`, `:data`, `:presentation`, and `:shared`
 
 - **:shared**
   - Pure stateless utility code (coroutine dispatchers, schedulers model, etc.)
@@ -44,13 +52,16 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 ## Dependency Graph
 
 ```
-:app --> :di --> :domain
-              \---> :data
+:app --> :presentation --> :domain
+      \-> :di ----------> :domain
+                    \----> :data
 :domain <--- :data
 :shared (utility, referenced by any, no references to core/domain/data)
 ```
 
-- `:app -> :di -> (:domain, :data)`
+- `:app -> :presentation -> :domain`
+- `:app -> :di -> (:domain, :data, :presentation)`
+- `:app -> :domain` (for platform workers/notifications that inject domain use cases directly)
 - `:data -> :domain`
 - `:shared` is a leaf-only utility module (no dependencies on core, domain, or data)
 
@@ -58,8 +69,10 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 
 ## Allowed Dependencies
 
-- Only `:di` depends on both `:domain` and `:data`
-- `:app` depends on `:di`, cannot know about `:data` directly
+- `:presentation` depends on `:domain` and `:shared` (UI accesses domain through use cases)
+- `:di` depends on `:domain`, `:data`, `:presentation`, and `:shared`
+- `:app` depends on `:presentation`, `:di`, `:domain`, and `:shared`
+- `:app` cannot depend on `:data` directly
 - `:domain` is pure and only knows about itself (& `:shared`)
 - `:data` can depend on `:domain` and `:shared`
 
@@ -73,7 +86,15 @@ This document describes the intended, long-term Clean Architecture for the `lumb
 | Repository Implementations | `:data` |
 | Use Cases | `:domain` (orchestrate business logic only) |
 | Mappers (data <-> domain) | `:data` |
-| ViewModels | `:app` |
+| Mappers (domain <-> UI) | `:presentation` |
+| ViewModels | `:presentation` |
+| UI Feature Screens | `:presentation` |
+| UI Models / DTOs | `:presentation` |
+| Navigation | `:presentation` |
+| Compose Theme | `:presentation` |
+| String/Drawable Resources | `:presentation` |
+| App Entry Point / Manifest | `:app` |
+| Platform Code (workers, notifications) | `:app` |
 | DI Configuration | `:di` |
 | Pure Utils / Schedulers model | `:shared` |
 
@@ -107,7 +128,8 @@ The qualifier annotations used in DI modules are currently co-located with their
 
 ## Models
 
-- UI models/DTOs stay in `:app`
+- UI models/DTOs live in `:presentation` (`model/` package)
+- Domain→UI mappers live in `:presentation` (`mapper/` package)
 - Domain models have no Android/infra/data dependencies; used in business logic layer
 - Data entities are only used in `:data`
 - `Schedulers` data class lives in `shared/di/model/Schedulers.kt` (`:shared`) and is injected into repositories/use cases
@@ -117,25 +139,21 @@ The qualifier annotations used in DI modules are currently co-located with their
 ## Current vs Target State (as of last update)
 
 ### Currently active modules (registered in `settings.gradle.kts`)
-- `:app`, `:data`, `:di`, `:domain`, `:shared` — **`:di` exists as of this update**
+- `:app`, `:data`, `:di`, `:domain`, `:presentation`, `:shared`
 
 ### Current dependency graph (actual)
 ```
-:app --> :di --> :domain, :data, :shared
-:data --> :domain, :shared
-:domain --> :shared
-```
-
-### Target dependency graph
-```
-:app --> :di --> :domain, :data, :shared
+:app --> :presentation --> :domain, :shared
+:app --> :di -----------> :domain, :data, :presentation, :shared
+:app --> :domain, :shared (for platform workers/notifications)
 :data --> :domain, :shared
 :domain --> :shared
 ```
 
 ### Open gap
-- None — `:di` module has been created and all DI modules have been moved into it
+- None — `:presentation` module has been created and all UI code has been moved into it
 - `LocaleModule` remains in `:app` intentionally: its sole binding (`LocaleRepositoryImpl`) uses `AppCompatDelegate` (an AppCompat/UI-layer dependency) which cannot live in `:data` or `:di` without introducing an inappropriate platform coupling
+- `IntentExt.kt` remains in `:app/extensions/platform/` intentionally: it references `MainActivity` and is only used by `:app` notification receivers
 
 ---
 

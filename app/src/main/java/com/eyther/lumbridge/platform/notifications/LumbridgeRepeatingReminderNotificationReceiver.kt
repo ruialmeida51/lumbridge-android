@@ -5,7 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.extensions.platform.getLaunchMainActivityIntent
 import com.eyther.lumbridge.extensions.platform.getNotificationManager
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationChannelBuilder.Companion.NOTIFICATION_ARG_MESSAGE

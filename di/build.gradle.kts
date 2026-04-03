@@ -67,6 +67,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":shared"))
+    implementation(project(":presentation"))
 
     DiDependencies.getImplementation().map { implementation(it) }
     DiDependencies.getKapt().map { kapt(it) }

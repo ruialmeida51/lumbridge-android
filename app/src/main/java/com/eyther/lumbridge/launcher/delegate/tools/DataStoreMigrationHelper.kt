@@ -2,7 +2,7 @@ package com.eyther.lumbridge.launcher.delegate.tools
 
 import android.content.Context
 import android.util.Log
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.domain.model.loan.LoanCategory
 import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
@@ -15,6 +15,7 @@ import com.eyther.lumbridge.domain.usecase.snapshotsalary.SaveSnapshotNetSalaryU
 import com.eyther.lumbridge.domain.usecase.snapshotsalary.UpdateSnapshotSalaryWithAllocation
 import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancials
 import com.eyther.lumbridge.domain.usecase.user.financials.SaveUserFinancials
+import com.eyther.lumbridge.presentation.R.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -67,7 +68,7 @@ class DataStoreMigrationHelper @Inject constructor(
         }
 
         val loanDomain = LoanDomain(
-            name = context.getString(R.string.mortgage),
+            name = context.getString(string.mortgage),
             startDate = currentMortgage.startDate,
             currentPaymentDate = currentMortgage.startDate,
             endDate = currentMortgage.endDate,
