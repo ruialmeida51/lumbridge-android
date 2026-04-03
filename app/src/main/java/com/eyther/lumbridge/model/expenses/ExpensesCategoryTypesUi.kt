@@ -6,8 +6,8 @@ import com.eyther.lumbridge.R
 import com.eyther.lumbridge.ui.common.model.math.MathOperator
 
 sealed class ExpensesCategoryTypesUi(
-    @StringRes val categoryRes: Int,
-    @DrawableRes val iconRes: Int,
+    @param:StringRes val categoryRes: Int,
+    @param:DrawableRes val iconRes: Int,
     val operator: MathOperator = MathOperator.SUBTRACTION,
     val ordinal: Int,
     val orderOfAppearance: Int

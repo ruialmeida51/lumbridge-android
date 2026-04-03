@@ -44,6 +44,7 @@ class TryPayPendingRecurringPaymentsUseCase @Inject constructor(
      */
     private suspend fun payRecurringPayment(paymentDomain: RecurringPaymentDomain) {
         val expense = ExpenseDomain(
+            id = -1L,
             categoryType = paymentDomain.categoryTypes,
             expenseName = paymentDomain.label,
             expenseAmount = paymentDomain.amountToPay,

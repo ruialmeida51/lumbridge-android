@@ -11,6 +11,7 @@ import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecu
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.EditRecurringPaymentInputHandler
 import com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate.IEditRecurringPaymentInputHandler
 import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
+import com.eyther.lumbridge.mapper.expenses.toDomain
 import com.eyther.lumbridge.mapper.recurringpayments.toDomain
 import com.eyther.lumbridge.mapper.recurringpayments.toUi
 import com.eyther.lumbridge.model.expenses.ExpensesCategoryTypesUi
