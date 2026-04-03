@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.features.tools.navigation.ToolsNavigationItem.Reminders.Companion.ARG_REMINDER_ID
 import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScreenViewEffects
 import com.eyther.lumbridge.features.tools.reminders.model.edit.RemindersEditScreenViewState

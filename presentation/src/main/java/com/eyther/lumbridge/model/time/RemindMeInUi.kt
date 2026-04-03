@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.model.time
 
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.ui.common.model.text.TextResource
 import java.time.LocalDateTime
 

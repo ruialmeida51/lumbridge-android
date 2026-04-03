@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.model.finance
 
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 
 sealed class SalaryInputTypeUi(@StringRes val label: Int, val ordinal: Int) {
     companion object {

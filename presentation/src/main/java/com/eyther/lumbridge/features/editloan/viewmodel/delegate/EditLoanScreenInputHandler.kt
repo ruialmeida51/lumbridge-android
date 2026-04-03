@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.editloan.viewmodel.delegate
 
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.editfinancialprofile.model.EditFinancialProfileScreenViewState.Content
 import com.eyther.lumbridge.features.editloan.model.EditLoanFixedTypeChoice

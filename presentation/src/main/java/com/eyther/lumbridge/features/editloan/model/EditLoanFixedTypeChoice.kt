@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.editloan.model
 
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 
 sealed class EditLoanFixedTypeChoice(
     @StringRes val label: Int,

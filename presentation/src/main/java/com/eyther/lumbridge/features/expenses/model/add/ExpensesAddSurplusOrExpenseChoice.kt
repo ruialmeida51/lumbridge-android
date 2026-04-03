@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.expenses.model.add
 
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 
 sealed class ExpensesAddSurplusOrExpenseChoice(
     @StringRes val label: Int,

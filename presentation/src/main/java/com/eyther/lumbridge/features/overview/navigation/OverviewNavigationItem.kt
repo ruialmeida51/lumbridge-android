@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.overview.navigation
 
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import kotlinx.serialization.Serializable
 

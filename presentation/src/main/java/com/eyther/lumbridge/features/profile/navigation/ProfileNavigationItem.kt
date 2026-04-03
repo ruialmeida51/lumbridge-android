@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.profile.navigation
 
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.features.overview.navigation.OverviewNavigationItem.Loan.Companion.ARG_LOAN_ID
 import com.eyther.lumbridge.ui.navigation.NavigationItem
 import kotlinx.serialization.Serializable

@@ -35,7 +35,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreenViewEffect
 import com.eyther.lumbridge.features.tools.notes.model.details.NoteDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.notes.viewmodel.details.INoteDetailsScreenViewModel

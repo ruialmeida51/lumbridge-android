@@ -2,7 +2,7 @@ package com.eyther.lumbridge.model.expenses
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.ui.common.model.math.MathOperator
 
 sealed class ExpensesCategoryTypesUi(

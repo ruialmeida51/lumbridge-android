@@ -58,7 +58,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.features.tools.shopping.model.details.ShoppingListDetailsScreenViewEffect
 import com.eyther.lumbridge.features.tools.shopping.model.details.ShoppingListDetailsScreenViewState
 import com.eyther.lumbridge.features.tools.shopping.viewmodel.details.IShoppingListDetailsScreenViewModel

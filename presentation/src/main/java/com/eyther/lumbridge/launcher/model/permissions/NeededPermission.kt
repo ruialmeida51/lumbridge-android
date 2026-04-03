@@ -3,7 +3,7 @@ package com.eyther.lumbridge.launcher.model.permissions
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 sealed class NeededPermission(

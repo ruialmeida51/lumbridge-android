@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.features.expenses.model.overview
 
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import java.time.Month
 import java.time.Year
 

@@ -2,7 +2,7 @@ package com.eyther.lumbridge.model.loan
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 
 sealed class LoanCategoryUi(
     @StringRes val label: Int,

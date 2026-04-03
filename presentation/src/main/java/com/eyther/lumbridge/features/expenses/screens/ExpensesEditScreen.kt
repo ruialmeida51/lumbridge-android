@@ -41,7 +41,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewEffect
 import com.eyther.lumbridge.features.expenses.model.edit.ExpensesEditScreenViewState
 import com.eyther.lumbridge.features.expenses.viewmodel.edit.ExpensesEditScreenViewModel

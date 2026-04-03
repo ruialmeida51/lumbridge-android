@@ -31,7 +31,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.extensions.kotlin.capitalise
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewEffects
 import com.eyther.lumbridge.features.profile.editprofile.model.EditProfileScreenViewState

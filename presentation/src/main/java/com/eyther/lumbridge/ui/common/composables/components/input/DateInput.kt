@@ -17,7 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearDateString
 import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearHourMinuteString
 import com.eyther.lumbridge.ui.common.composables.model.input.DateInputState

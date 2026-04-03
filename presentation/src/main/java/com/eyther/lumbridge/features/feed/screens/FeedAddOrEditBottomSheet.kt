@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.features.feed.viewmodel.bottomsheet.FeedAddOrEditBottomSheetViewModel
 import com.eyther.lumbridge.features.feed.viewmodel.bottomsheet.IFeedAddOrEditBottomSheetViewModel
 import com.eyther.lumbridge.model.news.RssFeedUi

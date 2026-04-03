@@ -24,7 +24,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.features.editfinancialprofile.components.DemographicInformationInput
 import com.eyther.lumbridge.features.editfinancialprofile.components.SalaryBreakdownInput
 import com.eyther.lumbridge.features.editfinancialprofile.components.SavingsBreakdownInput

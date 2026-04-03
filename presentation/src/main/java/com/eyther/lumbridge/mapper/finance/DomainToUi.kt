@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.mapper.finance
 
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.domain.model.finance.BalanceSheetDomain
 import com.eyther.lumbridge.domain.model.netsalary.NetSalary
 import com.eyther.lumbridge.domain.model.netsalary.allocation.MoneyAllocation

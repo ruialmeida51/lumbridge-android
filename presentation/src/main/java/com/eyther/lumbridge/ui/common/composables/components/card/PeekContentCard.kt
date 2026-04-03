@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.ui.common.composables.components.text.TabbedTextAndIcon
 import com.eyther.lumbridge.ui.common.composables.model.card.PeekContentCardType
 import com.eyther.lumbridge.ui.theme.DefaultPadding

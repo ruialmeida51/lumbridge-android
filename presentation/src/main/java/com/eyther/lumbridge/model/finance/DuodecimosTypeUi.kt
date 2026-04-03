@@ -2,7 +2,7 @@ package com.eyther.lumbridge.model.finance
 
 import android.os.Parcelable
 import androidx.annotation.StringRes
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

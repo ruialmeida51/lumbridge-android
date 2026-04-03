@@ -1,6 +1,6 @@
 package com.eyther.lumbridge.features.tools.recurringpayments.viewmodel.edit.delegate
 
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.extensions.kotlin.getErrorOrNull
 import com.eyther.lumbridge.features.expenses.model.add.ExpensesAddSurplusOrExpenseChoice.Surplus
 import com.eyther.lumbridge.features.tools.recurringpayments.model.edit.EditRecurringPaymentScreenInputState
