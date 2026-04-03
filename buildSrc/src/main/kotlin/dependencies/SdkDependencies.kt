@@ -5,6 +5,7 @@ import versions.SdkVersions.RETROFIT_VERSION
 import versions.SdkVersions.ROOM_VERSION
 import versions.SdkVersions.GSON_VERSION
 import versions.SharedVersions.HILT_VERSION
+import versions.DomainVersions.RSS_PARSER_VERSION
 
 object SdkDependencies {
     fun getImplementation() = listOf(
@@ -24,7 +25,10 @@ object SdkDependencies {
         "com.google.dagger:hilt-android:$HILT_VERSION",
 
         // Gson
-        "com.google.code.gson:gson:$GSON_VERSION"
+        "com.google.code.gson:gson:$GSON_VERSION",
+
+        // RSS Parser
+        "com.prof18.rssparser:rssparser:$RSS_PARSER_VERSION"
     )
 
     fun getKapt() = listOf(

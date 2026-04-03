@@ -70,6 +70,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":shared"))
 
     SdkDependencies.getImplementation().map { implementation(it) }
