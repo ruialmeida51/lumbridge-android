@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - 'master' # includes master
-workflow_dispatch: # This enables the manual trigger
-  inputs:
+  workflow_dispatch:
 
 jobs:
   build:
