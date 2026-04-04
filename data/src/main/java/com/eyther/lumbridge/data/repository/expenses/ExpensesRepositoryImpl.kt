@@ -6,7 +6,7 @@ import com.eyther.lumbridge.data.mapper.expenses.toDomain
 import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
 import com.eyther.lumbridge.domain.repository.expenses.ExpensesRepository
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,11 +17,11 @@ class ExpensesRepositoryImpl @Inject constructor(
 
     override val expensesFlow = expensesLocalDataSource
         .expensesFlow
-        .mapNotNull { it.toDomain() }
+        .map { it.toDomain() }
 
     override fun getExpensesByDate(year: Int, month: Int) = expensesLocalDataSource
         .getExpensesByDate(year, month)
-        .mapNotNull { it.toDomain() }
+        .map { it.toDomain() }
 
     override suspend fun saveExpense(expense: ExpenseDomain) = withContext(schedulers.io) {
         expensesLocalDataSource.saveExpense(expense.toCached())

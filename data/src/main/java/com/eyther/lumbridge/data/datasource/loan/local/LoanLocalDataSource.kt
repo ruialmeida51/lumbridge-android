@@ -17,16 +17,16 @@ class LoanLocalDataSource @Inject constructor(
     val loansFlow = loanDao
         .getAllLoansFlow()
         .map { flowItem ->
-            flowItem?.map { loanEntity -> loanEntity.toCached() }
+            flowItem.map { loanEntity -> loanEntity.toCached() }
         }
 
     fun getLoanByIdStream(loanId: Long) = loanDao
         .getLoanByIdStream(loanId)
         .map { loanEntity -> loanEntity?.toCached() }
 
-    suspend fun getLoans(): List<LoanCached>? {
+    suspend fun getLoans(): List<LoanCached> {
         return loanDao.getAllLoans()
-            ?.map { it.toCached() }
+            .map { it.toCached() }
     }
 
     suspend fun saveLoan(loan: LoanCached) {

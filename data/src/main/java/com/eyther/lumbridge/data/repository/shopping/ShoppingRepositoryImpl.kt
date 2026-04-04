@@ -6,7 +6,7 @@ import com.eyther.lumbridge.data.mapper.shopping.toDomain
 import com.eyther.lumbridge.domain.model.shopping.ShoppingList
 import com.eyther.lumbridge.domain.repository.shopping.ShoppingRepository
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class ShoppingRepositoryImpl @Inject constructor(
 
     override val shoppingListFlow = shoppingLocalDataSource
         .shoppingListFlow
-        .mapNotNull { it.toDomain() }
+        .map { it.toDomain() }
 
     override suspend fun saveShoppingList(shoppingList: ShoppingList): Long = withContext(schedulers.io) {
         shoppingLocalDataSource.saveShoppingList(shoppingList.toCached())

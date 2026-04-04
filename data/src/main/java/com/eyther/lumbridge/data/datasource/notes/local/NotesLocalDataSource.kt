@@ -5,15 +5,15 @@ import com.eyther.lumbridge.data.mappers.notes.toCached
 import com.eyther.lumbridge.data.mappers.notes.toEntity
 import com.eyther.lumbridge.data.model.notes.local.NoteCached
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NotesLocalDataSource @Inject constructor(
     private val notesDao: NotesDao
 ) {
     val notesFlow: Flow<List<NoteCached>> = notesDao.getAllNotes()
-        .mapNotNull { flowItem ->
-            flowItem?.map { noteEntity -> noteEntity.toCached() }
+        .map { flowItem ->
+            flowItem.map { noteEntity -> noteEntity.toCached() }
         }
 
     suspend fun saveNote(note: NoteCached): Long {

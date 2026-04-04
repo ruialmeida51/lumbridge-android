@@ -14,12 +14,12 @@ class RecurringPaymentsLocalDataSource @Inject constructor(
     val recurringPaymentsFlow = recurringPaymentsDao
         .getRecurringPaymentsFlow()
         .map { flowItem ->
-            flowItem?.map { recurringPaymentEntity -> recurringPaymentEntity.toCached() }
+            flowItem.map { recurringPaymentEntity -> recurringPaymentEntity.toCached() }
         }
 
-    suspend fun getAllRecurringPayments(): List<RecurringPaymentCached>? {
+    suspend fun getAllRecurringPayments(): List<RecurringPaymentCached> {
         return recurringPaymentsDao.getAllRecurringPayments()
-            ?.map { recurringPaymentEntity -> recurringPaymentEntity.toCached() }
+            .map { recurringPaymentEntity -> recurringPaymentEntity.toCached() }
     }
 
     suspend fun saveRecurringPayment(recurringPaymentCached: RecurringPaymentCached) {

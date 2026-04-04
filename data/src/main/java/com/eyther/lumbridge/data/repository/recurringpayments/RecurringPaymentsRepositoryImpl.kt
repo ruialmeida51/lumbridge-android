@@ -6,7 +6,7 @@ import com.eyther.lumbridge.data.mapper.recurringpayments.toDomain
 import com.eyther.lumbridge.domain.model.recurringpayments.RecurringPaymentDomain
 import com.eyther.lumbridge.domain.repository.recurringpayments.RecurringPaymentsRepository
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,13 +17,12 @@ class RecurringPaymentsRepositoryImpl @Inject constructor(
 
     override val recurringPaymentsFlow = recurringPaymentsLocalDataSource
         .recurringPaymentsFlow
-        .mapNotNull { recurringPayment ->
-            recurringPayment?.toDomain()
+        .map { recurringPayment ->
+            recurringPayment.toDomain()
         }
 
     override suspend fun getAllRecurringPayments(): List<RecurringPaymentDomain> = withContext(schedulers.io) {
         recurringPaymentsLocalDataSource.getAllRecurringPayments()
-            .orEmpty()
             .map { it.toDomain() }
     }
 
