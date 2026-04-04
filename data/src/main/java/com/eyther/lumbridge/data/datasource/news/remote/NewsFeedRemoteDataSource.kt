@@ -33,7 +33,7 @@ class NewsFeedRemoteDataSource @Inject constructor() {
         val response = okHttpClient.newCall(request).await()
 
         return if (response.isSuccessful) {
-            response.body()?.string()
+            response.body?.string()
         } else {
             null
         }

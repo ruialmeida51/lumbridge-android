@@ -1,120 +1,121 @@
 {
   "taxPercentage": [
     {
-      "range": [0, 904.00],
+      "range": [0, 991.00],
       "value": 0.0
     },
     {
-      "range": [904.01, 935.00],
-      "value": 0.13
+      "range": [991.01, 1042.00],
+      "value": 0.1250
     },
     {
-      "range": [935.01, 989.00],
-      "value": 0.13
+      "range": [1042.01, 1108.00],
+      "value": 0.1250
     },
     {
-      "range": [989.01, 1070.00],
-      "value": 0.13
+      "range": [1108.01, 1119.00],
+      "value": 0.1250
     },
     {
-      "range": [1070.01, 1394.00],
-      "value": 0.1320
+      "range": [1119.01, 1432.00],
+      "value": 0.1272
     },
     {
-      "range": [1394.01, 1912.00],
-      "value": 0.1650
+      "range": [1432.01, 1962.00],
+      "value": 0.1570
     },
     {
-      "range": [1912.01, 2178.00],
-      "value": 0.2018
+      "range": [1962.01, 2240.00],
+      "value": 0.1938
     },
     {
-      "range": [2178.01, 2671.00],
-      "value": 0.2362
+      "range": [2240.01, 2773.00],
+      "value": 0.2277
     },
     {
-      "range": [2671.01, 3284.00],
-      "value": 0.2594
+      "range": [2773.01, 3389.00],
+      "value": 0.2570
     },
     {
-      "range": [3284.01, 5906.00],
-      "value": 0.3072
+      "range": [3389.01, 5965.00],
+      "value": 0.2881
     },
     {
-      "range": [5906.01, 20064.00],
-      "value": 0.3872
+      "range": [5965.01, 20265.00],
+      "value": 0.3843
     },
     {
-      "range": [20064.01, 4294967295],
+      "range": [20265.01, 4294967295],
       "value": 0.4717
     }
   ],
   "flatRate": [
     {
-      "range": [0, 904.00],
+      "range": [0, 991.00],
       "value": 0.0,
       "perDependentAmount": 0
     },
     {
-      "range": [904.01, 935.00],
+      "range": [991.01, 1042.00],
       "formula": {
-        "taxPercentage": 0.13,
-        "multiplier": 1.35,
-        "rate": 1251.62
+        "taxPercentage": 0.1250,
+        "multiplier": 2.60,
+        "rate": 1372.15
       },
       "perDependentAmount": 42.86
     },
     {
-      "range": [935.01, 989.00],
+      "range": [1042.01, 1108.00],
       "formula": {
-        "taxPercentage": 0.1650,
+        "taxPercentage": 0.1250,
         "multiplier": 1.35,
-        "rate": 1545.09
+        "rate": 1677.85
       },
       "perDependentAmount": 42.86
     },
     {
-      "range": [989.01, 1070.00],
-      "value": 97.45,
+      "range": [1108.01, 1119.00],
+      "value": 96.17,
       "perDependentAmount": 42.86
     },
     {
-      "range": [1070.01, 1394.00],
-      "value": 99.68,
+      "range": [1119.01, 1432.00],
+      "value": 98.64,
       "perDependentAmount": 42.86
     },
     {
-      "range": [1394.01, 1912.00],
-      "value": 145.69,
+      "range": [1432.01, 1962.00],
+      "value": 141.32,
       "perDependentAmount": 42.86
     },
     {
-      "range": [1912.01, 2178.00],
-      "value": 216.11
-    },
-    {
-      "range": [2178.01, 2671.00],
-      "value": 291.09,
+      "range": [1962.01, 2240.00],
+      "value": 213.53,
       "perDependentAmount": 42.86
     },
     {
-      "range": [2671.01, 3284.00],
-      "value": 352.90,
+      "range": [2240.01, 2773.00],
+      "value": 289.47,
       "perDependentAmount": 42.86
     },
     {
-      "range": [3284.01, 5906.00],
-      "value": 510.04,
+      "range": [2773.01, 3389.00],
+      "value": 370.72,
       "perDependentAmount": 42.86
     },
     {
-      "range": [5906.01, 20064.00],
-      "value": 981.97,
+      "range": [3389.01, 5965.00],
+      "value": 476.12,
       "perDependentAmount": 42.86
     },
     {
-      "range": [20064.01, 4294967295],
-      "value": 2678.40,
+      "range": [5965.01, 20265.00],
+      "value": 1049.96,
+      "perDependentAmount": 42.86
+    },
+    {
+      "range": [20265.01, 4294967295],
+      "value": 2821.13,
       "perDependentAmount": 42.86
     }
   ]

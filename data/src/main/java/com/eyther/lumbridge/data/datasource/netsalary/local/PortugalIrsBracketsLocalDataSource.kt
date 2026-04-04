@@ -1,7 +1,7 @@
 package com.eyther.lumbridge.data.datasource.netsalary.local
 
-import com.eyther.lumbridge.data.di.UtilModule.AndroidFileReader
-import com.eyther.lumbridge.data.di.UtilModule.DefaultGson
+import com.eyther.lumbridge.data.di.AndroidFileReader
+import com.eyther.lumbridge.data.di.DefaultGson
 import com.eyther.lumbridge.data.input.IFileReader
 import com.eyther.lumbridge.data.mappers.netsalary.toCached
 import com.eyther.lumbridge.data.model.netsalary.files.portugal.PortugalIrsTableFromFile

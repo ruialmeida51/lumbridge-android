@@ -1,10 +1,8 @@
-import dependencies.DomainDependencies
-
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
-    kotlin("kapt")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -65,10 +63,9 @@ android {
 }
 
 dependencies {
-    implementation(kotlin("reflect"))
-    implementation(project(":data"))
     implementation(project(":shared"))
 
-    DomainDependencies.getImplementation().map { implementation(it) }
-    DomainDependencies.getKapt().map { kapt(it) }
+    implementation(libs.hilt.android)
+
+    ksp(libs.hilt.compiler)
 }

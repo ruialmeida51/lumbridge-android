@@ -2,7 +2,7 @@ package com.eyther.lumbridge.launcher.delegate.tools
 
 import android.content.Context
 import android.util.Log
-import com.eyther.lumbridge.R
+import com.eyther.lumbridge.presentation.R
 import com.eyther.lumbridge.domain.model.loan.LoanCategory
 import com.eyther.lumbridge.domain.model.loan.LoanDomain
 import com.eyther.lumbridge.domain.model.loan.LoanInterestRate
@@ -10,11 +10,12 @@ import com.eyther.lumbridge.domain.model.loan.LoanType
 import com.eyther.lumbridge.domain.repository.loan.LoanRepository
 import com.eyther.lumbridge.domain.repository.preferences.PreferencesRepository
 import com.eyther.lumbridge.domain.repository.snapshotsalary.SnapshotSalaryRepository
-import com.eyther.lumbridge.usecase.finance.GetNetSalaryUseCase
-import com.eyther.lumbridge.usecase.snapshotsalary.SaveSnapshotNetSalaryUseCase
-import com.eyther.lumbridge.usecase.snapshotsalary.UpdateSnapshotSalaryWithAllocation
-import com.eyther.lumbridge.usecase.user.financials.GetUserFinancials
-import com.eyther.lumbridge.usecase.user.financials.SaveUserFinancials
+import com.eyther.lumbridge.domain.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.SaveSnapshotNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.UpdateSnapshotSalaryWithAllocation
+import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancials
+import com.eyther.lumbridge.domain.usecase.user.financials.SaveUserFinancials
+import com.eyther.lumbridge.presentation.R.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -67,7 +68,7 @@ class DataStoreMigrationHelper @Inject constructor(
         }
 
         val loanDomain = LoanDomain(
-            name = context.getString(R.string.mortgage),
+            name = context.getString(string.mortgage),
             startDate = currentMortgage.startDate,
             currentPaymentDate = currentMortgage.startDate,
             endDate = currentMortgage.endDate,
@@ -162,7 +163,7 @@ class DataStoreMigrationHelper @Inject constructor(
                     .filter { it.moneyAllocations.isEmpty() }
                     .forEach { snapshot ->
                         updateSnapshotSalaryWithAllocation(
-                            userFinancialsUi = userFinancials,
+                            userFinancialsDomain = userFinancials,
                             monthlyNetSalary = snapshot.netSalary,
                             foodCardAmount = snapshot.foodCardAmount ?: 0f,
                             snapshotYear = snapshot.year,
@@ -187,7 +188,7 @@ class DataStoreMigrationHelper @Inject constructor(
                     .forEach { snapshot ->
                         Log.d(TAG, "⏩ Updating snapshot salary with food card amount for ${snapshot.year}/${snapshot.month} - $snapshot")
                         updateSnapshotSalaryWithAllocation(
-                            userFinancialsUi = userFinancials,
+                            userFinancialsDomain = userFinancials,
                             monthlyNetSalary = snapshot.netSalary,
                             foodCardAmount = netSalary.monthlyFoodCard,
                             snapshotYear = snapshot.year,

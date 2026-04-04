@@ -15,4 +15,7 @@ data class UserFinancialsDomain(
     val singleIncome: Boolean,
     val married: Boolean,
     val handicapped: Boolean
-)
+) {
+    fun hasAllocations(): Boolean =
+        savingsPercentage != null || necessitiesPercentage != null || luxuriesPercentage != null
+}

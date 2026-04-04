@@ -2,7 +2,7 @@ package com.eyther.lumbridge.data.datasource.news.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy.Companion.REPLACE
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
@@ -25,7 +25,7 @@ interface RssFeedDao {
     suspend fun insertRssFeed(rssFeedEntity: RssFeedEntity)
 
     @Transaction
-    @Update(onConflict = REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateRssFeed(rssFeedEntity: RssFeedEntity)
 
     @Transaction

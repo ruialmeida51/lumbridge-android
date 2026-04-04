@@ -19,7 +19,7 @@ import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSo
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.SALARY_INPUT_TYPE
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.SAVINGS_PERCENTAGE
 import com.eyther.lumbridge.data.datasource.user.local.UserFinancialsLocalDataSource.PreferencesKeys.SINGLE_INCOME
-import com.eyther.lumbridge.data.di.LocalDataModule.UserFinancialsDataStore
+import com.eyther.lumbridge.data.di.UserFinancialsDataStore
 import com.eyther.lumbridge.data.model.user.local.UserFinancialsCached
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

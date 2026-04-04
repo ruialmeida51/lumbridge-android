@@ -1,3 +1,9 @@
+# Kotlin Multiplatform
+
+There's an ongoing effort to translate the app into Kotlin Multiplatform, giving access to a wider audience. The idea is to create Desktop, Web, Android & iOS apps from this. More information will be posted here: https://github.com/ruialmeida51/lumbridge-kmp
+
+This one will keep being maintainted with the IRS Tables, but probably no new features will be added for the time being.
+
 # Loom (Previously Lumbridge) - Android Day-to-Day App
 
 Loom is a simple financial app built for Android using and learning Jetpack Compose. It was created as a passion project to help manage day-to-day tasks and is open-source just for the love of the game, but eventually grew to a more solid piece. If you're interested, feel free to use it, improve it, or fork it!
@@ -17,8 +23,6 @@ As stated before, it started a playground for me to learn and experiment with **
 ---
 
 ## 💡 Some notable features
-
----
 
 ### Feed
 * 🗞️ Dynamic RSS Feed, customizable with your links

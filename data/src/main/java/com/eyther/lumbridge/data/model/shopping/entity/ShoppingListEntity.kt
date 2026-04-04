@@ -20,5 +20,5 @@ data class ShoppingListEntity(
     @PrimaryKey(autoGenerate = true) val shoppingListId: Long = 0,
     val showTickedItems: Boolean,
     val title: String,
-    val shoppingListItems: ArrayList<ShoppingListEntryEntity>
+    val shoppingListItems: List<ShoppingListEntryEntity>
 )

@@ -5,13 +5,13 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.eyther.lumbridge.model.reminders.ReminderUi
+import com.eyther.lumbridge.domain.model.reminders.ReminderDomain
 import com.eyther.lumbridge.platform.notifications.LumbridgeNotificationSender
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.eyther.lumbridge.shared.time.extensions.isBeforeOrEqual
 import com.eyther.lumbridge.shared.time.extensions.toDayMonthYearHourMinuteString
-import com.eyther.lumbridge.usecase.reminders.GetRemindersUseCase
-import com.eyther.lumbridge.usecase.reminders.SetReminderAsNotifiedUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.GetRemindersUseCase
+import com.eyther.lumbridge.domain.usecase.reminders.SetReminderAsNotifiedUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.LocalDateTime
@@ -38,7 +38,7 @@ class CheckPendingRemindersWorker @AssistedInject constructor(
             val now = LocalDateTime.now()
 
             val remindersToNotify = reminders
-                .filter { it.remindMeIn.reminderTime?.isBeforeOrEqual(now) == true && !it.alreadyNotified }
+                .filter { it.remindMeIn.getReminderTime(it.dueDate).isBeforeOrEqual(now) && !it.alreadyNotified }
 
             notifyUsers(remindersToNotify)
 
@@ -49,7 +49,7 @@ class CheckPendingRemindersWorker @AssistedInject constructor(
         }
     }
 
-    private suspend fun notifyUsers(reminders: List<ReminderUi>) {
+    private suspend fun notifyUsers(reminders: List<ReminderDomain>) {
         if (reminders.isEmpty()) {
             return
         }

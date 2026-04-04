@@ -23,5 +23,7 @@ dependencyResolutionManagement {
 rootProject.name = "lumbridge"
 include(":app")
 include(":data")
+include(":di")
 include(":domain")
+include(":presentation")
 include(":shared")

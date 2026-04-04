@@ -1,0 +1,122 @@
+package com.eyther.lumbridge.features.overview.breakdown.viewmodel
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.eyther.lumbridge.domain.model.expenses.ExpenseDomain
+import com.eyther.lumbridge.domain.model.loan.LoanCalculation
+import com.eyther.lumbridge.domain.model.loan.LoanDomain
+import com.eyther.lumbridge.domain.model.preferences.Preferences
+import com.eyther.lumbridge.domain.model.snapshotsalary.SnapshotNetSalaryDomain
+import com.eyther.lumbridge.domain.model.user.UserFinancialsDomain
+import com.eyther.lumbridge.features.overview.breakdown.model.BreakdownScreenViewState
+import com.eyther.lumbridge.mapper.finance.toUi
+import com.eyther.lumbridge.mapper.loan.toUi
+import com.eyther.lumbridge.model.loan.LoanUi
+import com.eyther.lumbridge.domain.usecase.expenses.GetBalanceSheetUseCase
+import com.eyther.lumbridge.domain.usecase.expenses.GetExpensesStreamUseCase
+import com.eyther.lumbridge.domain.usecase.finance.GetNetSalaryUseCase
+import com.eyther.lumbridge.domain.usecase.loan.DeleteLoanUseCase
+import com.eyther.lumbridge.domain.usecase.loan.GetLoansFlowUseCase
+import com.eyther.lumbridge.domain.usecase.preferences.GetPreferencesStream
+import com.eyther.lumbridge.domain.usecase.snapshotsalary.GetSnapshotNetSalariesFlowUseCase
+import com.eyther.lumbridge.domain.usecase.user.financials.GetUserFinancialsFlow
+import com.eyther.lumbridge.domain.usecase.user.profile.GetLocaleOrDefault
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class BreakdownScreenViewModel @Inject constructor(
+    private val getLocaleOrDefault: GetLocaleOrDefault,
+    private val getLoansFlowUseCase: GetLoansFlowUseCase,
+    private val getExpensesStreamUseCase: GetExpensesStreamUseCase,
+    private val getSnapshotNetSalariesFlowUseCase: GetSnapshotNetSalariesFlowUseCase,
+    private val getBalanceSheetUseCase: GetBalanceSheetUseCase,
+    private val getUserFinancialsFlow: GetUserFinancialsFlow,
+    private val getNetSalaryUseCase: GetNetSalaryUseCase,
+    private val deleteLoanUseCase: DeleteLoanUseCase,
+    private val getPreferencesStream: GetPreferencesStream
+) : ViewModel(),
+    IBreakdownScreenViewModel {
+
+    companion object {
+        private const val TAG = "BreakdownScreenViewModel"
+
+        private data class DataStream(
+            val expenses: List<ExpenseDomain>,
+            val snapshotSalaries: List<SnapshotNetSalaryDomain>,
+            val loans: List<Pair<LoanDomain, LoanCalculation>>,
+            val userFinancials: UserFinancialsDomain?,
+            val preferences: Preferences?
+        )
+    }
+
+    override val viewState: MutableStateFlow<BreakdownScreenViewState> =
+        MutableStateFlow(BreakdownScreenViewState.Loading)
+
+    init {
+        fetchSalaryAndLoans()
+    }
+
+    private fun fetchSalaryAndLoans() {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "Error fetching loans", throwable)
+        }
+
+        viewModelScope.launch(coroutineExceptionHandler) {
+            val locale = getLocaleOrDefault()
+
+            combine(
+                getExpensesStreamUseCase(),
+                getSnapshotNetSalariesFlowUseCase(),
+                getLoansFlowUseCase(locale),
+                getUserFinancialsFlow(),
+                getPreferencesStream()
+            ) { expenses, snapshotSalaries, loanInfo, userFinancials, preferences ->
+                DataStream(
+                    expenses = expenses,
+                    snapshotSalaries = snapshotSalaries,
+                    loans = loanInfo,
+                    userFinancials = userFinancials,
+                    preferences = preferences
+                )
+            }
+                .onEach { (expenses, snapshotSalaries, loans, userFinancials, preferences) ->
+                    val currentNetSalary = userFinancials?.let { getNetSalaryUseCase(it).toUi() }
+
+                    viewState.update {
+                        BreakdownScreenViewState.Content(
+                            locale = locale,
+                            netSalary = currentNetSalary,
+                            loans = loans.map { (loan, calc) -> loan.toUi() to calc.toUi() },
+                            currencySymbol = locale.getCurrencySymbol(),
+                            balanceSheetNet = getBalanceSheetUseCase(
+                                currentNetSalary = currentNetSalary?.monthlyNetSalary,
+                                expenses = expenses,
+                                snapshotSalaries = snapshotSalaries,
+                                addFoodCardToNecessitiesAllocation = preferences?.addFoodCardToNecessitiesAllocation == true
+                            )?.toUi()
+                        )
+                    }
+                }
+                .launchIn(this)
+        }
+    }
+
+    override fun onDeleteLoan(loanUi: LoanUi) {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "💥 There was a problem deleting the loan", throwable)
+        }
+
+        viewModelScope.launch(coroutineExceptionHandler) {
+            deleteLoanUseCase(loanUi.id)
+        }
+    }
+}

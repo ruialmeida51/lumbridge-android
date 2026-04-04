@@ -14,7 +14,7 @@ import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSourc
 import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource.PreferencesKeys.EMAIL
 import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource.PreferencesKeys.IMAGE_BITMAP
 import com.eyther.lumbridge.data.datasource.user.local.UserProfileLocalDataSource.PreferencesKeys.NAME
-import com.eyther.lumbridge.data.di.LocalDataModule.UserProfileDataSource
+import com.eyther.lumbridge.data.di.UserProfileDataSource
 import com.eyther.lumbridge.data.model.user.local.UserProfileCached
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
