@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -57,10 +57,6 @@ android {
         jvmTarget = Config.JAVA_VERSION
     }
 
-    kapt {
-        correctErrorTypes = true
-    }
-
     hilt {
         enableAggregatingTask = true
     }
@@ -95,6 +91,7 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.core)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.compose.ui.text.google.fonts)
@@ -108,6 +105,6 @@ dependencies {
 
     debugImplementation(libs.compose.ui.tooling)
 
-    kapt(libs.hilt.compiler)
-    kapt(libs.hilt.compiler.jetpack)
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.compiler.jetpack)
 }

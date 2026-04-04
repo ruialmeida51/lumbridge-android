@@ -7,14 +7,18 @@ import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,8 +34,11 @@ fun MainScreen() {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .background(colorScheme.surface)
             .imePadding()
-            .systemBarsPadding(),
+            .statusBarsPadding()
+            .background(colorScheme.surfaceContainer)
+            .navigationBarsPadding(),
         bottomBar = {
             AnimatedVisibility(
                 visible = !WindowInsets.isImeVisible,
