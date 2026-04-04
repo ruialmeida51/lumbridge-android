@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.Flow
 interface RecurringPaymentsDao {
     @Transaction
     @Query("SELECT * FROM $RECURRING_PAYMENTS_TABLE_NAME")
-    fun getRecurringPaymentsFlow(): Flow<List<RecurringPaymentEntity>?>
+    fun getRecurringPaymentsFlow(): Flow<List<RecurringPaymentEntity>>
 
     @Transaction
     @Query("SELECT * FROM $RECURRING_PAYMENTS_TABLE_NAME")
-    suspend fun getAllRecurringPayments(): List<RecurringPaymentEntity>?
+    suspend fun getAllRecurringPayments(): List<RecurringPaymentEntity>
 
     @Transaction
     @Query("SELECT * FROM $RECURRING_PAYMENTS_TABLE_NAME WHERE recurringPaymentId = :recurringPaymentId")

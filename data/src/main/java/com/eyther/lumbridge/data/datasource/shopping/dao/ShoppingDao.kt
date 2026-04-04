@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface ShoppingDao {
     @Transaction
     @Query("SELECT * FROM $SHOPPING_LIST_TABLE_NAME")
-    fun getAllShoppingLists(): Flow<List<ShoppingListEntity>?>
+    fun getAllShoppingLists(): Flow<List<ShoppingListEntity>>
 
     @Transaction
     @Query("SELECT * FROM $SHOPPING_LIST_TABLE_NAME WHERE shoppingListId = :shoppingListId")

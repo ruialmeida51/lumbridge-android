@@ -15,7 +15,7 @@ interface LoanDao {
 
     @Transaction
     @Query("SELECT * FROM $LOAN_TABLE_NAME")
-    fun getAllLoansFlow(): Flow<List<LoanEntity>?>
+    fun getAllLoansFlow(): Flow<List<LoanEntity>>
 
     @Transaction
     @Query("SELECT * FROM $LOAN_TABLE_NAME WHERE loanId = :loanId")
@@ -23,7 +23,7 @@ interface LoanDao {
 
     @Transaction
     @Query("SELECT * FROM $LOAN_TABLE_NAME")
-    suspend fun getAllLoans(): List<LoanEntity>?
+    suspend fun getAllLoans(): List<LoanEntity>
 
     @Transaction
     @Query("SELECT * FROM $LOAN_TABLE_NAME WHERE loanId = :loanId")

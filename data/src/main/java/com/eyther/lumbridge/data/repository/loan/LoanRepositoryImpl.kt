@@ -12,6 +12,7 @@ import com.eyther.lumbridge.domain.model.user.UserMortgageDomain
 import com.eyther.lumbridge.domain.repository.loan.LoanRepository
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,10 +26,10 @@ class LoanRepositoryImpl @Inject constructor(
     override fun getLoansAndCalculationsFlow(locale: SupportedLocales): Flow<List<Pair<LoanDomain, LoanCalculation>>> =
         loanLocalDataSource
             .loansFlow
-            .mapNotNull { cachedLoans ->
+            .map { cachedLoans ->
                 cachedLoans
-                    ?.toDomain()
-                    ?.map { it to calculate(it, locale) }
+                    .toDomain()
+                    .map { it to calculate(it, locale) }
             }
 
     override fun getLoanAndCalculationByIdStream(
@@ -46,7 +47,6 @@ class LoanRepositoryImpl @Inject constructor(
     override suspend fun getLoansAndCalculations(locale: SupportedLocales): List<Pair<LoanDomain, LoanCalculation>> = withContext(schedulers.io) {
         loanLocalDataSource
             .getLoans()
-            .orEmpty()
             .map { it.toDomain() }
             .map { it to calculate(it, locale) }
     }

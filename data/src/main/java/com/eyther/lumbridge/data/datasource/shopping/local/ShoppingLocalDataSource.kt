@@ -5,15 +5,15 @@ import com.eyther.lumbridge.data.mappers.shopping.toCached
 import com.eyther.lumbridge.data.mappers.shopping.toEntity
 import com.eyther.lumbridge.data.model.shopping.local.ShoppingListCached
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ShoppingLocalDataSource @Inject constructor(
     private val shoppingDao: ShoppingDao
 ) {
     val shoppingListFlow: Flow<List<ShoppingListCached>> = shoppingDao.getAllShoppingLists()
-        .mapNotNull { flowItem ->
-            flowItem?.map { shoppingListEntity -> shoppingListEntity.toCached() }
+        .map { flowItem ->
+            flowItem.map { shoppingListEntity -> shoppingListEntity.toCached() }
         }
 
     suspend fun saveShoppingList(shoppingList: ShoppingListCached): Long {

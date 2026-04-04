@@ -40,7 +40,7 @@ android {
         }
 
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             isShrinkResources = false
 
             matchingFallbacks.add("release")
