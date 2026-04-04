@@ -37,7 +37,7 @@ fun MainScreen() {
             .background(colorScheme.surface)
             .imePadding()
             .statusBarsPadding()
-            .background(colorScheme.error)
+            .background(colorScheme.surfaceContainer)
             .navigationBarsPadding(),
         bottomBar = {
             AnimatedVisibility(
