@@ -6,7 +6,7 @@ import com.eyther.lumbridge.data.mapper.notes.toDomain
 import com.eyther.lumbridge.domain.model.notes.Note
 import com.eyther.lumbridge.domain.repository.notes.NotesRepository
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class NotesRepositoryImpl @Inject constructor(
 
     override val notesListFLow = notesLocalDataSource
         .notesFlow
-        .mapNotNull { it.toDomain() }
+        .map { it.toDomain() }
 
     override suspend fun saveNote(note: Note): Long = withContext(schedulers.io) {
         notesLocalDataSource.saveNote(note.toCached())

@@ -13,12 +13,12 @@ class RemindersLocalDataSource @Inject constructor(
     val remindersFlow = remindersDao
         .getRemindersFlow()
         .map { flowItem ->
-            flowItem?.map { reminderEntity -> reminderEntity.toCached() }
+            flowItem.map { reminderEntity -> reminderEntity.toCached() }
         }
 
-    suspend fun getAllReminders(): List<ReminderCached>? {
+    suspend fun getAllReminders(): List<ReminderCached> {
         return remindersDao.getAllReminders()
-            ?.map { reminderEntity -> reminderEntity.toCached() }
+            .map { reminderEntity -> reminderEntity.toCached() }
     }
 
     suspend fun saveReminder(reminderCached: ReminderCached) {

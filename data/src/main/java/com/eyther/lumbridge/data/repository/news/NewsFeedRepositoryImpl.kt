@@ -12,7 +12,7 @@ import com.eyther.lumbridge.domain.repository.news.NewsFeedRepository
 import com.eyther.lumbridge.shared.di.model.Schedulers
 import com.prof18.rssparser.RssParserBuilder
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -25,7 +25,7 @@ class NewsFeedRepositoryImpl @Inject constructor(
     override fun getAvailableFeedsFlow(): Flow<List<RssFeed>> {
         return rssFeedLocalDataSource
             .rssFeedFlow
-            .mapNotNull { it.toDomain() }
+            .map { it.toDomain() }
     }
 
     override suspend fun saveRssFeed(rssFeed: RssFeed) = withContext(schedulers.io) {

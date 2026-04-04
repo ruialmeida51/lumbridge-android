@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface RssFeedDao {
     @Transaction
     @Query("SELECT * FROM $RSS_FEED_TABLE_NAME")
-    fun getAllRssFeeds(): Flow<List<RssFeedEntity>?>
+    fun getAllRssFeeds(): Flow<List<RssFeedEntity>>
 
     @Transaction
     @Query("SELECT * FROM $RSS_FEED_TABLE_NAME WHERE rssId = :rssId")

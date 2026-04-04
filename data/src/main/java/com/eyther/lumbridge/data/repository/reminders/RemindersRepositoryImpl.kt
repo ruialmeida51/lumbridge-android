@@ -6,7 +6,7 @@ import com.eyther.lumbridge.data.mapper.reminders.toDomain
 import com.eyther.lumbridge.domain.model.reminders.ReminderDomain
 import com.eyther.lumbridge.domain.repository.reminders.RemindersRepository
 import com.eyther.lumbridge.shared.di.model.Schedulers
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -17,13 +17,12 @@ class RemindersRepositoryImpl @Inject constructor(
 
     override val remindersFlow = remindersLocalDataSource
         .remindersFlow
-        .mapNotNull { reminder ->
-            reminder?.toDomain()
+        .map { reminder ->
+            reminder.toDomain()
         }
 
     override suspend fun getAllReminders(): List<ReminderDomain> = withContext(schedulers.io) {
         remindersLocalDataSource.getAllReminders()
-            .orEmpty()
             .map { it.toDomain() }
     }
 

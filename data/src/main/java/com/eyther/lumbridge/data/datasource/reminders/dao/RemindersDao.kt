@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.Flow
 interface RemindersDao {
     @Transaction
     @Query("SELECT * FROM $REMINDERS_TABLE_NAME")
-    fun getRemindersFlow(): Flow<List<ReminderEntity>?>
+    fun getRemindersFlow(): Flow<List<ReminderEntity>>
 
     @Transaction
     @Query("SELECT * FROM $REMINDERS_TABLE_NAME")
-    suspend fun getAllReminders(): List<ReminderEntity>?
+    suspend fun getAllReminders(): List<ReminderEntity>
 
     @Transaction
     @Query("SELECT * FROM $REMINDERS_TABLE_NAME WHERE reminderId = :reminderId")

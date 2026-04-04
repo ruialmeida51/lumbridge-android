@@ -5,15 +5,15 @@ import com.eyther.lumbridge.data.mappers.news.toCached
 import com.eyther.lumbridge.data.mappers.news.toEntity
 import com.eyther.lumbridge.data.model.news.local.RssFeedCached
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RssFeedLocalDataSource @Inject constructor(
     private val rssFeedDao: RssFeedDao
 ) {
     val rssFeedFlow: Flow<List<RssFeedCached>> = rssFeedDao.getAllRssFeeds()
-        .mapNotNull { flowItem ->
-            flowItem?.map { rssFeedEntity -> rssFeedEntity.toCached() }
+        .map { flowItem ->
+            flowItem.map { rssFeedEntity -> rssFeedEntity.toCached() }
         }
 
     suspend fun saveRssFeed(rssFeed: RssFeedCached) {

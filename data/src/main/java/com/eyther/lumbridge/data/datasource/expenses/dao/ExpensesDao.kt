@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface ExpensesDao {
     @Transaction
     @Query("SELECT * FROM $EXPENSES_TABLE_NAME")
-    fun getAllExpenses(): Flow<List<ExpenseEntity>?>
+    fun getAllExpenses(): Flow<List<ExpenseEntity>>
 
     /**
      * We need to use the SQLite strftime function to partition the stored date into year and month. They are stored as strings,
@@ -25,7 +25,7 @@ interface ExpensesDao {
      */
     @Transaction
     @Query("SELECT * FROM $EXPENSES_TABLE_NAME WHERE strftime('%Y', date) = :year AND strftime('%m', date) = :month")
-    fun getExpensesByDate(year: String, month: String): Flow<List<ExpenseEntity>?>
+    fun getExpensesByDate(year: String, month: String): Flow<List<ExpenseEntity>>
 
     @Transaction
     @Query("SELECT * FROM $EXPENSES_TABLE_NAME WHERE expenseId = :expenseId")

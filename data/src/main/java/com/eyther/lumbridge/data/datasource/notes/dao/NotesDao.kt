@@ -15,7 +15,7 @@ interface NotesDao {
 
     @Transaction
     @Query("SELECT * FROM $NOTES_LIST_TABLE_NAME")
-    fun getAllNotes(): Flow<List<NoteEntity>?>
+    fun getAllNotes(): Flow<List<NoteEntity>>
 
     @Transaction
     @Query("SELECT * FROM $NOTES_LIST_TABLE_NAME WHERE noteId = :notesListId")
