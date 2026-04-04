@@ -21,13 +21,13 @@ class RoomConverters {
     private val gson: Gson = Gson()
 
     @TypeConverter
-    fun fromStringToShoppingListEntry(value: String?): ArrayList<ShoppingListEntryEntity> {
-        val listType: Type = object : TypeToken<ArrayList<ShoppingListEntryEntity?>?>() {}.type
+    fun fromStringToShoppingListEntry(value: String?): List<ShoppingListEntryEntity> {
+        val listType: Type = object : TypeToken<List<ShoppingListEntryEntity?>?>() {}.type
         return gson.fromJson(value, listType)
     }
 
     @TypeConverter
-    fun fromShoppingListEntryToString(list: ArrayList<ShoppingListEntryEntity?>?): String {
+    fun fromShoppingListEntryToString(list: List<ShoppingListEntryEntity?>?): String {
         return gson.toJson(list)
     }
 
